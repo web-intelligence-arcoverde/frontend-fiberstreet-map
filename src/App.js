@@ -6,11 +6,19 @@ import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 
 import Routes from "./routes";
+import GlobalStyle from "./styles/global";
 
 const TOKEN =
   "pk.eyJ1IjoidWxpbmt1eCIsImEiOiJjanczamF5cG8wNWt0NDltcnkydXQybGdjIn0.F1PkG0rCiHhf-jhnRMMdTg";
 
-const App = () => <Routes />;
+const App = () => {
+  return(
+    <>
+    <GlobalStyle />
+    <Routes />
+    </>
+  )
+};
 export default App;
 
 // "pk.eyJ1IjoidWxpbmt1eCIsImEiOiJjanczZ3pmbTMxN2JsNDNxcWRkcW42emFwIn0.kUT-gbVGUsufpAxksU5L0Q";
