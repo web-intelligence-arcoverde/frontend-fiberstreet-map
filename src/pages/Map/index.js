@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Dimensions from "react-dimensions";
 import { Container } from "./styles";
-import ReactMapGL, { NavigationControl } from "react-map-gl";
+import ReactMapGL, { NavigationControl, Marker } from "react-map-gl";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 
@@ -23,7 +23,10 @@ class Maps extends Component {
       zoom: 12.8,
       bearing: 0,
       pitch: 0
-    }
+    },
+    markers: [],
+    latitude: "",
+    longitude: ""
   };
 
   componentDidMount() {
@@ -45,6 +48,58 @@ class Maps extends Component {
     });
   };
 
+  handleMapClick = e => {
+    const [longitude, latitude] = e.lngLat;
+    // this.setState({ latitude, longitude });
+    this.setState({
+      markers: [...this.state.markers, { latitude, longitude }]
+    });
+    alert(`Latitude: ${latitude}, Longitude: ${longitude}`);
+  };
+
+  renderVariousMarkers() {
+    return this.state.markers.map((marker, index) => (
+      <Marker
+        key={index}
+        latitude={marker.latitude}
+        longitude={marker.longitude}
+        onClick={this.handleMapClick}
+        captureClick={true}
+      >
+        <img
+          style={{
+            borderRadius: 100,
+            width: 48,
+            height: 48
+          }}
+          src="https://avatars2.githubusercontent.com/u/2254731?v=4"
+        />
+      </Marker>
+    ));
+  }
+
+  renderMarker() {
+    if (this.state.latitude != "") {
+      return (
+        <Marker
+          latitude={this.state.latitude}
+          longitude={this.state.longitude}
+          onClick={this.handleMapClick}
+          captureClick={true}
+        >
+          <img
+            style={{
+              borderRadius: 100,
+              width: 48,
+              height: 48
+            }}
+            src="https://avatars2.githubusercontent.com/u/2254731?v=4"
+          />
+        </Marker>
+      );
+    }
+  }
+
   render() {
     const { containerWidth: width, containerHeight: height } = this.props;
 
@@ -53,6 +108,7 @@ class Maps extends Component {
         <ReactMapGL
           width={this.state.viewport.width}
           height={this.state.viewport.height}
+          onClick={this.handleMapClick}
           {...this.state.viewport}
           mapStyle="mapbox://styles/mapbox/dark-v9"
           mapboxApiAccessToken={TOKEN}
@@ -61,6 +117,9 @@ class Maps extends Component {
             this._resize();
           }}
         >
+          {/* {this.renderMarker()} */}
+          {this.renderVariousMarkers()}
+
           <Button />
           <div style={{ position: "absolute", right: 5, top: 5 }}>
             <NavigationControl />
