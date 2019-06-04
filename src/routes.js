@@ -6,7 +6,8 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 /** Rota Mapbox */
 import Map from "./pages/Map";
 /** Rotas de autenticação */
-import Signin from "./pages/Signin";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -16,6 +17,21 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
         <Component {...props} />
       ) : (
         <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+      )
+    }
+  />
+);
+
+const PrivateRouteForLogedUser = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      isAuthenticated() ? (
+        <Redirect
+          to={{ pathname: "/app/dashboard", state: { from: props.location } }}
+        />
+      ) : (
+        <Component {...props} />
       )
     }
   />
@@ -33,12 +49,8 @@ const Routes = () => (
           </h1>
         )}
       />
-      <Route exact path="/signin" component={() => <Signin />} />
-      <PrivateRoute
-        exact
-        path="/app"
-        component={() => <h1>Você está logado</h1>}
-      />
+      {/* <Route exact path="/signin" component={() => <Signin />} /> */}
+      <PrivateRoute path="/app" component={() => <h1>Você está logado</h1>} />
       <PrivateRoute exact path="/map" component={() => <Map />} />
       <PrivateRoute
         exact
@@ -73,6 +85,15 @@ const Routes = () => (
         path="/companys"
         component={() => <h1>Empresas que estão usando o sistema</h1>}
       />
+
+      <PrivateRouteForLogedUser
+        exact
+        path="/login"
+        // component={() => <Login />}
+        component={Login}
+      />
+
+      <PrivateRouteForLogedUser exact path="/signup" component={Signup} />
     </Switch>
   </BrowserRouter>
 );
