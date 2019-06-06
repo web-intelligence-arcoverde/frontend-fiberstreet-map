@@ -1,9 +1,17 @@
 import { AppBar } from "material-ui";
 import PropTypes from "prop-types";
 
-const Header = ({ title, iconClassNameRight }) => {
-  return <AppBar title={title} />;
-};
+// const Header = ({ title, iconClassNameRight }) => {
+//   return <AppBar title={title} />;
+// };
+
+function Header(props) {
+  return (
+    <>
+      <div />
+    </>
+  );
+}
 
 const { string } = PropTypes;
 
