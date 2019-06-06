@@ -6,7 +6,7 @@ const serverTwo = "http://localhost:3001";
 
 /** This API will connect to NodeJS Server */
 const api = axios.create({
-  baseURL: serverTwo//"http://localhost:3333"
+  baseURL: serverOne//"http://localhost:3333"
 });
 
 // api.interceptors.request.use(async config => {
