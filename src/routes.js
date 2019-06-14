@@ -5,6 +5,8 @@ import { isAuthenticated } from "./services/auth";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 /** Rota Mapbox */
 import Map from "./pages/Map";
+import MainMap from "./pages/MainMap";
+import Home from "./pages/Home";
 /** Rotas de autenticação */
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
@@ -40,18 +42,14 @@ const PrivateRouteForLogedUser = ({ component: Component, ...rest }) => (
 const Routes = () => (
   <BrowserRouter>
     <Switch>
-      <Route
-        exact
-        path="/"
-        component={() => (
-          <h1>
+      <Route exact path="/" component={() => <Home />} />
+      {/* <h1>
             Rotas de boas-vindas ao sistema, informação dos serviços, e etc
-          </h1>
-        )}
-      />
+          </h1> */}
       {/* <Route exact path="/signin" component={() => <Signin />} /> */}
       <PrivateRoute path="/app" component={() => <h1>Você está logado</h1>} />
-      <PrivateRoute exact path="/map" component={() => <Map />} />
+      {/* <PrivateRoute exact path="/map" component={() => <Map />} /> */}
+      <PrivateRoute exact path="/map" component={() => <MainMap />} />
       <PrivateRoute
         exact
         path="/dashboard"

@@ -7,10 +7,11 @@ import Button from "@material-ui/core/Button";
 import Cto from "../../assets/images/CTO_24x24.png";
 import AddCto from "../components/AddCto";
 import LeftSelector from "../components/LeftSelector";
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import * as Actions from '../../redux/store/actions/all'
-// import * as Actions from '../'
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import api from "../../services/api";
+// import { MapController } from '../../controllers/MapController'
+import * as Actions from "../../redux/store/actions/all";
 
 const TOKEN =
   "pk.eyJ1IjoidWxpbmt1eCIsImEiOiJjanczamF5cG8wNWt0NDltcnkydXQybGdjIn0.F1PkG0rCiHhf-jhnRMMdTg";
@@ -32,6 +33,7 @@ class Maps extends Component {
       pitch: 0
     },
     markers: [],
+    cto: [],
     latitude: "",
     longitude: "",
     captureClick: true,
@@ -41,6 +43,7 @@ class Maps extends Component {
   componentDidMount() {
     window.addEventListener("resize", this._resize);
     this._resize();
+    this.obterDadosDoServidor();
   }
 
   componentWillUnmount() {
@@ -56,6 +59,25 @@ class Maps extends Component {
       }
     });
   };
+
+  /** Obtém os dados do servidor e armazena no redux para mostrar no mapa */
+  async obterDadosDoServidor() {
+    const { setCtoFromServer } = this.props;
+    let information = {
+      type: "cto"
+    };
+    await api
+      .post("/get/cto", information)
+      .then(result => {
+        var data = result.data;
+        // this.state.cto = data;
+        setCtoFromServer(data);
+        console.warn(this.props);
+      })
+      .catch(err => {
+        console.warn(err);
+      });
+  }
 
   /**
    *
@@ -74,25 +96,19 @@ class Maps extends Component {
    * @param coordinates coordenadas selecionadas no mapa
    * */
   verificaTipoDelimitacao(coordinates) {
-    // const delimitacaoSelecionada = this.props.redux;
-    // const { modalCto } = this.props.redux;
-    // try{alert(this.props.redux.modalCto)}catch(e){}
-    console.log(this.props)
-    switch (this.state.delimitacaoSelecionada) {
-      case "addCto":
+    const { mapa } = this.props.redux;
+
+    switch (mapa.delimitacao) {
+      case "cto":
         this.openModal(coordinates);
-        this.state.delimitacaoSelecionada = "DISABLED";
-        // this.state.captureClick = false;
         break;
-      case "polyline":
-        // this.desenharPolyline(coordinates);
-        //case 'polyline': this.addPolyline(coordinates)
+      case "ceo":
         break;
-      case "circle":
-        // this.desenharCircle(coordinates);
+      case "splitter":
         break;
-      case "polygon":
-        // this.desenharPolygon(coordinates);
+      case "cliente":
+        break;
+      case "fibra":
         break;
       default:
         break;
@@ -111,29 +127,41 @@ class Maps extends Component {
 
   handleMapClick = e => {
     const [longitude, latitude] = e.lngLat;
-    // this.setState({ latitude, longitude });
+
+    const { addCoordenadas, canAddCoordenadas } = this.props;
+    const canAdd = this.props.redux.canAddCoordenadas;
+
+    this.state.coordinates = JSON.stringify({
+      longitude: longitude,
+      latitude: latitude
+    });
+    addCoordenadas({ longitude: longitude, latitude: latitude });
+    canAddCoordenadas(false);
 
     // if (this.state.modalCto == true) {
-    //   this.setState({
-    //     markers: [...this.state.markers, { latitude, longitude }]
-    //   });
-    //   alert(`Latitude: ${latitude}, Longitude: ${longitude}`);
-    // }
+    // ADD CTO per Click
+    // console.log(this.state.markers);
+    // this.setState({
+    //   markers: [...this.state.markers, { latitude, longitude }]
+    // });
 
     let coordinates = {
       latitude: latitude,
       longitude: longitude
     };
+
     this.verificaTipoDelimitacao(coordinates);
   };
 
-  openModal(coordinates) {
-    this.setState({
-      modalCto: !this.state.modalCto,
-      coordinates: coordinates,
-      latitude: coordinates.latitude,
-      longitude: coordinates.longitude
-    });
+  async openModal(coordinates) {
+    const { showModalCto, setDelimitacaoMapa } = this.props;
+    await showModalCto(coordinates);
+    setDelimitacaoMapa("default");
+  }
+
+  getCtos() {
+    const { mapa } = this.props.redux;
+    this.state.cto = mapa.cto;
   }
 
   renderVariousMarkers() {
@@ -147,21 +175,29 @@ class Maps extends Component {
       >
         <img
           style={{
-            // borderRadius: 100,
-            width: 24, //48,
-            height: 24 //48
+            width: 24,
+            height: 24
           }}
-          // src="https://avatars2.githubusercontent.com/u/2254731?v=4"
           src={Cto}
         />
       </Marker>
     ));
   }
-  renderModalCto() {
-    // if (this.state.modalCto == true) {
-    if(this.props.redux.modalCto == true){
-      return <AddCto coordinates={this.state.coordinates} />;
-    }
+
+  async renderCto() {
+    let myCtos = [];
+    await api
+      .post("/get/cto")
+      .then(result => {
+        var data = result.data;
+        console.log("RESULTADO");
+        console.log(data);
+        this.state.cto = data;
+        myCtos = data;
+      })
+      .catch(err => {
+        console.warn(err);
+      });
   }
 
   renderMarker() {
@@ -171,7 +207,6 @@ class Maps extends Component {
           latitude={this.state.latitude}
           longitude={this.state.longitude}
           onClick={this.handleMapClick}
-          // captureClick={true}
           captureClick={this.state.captureClick}
         >
           <img
@@ -193,8 +228,6 @@ class Maps extends Component {
   }
 
   render() {
-    const { containerWidth: width, containerHeight: height } = this.props;
-
     return (
       <Container>
         <ReactMapGL
@@ -202,7 +235,8 @@ class Maps extends Component {
           height={this.state.viewport.height}
           onClick={this.handleMapClick}
           {...this.state.viewport}
-          mapStyle="mapbox://styles/mapbox/dark-v9"
+          // mapStyle="mapbox://styles/mapbox/dark-v9"
+          mapStyle="mapbox://styles/mapbox/light-v9"
           mapboxApiAccessToken={TOKEN}
           onViewportChange={viewport => {
             // this.setState({ viewport });
@@ -212,8 +246,40 @@ class Maps extends Component {
         >
           {/* {this.renderMarker()} */}
           {this.renderVariousMarkers()}
-          {this.renderModalCto()}
-          <LeftSelector />
+          {/* {this.getCtos()} */}
+          {/* {this.renderCto()} */}
+          {this.props.redux.mapa.cto.map((cto, index) => {
+            //  this.state.cto.map((cto, index) => {
+            // alert(JSON.stringify(cto.coordenadas));
+            return (
+              <Marker
+                key={index}
+                latitude={JSON.parse(cto.coordenadas).latitude}
+                longitude={JSON.parse(cto.coordenadas).longitude}
+                captureClick
+              >
+                <img
+                  onClick={ async () => {
+                    const { showDataInViewModal } = this.props;
+                    
+                    await showDataInViewModal(cto);
+                    const { viewCto } = this.props.redux;
+                    let wow = viewCto.data
+
+                    // alert(JSON.stringify(wow));
+                    // alert(wow.nome)
+                  }}
+                  style={{
+                    width: 24,
+                    height: 24
+                  }}
+                  src={Cto}
+                />
+              </Marker>
+            );
+          })}
+
+          {/* <LeftSelector /> */}
 
           <Button />
           <div style={{ position: "absolute", right: 5, top: 5 }}>
@@ -225,8 +291,6 @@ class Maps extends Component {
   }
 }
 
-
-
 const DimensionedMap = Dimensions()(Maps);
 
 const Map = () => (
@@ -237,11 +301,13 @@ const Map = () => (
 
 const mapStateToProps = state => ({
   redux: state
-})
+});
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(Actions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Maps)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Maps);
 // export default Map
 // export default connect(mapStateToProps, mapDispatchToProps)(Map)

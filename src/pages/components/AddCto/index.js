@@ -1,58 +1,200 @@
 import React, { useState, useEffect } from "react";
-import { Container, Form } from "./styles";
+import { Container, Form, Button, CoordForm } from "./styles";
 import api from "../../../services/api";
+import propTypes from "prop-types";
+import Modal from "react-modal";
+import "./styles.css";
 
-export default function AddCto(props) {
-  const [name, setName] = useState("oo");
-  const [coordinates, setCoordinates] = useState("oo");
-  const [type, setType] = useState("oo");
-  const [address, setAddress] = useState("oo");
+// redux
+import { canAddCoordenadas } from "../../../redux/store/actions/all";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { obterDadosDoServidor } from "../../../services/handleInformation";
+import * as Actions from "../../../redux/store/actions/all";
 
-  function handleCto() {
-    // api.post('/api/models/cto/create')
+Modal.setAppElement(document.getElementById("root"));
+
+// Vamos fazer aqui uma renderização condicional para ADIÇÃO/AMOSTRAGEM de imagens
+
+function AddCto(props) {
+  const [name, setName] = useState("");
+  const [coordinates, setCoordinates] = useState(
+    JSON.stringify(props.redux.coordenadas)
+  );
+  // JSON.stringify(props.redux.coordenadas)
+  const [type, setType] = useState("");
+  const [address, setAddress] = useState("");
+  const { modalCto } = props.redux;
+  const TNAME = "name";
+  const TCOORDINATES = "coordinates";
+  const TTYPE = "type";
+  const TADDRESS = "address";
+
+  useEffect(() => {
+    function set() {
+      setCoordinates(JSON.stringify(props.redux.coordenadas));
+    }
+    set();
+  }, [props.redux.coordenadas]);
+
+  async function handleCto() {
+    const { setCtoFromServer } = props;
+
+    // function verifyLength() {
+    //   if (name.length > 5) {
+    //     if (coordinates.length > 5) {
+    //       if (type.length > 5) {
+    //         if (address.length > 5) {
+    //           return true;
+    //         }
+    //       }
+    //     }
+    //   }
+    //   return false;
+    // }
+
     const newCto = {
-      name,
-      coordinates,
-      type,
-      address
+      nome: name,
+      coordenadas: coordinates,
+      modelo: type,
+      endereco: address
     };
-    api
+    // if (verifyLength) {
+    await api
       .post("/create/cto", newCto) //, newCto)
       .then(response => {
         console.log(response);
+        // alert(JSON.stringify(response));
+        handleHideModal();
+        obterDadosDoServidor();
+      })
+      .catch(err => {
+        console.warn(err);
+      });
+  }
+  async function obterDadosDoServidor() {
+    const { setCtoFromServer } = props;
+    let information = {
+      type: "cto"
+    };
+    await api
+      .post("/get/cto", information)
+      .then(result => {
+        var data = result.data;
+        setCtoFromServer(data);
+        console.warn(props);
       })
       .catch(err => {
         console.warn(err);
       });
   }
 
+  function handleChange(event, mode) {
+    const { value } = event.target;
+
+    switch (mode) {
+      case "name":
+        setName(value);
+        break;
+      case "coordinates":
+        setCoordinates(value);
+        break;
+      case "type":
+        setType(value);
+        break;
+      case "address":
+        setAddress(value);
+        break;
+    }
+  }
+
+  function handleHideModal() {
+    const { hideModalCto } = props;
+    hideModalCto();
+  }
+
   return (
-    <Container>
-      <button onClick={handleCto}>TESTE</button>
-      <Form onSubmit={handleCto}>
-        <input
-          type="text"
-          placeholder="Insira o nome da CTO"
-          required
-          onChange={setName}
-        />
-        <input
-          type="text"
-          placeholder="Coordenadas"
-          required
-          onChange={setCoordinates}
-        />
-        <input
-          type="text"
-          placeholder="Endereço"
-          required
-          onChange={setAddress}
-        />
-        <input type="text" placeholder="Modelo" required onChange={setType} />
-        {/* <p>Lat: {this.props.coordinates.latitude}, Lng: {this.props.coordinates.longitude}</p> */}
-        <button type="submit">Adicionar</button>
-        <hr />
-      </Form>
-    </Container>
+    <Modal
+      isOpen={modalCto.visible}
+      onRequestClose={handleHideModal}
+      contentLabel="Adicionar nova CTO"
+      className="modal-container"
+      overlayClassName="modal-overlay"
+    >
+      <Container>
+        <Form>
+          <label for="ctoName">Nome Cto</label>
+          <input
+            id="ctoName"
+            value={name}
+            type="text"
+            name="nome"
+            placeholder="Insira o nome da CTO"
+            // required
+            onChange={e => handleChange(e, TNAME)}
+          />
+          <CoordForm style={{ alignItems: "center", justifyContent: "center" }}>
+            <label for="coordenadas">Coordenadas</label>
+            <input
+              id="coordenadas"
+              // value={coordinates}
+              // value={JSON.stringify(props.redux.coordenadas)}
+              // value={props.coordinates}
+              value={JSON.stringify(props.redux.modalCto.coordinates)}
+              type="text"
+              name="coordenadas"
+              placeholder="Coordenadas"
+              required
+              onChange={e => handleChange(e, TCOORDINATES)}
+            />
+
+            <div
+              style={{ width: 30, height: 30, backgroundColor: "#FFF" }}
+              onClick={() => {
+                canAddCoordenadas(true);
+                alert("Selecione um local precisamente no mapa;");
+              }}
+            >
+              +
+            </div>
+          </CoordForm>
+          <label for="address">Endereço</label>
+          <input
+            id="address"
+            value={address}
+            type="text"
+            name="endereco"
+            placeholder="Endereço"
+            // required
+            onChange={e => handleChange(e, TADDRESS)}
+          />
+          <label for="modelo">Modelo</label>
+          <input
+            id="modelo"
+            value={type}
+            type="text"
+            name="modelo"
+            placeholder="Modelo"
+            // required
+            onChange={e => handleChange(e, TTYPE)}
+          />
+          {/* <p>Lat: {this.props.coordinates.latitude}, Lng: {this.props.coordinates.longitude}</p> */}
+          <hr />
+          <Button onClick={() => alert('Adicionar Splitter')}>Adicionar Splitter</Button>
+          <Button onClick={handleCto}>Adicionar</Button>
+        </Form>
+      </Container>
+    </Modal>
   );
 }
+
+const mapStateToProps = state => ({
+  redux: state
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddCto);
