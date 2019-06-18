@@ -45,6 +45,10 @@ function SpAddModal(props) {
         .catch(e => console.warn(e));
     } else if (type === "ceo") {
     }
+
+    const { showDataInViewModal, hideSplitterAddModal } = props;
+    hideSplitterAddModal();
+    showDataInViewModal(modalSplitter.id);
   }
 
   function handleChange(event, mode) {
@@ -83,7 +87,7 @@ function SpAddModal(props) {
             required
             onChange={e => handleChange(e, TNAME)}
           />
-          
+
           <label for="modelo">Modelo</label>
           <input
             id="modelo"

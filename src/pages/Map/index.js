@@ -5,8 +5,8 @@ import ReactMapGL, { NavigationControl, Marker } from "react-map-gl";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import Cto from "../../assets/images/CTO_24x24.png";
-import AddCto from "../components/AddCto";
-import LeftSelector from "../components/LeftSelector";
+
+
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import api from "../../services/api";
@@ -244,13 +244,9 @@ class Maps extends Component {
             this._resize();
           }}
         >
-          {/* {this.renderMarker()} */}
           {this.renderVariousMarkers()}
-          {/* {this.getCtos()} */}
-          {/* {this.renderCto()} */}
+
           {this.props.redux.mapa.cto.map((cto, index) => {
-            //  this.state.cto.map((cto, index) => {
-            // alert(JSON.stringify(cto.coordenadas));
             return (
               <Marker
                 key={index}
@@ -259,15 +255,10 @@ class Maps extends Component {
                 captureClick
               >
                 <img
-                  onClick={ async () => {
+                  onClick={async () => {
                     const { showDataInViewModal } = this.props;
-                    
-                    await showDataInViewModal(cto);
-                    const { viewCto } = this.props.redux;
-                    let wow = viewCto.data
 
-                    // alert(JSON.stringify(wow));
-                    // alert(wow.nome)
+                    await showDataInViewModal(cto);
                   }}
                   style={{
                     width: 24,
@@ -278,8 +269,6 @@ class Maps extends Component {
               </Marker>
             );
           })}
-
-          {/* <LeftSelector /> */}
 
           <Button />
           <div style={{ position: "absolute", right: 5, top: 5 }}>

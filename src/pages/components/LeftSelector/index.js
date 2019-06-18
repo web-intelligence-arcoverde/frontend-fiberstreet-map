@@ -3,7 +3,7 @@ import { Container, Button, MoreInfo } from "./styles";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from "../../../redux/store/actions/all";
-import Modal from 'react-modal'
+import Modal from "react-modal";
 
 // Modal.setAppElement(document.getElementById('root'))
 
@@ -15,7 +15,7 @@ function LeftSelector(props) {
 
   return (
     <>
-    {/* <Modal
+      {/* <Modal
       isOpen={true}
     > */}
       <Container>
@@ -41,34 +41,70 @@ function LeftSelector(props) {
           {dropDownOne == false ? (
             <></>
           ) : (
-            <p onClick={() => {
-              setDelimitacaoMapa("splitter");
-              setDropDownOne(!dropDownOne);
-            }}>SPLITTER</p>
+            <p
+              onClick={() => {
+                setDelimitacaoMapa("splitter");
+                setDropDownOne(!dropDownOne);
+              }}
+            >
+              SPLITTER
+            </p>
           )}
           {dropDownOne == false ? (
             <></>
           ) : (
-            <p onClick={() => {
-              setDelimitacaoMapa("ceo");
-              setDropDownOne(!dropDownOne);
-            }}>CEO</p>
+            <p
+              onClick={() => {
+                setDelimitacaoMapa("ceo");
+                setDropDownOne(!dropDownOne);
+              }}
+            >
+              CEO
+            </p>
           )}
           {dropDownOne == false ? (
             <></>
           ) : (
-            <p onClick={() => {
-              setDelimitacaoMapa("cliente");
-              setDropDownOne(!dropDownOne);
-            }}>CLIENTE</p>
+            <p
+              onClick={() => {
+                setDelimitacaoMapa("cliente");
+                setDropDownOne(!dropDownOne);
+              }}
+            >
+              CLIENTE
+            </p>
           )}
           {dropDownOne == false ? <></> : <p />}
         </Button>
         <Button>
-          <p>CLIENTE</p>
+          <p onClick={() => setDropDownOne(!dropDownOne)}>CLIENTE</p>
+          {dropDownOne == false ? (
+            <></>
+          ) : (
+            <p
+              onClick={() => {
+                setDelimitacaoMapa("viabilidade");
+                setDropDownOne(!dropDownOne);
+              }}
+            >
+              Viabilidade
+            </p>
+          )}
+          {dropDownOne == false ? (
+            <></>
+          ) : (
+            <p
+              onClick={() => {
+                setDelimitacaoMapa("cliente");
+                setDropDownOne(!dropDownOne);
+              }}
+            >
+              Adicionar
+            </p>
+          )}
         </Button>
       </Container>
-    {/* </Modal> */}
+      {/* </Modal> */}
     </>
   );
 }

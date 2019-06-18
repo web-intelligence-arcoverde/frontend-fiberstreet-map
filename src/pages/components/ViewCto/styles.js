@@ -10,6 +10,26 @@ export const Container = styled.div`
   height: 100vh;
 `;
 
+export const SplitterContainer = styled.div`
+  border-radius: 4px;
+  color: orange;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  margin: 15px;
+  border: solid 2px;
+  .title {
+    align-self: center;
+  }
+  .name {
+  }
+  p {
+    font-size: 16px;
+    color: blue;
+    font-weight: bold;
+  }
+`;
+
 export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -22,6 +42,7 @@ export const Button = styled.button`
   align-items: center;
   justify-content: center;
   height: 56px;
+  margin: 5px;
   border: 0;
   border-radius: 5px;
   width: 100%;

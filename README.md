@@ -19,3 +19,9 @@ FiberStreet project for Web with ReactJs
       |--- App.js    # Arquivo que conterá configurações principais do App
       |--- index.js  # Ponto de entrada para execução do nosso App
       |--- routes.js # Arquivo contendo as principais rotas do App
+
+# 3/3 React Mouse Events Tutorial
+
+[React Mouse Events](https://www.youtube.com/watch?v=l_ahowxmqzg)
+
+# Estrutura do Redux
