@@ -1,5 +1,12 @@
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import * as Types from "./store/type";
+
+const composer = process.env.NODE_ENV === 'development'
+  ? compose(
+    applyMiddleware(...[]),
+    console.tron.createEnhancer(),
+  )
+  : applyMiddleware(...[]);
 
 const INITIAL_STATE = {
   markers: [],
@@ -19,9 +26,19 @@ const INITIAL_STATE = {
     visible: false,
     id: 9999999
   },
+  modalCliente: {
+    visible: false,
+    coordinates: {}
+  },
   mapa: {
     delimitacao: "default",
-    cto: []
+    cto: [],
+    cliente: [],
+    polyline: []
+  },
+  viewClient: {
+    visible: false,
+    data: ""
   }
 };
 
@@ -64,8 +81,17 @@ function reducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         mapa: {
-          // ...state.mapa,
+          ...state.mapa,
           cto: action.payload.cto
+        }
+      };
+    // CLIENTE SERVER HANDLE DATA TO STORE
+    case Types.obtainClientFromServer:
+      return {
+        ...state,
+        mapa: {
+          ...state.mapa,
+          cliente: action.payload.cliente
         }
       };
     // Data to show in modal
@@ -101,11 +127,60 @@ function reducer(state = INITIAL_STATE, action) {
           id: null
         }
       };
+    case Types.showAddClientModal:
+      return {
+        ...state,
+        modalCliente: {
+          visible: true,
+          coordinates: action.payload.coordinates
+        }
+      };
+    case Types.hideAddClientModal:
+      return {
+        ...state,
+        modalCliente: {
+          visible: false,
+          coordinates: {}
+        }
+      };
+    // View MODAL Client
+    case Types.showClientViewModal:
+      return {
+        ...state,
+        viewClient: {
+          visible: true,
+          data: action.payload.data
+        }
+      };
+    case Types.hideClientViewModal:
+      return {
+        ...state,
+        viewClient: {
+          visible: false,
+          data: ""
+        }
+      };
+    case Types.changeClienteData:
+      return {
+        ...state,
+        viewClient: {
+          ...state.viewClient,
+          data: action.payload.data
+        }
+      };
+    case Types.addCoordCabo:
+      return {
+        ...state,
+        mapa: {
+          ...state.mapa,
+          polyline: action.payload.polyline
+        }
+      };
     default:
       return state;
   }
 }
 
-const store = createStore(reducer);
+const store = createStore(reducer, composer);
 
 export default store;

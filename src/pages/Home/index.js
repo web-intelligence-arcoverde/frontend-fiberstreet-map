@@ -1,11 +1,12 @@
 import React, { Fragment } from "react";
+import { Container } from "./styles";
 import Axios from "axios";
 import qs from "querystring";
 //import { obterDadosDoServidor } from '../../services/handleInformation'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import * as Actions from '../../redux/store/actions/all'
-import testApi from '../../services/api'
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as Actions from "../../redux/store/actions/all";
+import testApi from "../../services/api";
 
 function Home(props) {
   const api = Axios.create({
@@ -51,41 +52,47 @@ function Home(props) {
       .catch(err => console.warn(err));
   };
 
- const obterDadosDoServidor = (type) => {
-  let information = {
-    type: type
+  const obterDadosDoServidor = type => {
+    let information = {
+      type: type
+    };
+
+    var dados;
+
+    testApi
+      .post(`/get/${type}`, information)
+      .then(result => {
+        var data = result.data;
+        dados = data;
+        setCtoFromServer(dados);
+      })
+      .catch(err => {
+        console.warn(err);
+      });
+    return dados;
   };
 
-  var dados;
-
-  testApi
-    .post(`/get/${type}`, information)
-    .then(result => {
-      var data = result.data;
-      dados = data;
-      setCtoFromServer(dados)
-    })
-    .catch(err => {
-      console.warn(err);
-    });
-  return dados;
-}
-
   return (
-    <Fragment>
-      <button onClick={sendMessage}>AAA</button>
-      <button onClick={() => alert(obterDadosDoServidor("cto"))}>CTO DO DATABASE</button>
-      <button onClick={() => alert(console.warn(mapa))}>QUale</button>
-      <p />
-    </Fragment>
+    <Container>
+      <Fragment>
+        <button onClick={sendMessage}>AAA</button>
+        <button onClick={() => alert(obterDadosDoServidor("cto"))}>
+          CTO DO DATABASE
+        </button>
+        <button onClick={() => alert(console.warn(mapa))}>QUale</button>
+        <p />
+      </Fragment>
+    </Container>
   );
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(Actions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
 
 const mapStateToProps = state => ({
-  redux: state  
+  redux: state
 });
 
-export default connect(mapDispatchToProps, mapStateToProps)(Home);
+export default connect(
+  mapDispatchToProps,
+  mapStateToProps
+)(Home);

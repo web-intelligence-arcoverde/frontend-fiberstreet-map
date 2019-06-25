@@ -22,19 +22,44 @@ function ViewCto(props) {
   const [endereco, setEndereco] = useState("");
   const [modelo, setModelo] = useState("");
   const [splitters, setSplitters] = useState([]);
+  const [saidasSplitter, setSaidasSplitter] = useState([]);
 
+  /** useEffect para obter os Splitters pelo id da cto */
   useEffect(() => {
     function getSplitters(id) {
       api
         .get(`/get/splitter/${id}`)
         .then(response => {
           const sp = response.data;
+          alert(JSON.stringify(response.data));
           setSplitters(sp);
         })
         .catch(e => console.warn(e));
     }
     getSplitters(viewCto.data.id);
   }, [viewCto.data.id]);
+
+  /** Obtém os clientes por cada saída do splitter existente */
+  useEffect(() => {
+    function getSaidaSpWithClientes(splitterId) {
+      api.get(`/get/cliente/splitter/${splitterId}`).then(response => {
+        const saidaSplitter = response.data;
+        setSaidasSplitter(saidaSplitter);
+      });
+    }
+    getSaidaSpWithClientes(viewCto.data.id);
+  }, [viewCto.data.id]);
+
+  // useEffect(() => {
+  //   function getClientesBySplitter(id){
+  //     api
+  //       .get(`/get/cliente/${id}`)
+  //       .then(response => {
+  //         const cl = response.data;
+  //         set
+  //       })
+  //   }
+  // })
 
   function handleHideModal() {
     const { hideDataInViewModal } = props;
@@ -65,18 +90,36 @@ function ViewCto(props) {
           <h3>Splitters nesta CTO</h3>
           <table>
             <tr>
-              <td>Nome</td>
-              <td>Modelo</td>
-              <td>Balanceamento</td>
+              <th>Nome</th>
+              {/* <th>Modelo</th>
+              <th>Balanceamento</th> */}
             </tr>
-            {splitters.map(splitter => (
-              <tr>
-                <td>{splitter.nome}</td>
-                <td>{splitter.modelo}</td>
-                <td>{splitter.balanceamento}</td>
-              </tr>
+            {saidasSplitter.map(sSplitter => (
+              <>
+                <tr>
+                  <td>{sSplitter.nome}</td>
+                  <td>{sSplitter.modelo}</td>
+                  <td>{sSplitter.balanceamento}</td>
+                </tr>
+                <h3>Clientes</h3>
+                <table>
+                  <tr>
+                    <th>Porta</th>
+                    <th>Nome</th>
+                    <th>PPPoE</th>
+                    <th>Velocidade</th>
+                  </tr>
+                  <tr>
+                    <td>{sSplitter.numero}</td>
+                    <td>{sSplitter.Cliente.nome}</td>
+                    <td>{sSplitter.Cliente.usuario_pppoe}</td>
+                    <td>{sSplitter.Cliente.velocidade}</td>
+                  </tr>
+                </table>
+              </>
             ))}
           </table>
+          <button>Adicionar Cliente</button>
         </SplitterContainer>
 
         <br />

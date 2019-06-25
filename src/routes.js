@@ -13,8 +13,8 @@ import Login from "./pages/Login";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
-    {...rest}
-    render={props =>
+    {...rest} // recebe todos os parametros 
+    render={props => // O método render verifica se está autenticado
       isAuthenticated() ? (
         <Component {...props} />
       ) : (

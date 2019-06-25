@@ -80,9 +80,8 @@ function AddCto(props) {
     await api
       .post("/get/cto", information)
       .then(result => {
-        var data = result.data;
+        let data = result.data;
         setCtoFromServer(data);
-        console.warn(props);
       })
       .catch(err => {
         console.warn(err);
@@ -137,9 +136,6 @@ function AddCto(props) {
             <label for="coordenadas">Coordenadas</label>
             <input
               id="coordenadas"
-              // value={coordinates}
-              // value={JSON.stringify(props.redux.coordenadas)}
-              // value={props.coordinates}
               value={JSON.stringify(props.redux.modalCto.coordinates)}
               type="text"
               name="coordenadas"
@@ -180,7 +176,9 @@ function AddCto(props) {
           />
           {/* <p>Lat: {this.props.coordinates.latitude}, Lng: {this.props.coordinates.longitude}</p> */}
           <hr />
-          <Button onClick={() => alert('Adicionar Splitter')}>Adicionar Splitter</Button>
+          <Button onClick={() => alert("Adicionar Splitter")}>
+            Adicionar Splitter
+          </Button>
           <Button onClick={handleCto}>Adicionar</Button>
         </Form>
       </Container>

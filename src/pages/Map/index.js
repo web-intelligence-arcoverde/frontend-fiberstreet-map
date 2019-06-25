@@ -5,7 +5,10 @@ import ReactMapGL, { NavigationControl, Marker } from "react-map-gl";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import Cto from "../../assets/images/CTO_24x24.png";
-
+import Cliente from "../../assets/images/cliente com24x12.png";
+import { Layer, Feature } from "react-mapbox-gl";
+import PolylineOverlay from "../components/PolylineOverlay";
+// import { Polyline } from 'react-leaflet';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -77,6 +80,21 @@ class Maps extends Component {
       .catch(err => {
         console.warn(err);
       });
+    await this.obterClientes();
+  }
+
+  async obterClientes() {
+    const { setClientFromServer } = this.props;
+    await api
+      .post("/get/cliente")
+      .then(result => {
+        let data = result.data;
+        alert(JSON.stringify(data));
+        setClientFromServer(data);
+      })
+      .catch(err => {
+        console.warn(err);
+      });
   }
 
   /**
@@ -107,12 +125,31 @@ class Maps extends Component {
       case "splitter":
         break;
       case "cliente":
+        this.openModalAddClient(coordinates);
         break;
       case "fibra":
+        break;
+      case "cabo":
+        this.addCoordenadasCabo(coordinates);
         break;
       default:
         break;
     }
+  }
+
+  /** Adiciona coordenadas ao JSON de coordenadas de polyline contido no redux store
+   * mapa.polyline - REDUX
+   */
+  addCoordenadasCabo(coordenadas) {
+    const { addCoordCabo } = this.props;
+    const { polyline } = this.props.redux.mapa;
+    let newPolyline = [
+      ...polyline,
+      [coordenadas.longitude, coordenadas.latitude]
+    ];
+    console.tron.log({ LINES: newPolyline });
+
+    addCoordCabo(newPolyline);
   }
 
   /** Verifica como está o modo de captura e realiza ações de acordo com tal */
@@ -138,9 +175,7 @@ class Maps extends Component {
     addCoordenadas({ longitude: longitude, latitude: latitude });
     canAddCoordenadas(false);
 
-    // if (this.state.modalCto == true) {
     // ADD CTO per Click
-    // console.log(this.state.markers);
     // this.setState({
     //   markers: [...this.state.markers, { latitude, longitude }]
     // });
@@ -156,6 +191,12 @@ class Maps extends Component {
   async openModal(coordinates) {
     const { showModalCto, setDelimitacaoMapa } = this.props;
     await showModalCto(coordinates);
+    setDelimitacaoMapa("default");
+  }
+
+  async openModalAddClient(coordinates) {
+    const { showAddClienteModal, setDelimitacaoMapa } = this.props;
+    await showAddClienteModal(coordinates);
     setDelimitacaoMapa("default");
   }
 
@@ -189,7 +230,7 @@ class Maps extends Component {
     await api
       .post("/get/cto")
       .then(result => {
-        var data = result.data;
+        let data = result.data;
         console.log("RESULTADO");
         console.log(data);
         this.state.cto = data;
@@ -200,6 +241,37 @@ class Maps extends Component {
       });
   }
 
+  async renderCliente() {
+    let myClients = [];
+    await api
+      .post("/get/cliente")
+      .then(result => {
+        let data = result.data;
+        this.state.cliente = data;
+      })
+      .catch(err => {
+        console.warn(err);
+      });
+  }
+
+  addLines = () => {
+    return (
+      <PolylineOverlay
+        points={[
+          [-122.48369693756104, 37.83381888486939],
+          [116.48348236083984, 37.83317489144141]
+        ]}
+        // points={[
+        //   {latitude: -122.48369693756104, longitude: 37.83381888486939},
+        //   {latitude: 116.48348236083984, longitude: 37.83317489144141}
+        // ]}
+      />
+    );
+  };
+  renderAtualPolylineRedux = () => (
+    <PolylineOverlay points={this.props.redux.mapa.polyline} />
+  );
+
   renderMarker() {
     if (this.state.latitude != "") {
       return (
@@ -208,6 +280,9 @@ class Maps extends Component {
           longitude={this.state.longitude}
           onClick={this.handleMapClick}
           captureClick={this.state.captureClick}
+          id={"map"}
+          ref={"map"}
+          onLoad={this.addLines}
         >
           <img
             style={{
@@ -245,26 +320,66 @@ class Maps extends Component {
           }}
         >
           {this.renderVariousMarkers()}
+          {this.addLines()}
+          {this.renderAtualPolylineRedux()}
 
           {this.props.redux.mapa.cto.map((cto, index) => {
+            let latitude = JSON.parse(cto.coordenadas).latitude;
+            let longitude = JSON.parse(cto.coordenadas).longitude;
             return (
               <Marker
                 key={index}
-                latitude={JSON.parse(cto.coordenadas).latitude}
-                longitude={JSON.parse(cto.coordenadas).longitude}
+                latitude={latitude}
+                longitude={longitude}
                 captureClick
               >
                 <img
                   onClick={async () => {
-                    const { showDataInViewModal } = this.props;
+                    
+                    if(this.props.redux.mapa.delimitacao === "cabo"){
+                      const { addCoordCabo, setDelimitacaoMapa } = this.props;
+                      const { polyline } = this.props.redux.mapa;
+                      let newPolyline = [...polyline, [longitude, latitude]]
+                      addCoordCabo(newPolyline)
+                      setDelimitacaoMapa("default")
 
-                    await showDataInViewModal(cto);
+
+                    } else {
+                      const { showDataInViewModal } = this.props;
+
+                      await showDataInViewModal(cto);
+                    }
                   }}
                   style={{
                     width: 24,
                     height: 24
                   }}
                   src={Cto}
+                />
+              </Marker>
+            );
+          })}
+          {this.props.redux.mapa.cliente.map((cliente, index) => {
+            return (
+              <Marker
+                key={index}
+                latitude={JSON.parse(cliente.coordenadas).latitude}
+                longitude={JSON.parse(cliente.coordenadas).longitude}
+                captureClick
+              >
+                <img
+                  onClick={async () => {
+                    alert(JSON.stringify(cliente));
+                    // const { showDataInViewModal } = this.props;
+                    // await showDataInViewModal(cliente);
+                    const { showClientViewModal } = this.props;
+                    await showClientViewModal(cliente);
+                  }}
+                  style={{
+                    width: 24,
+                    height: 24
+                  }}
+                  src={Cliente}
                 />
               </Marker>
             );

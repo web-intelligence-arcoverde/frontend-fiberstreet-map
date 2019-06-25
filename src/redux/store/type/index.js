@@ -17,3 +17,15 @@ export const hideDataViewModal = "REMOVE_DATA_VIEWMODAL";
 
 export const showSpAddModal = "modalAddSp/SHOW";
 export const hideSpAddModal = "modalAddSp/HIDE";
+
+export const showAddClientModal = "modalAddCl/SHOW";
+export const hideAddClientModal = "modalAddCl/HIDE";
+
+export const obtainClientFromServer = "obtainClientFromServer";
+
+export const showClientViewModal = "modalClient/SHOW";
+export const hideClientViewModal = "modalClient/HIDE";
+
+export const changeClienteData = "ccdata";
+
+export const addCoordCabo = "coordaddcabo";

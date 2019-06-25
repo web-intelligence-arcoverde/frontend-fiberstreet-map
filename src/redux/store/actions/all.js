@@ -13,6 +13,7 @@ import {
   showSpAddModal,
   hideSpAddModal
 } from "../type";
+import * as Types from "../type";
 
 export const addMarker = marker => ({
   type: mk,
@@ -83,6 +84,13 @@ export const setCtoFromServer = cto => ({
   }
 });
 
+export const setClientFromServer = cliente => ({
+  type: Types.obtainClientFromServer,
+  payload: {
+    cliente
+  }
+});
+
 export const showDataInViewModal = data => ({
   type: showDataViewModal,
   payload: {
@@ -108,4 +116,48 @@ export const showSplitterAddModal = id => ({
 
 export const hideSplitterAddModal = () => ({
   type: hideSpAddModal
+});
+
+/** Show the client modal */
+export const showAddClienteModal = data => ({
+  type: Types.showAddClientModal,
+  payload: {
+    visible: true,
+    coordinates: data
+  }
+});
+
+/** Hide the client modal */
+export const hideAddClienteModal = () => ({
+  type: Types.hideAddClientModal,
+  payload: {
+    visible: false
+  }
+});
+
+export const showClientViewModal = data => ({
+  type: Types.showClientViewModal,
+  payload: {
+    data: data
+  }
+});
+
+export const changeClienteData = data => ({
+  type: Types.changeClienteData,
+  payload: {
+    data
+  }
+});
+
+export const hideClientViewModal = () => ({
+  type: Types.hideClientViewModal,
+  payload: {}
+});
+
+/** Adiciona coordenadas para adição de cabo */
+export const addCoordCabo = polyline => ({
+  type: Types.addCoordCabo,
+  payload: {
+    polyline: polyline
+  }
 });
