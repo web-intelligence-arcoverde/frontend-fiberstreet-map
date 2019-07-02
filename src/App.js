@@ -7,17 +7,21 @@ import Button from "@material-ui/core/Button";
 
 import Routes from "./routes";
 import GlobalStyle from "./styles/global";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import { muiTheme } from "./themes";
 
 const TOKEN =
   "pk.eyJ1IjoidWxpbmt1eCIsImEiOiJjanczamF5cG8wNWt0NDltcnkydXQybGdjIn0.F1PkG0rCiHhf-jhnRMMdTg";
 
 const App = () => {
-  return(
+  return (
     <>
-    <GlobalStyle />
-    <Routes />
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <GlobalStyle />
+        <Routes />
+      </MuiThemeProvider>
     </>
-  )
+  );
 };
 export default App;
 

@@ -5,7 +5,7 @@ export const Container = styled.div`
   flex-direction: column;
   position: absolute;
   left: 5px;
-  top: 50px;
+  top: 6em;
 `;
 
 // position: absolute;

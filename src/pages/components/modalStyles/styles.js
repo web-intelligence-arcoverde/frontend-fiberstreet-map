@@ -22,7 +22,7 @@ export const Button = styled.button`
 `;
 
 export const Form = styled.div`
-  width: 400px;
+  width: auto;
   background: #fff;
   padding: 20px;
   display: flex;
@@ -46,6 +46,7 @@ export const Form = styled.div`
     margin-bottom: 15px;
     padding: 0 20px;
     color: #777;
+    border-radius: 4px;
     font-size: 15px;
     width: 100%;
     border: 1px solid #ddd;

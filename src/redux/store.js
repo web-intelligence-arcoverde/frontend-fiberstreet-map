@@ -1,12 +1,13 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import * as Types from "./store/type";
 
-const composer = process.env.NODE_ENV === 'development'
-  ? compose(
-    applyMiddleware(...[]),
-    console.tron.createEnhancer(),
-  )
-  : applyMiddleware(...[]);
+const composer =
+  process.env.NODE_ENV === "development"
+    ? compose(
+        applyMiddleware(...[]),
+        console.tron.createEnhancer()
+      )
+    : applyMiddleware(...[]);
 
 const INITIAL_STATE = {
   markers: [],
@@ -30,10 +31,14 @@ const INITIAL_STATE = {
     visible: false,
     coordinates: {}
   },
+  modalCabo: {
+    visible: false
+  },
   mapa: {
     delimitacao: "default",
     cto: [],
     cliente: [],
+    cabos: [],
     polyline: []
   },
   viewClient: {
@@ -174,6 +179,29 @@ function reducer(state = INITIAL_STATE, action) {
         mapa: {
           ...state.mapa,
           polyline: action.payload.polyline
+        }
+      };
+    case Types.showAddCabo:
+      return {
+        ...state,
+        modalCabo: {
+          visible: true
+        }
+      };
+    case Types.hideAddCabo:
+      return {
+        ...state,
+        modalCabo: {
+          visible: false
+        }
+      };
+    // Seta os cabos vindos do servidor
+    case Types.setPolylinesFromServer:
+      return {
+        ...state,
+        mapa: {
+          ...state.mapa,
+          cabos: action.payload.data
         }
       };
     default:

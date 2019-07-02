@@ -29,3 +29,7 @@ export const hideClientViewModal = "modalClient/HIDE";
 export const changeClienteData = "ccdata";
 
 export const addCoordCabo = "coordaddcabo";
+export const showAddCabo = "show/ADDCabo";
+export const hideAddCabo = "hide/ADDCabo";
+
+export const setPolylinesFromServer = "setPolyFServer";

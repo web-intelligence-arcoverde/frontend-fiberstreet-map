@@ -9,6 +9,10 @@ import Cliente from "../../assets/images/cliente com24x12.png";
 import { Layer, Feature } from "react-mapbox-gl";
 import PolylineOverlay from "../components/PolylineOverlay";
 // import { Polyline } from 'react-leaflet';
+import DeckGL from "@deck.gl/react";
+import { ScatterplotLayer } from 'deck.gl'
+import { MapboxLayer } from '@deck.gl/mapbox'
+import { LineLayer } from "@deck.gl/layers";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -72,7 +76,7 @@ class Maps extends Component {
     await api
       .post("/get/cto", information)
       .then(result => {
-        var data = result.data;
+        let data = result.data;
         // this.state.cto = data;
         setCtoFromServer(data);
         console.warn(this.props);
@@ -89,12 +93,40 @@ class Maps extends Component {
       .post("/get/cliente")
       .then(result => {
         let data = result.data;
-        alert(JSON.stringify(data));
+        // alert(JSON.stringify(data));
         setClientFromServer(data);
+        this.obterCabos();
       })
       .catch(err => {
         console.warn(err);
       });
+  }
+
+  async obterCabos() {
+    const { setPolylinesFromServer } = this.props;
+    await api
+      .get("/cabo/get")
+      .then(result => {
+        let data = result.data;
+        let arrayDados = data.map(dado => {
+          //console.tron.log({ Coordenadas: JSON.stringify(dado.coordenadas) });
+          //console.tron.log(JSON.parse(dado.coordenadas));
+          let coord = JSON.parse(dado.coordenadas);
+          let arrayDeLocalizacao = coord.map(dado => {
+            return [dado.longitude, dado.latitude];
+          });
+          //console.tron.log(arrayDeLocalizacao)
+
+          return {
+            ...dado,
+            coordenadas: arrayDeLocalizacao
+          };
+        });
+
+        console.tron.log(arrayDados);
+        setPolylinesFromServer(arrayDados);
+      })
+      .catch(err => console.tron.warn(err));
   }
 
   /**
@@ -261,10 +293,6 @@ class Maps extends Component {
           [-122.48369693756104, 37.83381888486939],
           [116.48348236083984, 37.83317489144141]
         ]}
-        // points={[
-        //   {latitude: -122.48369693756104, longitude: 37.83381888486939},
-        //   {latitude: 116.48348236083984, longitude: 37.83317489144141}
-        // ]}
       />
     );
   };
@@ -302,14 +330,30 @@ class Maps extends Component {
     this._resize();
   }
 
+  
+
+  _onMapLoad() {
+    const map = this.state.map;
+    const deck = this._deck;
+    // console.tron.log(thiss)
+    alert('a')
+    console.tron.log(this.state)
+  }
+  
+
   render() {
+    
     return (
       <Container>
         <ReactMapGL
+          
+          onLoad={() => this._onMapLoad()}
+          {...this.state.viewport}
           width={this.state.viewport.width}
           height={this.state.viewport.height}
           onClick={this.handleMapClick}
-          {...this.state.viewport}
+          
+          
           // mapStyle="mapbox://styles/mapbox/dark-v9"
           mapStyle="mapbox://styles/mapbox/light-v9"
           mapboxApiAccessToken={TOKEN}
@@ -319,6 +363,7 @@ class Maps extends Component {
             this._resize();
           }}
         >
+        
           {this.renderVariousMarkers()}
           {this.addLines()}
           {this.renderAtualPolylineRedux()}
@@ -334,20 +379,23 @@ class Maps extends Component {
                 captureClick
               >
                 <img
-                  onClick={async () => {
-                    
-                    if(this.props.redux.mapa.delimitacao === "cabo"){
-                      const { addCoordCabo, setDelimitacaoMapa } = this.props;
+                  onClick={() => {
+                    if (this.props.redux.mapa.delimitacao === "cabo") {
+                      const {
+                        addCoordCabo,
+                        setDelimitacaoMapa,
+                        showAddCaboModal
+                      } = this.props;
                       const { polyline } = this.props.redux.mapa;
-                      let newPolyline = [...polyline, [longitude, latitude]]
-                      addCoordCabo(newPolyline)
-                      setDelimitacaoMapa("default")
+                      let newPolyline = [...polyline, [longitude, latitude]];
 
-
+                      addCoordCabo(newPolyline);
+                      showAddCaboModal();
+                      setDelimitacaoMapa("default");
                     } else {
                       const { showDataInViewModal } = this.props;
 
-                      await showDataInViewModal(cto);
+                      showDataInViewModal(cto);
                     }
                   }}
                   style={{
@@ -369,7 +417,7 @@ class Maps extends Component {
               >
                 <img
                   onClick={async () => {
-                    alert(JSON.stringify(cliente));
+                    // alert(JSON.stringify(cliente));
                     // const { showDataInViewModal } = this.props;
                     // await showDataInViewModal(cliente);
                     const { showClientViewModal } = this.props;
@@ -385,11 +433,36 @@ class Maps extends Component {
             );
           })}
 
+          {/* {this.props.redux.mapa.cabos.map(cabo => {
+          return(
+            // <PolylineOverlay
+            //   points={cabo.coordenadas}
+            // />
+          )
+        })} */}
+
           <Button />
           <div style={{ position: "absolute", right: 5, top: 5 }}>
             <NavigationControl />
           </div>
+          {/* <DeckGL
+        ref={ref => {
+          this._deck = ref && ref.deck;
+        }}
+        onWebGLInitialized={this._onWebGLInitialized}
+        layers={layers}
+        initialViewState={{
+          latitude: -35.280937,
+          longitude: 149.130005,
+          zoom: 13,
+          pitch: 0,
+          bearing: 0
+        }}
+        controller={true}
+      >
+          </DeckGL> */}
         </ReactMapGL>
+        
       </Container>
     );
   }

@@ -161,3 +161,19 @@ export const addCoordCabo = polyline => ({
     polyline: polyline
   }
 });
+
+export const showAddCaboModal = () => ({
+  type: Types.showAddCabo
+});
+
+export const hideAddCaboModal = () => ({
+  type: Types.hideAddCabo
+});
+
+/** Setta as polylines/Cabos vindas do servidor no redux */
+export const setPolylinesFromServer = data => ({
+  type: Types.setPolylinesFromServer,
+  payload: {
+    data: data
+  }
+});
