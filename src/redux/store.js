@@ -1,13 +1,21 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
+import createSagaMiddleware from "redux-saga";
 import * as Types from "./store/type";
+import reducerCto from "./store/ducks/ctos";
+
+import sagas from "./store/sagas";
+
+const middlewares = [];
+const sagaMiddlewares = createSagaMiddleware();
+middlewares.push(sagaMiddlewares);
 
 const composer =
   process.env.NODE_ENV === "development"
     ? compose(
-        applyMiddleware(...[]),
+        applyMiddleware(...middlewares),
         console.tron.createEnhancer()
       )
-    : applyMiddleware(...[]);
+    : applyMiddleware(...middlewares);
 
 const INITIAL_STATE = {
   markers: [],
@@ -35,6 +43,7 @@ const INITIAL_STATE = {
     visible: false
   },
   mapa: {
+    map: {},
     delimitacao: "default",
     cto: [],
     cliente: [],
@@ -204,11 +213,24 @@ function reducer(state = INITIAL_STATE, action) {
           cabos: action.payload.data
         }
       };
+    case Types.addMapReference:
+      return {
+        ...state,
+        mapa: {
+          ...state.mapa,
+          map: action.payload.map
+        }
+      };
     default:
       return state;
   }
 }
 
-const store = createStore(reducer, composer);
+const rootReducer = combineReducers({reducer, reducerCto});
+
+// const store = createStore(reducer, composer);
+const store = createStore(rootReducer, composer);
+
+sagaMiddlewares.run(sagas);
 
 export default store;

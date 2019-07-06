@@ -177,3 +177,10 @@ export const setPolylinesFromServer = data => ({
     data: data
   }
 });
+
+export const addMapReference = map => ({
+  type: Types.addMapReference,
+  payload: {
+    map: map
+  }
+});

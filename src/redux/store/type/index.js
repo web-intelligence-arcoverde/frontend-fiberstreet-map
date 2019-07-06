@@ -33,3 +33,5 @@ export const showAddCabo = "show/ADDCabo";
 export const hideAddCabo = "hide/ADDCabo";
 
 export const setPolylinesFromServer = "setPolyFServer";
+
+export const addMapReference = "map/Reference";
