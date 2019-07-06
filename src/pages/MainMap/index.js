@@ -22,7 +22,8 @@ const MainMap = () => (
     {/* <Header title="UxFs Maps" /> */}
     <MapO
       container="map"
-      style="mapbox://styles/mapbox/traffic-night-v2"
+      style="mapbox://styles/mapbox/light-v9"
+      //style="mapbox://styles/mapbox/traffic-night-v2"
       zoom={18}
       classNameStyle="mapContainer"
       accessToken={TOKEN}
