@@ -12,7 +12,7 @@ import PolylineOverlay from "../components/PolylineOverlay";
 import DeckGL from "@deck.gl/react";
 import { ScatterplotLayer } from 'deck.gl'
 import { MapboxLayer } from '@deck.gl/mapbox'
-import { LineLayer } from "@deck.gl/layers";
+import {LineLayer} from '@deck.gl/layers';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -22,6 +22,11 @@ import * as Actions from "../../redux/store/actions/all";
 
 const TOKEN =
   "pk.eyJ1IjoidWxpbmt1eCIsImEiOiJjanczamF5cG8wNWt0NDltcnkydXQybGdjIn0.F1PkG0rCiHhf-jhnRMMdTg";
+
+// Data to be used by the LineLayer
+const dataLINE = [{sourcePosition: [-122.41669, 37.7853], targetPosition: [61.6796786519058,
+  0.66249062664293
+  ]}];
 
 class Maps extends Component {
   static propTypes = {
@@ -51,6 +56,7 @@ class Maps extends Component {
     window.addEventListener("resize", this._resize);
     this._resize();
     this.obterDadosDoServidor();
+    this.state.logger = 1
   }
 
   componentWillUnmount() {
@@ -291,7 +297,9 @@ class Maps extends Component {
       <PolylineOverlay
         points={[
           [-122.48369693756104, 37.83381888486939],
-          [116.48348236083984, 37.83317489144141]
+          [116.48348236083984, 37.83317489144141],
+          [-72.87582982956775
+, 20.373523289756537]
         ]}
       />
     );
@@ -343,6 +351,7 @@ class Maps extends Component {
 
   render() {
     
+
     return (
       <Container>
         <ReactMapGL
@@ -363,7 +372,7 @@ class Maps extends Component {
             this._resize();
           }}
         >
-        
+           
           {this.renderVariousMarkers()}
           {this.addLines()}
           {this.renderAtualPolylineRedux()}
@@ -371,6 +380,10 @@ class Maps extends Component {
           {this.props.redux.mapa.cto.map((cto, index) => {
             let latitude = JSON.parse(cto.coordenadas).latitude;
             let longitude = JSON.parse(cto.coordenadas).longitude;
+            
+            this.state.logger+= 1
+            
+            console.tron.log('loop' + this.state.logger)
             return (
               <Marker
                 key={index}

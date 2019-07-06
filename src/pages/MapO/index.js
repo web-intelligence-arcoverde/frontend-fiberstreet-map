@@ -14,6 +14,7 @@ import { bindActionCreators } from "redux";
 import Header from "./header";
 import api from "../../services/api";
 import * as Actions from "../../redux/store/actions/all";
+import { Creators as CtosActions } from '../../redux/store/ducks/ctos'
 import MapController from "./MapController";
 
 const myDeckLayer = new MapboxLayer({
@@ -70,10 +71,12 @@ class Map extends Component {
     this.handleFlyToAPosition = this.handleFlyToAPosition.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { container, style, zoom, accessToken } = this.props;
     const { center } = this.state;
+    // let map = await 
     this.handleMap(container, style, center, zoom, accessToken);
+    
     this.handlePosition();
   }
 
@@ -99,10 +102,86 @@ class Map extends Component {
     // });
     map.on("click", e => this.handleMapClick(e));
 
-    this.setState({
-      map: map
-    });
+    var url = 'https://wanderdrone.appspot.com';
+    map.on('load', function() {
+      window.setInterval(function() {
+        map.getSource('drone').setData(url);
+      }, 2000);
+
+      map.addSource('drone', {
+        type: 'geojson', data: url
+      });
+      map.addLayer({
+        'id': "drone",
+        'type': 'symbol',
+        'source': 'drone',
+        'layout': {
+          'icon-image': "rocket-15"
+        }
+      })
+    })
+
+    // Teste de de reloading dos components
+          // let ctoFeatures = [];
+          // this.props.redux.mapa.cto.map((cto, index) => {
+          //   let latitude = JSON.parse(cto.coordenadas).latitude;
+          //   let longitude = JSON.parse(cto.coordenadas).longitude;
+          //   console.tron.log({ CTOS: cto });
+          //   let data = {
+          //     type: "Feature",
+          //     properties: {
+          //       data: cto
+          //     },
+          //     geometry: {
+          //       type: "Point",
+          //       coordinates: [longitude, latitude]
+          //     }
+          //   };
+          //   ctoFeatures.push(data); // nome
+          // });
+
+          // let data = this.props.redux.mapa.ctos.data
+          // map.on('load', function (){
+          //   window.setInterval(function() {
+          //     map.getSource('cto').setData(data)
+          //   }, 2000);
+          //   map.addSource('cto', {
+          //     type: 'geojson', data: data
+          //   })
+            
+          //   map.loadImage(require("../../assets/images/CTO_24x24.png"), function(
+          //     error,
+          //     image
+          //   ) {
+          //     if (error) throw error;
+          //     map.addImage("custom-marker", image);
+          //     /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+          //     map.addLayer({
+          //       'id': "markers",
+          //       'type': "symbol",
+          //       /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
+          //       'source': {
+          //         'type': "geojson",
+          //         'data': 'cto'
+          //       },
+          //       'layout': {
+          //         "icon-image": "custom-marker"
+          //       }
+          //     });
+          //   });
+          // })
+    // Teste End de reloading dos components
+
+
+
+    // this.setState({
+    //   map: map
+    // });
+    this.state.map = map; // Setting map in assyncronous modeß
+    // console.tron.log(this.state)
     this.obterDadosDoServidor(map);
+    return this.state.map;
+    // this.obterDadosDoServidor(map);
   }
 
   loadAsCoisas = () => {
@@ -149,8 +228,72 @@ class Map extends Component {
     const { lng: longitude, lat: latitude } = e.lngLat;
     console.tron.log(e.lngLat);
     console.tron.log(`Longitude: ${longitude}, Latitude: ${latitude}`);
+    const { addCoordenadas, canAddCoordenadas } = this.props;
+    addCoordenadas({ longitude: longitude, latitude: latitude });
+    canAddCoordenadas(false);
+    let coordinates = {
+      latitude: latitude,
+      longitude: longitude
+    };
+    this.verificaTipoDelimitacao(coordinates);
     // alert(`Longitude: ${longitude}, Latitude: ${latitude}`);
   };
+
+  /**
+   * Verifica o tipo de delimitação selecionada,
+   * adiciona o tipo de marcador selecionado nas coordenadas no mapa selecionada
+   * @param coordinates coordenadas selecionadas no mapa
+   * */
+  verificaTipoDelimitacao(coordinates) {
+    const { mapa } = this.props.redux;
+
+    switch (mapa.delimitacao) {
+      case "cto":
+        this.openModal(coordinates);
+        break;
+      case "ceo":
+        break;
+      case "splitter":
+        break;
+      case "cliente":
+        this.openModalAddClient(coordinates);
+        break;
+      case "fibra":
+        break;
+      case "cabo":
+        this.addCoordenadasCabo(coordinates);
+        break;
+      default:
+        break;
+    }
+  }
+
+  async openModal(coordinates) {
+    const { showModalCto, setDelimitacaoMapa } = this.props;
+    await showModalCto(coordinates);
+    setDelimitacaoMapa("default");
+  }
+
+  async openModalAddClient(coordinates) {
+    const { showAddClienteModal, setDelimitacaoMapa } = this.props;
+    await showAddClienteModal(coordinates);
+    setDelimitacaoMapa("default");
+  }
+
+  /** Adiciona coordenadas ao JSON de coordenadas de polyline contido no redux store
+   * mapa.polyline - REDUX
+   */
+  addCoordenadasCabo(coordenadas) {
+    const { addCoordCabo } = this.props;
+    const { polyline } = this.props.redux.mapa;
+    let newPolyline = [
+      ...polyline,
+      [coordenadas.longitude, coordenadas.latitude]
+    ];
+    console.tron.log({ LINES: newPolyline });
+
+    addCoordCabo(newPolyline);
+  }
 
   /** Aqui criamos uma função que usa uma feature do HTML5, chamada getCurrentPosition, que pega as informações de
   latitude e longitude do browser, caso o usuario permita, daí jogamos essas informações no estado da nossa
@@ -223,6 +366,7 @@ class Map extends Component {
   }
 
   async loadCtos(map) {
+    // console.tron.log(map)
     let ctoFeatures = [];
     await this.props.redux.mapa.cto.map((cto, index) => {
       let latitude = JSON.parse(cto.coordenadas).latitude;
@@ -349,29 +493,32 @@ class Map extends Component {
       map.getCanvas().style.cursor = "";
     });
     /* Image: An image is loaded and added to the map. */
-    map.loadImage(require("../../assets/images/CTO_24x24.png"), function(
-      error,
-      image
-    ) {
-      if (error) throw error;
-      map.addImage("custom-marker", image);
-      /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
-      map.addLayer({
-        id: "markers",
-        type: "symbol",
-        /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
-        source: {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: ctoFeatures
+    map.on('load', function (){
+      map.loadImage(require("../../assets/images/CTO_24x24.png"), function(
+        error,
+        image
+      ) {
+        if (error) throw error;
+        map.addImage("custom-marker", image);
+        /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+        map.addLayer({
+          id: "markers",
+          type: "symbol",
+          /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
+          source: {
+            type: "geojson",
+            data: {
+              type: "FeatureCollection",
+              features: ctoFeatures
+            }
+          },
+          layout: {
+            "icon-image": "custom-marker"
           }
-        },
-        layout: {
-          "icon-image": "custom-marker"
-        }
+        });
       });
-    });
+    })
+    
   }
 
   async loadWires(map) {
@@ -419,12 +566,59 @@ class Map extends Component {
     });
   }
 
+  handleReload(){
+    let ctoFeatures = []
+    this.props.redux.mapa.cto.map((cto, index) => {
+      let latitude = JSON.parse(cto.coordenadas).latitude;
+      let longitude = JSON.parse(cto.coordenadas).longitude;
+      let data = {
+        type: "Feature",
+        properties: {
+          data: cto
+        },
+        geometry: {
+          type: "Point",
+          coordinates: [longitude, latitude]
+        }
+      };
+      ctoFeatures.push(data);
+    })
+    const { map } = this.state
+    map.loadImage(require("../../assets/images/CTO_24x24.png"), function(
+      error,
+      image
+    ) {
+      if (error) throw error;
+      map.addImage("custom-marker", image);
+      /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+      map.addLayer({
+        id: "markers",
+        type: "symbol",
+        /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
+        source: {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: ctoFeatures
+          }
+        },
+        layout: {
+          "icon-image": "custom-marker"
+        }
+      });
+    });
+  }
+  
+
   render() {
     const { container, classNameStyle } = this.props;
     const { map } = this.state;
     return (
       <div id={container} className={classNameStyle}>
         <Header title="FiberStreet Maps - GZ NET" />
+        {// this.loadCtos(this.state.map)
+          //this.handleReload()
+        }
       </div>
     );
   }
@@ -442,7 +636,7 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({...Actions, ...CtosActions}, dispatch);
 
 export default connect(
   mapStateToProps,
@@ -453,3 +647,10 @@ export default connect(
  * https://docs.mapbox.com/mapbox-gl-js/example/custom-marker-icons/
  * https://medium.com/vis-gl/deckgl-and-mapbox-better-together-47b29d6d4fb1
  */
+
+ /**
+  * 
+  * TESTE TO RELOAD DATA
+  * https://docs.mapbox.com/mapbox-gl-js/example/live-geojson/
+  * Save geojson in redux and this is reloaded in the actions of redux
+  */
