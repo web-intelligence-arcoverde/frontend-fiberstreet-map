@@ -46,6 +46,7 @@ const INITIAL_STATE = {
   }
 };
 
+var initial = {};
 /**
  * Reducer
  * @param {*} state
@@ -54,15 +55,14 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case Types.ADD_REQUEST:
-      return { ...state };
+      return state;
     case Types.ADD_SUCCESS:
       return { ...state, mapa: { ...state.mapa, ctos: action.payload.data } };
     case Types.ADD_FAILURE:
-      return { ...state };
+      return state;
     default:
       return state;
   }
-  return state;
 }
 
 /**
