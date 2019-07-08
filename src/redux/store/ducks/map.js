@@ -10,15 +10,14 @@ export const Types = {
 /**
  * Reducer
  */
-
-const INITIAL_STATE = {};
+let INITIAL_STATE = require("./ctos");
 
 /**
  * Reducer
  * @param {*} state Estado atual da aplicação
  * @param {*} action Action enviada para o reducer
  */
-export default function(state = INITIAL_STATE, action) {
+export default function(state, action) {
   switch (action.type) {
     case Types.ADD_REQUEST:
       return { ...state, mapa: { ...state.mapa, loading: true } };
