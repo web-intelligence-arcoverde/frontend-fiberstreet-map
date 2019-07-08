@@ -2,6 +2,7 @@ import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 import * as Types from "./store/type";
 import reducerCto from "./store/ducks/ctos";
+import reducers from "./store/ducks";
 
 import sagas from "./store/sagas";
 
@@ -56,7 +57,7 @@ const INITIAL_STATE = {
   }
 };
 
-function reducer(state = INITIAL_STATE, action) {
+export function reducer(state = {}, action) {
   switch (action.type) {
     case Types.addMarker:
       return { ...state, markers: [...state.markers, action.payload.markers] };
@@ -226,10 +227,10 @@ function reducer(state = INITIAL_STATE, action) {
   }
 }
 
-const rootReducer = combineReducers({reducer, reducerCto});
+// const rootReducer = combineReducers(reducer );
 
-// const store = createStore(reducer, composer);
-const store = createStore(rootReducer, composer);
+const store = createStore(reducers, composer);
+// const store = createStore(rootReducer, composer);
 
 sagaMiddlewares.run(sagas);
 
