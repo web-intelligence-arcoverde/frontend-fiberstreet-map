@@ -10,7 +10,7 @@ import api from "../../../services/api";
 Modal.setAppElement(document.getElementById("root"));
 
 function CaboAdd(props) {
-  const { modalCabo } = props.redux;
+  const { modalCabo } = props.redux.all;
 
   const [nome, setNome] = useState("");
   const [modelo, setModelo] = useState("");
@@ -32,7 +32,7 @@ function CaboAdd(props) {
   }
 
   async function handleSubmit() {
-    let coordinates = props.redux.mapa.polyline.map(linha => {
+    let coordinates = props.redux.all.mapa.polyline.map(linha => {
       return {
         longitude: linha[0],
         latitude: linha[1]
@@ -133,7 +133,7 @@ function CaboAdd(props) {
           <button
             style={{ height: 3 + "em", backgroundColor: "#429911" }}
             onClick={() => {
-              console.tron.log({ redux: props.redux.modalCabo });
+              console.tron.log({ redux: props.redux.all.modalCabo });
               handleSubmit();
             }}
           >

@@ -19,12 +19,12 @@ Modal.setAppElement(document.getElementById("root"));
 function AddCto(props) {
   const [name, setName] = useState("");
   const [coordinates, setCoordinates] = useState(
-    JSON.stringify(props.redux.coordenadas)
+    JSON.stringify(props.redux.all.coordenadas)
   );
   // JSON.stringify(props.redux.coordenadas)
   const [type, setType] = useState("");
   const [address, setAddress] = useState("");
-  const { modalCto } = props.redux;
+  const { modalCto } = props.redux.all;
   const TNAME = "name";
   const TCOORDINATES = "coordinates";
   const TTYPE = "type";
@@ -32,10 +32,10 @@ function AddCto(props) {
 
   useEffect(() => {
     function set() {
-      setCoordinates(JSON.stringify(props.redux.coordenadas));
+      setCoordinates(JSON.stringify(props.redux.all.coordenadas));
     }
     set();
-  }, [props.redux.coordenadas]);
+  }, [props.redux.all.coordenadas]);
 
   async function handleCto() {
     const { setCtoFromServer } = props;
@@ -136,7 +136,7 @@ function AddCto(props) {
             <label for="coordenadas">Coordenadas</label>
             <input
               id="coordenadas"
-              value={JSON.stringify(props.redux.modalCto.coordinates)}
+              value={JSON.stringify(props.redux.all.modalCto.coordinates)}
               type="text"
               name="coordenadas"
               placeholder="Coordenadas"

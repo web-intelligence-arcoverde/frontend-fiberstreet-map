@@ -11,7 +11,7 @@ import * as Actions from "../../../redux/store/actions/all";
 Modal.setAppElement(document.getElementById("root"));
 
 function SpAddModal(props) {
-  const { modalSplitter } = props.redux;
+  const { modalSplitter } = props.redux.all;
   // nome modelo balanceamento cto ceo fibraalimentacao
   const [nome, setNome] = useState("");
   const [balanceamento, setBalanceamento] = useState("");

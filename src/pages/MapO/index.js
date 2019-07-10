@@ -84,7 +84,7 @@ class Map extends Component {
    * Cria um novo mapa ( igual na doc Mapbox em getStarted )
    * Passa para o state a constante de mapa para não ficarmos criando objetos globais
    */
-  handleMap(container, style, center, zoom, accessToken) {
+  handleMap = (container, style, center, zoom, accessToken) =>{
     mapboxgl.accessToken = accessToken;
     const map = new mapboxgl.Map({
       container: container,
@@ -103,76 +103,65 @@ class Map extends Component {
     map.on("click", e => this.handleMapClick(e));
 
     var url = 'https://wanderdrone.appspot.com';
+    var urlFS = 'http://localhost:3333/get/cto';
     map.on('load', function() {
       window.setInterval(function() {
-        map.getSource('drone').setData(url);
-      }, 2000);
+        // map.getSource('drone').setData(url);
+        api.get('/get/cto').then(result => {
+          const { data } = result;
+          const dados = {
+              type: "FeatureCollection",
+              features: data
+          }
+          map.getSource('drone').setData(dados)
+        })
+        
+      }, 3700);
 
       map.addSource('drone', {
-        type: 'geojson', data: url
+        type: 'geojson', 
+        data: url
       });
-      map.addLayer({
-        'id': "drone",
-        'type': 'symbol',
-        'source': 'drone',
-        'layout': {
-          'icon-image': "rocket-15"
-        }
-      })
+      console.tron.log(this.props)
+      
+      map.loadImage(require("../../assets/images/CTO_24x24.png"), function(
+        error,
+        image
+      ){
+        if (error) throw error;
+        map.addImage("custom-CTO", image);
+        /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+        map.addLayer({
+          'id': "drone",
+          'type': 'symbol',
+          'source': 'drone',
+          'layout': {
+            'icon-image': "custom-CTO"//"rocket-15"
+          }  
+        });
+      });
+      // map.addLayer({
+      //   'id': "drone",
+      //   'type': 'symbol',
+      //   'source': 'drone',
+      //   'layout': {
+      //     'icon-image': "custom-cto"//"rocket-15"
+      //   }
+      // })
     })
 
-    // Teste de de reloading dos components
-          // let ctoFeatures = [];
-          // this.props.redux.mapa.cto.map((cto, index) => {
-          //   let latitude = JSON.parse(cto.coordenadas).latitude;
-          //   let longitude = JSON.parse(cto.coordenadas).longitude;
-          //   console.tron.log({ CTOS: cto });
-          //   let data = {
-          //     type: "Feature",
-          //     properties: {
-          //       data: cto
-          //     },
-          //     geometry: {
-          //       type: "Point",
-          //       coordinates: [longitude, latitude]
-          //     }
-          //   };
-          //   ctoFeatures.push(data); // nome
-          // });
+    
 
-          // let data = this.props.redux.mapa.ctos.data
-          // map.on('load', function (){
-          //   window.setInterval(function() {
-          //     map.getSource('cto').setData(data)
-          //   }, 2000);
-          //   map.addSource('cto', {
-          //     type: 'geojson', data: data
-          //   })
-            
-          //   map.loadImage(require("../../assets/images/CTO_24x24.png"), function(
-          //     error,
-          //     image
-          //   ) {
-          //     if (error) throw error;
-          //     map.addImage("custom-marker", image);
-          //     /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
-          //     map.addLayer({
-          //       'id': "markers",
-          //       'type': "symbol",
-          //       /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
-          //       'source': {
-          //         'type': "geojson",
-          //         'data': 'cto'
-          //       },
-          //       'layout': {
-          //         "icon-image": "custom-marker"
-          //       }
-          //     });
-          //   });
-          // })
-    // Teste End de reloading dos components
-
-
+    // map.on("click", "drone", function(e) {
+        
+    //   // if (this.props.redux.mapa.delimitacao === "cabo") {
+    //     let longitude = e.features[0].geometry.coordinates[0];
+    //     let latitude = e.features[0].geometry.coordinates[1];
+    //     console.tron.log(longitude)
+    //     console.tron.log(latitude)
+    //     let cto = e.features[0].properties.data
+    //    console.tron.log(this.props.redux)
+    // });
 
     // this.setState({
     //   map: map
@@ -182,6 +171,27 @@ class Map extends Component {
     this.obterDadosDoServidor(map);
     return this.state.map;
     // this.obterDadosDoServidor(map);
+  }
+
+
+  addCto = (longitude, latitude, cto) => {
+    if (this.props.redux.all.mapa.delimitacao === "cabo") {
+      const {
+        addCoordCabo,
+        setDelimitacaoMapa,
+        showAddCaboModal
+      } = this.props;
+      const { polyline } = this.props.redux.all.mapa;
+      let newPolyline = [...polyline, [longitude, latitude]];
+
+      addCoordCabo(newPolyline);
+      showAddCaboModal();
+      setDelimitacaoMapa("default");
+    } else {
+      const { showDataInViewModal } = this.props;
+
+      showDataInViewModal(cto);
+    }
   }
 
   loadAsCoisas = () => {
@@ -245,7 +255,7 @@ class Map extends Component {
    * @param coordinates coordenadas selecionadas no mapa
    * */
   verificaTipoDelimitacao(coordinates) {
-    const { mapa } = this.props.redux;
+    const { mapa } = this.props.redux.all;
 
     switch (mapa.delimitacao) {
       case "cto":
@@ -285,7 +295,7 @@ class Map extends Component {
    */
   addCoordenadasCabo(coordenadas) {
     const { addCoordCabo } = this.props;
-    const { polyline } = this.props.redux.mapa;
+    const { polyline } = this.props.redux.mapa.all;
     let newPolyline = [
       ...polyline,
       [coordenadas.longitude, coordenadas.latitude]
@@ -323,6 +333,9 @@ class Map extends Component {
     let information = {
       type: "cto"
     };
+    function a(lng, lat, ct){
+      this.addCto(lng,lat,ct)
+    }
     await api
       .post("/get/cto", information)
       .then(result => {
@@ -332,7 +345,15 @@ class Map extends Component {
         setCtoFromServer(data);
         // console.warn(this.props);
         console.tron.log({ functions: this.props });
-        this.loadCtos(map);
+        // this.loadCtos(map);
+        map.on("click", "drone", function(e) {
+          let longitude = e.features[0].geometry.coordinates[0];
+          let latitude = e.features[0].geometry.coordinates[1];
+          console.tron.log(longitude)
+          console.tron.log(latitude)
+          let cto = e.features[0].properties.data
+          a(longitude, latitude, cto)
+        });
         this.obterCabos(map);
       })
       .catch(err => {
@@ -341,6 +362,8 @@ class Map extends Component {
     // await this.obterClientes();
   }
   async obterCabos(map) {
+    
+    
     const { setPolylinesFromServer } = this.props;
     await api
       .get("/cabo/get")
@@ -365,10 +388,41 @@ class Map extends Component {
       .catch(err => console.tron.warn(err));
   }
 
+  /**
+   * Método responsável por carregar os clientes no mapa
+   * @param map -> Mapa que está sendo utilizado.
+   */
+  async loadClientes(map) {
+    map.on('load', function() {
+      window.setInterval(() => {
+        api
+          .get('/cliente/get')
+          .then(response => {
+            const { data } = response;
+            map.getSource('cliente').setData(data);
+          })
+      }, 2000)
+      map.addSource('cliente', {
+        type: 'geojson',
+        data: {}
+      })
+      // map.addImage('custom-cliente', insert_src_of_Image_Here)
+      map.addLayer({
+        'id': "cliente",
+        'type': 'symbol',
+        'source': 'cliente',
+        'layout': {
+          'icon-image': "rocket-15"
+        }
+      })
+    })
+  }
+
   async loadCtos(map) {
     // console.tron.log(map)
     let ctoFeatures = [];
-    await this.props.redux.mapa.cto.map((cto, index) => {
+    console.tron.log({LOADING_CTO: 'Carregando ctos'})
+    await this.props.redux.all.mapa.cto.map((cto, index) => {
       let latitude = JSON.parse(cto.coordenadas).latitude;
       let longitude = JSON.parse(cto.coordenadas).longitude;
       console.tron.log({ CTOS: cto });
@@ -516,13 +570,14 @@ class Map extends Component {
             "icon-image": "custom-marker"
           }
         });
+        // console.tron.log({ POST_LOAD: 'Features carregadas'})
       });
     })
     
   }
 
   async loadWires(map) {
-    this.props.redux.mapa.cabos.map((wire, index) => {
+    this.props.redux.all.mapa.cabos.map((wire, index) => {
       console.tron.log(this.props.redux);
       const { coordenadas } = wire;
       const layer = new MapboxLayer({
@@ -568,7 +623,7 @@ class Map extends Component {
 
   handleReload(){
     let ctoFeatures = []
-    this.props.redux.mapa.cto.map((cto, index) => {
+    this.props.redux.mapa.all.cto.map((cto, index) => {
       let latitude = JSON.parse(cto.coordenadas).latitude;
       let longitude = JSON.parse(cto.coordenadas).longitude;
       let data = {

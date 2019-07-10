@@ -15,8 +15,9 @@ import api from "../../../services/api";
 Modal.setAppElement(document.getElementById("root"));
 
 function ViewCto(props) {
-  const { viewCto } = props.redux;
-  const coordinates = viewCto.data.coordenadas;
+  // const { viewCto } = props.redux;
+  const { all } = props.redux;
+  const coordinates = all.viewCto.data.coordenadas;
   const [coordenadas, setCoordenadas] = useState("");
   const [nome, setNome] = useState("");
   const [endereco, setEndereco] = useState("");
@@ -36,8 +37,8 @@ function ViewCto(props) {
         })
         .catch(e => console.warn(e));
     }
-    getSplitters(viewCto.data.id);
-  }, [viewCto.data.id]);
+    getSplitters(all.viewCto.data.id);
+  }, [all.viewCto.data.id]);
 
   /** Obtém os clientes por cada saída do splitter existente */
   useEffect(() => {
@@ -47,8 +48,8 @@ function ViewCto(props) {
         setSaidasSplitter(saidaSplitter);
       });
     }
-    getSaidaSpWithClientes(viewCto.data.id);
-  }, [viewCto.data.id]);
+    getSaidaSpWithClientes(all.viewCto.data.id);
+  }, [all.viewCto.data.id]);
 
   // useEffect(() => {
   //   function getClientesBySplitter(id){
@@ -74,7 +75,7 @@ function ViewCto(props) {
 
   return (
     <Modal
-      isOpen={viewCto.visible}
+      isOpen={all.viewCto.visible}
       onRequestClose={handleHideModal}
       contentLabel="Visualização dos dados da CTO"
       className="modal-container"
@@ -82,9 +83,9 @@ function ViewCto(props) {
     >
       <Container>
         <h1>Caixa Terminal Óptica</h1>
-        <p>Nome: {viewCto.data.nome}</p>
-        <p>Endereço: {viewCto.data.endereco}</p>
-        <p>Modelo: {viewCto.data.modelo}</p>
+        <p>Nome: {all.viewCto.data.nome}</p>
+        <p>Endereço: {all.viewCto.data.endereco}</p>
+        <p>Modelo: {all.viewCto.data.modelo}</p>
         <br />
         <SplitterContainer>
           <h3>Splitters nesta CTO</h3>
@@ -124,7 +125,7 @@ function ViewCto(props) {
 
         <br />
         <ButtonContainer>
-          <Button onClick={() => addSplitter(viewCto.data.id)}>
+          <Button onClick={() => addSplitter(all.viewCto.data.id)}>
             Adicionar Splitter
           </Button>
           <Button>Editar</Button>

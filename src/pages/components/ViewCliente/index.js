@@ -3,13 +3,14 @@ import Modal from "react-modal";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from "../../../redux/store/actions/all";
+import { Creators as ClienteCreators } from "../../../redux/store/ducks/all";
 import { Container, ButtonContainer, Button } from "./styles";
 import "../modalStyles/styles.css";
 
 Modal.setAppElement(document.getElementById("root"));
 
 function ViewCliente(props) {
-  const { viewClient } = props.redux;
+  const { viewClient } = props.redux.all;
 
   let {
     nome,
@@ -27,8 +28,9 @@ function ViewCliente(props) {
   }
 
   function handleCoordCabo() {
-    let latitude = JSON.parse(props.redux.viewClient.data.coordenadas).latitude;
-    let longitude = JSON.parse(props.redux.viewClient.data.coordenadas)
+    let latitude = JSON.parse(props.redux.all.viewClient.data.coordenadas)
+      .latitude;
+    let longitude = JSON.parse(props.redux.all.viewClient.data.coordenadas)
       .longitude;
     let coord = [longitude, latitude];
     // alert(coord);
@@ -94,7 +96,9 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
+// const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(ClienteCreators, dispatch);
 
 export default connect(
   mapStateToProps,

@@ -9,6 +9,7 @@ import "../modalStyles/styles.css";
 // import { canAddCoordenadas } from "../../../redux/store/actions/all";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import { Creators as ClienteCreators } from "../../../redux/store/ducks/all";
 // import { obterDadosDoServidor } from "../../../services/handleInformation";
 import * as Actions from "../../../redux/store/actions/all";
 
@@ -30,7 +31,7 @@ function ClienteAddModal(props) {
   const VELOCIDADE = "velocidade";
   const PPPOE = "pppoe";
   const DTINSTALL = "data_instalacao";
-  const { modalCliente } = props.redux;
+  const { all } = props.redux;
 
   function handleChange(event, mode) {
     const { value } = event.target;
@@ -76,7 +77,7 @@ function ClienteAddModal(props) {
   }
 
   async function handleCliente() {
-    const { coordinates } = props.redux.modalCliente;
+    const { coordinates } = props.redux.all.modalCliente;
     const cliente = {
       nome: nome,
       cpf: cpf,
@@ -120,7 +121,7 @@ function ClienteAddModal(props) {
 
   return (
     <Modal
-      isOpen={modalCliente.visible}
+      isOpen={all.modalCliente.visible}
       onRequestClose={handleHideModal}
       contentLabel="Adicionar novo cliente"
       className="modal-container"
@@ -153,7 +154,7 @@ function ClienteAddModal(props) {
           <label for="coord">Coordenadas</label>
           <input
             id="coord"
-            value={JSON.stringify(props.redux.modalCliente.coordinates)}
+            value={JSON.stringify(props.redux.all.modalCliente.coordinates)}
             type="text"
             name={COORD}
             placeholder="Coordenadas"
@@ -193,7 +194,9 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
+// const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(ClienteCreators, dispatch);
 
 export default connect(
   mapStateToProps,

@@ -7,44 +7,7 @@ export const Types = {
   ADD_FAILURE: "cto/ADD_FAILURE"
 };
 
-const INITIAL_STATE = {
-  markers: [],
-  coordenadas: {
-    latitude: "",
-    longitude: ""
-  },
-  canAddCoordenadas: true,
-  modalCto: {
-    visible: false
-  },
-  viewCto: {
-    visible: false,
-    data: {}
-  },
-  modalSplitter: {
-    visible: false,
-    id: 9999999
-  },
-  modalCliente: {
-    visible: false,
-    coordinates: {}
-  },
-  modalCabo: {
-    visible: false
-  },
-  mapa: {
-    map: {},
-    delimitacao: "default",
-    cto: [],
-    cliente: [],
-    cabos: [],
-    polyline: []
-  },
-  viewClient: {
-    visible: false,
-    data: ""
-  }
-};
+const INITIAL_STATE = {};
 
 var initial = {};
 /**
@@ -57,7 +20,7 @@ export default function(state = INITIAL_STATE, action) {
     case Types.ADD_REQUEST:
       return state;
     case Types.ADD_SUCCESS:
-      return { ...state, mapa: { ...state.mapa, ctos: action.payload.data } };
+      return { ...state, ctos: action.payload.data };
     case Types.ADD_FAILURE:
       return state;
     default:
