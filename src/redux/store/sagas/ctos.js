@@ -27,3 +27,26 @@ export function* loadCto(action) {
     yield put(CtoActions.addCtoFailure("Erro ao carregar ctos"));
   }
 }
+
+export function* viewCto(action) {
+  try {
+    yield put(CtoActions.add);
+  } catch (err) {
+    yield put();
+  }
+}
+
+/**
+ * 1 - Ao adicionar uma cto, dispara um evento para adicionar cto
+ * 2 - O evento vai ser ouvido aqui e vamos verificar a quantidade de objetos no mapa
+ *    - Caso a quantidade for mais ou diferente da existente no mapa, obtemos novamento
+ *        do banco de dados as ctos existentes e alteramos o source existente na UI
+ * 3 - A UI ficará observando por mudanças no redux
+ * Obs -> Podemos salvar o interval no redux e ativar/desativar ele
+ *
+ */
+export function* addCto(action) {
+  try {
+    yield put();
+  } catch (err) {}
+}

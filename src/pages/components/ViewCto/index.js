@@ -17,9 +17,10 @@ Modal.setAppElement(document.getElementById("root"));
 function ViewCto(props) {
   // const { viewCto } = props.redux;
   const { all } = props.redux;
+  const { data } = props.redux.all.viewCto;
   const coordinates = all.viewCto.data.coordenadas;
   const [coordenadas, setCoordenadas] = useState("");
-  const [nome, setNome] = useState("");
+  const [nome, setNome] = useState(props.redux.all.viewCto.data.nome);
   const [endereco, setEndereco] = useState("");
   const [modelo, setModelo] = useState("");
   const [splitters, setSplitters] = useState([]);
@@ -73,6 +74,8 @@ function ViewCto(props) {
     showSplitterAddModal(id);
   }
 
+  var dados = {};
+
   return (
     <Modal
       isOpen={all.viewCto.visible}
@@ -83,18 +86,20 @@ function ViewCto(props) {
     >
       <Container>
         <h1>Caixa Terminal Óptica</h1>
-        <p>Nome: {all.viewCto.data.nome}</p>
-        <p>Endereço: {all.viewCto.data.endereco}</p>
-        <p>Modelo: {all.viewCto.data.modelo}</p>
+        <p onClick={() => console.tron.log(data.nome)}>Nome: {data.nome}</p>
+        <p>Endereço: {data.endereco}</p>
+        <p>Modelo: {data.modelo}</p>
         <br />
+
         <SplitterContainer>
           <h3>Splitters nesta CTO</h3>
           <table>
-            <tr>
+            <thead>
               <th>Nome</th>
-              {/* <th>Modelo</th>
-              <th>Balanceamento</th> */}
-            </tr>
+              <th>Modelo</th>
+              <th>Balanceamento</th>
+            </thead>
+            <tbody>
             {saidasSplitter.map(sSplitter => (
               <>
                 <tr>
@@ -119,6 +124,7 @@ function ViewCto(props) {
                 </table>
               </>
             ))}
+            </tbody>
           </table>
           <button>Adicionar Cliente</button>
         </SplitterContainer>

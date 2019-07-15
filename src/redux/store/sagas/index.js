@@ -3,6 +3,8 @@ import { all, takeLatest } from "redux-saga/effects";
 
 import { loadCto } from "./ctos";
 import { Types } from "../ducks/ctos";
+import { loadMap } from './map';
+import { Types as MapTypes } from '../ducks/map';
 
 /**  O * diz que estamos criando uma função generator
  * O generator é a maneira de lidarmos com assincronismo
@@ -11,5 +13,8 @@ import { Types } from "../ducks/ctos";
  */
 
 export default function* rootSaga() {
-  yield all([takeLatest(Types.ADD_REQUEST, loadCto)]);
+  yield all([
+    takeLatest(Types.ADD_REQUEST, loadCto),
+    takeLatest(MapTypes.ADD_REQUEST, loadMap)
+  ]);
 }

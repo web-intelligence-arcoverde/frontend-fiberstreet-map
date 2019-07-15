@@ -4,10 +4,16 @@
 export const Types = {
   ADD_REQUEST: "cto/ADD_REQUEST",
   ADD_SUCCESS: "cto/ADD_SUCCESS",
-  ADD_FAILURE: "cto/ADD_FAILURE"
+  ADD_FAILURE: "cto/ADD_FAILURE",
+
+  VIEW_REQUEST: 'cto/VIEW_REQUEST',
+  VIEW_SUCCESS: 'cto/VIEW_SUCCESS',
+  VIEW_FAILURE: 'cto/VIEW_FAILURE'
 };
 
-const INITIAL_STATE = {};
+const INITIAL_STATE = {
+  ctos: []
+};
 
 var initial = {};
 /**
@@ -17,12 +23,14 @@ var initial = {};
  */
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case Types.ADD_REQUEST:
-      return state;
     case Types.ADD_SUCCESS:
       return { ...state, ctos: action.payload.data };
     case Types.ADD_FAILURE:
       return state;
+
+    case Types.VIEW_REQUEST:
+      return {...state, ctos: action.payload.data }
+
     default:
       return state;
   }

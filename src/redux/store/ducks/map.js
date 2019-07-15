@@ -10,29 +10,28 @@ export const Types = {
 /**
  * Reducer
  */
-let INITIAL_STATE = require("./ctos");
+let INITIAL_STATE = {
+  map: {}
+};
 
 /**
  * Reducer
  * @param {*} state Estado atual da aplicação
  * @param {*} action Action enviada para o reducer
  */
-export default function(state, action) {
+export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case Types.ADD_REQUEST:
-      return { ...state, mapa: { ...state.mapa, loading: true } };
+      return { ...state, loading: true };
     case Types.ADD_SUCCESS:
       return {
         ...state,
-        mapa: {
-          ...state.mapa,
-          loading: false,
-          error: null,
-          data: action.payload.data
-        }
+        map: action.payload.map,
+        loading: false,
+        error: null
       };
     case Types.ADD_FAILURE:
-      return { ...state, mapa: { ...state.mapa, error: action.payload.error } };
+      return { ...state, map: {}, error: action.payload.error };
     default:
       return state;
   }
@@ -47,9 +46,9 @@ export const Creators = {
     payload: { request }
   }),
 
-  addMapSuccess: data => ({
+  addMapSuccess: map => ({
     type: Types.ADD_SUCCESS,
-    payload: { data }
+    payload: { map }
   }),
 
   addMapFailure: error => ({

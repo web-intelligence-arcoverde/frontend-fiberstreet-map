@@ -13,8 +13,10 @@ import Login from "./pages/Login";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
-    {...rest} // recebe todos os parametros 
-    render={props => // O método render verifica se está autenticado
+    {...rest} // recebe todos os parametros
+    render={(
+      props // O método render verifica se está autenticado
+    ) =>
       isAuthenticated() ? (
         <Component {...props} />
       ) : (
@@ -49,7 +51,7 @@ const Routes = () => (
       {/* <Route exact path="/signin" component={() => <Signin />} /> */}
       <PrivateRoute path="/app" component={() => <h1>Você está logado</h1>} />
       {/* <PrivateRoute exact path="/map" component={() => <Map />} /> */}
-      <PrivateRoute exact path="/map" component={() => <MainMap />} />
+      <PrivateRoute exact path="/map" component={MainMap} />
       <PrivateRoute
         exact
         path="/dashboard"
