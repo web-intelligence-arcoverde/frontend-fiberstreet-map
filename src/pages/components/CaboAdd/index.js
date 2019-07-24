@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from "../../../redux/store/actions/all";
+import { Creators as AllCreators } from '../../../redux/store/ducks/all'
 import Modal from "react-modal";
 import { Form } from "../modalStyles/styles";
 import "../modalStyles/styles.css";
@@ -49,6 +50,7 @@ function CaboAdd(props) {
       coordenadas: coordinatesStrinfigied //props.redux.mapa.polyline
     };
     const { addCoordCabo, hideAddCaboModal } = props;
+    addCoordCabo([null]);
     await api
       .post("/cabo/add", cabo)
       .then(response => {
@@ -56,8 +58,9 @@ function CaboAdd(props) {
         alert("Cabo armazenado <com></com> suceso");
         setNome("");
         setModelo("");
-        hideAddCaboModal();
         addCoordCabo([]);
+        hideAddCaboModal();
+        
       })
       .catch(err => console.tron.warn(`API => Cabo/ADD: ${err}`));
   }
@@ -106,7 +109,7 @@ function CaboAdd(props) {
           <input
             id="modelo"
             name="tipo"
-            placeholder="Modelo da CTO"
+            placeholder="Modelo do cabo"
             value={modelo}
             onChange={e => handleChange(e, TMODEL)}
             required
@@ -152,7 +155,8 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
+// const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(AllCreators, dispatch);
 
 export default connect(
   mapStateToProps,

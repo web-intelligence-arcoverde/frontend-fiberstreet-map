@@ -4,7 +4,7 @@ import styled from "styled-components";
 export const Container = styled.div`
   align-items: center;
   justify-content: center;
-  background-image: url("https://www.freepik.com/free-photos-vectors/background")
+  background-image: linear-gradient(blue, red);
   opacity: 0.5;
   top: 0;
   left: 0;

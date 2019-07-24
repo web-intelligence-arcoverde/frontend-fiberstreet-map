@@ -76,7 +76,6 @@ class Map extends Component {
     this.handlePosition = this.handlePosition.bind(this);
     this.handleFlyToAPosition = this.handleFlyToAPosition.bind(this);
   }
-  
 
   async componentDidMount() {
     const { container, style, zoom, accessToken } = this.props;
@@ -110,6 +109,7 @@ class Map extends Component {
     // this.obterDadosDoServidor(map);    
   }
 
+  /** Faz a configuração inicial do mapa */
   firstConfigure() {
     let { map } = this.state
     const { showDataInViewModal, addMapSuccess } = this.props;
@@ -119,7 +119,6 @@ class Map extends Component {
     var urlFS = 'http://localhost:3333/get/cto';
     map.on('load', function() {
       window.setInterval(function() {
-        // map.getSource('drone').setData(url);
         // Carrega as CTOS
         api.get('/get/cto').then(result => {
           const { data } = result;
@@ -138,9 +137,51 @@ class Map extends Component {
           }
           map.getSource('cliente').setData(dados);
         })
+
+        // Configurando obtenção dos cabos de fibra optica
+        api.get('/cabo/getgj').then(result => {
+          const { data } = result;
+          // LAYER DATA
+          const dados = {
+            type: 'FeatureCollection',
+            features: data
+          }
+          map.getSource('wires').setData(dados)
+
+          // LAYER
+        })
         
       }, 3700);
+      // init Carrega cabos
+      map.addSource('wires', {
+        type: 'geojson',
+        data: url
+      })
+      map.addLayer({
+        'id': "wires",
+        'source': 'wires',
+        'type': "line",//GeoJsonLayer,
+        // pickable: true,
+        // stroked: false,
+        // filled: true,
+        // extruded: true,
+        // lineWidthScale: 2,
+        // lineWidthMinPixels: 2,
+        // getFillColor: [160, 160, 180, 200],
+        // getLineColor: [255, 0, 0], //d => colorToRGBArray(d.properties.color),
+        // getRadius: 100,
+        // getLineWidth: 1,
+        // getElevation: 30
+        // onHover: ({ object, x, y }) => {
+        //   const tooltip = object.properties.name || object.properties.station;
+        //   /* Update tooltip
+        //     http://deck.gl/#/documentation/developer-guide/adding-interactivity?section=example-display-a-tooltip-for-hovered-object
+        //   */
+        // }
+      });
+      // end Carrega cabos
 
+      // Adiciona cto
       map.addSource('drone', {
         type: 'geojson', 
         data: url
@@ -188,15 +229,18 @@ class Map extends Component {
       });
       // end Carrega cliente
 
-
       
     })
+    // map.addSource('polylineAdd', {
+    //   type: 'geojson', 
+    //   data: {}
+    // });
+    this.pruuuu()
     this.handleClicks(map);
   }
 
   /** Configuração de evento de clique nos objetos que estão no mapa
    * 'drone' -> Representa a CTO
-   * 
    */
   handleClicks(map){
     // Cliques na cto
@@ -204,43 +248,63 @@ class Map extends Component {
       addCoordCabo,
       setDelimitacaoMapa,
       showAddCaboModal } = this.props;
-    const { delimitacao } = this.props.redux.all.mapa;
-    const { polyline } = this.props.redux.all.mapa;
-    map.on('click', 'drone', function(e){
-      let longitude = e.features[0].geometry.coordinates[0];
-      let latitude = e.features[0].geometry.coordinates[1];
-      let cto = e.features[0].properties.data
-
-      if (delimitacao === "cabo") {
-        let newPolyline = [...polyline, [longitude, latitude]];
-
-        addCoordCabo(newPolyline);
-        showAddCaboModal();
-        setDelimitacaoMapa("default");
-      } else {
-        showDataInViewModal(JSON.parse(cto));
-      }
-     
-    })
+    var { delimitacao } = this.props.redux.all.mapa;
+    var { polyline } = this.props.redux.all.mapa;
+    
+    map.on('click', 'drone', e => this.handleCtoClick(e.features[0]))
 
     // Evento de clique nos Clientes
     const { showClientViewModal } = this.props;
     
-    map.on('click', 'cliente', function(e) {
-      alert('Você clicou no cliente')
-      let coordenadas = {
-        longitude: e.features[0].geometry.coordinates[0],
-        latitude: e.features[0].geometry.coordinates[1]
-      }
-      let cliente = JSON.parse(e.features[0].properties.data)
-      showClientViewModal(cliente);
-    })
+    map.on('click', 'cliente', e => this.handleCtoCaboClick(e))
+
+
+
   }
 
+  handleCtoClick = features => {
+    const { properties } = features;
+    let longitude = features.geometry.coordinates[0];
+    let latitude = features.geometry.coordinates[1];
+    
+    const data = JSON.parse(properties.data);
+    
+    this.handleCtoClickTwoFactor(data, longitude, latitude);
+  }
+
+  handleCtoClickTwoFactor(cto, longitude, latitude){
+    if(this.props.redux.all.mapa.delimitacao === 'cabo') {
+      const { addCoordCabo, setDelimitacaoMapa, showAddCaboModal } = this.props;
+      const { polyline } = this.props.redux.all.mapa;
+      let newPolyline = [...polyline, [longitude, latitude]]
+      
+      addCoordCabo(newPolyline);
+      showAddCaboModal();
+      setDelimitacaoMapa('default');
+    } else {
+      const { showDataInViewModal } = this.props;
+      
+      showDataInViewModal(cto)
+    }
+  }
+  
+  handleCtoCaboClick = e => {
+    let coordenadas = {
+      longitude: e.features[0].geometry.coordinates[0],
+      latitude: e.features[0].geometry.coordinates[1]
+    }
+    let cliente = JSON.parse(e.features[0].properties.data);
+    this.handleCtoCaboClickTwoFactor(cliente)
+  }
+
+  handleCtoCaboClickTwoFactor(cliente){
+    const { showClientViewModal } = this.props;
+    showClientViewModal(cliente)
+  }
 
   
   handleMapClick = e => {
-    console.log(this.state)
+    
     const { lng: longitude, lat: latitude } = e.lngLat;
     console.tron.log(e.lngLat);
     console.tron.log(`Longitude: ${longitude}, Latitude: ${latitude}`);
@@ -284,12 +348,20 @@ class Map extends Component {
     }
   }
 
+  /**
+   * Abre o modal de adição de CTO
+   * @param coordinates Coordenadas de onde ficará a CTO
+   */
   async openModal(coordinates) {
     const { showModalCto, setDelimitacaoMapa } = this.props;
     await showModalCto(coordinates);
     setDelimitacaoMapa("default");
   }
 
+  /** 
+   * Abre o modal de adição de cliente 
+   * @param coordinates Coordenadas de onde o cliente será inserido
+   * */
   async openModalAddClient(coordinates) {
     const { showAddClienteModal, setDelimitacaoMapa } = this.props;
     await showAddClienteModal(coordinates);
@@ -300,6 +372,7 @@ class Map extends Component {
    * mapa.polyline - REDUX
    */
   addCoordenadasCabo(coordenadas) {
+
     const { addCoordCabo } = this.props;
     const { polyline } = this.props.redux.all.mapa;
     let newPolyline = [
@@ -309,6 +382,7 @@ class Map extends Component {
     console.tron.log({ LINES: newPolyline });
 
     addCoordCabo(newPolyline);
+    this.adicionarCoordenadasAoCabo(newPolyline)
   }
 
   /** Aqui criamos uma função que usa uma feature do HTML5, chamada getCurrentPosition, que pega as informações de
@@ -670,11 +744,117 @@ class Map extends Component {
   //     });
   //   });
   // }
+  adicionarCoordenadasAoCabo(coordinates){
+    const { map } = this.state;
+    const { polyline } = this.props.redux.all.mapa
+    // alert(polyline)
+    // alert(map.getSource('putaquepariu'))
+    // alert(map.getSource('drone'))
+    // const datab = {
+    //   'type': 'Feature',
+    //   'properties': {},
+    //   'geometry': {
+    //     'type': "LineString",
+    //     'coordinates': [[-77.03202080476535, 38.91454768710531], [-78.03, 39.91]]  
+    //   }
+    // }
+    // console.log(map)
+    // map.getSource('putaquepariu').setData({
+    //   type: "geojson",
+    //   data: datab
+    // })
+    map.getSource('putaquepariu').setData({
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": polyline
+      }
+    })
   
+    
+  }
 
+  resetarCoordenadasAoCabo(){
+    const { map } = this.state;
+    const datab = {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: "LineString",
+        coordinates: [[-77.03202080476535, 38.91454768710531], [-78.03, 39.91]]  
+      }
+    }
+    map.getSource('lollipop').setData({
+      type: "geojson",
+      data: datab
+        // "type": "LineString",
+        // "coordinates": []
+    })
+  }
+  
+  pruuuu(){
+    const { map } = this.state;
+    const { polyline } = this.props.redux.all.mapa
+    map.on('load', () => {
+      map.addSource('putaquepariu', {
+        "type": "geojson",
+        "data": {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+        "type": "LineString",
+        "coordinates": polyline
+        // [
+        // [-122.48369693756104, 37.83381888486939],
+        // [-122.48348236083984, 37.83317489144141],
+        // [-122.48339653015138, 37.83270036637107],
+        // [-122.48356819152832, 37.832056363179625],
+        // [-122.48404026031496, 37.83114119107971],
+        // [-122.48404026031496, 37.83049717427869],
+        // [-122.48348236083984, 37.829920943955045],
+        // [-122.48356819152832, 37.82954808664175],
+        // [-122.48507022857666, 37.82944639795659],
+        // [-122.48610019683838, 37.82880236636284],
+        // [-122.48695850372314, 37.82931081282506],
+        // [-122.48700141906738, 37.83080223556934],
+        // [-122.48751640319824, 37.83168351665737],
+        // [-122.48803138732912, 37.832158048267786],
+        // [-122.48888969421387, 37.83297152392784],
+        // [-122.48987674713133, 37.83263257682617],
+        // [-122.49043464660643, 37.832937629287755],
+        // [-122.49125003814696, 37.832429207817725],
+        // [-122.49163627624512, 37.832564787218985],
+        // [-122.49223709106445, 37.83337825839438],
+        // [-122.49378204345702, 37.83368330777276],
+        //   [-77.03202080476535, 38.91454768710531]
+        // ]
+        }
+        }
+        })
+      
+      map.addLayer({
+        "id": "putaquepariu",
+        "type": "line",
+        "source": 'putaquepariu',
+        "layout": {
+        "line-join": "round",
+        "line-cap": "round"
+        },
+        "paint": {
+        "line-color": "#13d",
+        "line-width": 8
+        }
+      });
+      
+      
+    })
+    this.setState({map})
+  }
+  
   render() {
     const { container, classNameStyle } = this.props;
-    
+    const { polyline } = this.props.redux.all.mapa;
     
     return (
       <div id={container} className={classNameStyle}>

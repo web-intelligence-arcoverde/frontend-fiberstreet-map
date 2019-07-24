@@ -30,7 +30,7 @@ function ViewCto(props) {
   useEffect(() => {
     function getSplitters(id) {
       api
-        .get(`/get/splitter/${id}`)
+        .get(`/get/splitter/cto/${id}`)
         .then(response => {
           const sp = response.data;
           alert(JSON.stringify(response.data));
@@ -81,14 +81,15 @@ function ViewCto(props) {
       isOpen={all.viewCto.visible}
       onRequestClose={handleHideModal}
       contentLabel="Visualização dos dados da CTO"
-      className="modal-container"
+      // className="modal-container"
       overlayClassName="modal-overlay"
     >
       <Container>
         <h1>Caixa Terminal Óptica</h1>
-        <p onClick={() => console.tron.log(data.nome)}>Nome: {data.nome}</p>
+        <p>Nome: {data.nome}</p>
         <p>Endereço: {data.endereco}</p>
         <p>Modelo: {data.modelo}</p>
+        <p>Id: {data.id}</p>
         <br />
 
         <SplitterContainer>
@@ -98,34 +99,54 @@ function ViewCto(props) {
               <th>Nome</th>
               <th>Modelo</th>
               <th>Balanceamento</th>
+              <th>Fibra Aliment.</th>
             </thead>
             <tbody>
-            {saidasSplitter.map(sSplitter => (
-              <>
-                <tr>
-                  <td>{sSplitter.nome}</td>
-                  <td>{sSplitter.modelo}</td>
-                  <td>{sSplitter.balanceamento}</td>
-                </tr>
-                <h3>Clientes</h3>
-                <table>
+              {splitters.map((splitter, index) => (
+                <>
                   <tr>
-                    <th>Porta</th>
-                    <th>Nome</th>
-                    <th>PPPoE</th>
-                    <th>Velocidade</th>
+                    <td>{splitter.nome}</td>
+                    <td>{splitter.modelo}</td>
+                    <td>{splitter.balanceamento}</td>
+                    <td>Em const.</td>
                   </tr>
-                  <tr>
-                    <td>{sSplitter.numero}</td>
-                    <td>{sSplitter.Cliente.nome}</td>
-                    <td>{sSplitter.Cliente.usuario_pppoe}</td>
-                    <td>{sSplitter.Cliente.velocidade}</td>
-                  </tr>
-                </table>
-              </>
-            ))}
+                </>
+              ))}
             </tbody>
           </table>
+          {/* <table>
+            <thead>
+              <th>Nome</th>
+              <th>Modelo</th>
+              <th>Balanceamento</th>
+            </thead>
+            <tbody>
+              {saidasSplitter.map(sSplitter => (
+                <>
+                  <tr>
+                    <td>{sSplitter.nome}</td>
+                    <td>{sSplitter.modelo}</td>
+                    <td>{sSplitter.balanceamento}</td>
+                  </tr>
+                  <h3>Clientes</h3>
+                  <table>
+                    <tr>
+                      <th>Porta</th>
+                      <th>Nome</th>
+                      <th>PPPoE</th>
+                      <th>Velocidade</th>
+                    </tr>
+                    <tr>
+                      <td>{sSplitter.numero}</td>
+                      <td>{sSplitter.Cliente.nome}</td>
+                      <td>{sSplitter.Cliente.usuario_pppoe}</td>
+                      <td>{sSplitter.Cliente.velocidade}</td>
+                    </tr>
+                  </table>
+                </>
+              ))}
+            </tbody>
+          </table> */}
           <button>Adicionar Cliente</button>
         </SplitterContainer>
 
