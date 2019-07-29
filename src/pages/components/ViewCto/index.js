@@ -110,6 +110,21 @@ function ViewCto(props) {
                     <td>{splitter.balanceamento}</td>
                     <td>Em const.</td>
                   </tr>
+                  {/* Tabela com os clientes */}
+                  <table>
+                    <thead>
+                      <th>Nome</th>
+                      <th>PPPoE</th>
+                      <th>Endereço</th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>TesteNome</td>
+                        <td>Eu já não me...</td>
+                        <td>Rua da curva</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </>
               ))}
             </tbody>

@@ -10,6 +10,7 @@ import CaboAdd from "../components/CaboAdd";
 import Button from "../components/Button";
 import MapO from "../MapO";
 import Header from "../MapO/header";
+import AddRelCliCto from '../components/AddRelCliCto';
 // import Maps from "../MapboxDeckGl";
 
 const TOKEN =
@@ -47,6 +48,7 @@ const MainMap = () => (
     <ClienteAddModal />
     <ViewCliente />
     <CaboAdd />
+    <AddRelCliCto />
     {/* <AddCliente /> */}
   </Fragment>
 );
