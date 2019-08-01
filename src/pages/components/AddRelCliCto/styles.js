@@ -3,7 +3,12 @@ import styled from "styled-components";
 export const IconOutSp = styled.div`
   height: 25px;
   width: 25px;
-  background-color: ${props => (props.active === true ? "#AAF1A0" : "#FF000A")};
+  background-color: ${props =>
+    props.active === true
+      ? "#AAF1A0"
+      : props.selected === true
+      ? "#0000ff"
+      : "#FF000A"};
   border-radius: 50%;
   display: inline-block;
 `;

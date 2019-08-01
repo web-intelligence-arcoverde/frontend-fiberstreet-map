@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from "../../../redux/store/actions/all";
-import { Creators as AllCreators } from '../../../redux/store/ducks/all'
+import { Creators as AllCreators } from "../../../redux/store/ducks/all";
+import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
 import Modal from "react-modal";
 import { Form } from "../modalStyles/styles";
 import "../modalStyles/styles.css";
@@ -46,23 +47,29 @@ function CaboAdd(props) {
     const cabo = {
       nome: nome,
       tipo: modelo,
-      quantidade_fibras: 6,
+      quantidade_fibras: fibra,
       coordenadas: coordinatesStrinfigied //props.redux.mapa.polyline
     };
     const { addCoordCabo, hideAddCaboModal } = props;
-    addCoordCabo([null]);
-    await api
-      .post("/cabo/add", cabo)
-      .then(response => {
-        console.tron.log(`API => Cabo/ADD: ${response}`);
-        alert("Cabo armazenado <com></com> suceso");
-        setNome("");
-        setModelo("");
-        addCoordCabo([]);
-        hideAddCaboModal();
-        
-      })
-      .catch(err => console.tron.warn(`API => Cabo/ADD: ${err}`));
+    // addCoordCabo(null);
+    // Irá para próxima etapa
+      await api
+        .post("/cabo/add", cabo)
+        .then(response => {
+          console.tron.log(`API => Cabo/ADD: ${JSON.stringify(response)}`);
+          alert("Cabo armazenado com suceso");
+          setNome("");
+          setModelo("");
+          addCoordCabo([]);
+          hideAddCaboModal();
+        })
+        .catch(err => console.tron.warn(`err -> API => Cabo/ADD: ${err}`));
+    const { showDropAddModal } = props;
+    const dropNdCtoId = {
+      drop: cabo,
+      cto_id: modalCabo.cto_id
+    }
+    showDropAddModal(dropNdCtoId);
   }
 
   function handleChange(event, mode) {
@@ -156,7 +163,8 @@ const mapStateToProps = state => ({
 });
 
 // const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
-const mapDispatchToProps = dispatch => bindActionCreators(AllCreators, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ ...AllCreators, ...DropCreators }, dispatch);
 
 export default connect(
   mapStateToProps,

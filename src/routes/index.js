@@ -1,15 +1,22 @@
 import React from "react";
 /** Verifica autenticação no serviço */
-import { isAuthenticated } from "./services/auth";
+import { isAuthenticated } from "../services/auth";
+
 /** Imports de rotas */
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+
+/** ReactRouterDom + Redux */
+import { ConnectedRouter } from "connected-react-router";
+import history from "./history";
+
 /** Rota Mapbox */
-import Map from "./pages/Map";
-import MainMap from "./pages/MainMap";
-import Home from "./pages/Home";
+import Map from "../pages/Map";
+import MainMap from "../pages/MainMap";
+import Home from "../pages/Home";
+
 /** Rotas de autenticação */
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
+import Signup from "../pages/Signup";
+import Login from "../pages/Login";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -42,7 +49,7 @@ const PrivateRouteForLogedUser = ({ component: Component, ...rest }) => (
 );
 
 const Routes = () => (
-  <BrowserRouter>
+  <ConnectedRouter history={history}>
     <Switch>
       <Route exact path="/" component={() => <Home />} />
       {/* <h1>
@@ -95,7 +102,7 @@ const Routes = () => (
 
       <PrivateRouteForLogedUser exact path="/signup" component={Signup} />
     </Switch>
-  </BrowserRouter>
+  </ConnectedRouter>
 );
 
 export default Routes;

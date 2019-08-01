@@ -8,17 +8,17 @@ import {
   BitmapLayer
 } from "@deck.gl/layers";
 import { MapboxLayer } from "@deck.gl/mapbox";
-import 'mapbox-gl/dist/mapbox-gl.css'
+import "mapbox-gl/dist/mapbox-gl.css";
 import "./map.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Header from "./header";
 import api from "../../services/api";
 import * as Actions from "../../redux/store/actions/all";
-import { Creators as CtosActions } from '../../redux/store/ducks/ctos'
-import { Creators as MapCreators } from '../../redux/store/ducks/map'
+import { Creators as CtosActions } from "../../redux/store/ducks/ctos";
+import { Creators as MapCreators } from "../../redux/store/ducks/map";
 
-import Button from './button'
+import Button from "./button";
 
 const myDeckLayer = new MapboxLayer({
   id: "my-scatterplot",
@@ -62,15 +62,12 @@ const layer = new MapboxLayer({
   }
 });
 
-
-
 class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
       // center: [-75.5, 40]
-      center: [-77.031706, 38.914581], //[-49.6446024, -27.2108001]
-      
+      center: [-77.031706, 38.914581] //[-49.6446024, -27.2108001]
     };
     this.handleMap = this.handleMap.bind(this);
     this.handlePosition = this.handlePosition.bind(this);
@@ -80,9 +77,9 @@ class Map extends Component {
   async componentDidMount() {
     const { container, style, zoom, accessToken } = this.props;
     const { center } = this.state;
-    
+
     this.handleMap(container, style, center, zoom, accessToken);
-    this.firstConfigure()
+    this.firstConfigure();
     this.handlePosition();
   }
 
@@ -90,7 +87,7 @@ class Map extends Component {
    * Cria um novo mapa ( igual na doc Mapbox em getStarted )
    * Passa para o state a constante de mapa para não ficarmos criando objetos globais
    */
-  handleMap = (container, style, center, zoom, accessToken) =>{
+  handleMap = (container, style, center, zoom, accessToken) => {
     mapboxgl.accessToken = accessToken;
     var map = new mapboxgl.Map({
       container: container,
@@ -99,68 +96,64 @@ class Map extends Component {
       zoom: zoom
     });
 
-    
-    
     // this.setState({map})
     this.state.map = map;
-     // Configura eventos de clique no mapa
+    // Configura eventos de clique no mapa
 
-    
-    // this.obterDadosDoServidor(map);    
-  }
+    // this.obterDadosDoServidor(map);
+  };
 
   /** Faz a configuração inicial do mapa */
   firstConfigure() {
-    let { map } = this.state
+    let { map } = this.state;
     const { showDataInViewModal, addMapSuccess } = this.props;
 
     map.on("click", e => this.handleMapClick(e));
-    var url = 'https://wanderdrone.appspot.com';
-    var urlFS = 'http://localhost:3333/get/cto';
-    map.on('load', function() {
+    var url = "https://wanderdrone.appspot.com";
+    var urlFS = "http://localhost:3333/get/cto";
+    map.on("load", function() {
       window.setInterval(function() {
         // Carrega as CTOS
-        api.get('/get/cto').then(result => {
+        api.get("/get/cto").then(result => {
           const { data } = result;
           const dados = {
-              type: "FeatureCollection",
-              features: data
-          }
-          map.getSource('drone').setData(dados)
+            type: "FeatureCollection",
+            features: data
+          };
+          map.getSource("drone").setData(dados);
         });
         // Carrega os Clientes
-        api.get('/get/cliente').then(result => {
+        api.get("/get/cliente").then(result => {
           const { data } = result;
           const dados = {
-            type: 'FeatureCollection',
+            type: "FeatureCollection",
             features: data
-          }
-          map.getSource('cliente').setData(dados);
-        })
+          };
+          map.getSource("cliente").setData(dados);
+        });
 
         // Configurando obtenção dos cabos de fibra optica
-        api.get('/cabo/getgj').then(result => {
+        api.get("/cabo/getgj").then(result => {
           const { data } = result;
           // LAYER DATA
           const dados = {
-            type: 'FeatureCollection',
+            type: "FeatureCollection",
             features: data
-          }
-          map.getSource('wires').setData(dados)
+          };
+          map.getSource("wires").setData(dados);
 
           // LAYER
-        })
-        
+        });
       }, 3700);
       // init Carrega cabos
-      map.addSource('wires', {
-        type: 'geojson',
+      map.addSource("wires", {
+        type: "geojson",
         data: url
-      })
+      });
       map.addLayer({
-        'id': "wires",
-        'source': 'wires',
-        'type': "line",//GeoJsonLayer,
+        id: "wires",
+        source: "wires",
+        type: "line" //GeoJsonLayer,
         // pickable: true,
         // stroked: false,
         // filled: true,
@@ -182,129 +175,123 @@ class Map extends Component {
       // end Carrega cabos
 
       // Adiciona cto
-      map.addSource('drone', {
-        type: 'geojson', 
+      map.addSource("drone", {
+        type: "geojson",
         data: url
       });
-      console.tron.log(this.props)
-      
+      console.tron.log(this.props);
+
       // Carrega cto
       map.loadImage(require("../../assets/images/CTO_24x24.png"), function(
         error,
         image
-      ){
+      ) {
         if (error) throw error;
         map.addImage("custom-CTO", image);
         /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
         map.addLayer({
-          'id': "drone",
-          'type': 'symbol',
-          'source': 'drone',
-          'layout': {
-            'icon-image': "custom-CTO"//"rocket-15"
-          }  
+          id: "drone",
+          type: "symbol",
+          source: "drone",
+          layout: {
+            "icon-image": "custom-CTO" //"rocket-15"
+          }
         });
       });
       // end Carrega cto
       // ini Carrega Cliente
-      map.addSource('cliente', {
-        type: 'geojson', 
+      map.addSource("cliente", {
+        type: "geojson",
         data: url
       });
-      map.loadImage(require("../../assets/images/clienteCom24x12.png"), function(
-        error,
-        image
-      ){
-        if (error) throw error;
-        map.addImage("custom-cliente", image);
-        /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
-        map.addLayer({
-          'id': "cliente",
-          'type': 'symbol',
-          'source': 'cliente',
-          'layout': {
-            'icon-image': "custom-cliente"
-          }  
-        });
-      });
+      map.loadImage(
+        require("../../assets/images/clienteCom24x12.png"),
+        function(error, image) {
+          if (error) throw error;
+          map.addImage("custom-cliente", image);
+          /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+          map.addLayer({
+            id: "cliente",
+            type: "symbol",
+            source: "cliente",
+            layout: {
+              "icon-image": "custom-cliente"
+            }
+          });
+        }
+      );
       // end Carrega cliente
-
-      
-    })
+    });
     // map.addSource('polylineAdd', {
-    //   type: 'geojson', 
+    //   type: 'geojson',
     //   data: {}
     // });
-    this.pruuuu()
+    this.pruuuu();
     this.handleClicks(map);
   }
 
   /** Configuração de evento de clique nos objetos que estão no mapa
    * 'drone' -> Representa a CTO
    */
-  handleClicks(map){
+  handleClicks(map) {
     // Cliques na cto
-    const { showDataInViewModal, 
+    const {
+      showDataInViewModal,
       addCoordCabo,
       setDelimitacaoMapa,
-      showAddCaboModal } = this.props;
+      showAddCaboModal
+    } = this.props;
     var { delimitacao } = this.props.redux.all.mapa;
     var { polyline } = this.props.redux.all.mapa;
-    
-    map.on('click', 'drone', e => this.handleCtoClick(e.features[0]))
+
+    map.on("click", "drone", e => this.handleCtoClick(e.features[0]));
 
     // Evento de clique nos Clientes
     const { showClientViewModal } = this.props;
-    
-    map.on('click', 'cliente', e => this.handleCtoCaboClick(e))
 
-
-
+    map.on("click", "cliente", e => this.handleCtoCaboClick(e));
   }
 
   handleCtoClick = features => {
     const { properties } = features;
     let longitude = features.geometry.coordinates[0];
     let latitude = features.geometry.coordinates[1];
-    
-    const data = JSON.parse(properties.data);
-    
-    this.handleCtoClickTwoFactor(data, longitude, latitude);
-  }
 
-  handleCtoClickTwoFactor(cto, longitude, latitude){
-    if(this.props.redux.all.mapa.delimitacao === 'cabo') {
+    const data = JSON.parse(properties.data);
+
+    this.handleCtoClickTwoFactor(data, longitude, latitude);
+  };
+
+  handleCtoClickTwoFactor(cto, longitude, latitude) {
+    if (this.props.redux.all.mapa.delimitacao === "cabo") {
       const { addCoordCabo, setDelimitacaoMapa, showAddCaboModal } = this.props;
       const { polyline } = this.props.redux.all.mapa;
-      let newPolyline = [...polyline, [longitude, latitude]]
-      
+      let newPolyline = [...polyline, [longitude, latitude]];
+
       addCoordCabo(newPolyline);
-      showAddCaboModal();
-      setDelimitacaoMapa('default');
+      showAddCaboModal(cto.id);
+      setDelimitacaoMapa("default");
     } else {
       const { showDataInViewModal } = this.props;
-      
-      showDataInViewModal(cto)
+      showDataInViewModal(cto);
     }
   }
-  
+
   handleCtoCaboClick = e => {
     let coordenadas = {
       longitude: e.features[0].geometry.coordinates[0],
       latitude: e.features[0].geometry.coordinates[1]
-    }
+    };
     let cliente = JSON.parse(e.features[0].properties.data);
-    this.handleCtoCaboClickTwoFactor(cliente)
-  }
+    this.handleCtoCaboClickTwoFactor(cliente);
+  };
 
-  handleCtoCaboClickTwoFactor(cliente){
+  handleCtoCaboClickTwoFactor(cliente) {
     const { showClientViewModal } = this.props;
-    showClientViewModal(cliente)
+    showClientViewModal(cliente);
   }
 
-  
   handleMapClick = e => {
-    
     const { lng: longitude, lat: latitude } = e.lngLat;
     console.tron.log(e.lngLat);
     console.tron.log(`Longitude: ${longitude}, Latitude: ${latitude}`);
@@ -315,7 +302,7 @@ class Map extends Component {
       latitude: latitude,
       longitude: longitude
     };
-    this.verificaTipoDelimitacao(coordinates)
+    this.verificaTipoDelimitacao(coordinates);
   };
 
   /**
@@ -325,7 +312,6 @@ class Map extends Component {
    * */
   verificaTipoDelimitacao(coordinates) {
     const { mapa } = this.props.redux.all;
-    
 
     switch (mapa.delimitacao) {
       case "cto":
@@ -358,8 +344,8 @@ class Map extends Component {
     setDelimitacaoMapa("default");
   }
 
-  /** 
-   * Abre o modal de adição de cliente 
+  /**
+   * Abre o modal de adição de cliente
    * @param coordinates Coordenadas de onde o cliente será inserido
    * */
   async openModalAddClient(coordinates) {
@@ -372,7 +358,6 @@ class Map extends Component {
    * mapa.polyline - REDUX
    */
   addCoordenadasCabo(coordenadas) {
-
     const { addCoordCabo } = this.props;
     const { polyline } = this.props.redux.all.mapa;
     let newPolyline = [
@@ -382,7 +367,7 @@ class Map extends Component {
     console.tron.log({ LINES: newPolyline });
 
     addCoordCabo(newPolyline);
-    this.adicionarCoordenadasAoCabo(newPolyline)
+    this.adicionarCoordenadasAoCabo(newPolyline);
   }
 
   /** Aqui criamos uma função que usa uma feature do HTML5, chamada getCurrentPosition, que pega as informações de
@@ -410,21 +395,21 @@ class Map extends Component {
   /** Obtém os dados do servidor e armazena no redux para mostrar no mapa */
   async obterDadosDoServidor(map) {
     const { setCtoFromServer } = this.props;
-    const delimitacao = this.props.redux.all.mapa.delimitacao
-    
+    const delimitacao = this.props.redux.all.mapa.delimitacao;
+
     let information = {
       type: "cto"
     };
-    
+
     const { showDataInViewModal } = this.props;
-    
+
     await api
       .post("/get/cto", information)
       .then(result => {
         let data = result.data;
-        
+
         setCtoFromServer(data);
-        
+
         // map.on("click", "drone", function(e) {
         //   let longitude = e.features[0].geometry.coordinates[0];
         //   let latitude = e.features[0].geometry.coordinates[1];
@@ -439,12 +424,7 @@ class Map extends Component {
     // await this.obterClientes();
   }
   async obterCabos(map) {
-    
-    const {
-      addCoordCabo,
-      setDelimitacaoMapa,
-      showAddCaboModal
-    } = this.props;
+    const { addCoordCabo, setDelimitacaoMapa, showAddCaboModal } = this.props;
     const { setPolylinesFromServer } = this.props;
     await api
       .get("/cabo/get")
@@ -474,34 +454,32 @@ class Map extends Component {
    * @param map -> Mapa que está sendo utilizado.
    */
   async loadClientes(map) {
-    map.on('load', function() {
+    map.on("load", function() {
       window.setInterval(() => {
-        api
-          .get('/cliente/get')
-          .then(response => {
-            const { data } = response;
-            map.getSource('cliente').setData(data);
-          })
-      }, 2000)
-      map.addSource('cliente', {
-        type: 'geojson',
+        api.get("/cliente/get").then(response => {
+          const { data } = response;
+          map.getSource("cliente").setData(data);
+        });
+      }, 2000);
+      map.addSource("cliente", {
+        type: "geojson",
         data: {}
-      })
-      
+      });
+
       map.addLayer({
-        'id': "cliente",
-        'type': 'symbol',
-        'source': 'cliente',
-        'layout': {
-          'icon-image': "rocket-15"
+        id: "cliente",
+        type: "symbol",
+        source: "cliente",
+        layout: {
+          "icon-image": "rocket-15"
         }
-      })
-    })
+      });
+    });
   }
 
   async loadCtos(map) {
     let ctoFeatures = [];
-    console.tron.log({LOADING_CTO: 'Carregando ctos'})
+    console.tron.log({ LOADING_CTO: "Carregando ctos" });
     await this.props.redux.all.mapa.cto.map((cto, index) => {
       let latitude = JSON.parse(cto.coordenadas).latitude;
       let longitude = JSON.parse(cto.coordenadas).longitude;
@@ -627,9 +605,8 @@ class Map extends Component {
       map.getCanvas().style.cursor = "";
     });
 
-    
     /* Image: An image is loaded and added to the map. */
-    map.on('load', function (){
+    map.on("load", function() {
       map.loadImage(require("../../assets/images/CTO_24x24.png"), function(
         error,
         image
@@ -653,8 +630,7 @@ class Map extends Component {
           }
         });
       });
-    })
-    
+    });
   }
 
   async loadWires(map) {
@@ -744,9 +720,9 @@ class Map extends Component {
   //     });
   //   });
   // }
-  adicionarCoordenadasAoCabo(coordinates){
+  adicionarCoordenadasAoCabo(coordinates) {
     const { map } = this.state;
-    const { polyline } = this.props.redux.all.mapa
+    const { polyline } = this.props.redux.all.mapa;
     // alert(polyline)
     // alert(map.getSource('putaquepariu'))
     // alert(map.getSource('drone'))
@@ -755,7 +731,7 @@ class Map extends Component {
     //   'properties': {},
     //   'geometry': {
     //     'type': "LineString",
-    //     'coordinates': [[-77.03202080476535, 38.91454768710531], [-78.03, 39.91]]  
+    //     'coordinates': [[-77.03202080476535, 38.91454768710531], [-78.03, 39.91]]
     //   }
     // }
     // console.log(map)
@@ -763,103 +739,98 @@ class Map extends Component {
     //   type: "geojson",
     //   data: datab
     // })
-    map.getSource('putaquepariu').setData({
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "LineString",
-        "coordinates": polyline
-      }
-    })
-  
-    
-  }
-
-  resetarCoordenadasAoCabo(){
-    const { map } = this.state;
-    const datab = {
-      type: 'Feature',
+    map.getSource("putaquepariu").setData({
+      type: "Feature",
       properties: {},
       geometry: {
         type: "LineString",
-        coordinates: [[-77.03202080476535, 38.91454768710531], [-78.03, 39.91]]  
+        coordinates: polyline
       }
-    }
-    map.getSource('lollipop').setData({
+    });
+  }
+
+  resetarCoordenadasAoCabo() {
+    const { map } = this.state;
+    const datab = {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "LineString",
+        coordinates: [[-77.03202080476535, 38.91454768710531], [-78.03, 39.91]]
+      }
+    };
+    map.getSource("lollipop").setData({
       type: "geojson",
       data: datab
-        // "type": "LineString",
-        // "coordinates": []
-    })
+      // "type": "LineString",
+      // "coordinates": []
+    });
   }
-  
-  pruuuu(){
+
+  pruuuu() {
     const { map } = this.state;
-    const { polyline } = this.props.redux.all.mapa
-    map.on('load', () => {
-      map.addSource('putaquepariu', {
-        "type": "geojson",
-        "data": {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-        "type": "LineString",
-        "coordinates": polyline
-        // [
-        // [-122.48369693756104, 37.83381888486939],
-        // [-122.48348236083984, 37.83317489144141],
-        // [-122.48339653015138, 37.83270036637107],
-        // [-122.48356819152832, 37.832056363179625],
-        // [-122.48404026031496, 37.83114119107971],
-        // [-122.48404026031496, 37.83049717427869],
-        // [-122.48348236083984, 37.829920943955045],
-        // [-122.48356819152832, 37.82954808664175],
-        // [-122.48507022857666, 37.82944639795659],
-        // [-122.48610019683838, 37.82880236636284],
-        // [-122.48695850372314, 37.82931081282506],
-        // [-122.48700141906738, 37.83080223556934],
-        // [-122.48751640319824, 37.83168351665737],
-        // [-122.48803138732912, 37.832158048267786],
-        // [-122.48888969421387, 37.83297152392784],
-        // [-122.48987674713133, 37.83263257682617],
-        // [-122.49043464660643, 37.832937629287755],
-        // [-122.49125003814696, 37.832429207817725],
-        // [-122.49163627624512, 37.832564787218985],
-        // [-122.49223709106445, 37.83337825839438],
-        // [-122.49378204345702, 37.83368330777276],
-        //   [-77.03202080476535, 38.91454768710531]
-        // ]
-        }
-        }
-        })
-      
-      map.addLayer({
-        "id": "putaquepariu",
-        "type": "line",
-        "source": 'putaquepariu',
-        "layout": {
-        "line-join": "round",
-        "line-cap": "round"
-        },
-        "paint": {
-        "line-color": "#13d",
-        "line-width": 8
+    const { polyline } = this.props.redux.all.mapa;
+    map.on("load", () => {
+      map.addSource("putaquepariu", {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "LineString",
+            coordinates: polyline
+            // [
+            // [-122.48369693756104, 37.83381888486939],
+            // [-122.48348236083984, 37.83317489144141],
+            // [-122.48339653015138, 37.83270036637107],
+            // [-122.48356819152832, 37.832056363179625],
+            // [-122.48404026031496, 37.83114119107971],
+            // [-122.48404026031496, 37.83049717427869],
+            // [-122.48348236083984, 37.829920943955045],
+            // [-122.48356819152832, 37.82954808664175],
+            // [-122.48507022857666, 37.82944639795659],
+            // [-122.48610019683838, 37.82880236636284],
+            // [-122.48695850372314, 37.82931081282506],
+            // [-122.48700141906738, 37.83080223556934],
+            // [-122.48751640319824, 37.83168351665737],
+            // [-122.48803138732912, 37.832158048267786],
+            // [-122.48888969421387, 37.83297152392784],
+            // [-122.48987674713133, 37.83263257682617],
+            // [-122.49043464660643, 37.832937629287755],
+            // [-122.49125003814696, 37.832429207817725],
+            // [-122.49163627624512, 37.832564787218985],
+            // [-122.49223709106445, 37.83337825839438],
+            // [-122.49378204345702, 37.83368330777276],
+            //   [-77.03202080476535, 38.91454768710531]
+            // ]
+          }
         }
       });
-      
-      
-    })
-    this.setState({map})
+
+      map.addLayer({
+        id: "putaquepariu",
+        type: "line",
+        source: "putaquepariu",
+        layout: {
+          "line-join": "round",
+          "line-cap": "round"
+        },
+        paint: {
+          "line-color": "#13d",
+          "line-width": 8
+        }
+      });
+    });
+    this.setState({ map });
   }
-  
+
   render() {
     const { container, classNameStyle } = this.props;
     const { polyline } = this.props.redux.all.mapa;
-    
+
     return (
       <div id={container} className={classNameStyle}>
         <Header title="FiberStreet Maps - GZ NET" />
-        
       </div>
     );
   }
@@ -877,7 +848,8 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({...Actions, ...CtosActions, ...MapCreators }, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ ...Actions, ...CtosActions, ...MapCreators }, dispatch);
 
 export default connect(
   mapStateToProps,
@@ -889,9 +861,9 @@ export default connect(
  * https://medium.com/vis-gl/deckgl-and-mapbox-better-together-47b29d6d4fb1
  */
 
- /**
-  * 
-  * TESTE TO RELOAD DATA
-  * https://docs.mapbox.com/mapbox-gl-js/example/live-geojson/
-  * Save geojson in redux and this is reloaded in the actions of redux
-  */
+/**
+ *
+ * TESTE TO RELOAD DATA
+ * https://docs.mapbox.com/mapbox-gl-js/example/live-geojson/
+ * Save geojson in redux and this is reloaded in the actions of redux
+ */

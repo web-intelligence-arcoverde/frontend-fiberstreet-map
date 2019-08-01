@@ -22,12 +22,15 @@ export const Button = styled.button`
 `;
 
 export const Form = styled.div`
-  width: 400px;
-  background: #fff;
-  padding: 20px;
   display: flex;
+  flex: 1 1;
+  background: #fff;
+  padding: 1.2em;
   flex-direction: column;
   align-items: center;
+  label {
+    font-weight: bold;
+  }
   img {
     width: 100px;
     margin: 10px 0 40px;

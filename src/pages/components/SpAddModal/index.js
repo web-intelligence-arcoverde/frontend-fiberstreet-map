@@ -75,44 +75,44 @@ function SpAddModal(props) {
       className="modal-container"
       overlayClassName="modal-overlay"
     >
-      <Container>
-        <Form>
-          <label for="spName">Nome Splitter</label>
-          <input
-            id="spName"
-            value={nome}
-            type="text"
-            name="nome"
-            placeholder="Insira o nome do Splitter"
-            required
-            onChange={e => handleChange(e, TNAME)}
-          />
+      {/* <Container> */}
+      <Form>
+        <label for="spName">Nome Splitter</label>
+        <input
+          id="spName"
+          value={nome}
+          type="text"
+          name="nome"
+          placeholder="Insira o nome do Splitter"
+          required
+          onChange={e => handleChange(e, TNAME)}
+        />
 
-          <label for="modelo">Modelo</label>
-          <input
-            id="modelo"
-            value={modelo}
-            type="text"
-            name="modelo"
-            placeholder="Modelo"
-            required
-            onChange={e => handleChange(e, TMODEL)}
-          />
+        <label for="modelo">Modelo</label>
+        <input
+          id="modelo"
+          value={modelo}
+          type="text"
+          name="modelo"
+          placeholder="Modelo"
+          required
+          onChange={e => handleChange(e, TMODEL)}
+        />
 
-          <label for="balanceamento">Balanceamento</label>
-          <input
-            id="balanceamento"
-            value={balanceamento}
-            type="text"
-            name="balanceamento"
-            placeholder="Balanceamento"
-            required
-            onChange={e => handleChange(e, TBAL)}
-          />
-          <hr />
-          <Button onClick={handleSplitter}>Adicionar</Button>
-        </Form>
-      </Container>
+        <label for="balanceamento">Balanceamento</label>
+        <input
+          id="balanceamento"
+          value={balanceamento}
+          type="text"
+          name="balanceamento"
+          placeholder="Balanceamento"
+          required
+          onChange={e => handleChange(e, TBAL)}
+        />
+        <hr />
+        <Button onClick={handleSplitter}>Adicionar</Button>
+      </Form>
+      {/* </Container> */}
     </Modal>
   );
 }
