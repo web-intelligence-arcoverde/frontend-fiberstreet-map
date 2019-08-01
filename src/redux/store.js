@@ -1,5 +1,9 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
+
+import { connectRouter, routerMiddleware } from "connected-react-router";
+import history from "../routes/history";
+
 import * as Types from "./store/type";
 import reducerCto from "./store/ducks/ctos";
 import reducers from "./store/ducks";
@@ -9,6 +13,7 @@ import sagas from "./store/sagas";
 const middlewares = [];
 const sagaMiddlewares = createSagaMiddleware();
 middlewares.push(sagaMiddlewares);
+middlewares.push(routerMiddleware(history));
 
 const composer =
   process.env.NODE_ENV === "development"
@@ -229,7 +234,7 @@ export function reducer(state = {}, action) {
 
 // const rootReducer = combineReducers(reducer );
 
-const store = createStore(reducers, composer);
+const store = createStore(connectRouter(history)(reducers), composer);
 // const store = createStore(rootReducer, composer);
 
 sagaMiddlewares.run(sagas);

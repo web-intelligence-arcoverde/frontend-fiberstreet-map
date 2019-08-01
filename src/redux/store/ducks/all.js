@@ -212,7 +212,8 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         modalCabo: {
-          visible: true
+          visible: true,
+          cto_id: action.payload.cto_id
         }
       };
     case Types.hideAddCabo:

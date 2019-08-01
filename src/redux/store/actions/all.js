@@ -162,8 +162,9 @@ export const addCoordCabo = polyline => ({
   }
 });
 
-export const showAddCaboModal = () => ({
-  type: Types.showAddCabo
+export const showAddCaboModal = cto_id => ({
+  type: Types.showAddCabo,
+  payload: { cto_id }
 });
 
 export const hideAddCaboModal = () => ({
