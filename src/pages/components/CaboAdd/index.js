@@ -53,23 +53,27 @@ function CaboAdd(props) {
     const { addCoordCabo, hideAddCaboModal } = props;
     // addCoordCabo(null);
     // Irá para próxima etapa
-      await api
-        .post("/cabo/add", cabo)
-        .then(response => {
-          console.tron.log(`API => Cabo/ADD: ${JSON.stringify(response)}`);
-          alert("Cabo armazenado com suceso");
-          setNome("");
-          setModelo("");
-          addCoordCabo([]);
-          hideAddCaboModal();
-        })
-        .catch(err => console.tron.warn(`err -> API => Cabo/ADD: ${err}`));
-    const { showDropAddModal } = props;
+    // await api
+    //   .post("/cabo/add", cabo)
+    //   .then(response => {
+    //     console.tron.log(`API => Cabo/ADD: ${JSON.stringify(response)}`);
+    //     alert("Cabo armazenado com suceso");
+    //     setNome("");
+    //     setModelo("");
+    //     addCoordCabo([]);
+    //     hideAddCaboModal();
+    //   })
+    //   .catch(err => console.tron.warn(`err -> API => Cabo/ADD: ${err}`));
+    setNome("");
+    setModelo("");
+    addCoordCabo([]);
+    hideAddCaboModal();
+    const { showDropAddModalRequest } = props;
     const dropNdCtoId = {
       drop: cabo,
       cto_id: modalCabo.cto_id
-    }
-    showDropAddModal(dropNdCtoId);
+    };
+    showDropAddModalRequest(dropNdCtoId);
   }
 
   function handleChange(event, mode) {
@@ -107,7 +111,7 @@ function CaboAdd(props) {
           <input
             id="nome"
             name="nome"
-            placeholder="Nome da CTO"
+            placeholder="Nome do cabo"
             value={nome}
             onChange={e => handleChange(e, TNAME)}
             required

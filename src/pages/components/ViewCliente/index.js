@@ -17,7 +17,8 @@ function ViewCliente(props) {
     usuario_pppoe,
     cpf,
     velocidade,
-    data_instalacao
+    data_instalacao,
+    id
   } = viewClient.data;
 
   const [editar, setEditar] = useState(false);
@@ -80,6 +81,7 @@ function ViewCliente(props) {
           <p>Cpf: {cpf}</p>
           <p>Velocidade: {velocidade}</p>
           <p>Data de Instalação: {data_instalacao}</p>
+          <p>Identificador único: {id}</p>
         </div>
         <ButtonContainer>
           <Button onClick={() => setEditar(!editar)}>

@@ -3,8 +3,10 @@ import { all, takeLatest } from "redux-saga/effects";
 
 import { loadCto } from "./ctos";
 import { Types } from "../ducks/ctos";
-import { loadMap } from './map';
-import { Types as MapTypes } from '../ducks/map';
+import { loadMap } from "./map";
+import { Types as MapTypes } from "../ducks/map";
+import { loadSplitters } from "./drop";
+import { Types as DropTypes } from "../ducks/drop";
 
 /**  O * diz que estamos criando uma função generator
  * O generator é a maneira de lidarmos com assincronismo
@@ -15,6 +17,7 @@ import { Types as MapTypes } from '../ducks/map';
 export default function* rootSaga() {
   yield all([
     takeLatest(Types.ADD_REQUEST, loadCto),
-    takeLatest(MapTypes.ADD_REQUEST, loadMap)
+    takeLatest(MapTypes.ADD_REQUEST, loadMap),
+    takeLatest(DropTypes.SHOW_DROP_MODAL_REQUEST, loadSplitters)
   ]);
 }
