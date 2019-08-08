@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from "../../../redux/store/actions/all";
 import { Creators as ClienteCreators } from "../../../redux/store/ducks/all";
+import { Creators as CliCreators } from "../../../redux/store/ducks/cliente";
 import { Container, ButtonContainer, Button } from "./styles";
 import "../modalStyles/styles.css";
 
@@ -35,11 +36,18 @@ function ViewCliente(props) {
       .longitude;
     let coord = [longitude, latitude];
     // alert(coord);
-    const { addCoordCabo, setDelimitacaoMapa, hideClientViewModal } = props;
+    const {
+      addCoordCabo,
+      setDelimitacaoMapa,
+      hideClientViewModal,
+      addClienteId
+    } = props;
     setDelimitacaoMapa("cabo");
     let arrayDeArray = new Array(coord);
     // addCoordCabo(coord);
+    addClienteId(id);
     addCoordCabo(arrayDeArray);
+
     // alert(props.redux.mapa.polyline);
     console.tron.log(props.redux);
 
@@ -100,7 +108,7 @@ const mapStateToProps = state => ({
 
 // const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
 const mapDispatchToProps = dispatch =>
-  bindActionCreators(ClienteCreators, dispatch);
+  bindActionCreators({ ...ClienteCreators, ...CliCreators }, dispatch);
 
 export default connect(
   mapStateToProps,

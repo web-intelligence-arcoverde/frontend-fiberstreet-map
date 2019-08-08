@@ -9,6 +9,7 @@ import api from "../../../services/api";
 
 import { Container, ConnectionView, IconOutSp, OutView } from "./styles";
 import "./styles.css";
+import { AST_True } from "terser";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -16,10 +17,11 @@ function AddRelCliCto(props) {
   const [saidas, setSaidas] = useState([]);
   const [splitters, setSplitters] = useState([]);
 
-  const [saidaSelecionada, setSaidaSelecionada] = useState("");
+  const [saidaSelecionada, setSaidaSelecionada] = useState([]);
   const [params, setParams] = useState({});
+  const [selected, setSelected] = useState(1000);
 
-  const { drop } = props.redux;
+  const { drop, cliente } = props.redux;
   const { cto_id } = drop;
 
   function handleHideModal() {
@@ -86,11 +88,13 @@ function AddRelCliCto(props) {
         newArray[count] = {
           id: 0,
           numero: count + 1,
-          isActive: false
+          isActive: false,
+          selected: false
         };
       }
     }
     console.tron.log(newArray);
+    // T
     setSaidas(newArray);
   }
 
@@ -120,9 +124,13 @@ function AddRelCliCto(props) {
       alert("Não é possível usar uma saída já em uso");
     } else {
       setSaidaSelecionada(number);
-      setParams({
-        selected: true
-      });
+      // setParams({
+      //   selected: true
+      // });
+
+      setParams(
+        params.map((select, index) => (number === index ? true : false))
+      );
       alert("Splitter selecionado");
     }
   }
@@ -135,6 +143,48 @@ function AddRelCliCto(props) {
 
     carregarSaidasSplitter();
   });
+
+  function salvarDrop() {
+    //Adicionar o cliente na saída do splitter selecionada
+
+    // api.post()
+    // Procurando em um array
+    console.tron.log(saidaSelecionada);
+    let index = saidaSelecionada.indexOf(true);
+    console.tron.log(index);
+    let saida = index++;
+
+    // Procurando em um array de objetos
+    let findedSelected = saidaSelecionada.find(
+      saida => saida.selected === true
+    );
+    if (findedSelected.isActive === false) {
+      console.tron.log(
+        `Poderá ser usada a saída de número ${findedSelected.numero}`
+      );
+      alert(`Aguarde enquanto salvamos os dados no banco de dados`);
+      // drop
+      const { addDropRequest } = props.redux;
+      const { data } = drop;
+
+      const { cliente_id } = cliente;
+      addDropRequest({ ...drop, cliente_id });
+      // api.post(`saidasplitter/cliente/create`, );
+    } else {
+      console.tron.log(
+        `A saída de número ${
+          findedSelected.numero
+        }, pois ela encontra-se ocupada`
+      );
+      alert(
+        `A saída ${
+          findedSelected.numero
+        }, encontra-se ocupada, escolha outra por favor!`
+      );
+    }
+    console.tron.log(findedSelected);
+    // Add fibra drop cliente no cabo
+  }
 
   return (
     <Modal
@@ -150,29 +200,33 @@ function AddRelCliCto(props) {
         <ConnectionView>
           <div>DROP</div>
           <div>
-            {/* <OutView>
-              <span>1</span>
-              <IconOutSp active onClick={() => alert("Fica verde")} />
-            </OutView>
-            <OutView>
-              <span>2</span>
-              <IconOutSp inactive />
-            </OutView>
-            <OutView onClick={() => selectOutToAddCliente(3, false)}>
-              <span>3</span>
-              <IconOutSp iactive {...params} />
-            </OutView>
-            <OutView>
-              <span>4</span>
-              <IconOutSp inactive />
-            </OutView> */}
             {saidas.map((saida, index) => {
+              console.tron.log(saida);
               return (
                 <OutView>
                   <span>{saida.numero}</span>
                   <IconOutSp
                     active={saida.isActive}
-                    onClick={() => selectOutToAddCliente(index, false)}
+                    onClick={() => {
+                      let newAr = saidas.map((output, indice) =>
+                        index === indice
+                          ? (output.selected = true)
+                          : (output.selected = false)
+                      );
+
+                      let newArrayFull = saidas.map((output, indx) =>
+                        index === indx
+                          ? { ...output, selected: true }
+                          : { ...output, selected: false }
+                      );
+                      console.tron.log(newArrayFull);
+
+                      // setSaidaSelecionada(newAr);
+                      setSaidaSelecionada(newArrayFull);
+                    }}
+                    selected={saida.selected}
+                    // {...params[index]}
+                    // selected={true}
                   />
                 </OutView>
               );
@@ -188,6 +242,9 @@ function AddRelCliCto(props) {
           <span>Selecionada</span>
           <IconOutSp selected />
         </OutView>
+        <span>
+          <button onClick={salvarDrop}>Salvar</button>
+        </span>
       </Container>
     </Modal>
   );

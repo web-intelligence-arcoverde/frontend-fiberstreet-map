@@ -4,6 +4,7 @@ import all from "./all";
 import ctos from "./ctos";
 import map from "./map";
 import drop from "./drop";
+import cliente from "./cliente";
 // import { reducer } from "../../store";
 
 import { connectRouter } from "connected-react-router";
@@ -14,5 +15,6 @@ export default combineReducers({
   ctos,
   map,
   drop,
+  cliente,
   router: connectRouter(history)
 });

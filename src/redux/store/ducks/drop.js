@@ -63,7 +63,7 @@ export const Creators = {
   addSaidasSplitter: saidas => ({
     type: Types.ADD_SAIDAS_SPLITTER,
     payload: { saidas }
-  }),
+  })
 
   // removeSaidasSplitter°
 };
