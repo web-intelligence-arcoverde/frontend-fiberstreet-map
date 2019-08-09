@@ -41,9 +41,9 @@ export default function(state = INITIAL_STATE, action) {
 }
 
 export const Creators = {
-  addDropRequest: drop => ({
+  addDropRequest: data => ({
     type: Types.ADD_DROP_REQUEST,
-    payload: { drop }
+    payload: { data }
   }),
 
   showDropAddModalRequest: data => ({
