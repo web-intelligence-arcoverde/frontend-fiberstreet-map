@@ -58,6 +58,15 @@ function ViewCto(props) {
       .catch(err => console.tron.log(err));
   }
 
+  useEffect(() => {
+    console.tron.log({
+      useEffect: saidasSplitter.saidas
+    });
+    console.tron.log(saidasSplitter.saidas);
+
+    setClientes(saidasSplitter.saidas);
+  }, [saidasSplitter]);
+
   // useEffect(() => {
   //   async function obterClientePorSplitter() {
   //     await api
@@ -119,8 +128,8 @@ function ViewCto(props) {
         <br />
 
         <SplitterContainer>
-          <h3>Splitters nesta CTO</h3>
-          <button onClick={() => getClientes(splitters[0].id)}>AAA</button>
+          <h3>Splitter</h3>
+
           <table>
             <thead>
               <th>Nome</th>
@@ -129,13 +138,22 @@ function ViewCto(props) {
               <th>Fibra Aliment.</th>
             </thead>
             <tbody>
+              <tr>
+                <td colspan="2">2 Span's</td>
+                <td colspan="1">1 Span</td>
+              </tr>
+
               {splitters.map((splitter, index) => (
                 <>
                   <tr>
-                    <td>{splitter.nome}</td>
-                    <td>{splitter.modelo}</td>
-                    <td>{splitter.balanceamento}</td>
-                    <td>Em const.</td>
+                    <td style={{ color: "rgb(20,30,40)" }}>{splitter.nome}</td>
+                    <td style={{ color: "rgb(20,30,40)" }}>
+                      {splitter.modelo}
+                    </td>
+                    <td style={{ color: "rgb(20,30,40)" }}>
+                      {splitter.balanceamento}
+                    </td>
+                    <td style={{ color: "rgb(20,30,40)" }}>Em const.</td>
                   </tr>
                   {/* Tabela com os clientes */}
                   <table>
@@ -145,22 +163,28 @@ function ViewCto(props) {
                       <th>Endereço</th>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>TesteNome</td>
-                        <td>Eu já não me...</td>
-                        <td>Rua da curva</td>
-                      </tr>
-                      {/* {clientes.map((cliente, index) => {})} */}
-                      {!!saidasSplitter.length &&
-                        saidasSplitter.map((saida, index) => {
-                          return (
-                            <tr>
-                              <td>{saida.numero}</td>
-                              <td>{saida.Cliente.nome}</td>
-                              <td>{saida.Cliente.usuario_pppoe}</td>
-                              <td>{saida.Cliente.cpf}</td>
-                            </tr>
-                          );
+                      {clientes &&
+                        clientes.map(cliente => (
+                          <tr>
+                            <td
+                              style={{
+                                // color: "rgb(22,255,3)"
+                                color: "#000"
+                              }}
+                            >
+                              {cliente.Cliente.nome}
+                            </td>
+                            <td style={{ color: "#000" }}>
+                              {cliente.Cliente.usuario_pppoe}
+                            </td>
+                            <td style={{ color: "#000" }}>
+                              {cliente.Cliente.endereco}
+                            </td>
+                          </tr>
+                        ))}
+                      {clientes &&
+                        clientes.map(cliente => {
+                          api.get("");
                         })}
                     </tbody>
                   </table>
@@ -168,40 +192,6 @@ function ViewCto(props) {
               ))}
             </tbody>
           </table>
-          {/* <table>
-            <thead>
-              <th>Nome</th>
-              <th>Modelo</th>
-              <th>Balanceamento</th>
-            </thead>
-            <tbody>
-              {saidasSplitter.map(sSplitter => (
-                <>
-                  <tr>
-                    <td>{sSplitter.nome}</td>
-                    <td>{sSplitter.modelo}</td>
-                    <td>{sSplitter.balanceamento}</td>
-                  </tr>
-                  <h3>Clientes</h3>
-                  <table>
-                    <tr>
-                      <th>Porta</th>
-                      <th>Nome</th>
-                      <th>PPPoE</th>
-                      <th>Velocidade</th>
-                    </tr>
-                    <tr>
-                      <td>{sSplitter.numero}</td>
-                      <td>{sSplitter.Cliente.nome}</td>
-                      <td>{sSplitter.Cliente.usuario_pppoe}</td>
-                      <td>{sSplitter.Cliente.velocidade}</td>
-                    </tr>
-                  </table>
-                </>
-              ))}
-            </tbody>
-          </table> */}
-          {/* <button>Adicionar Cliente</button> */}
         </SplitterContainer>
 
         <br />
