@@ -6,7 +6,7 @@ export const Container = styled.div`
   justify-content: center,
   border-radius: 4px;
   padding: 20px;
-  height: 100vh;
+  
 `;
 
 // width: 370px;
@@ -21,22 +21,19 @@ export const Button = styled.button`
   width: 100%;
 `;
 
-export const Form = styled.div`
-  width: 400px;
+export const Form = styled.form`
+  display: flex;
+  flex: 1 1;
   background: #fff;
-  padding: 20px;
+  padding: 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
-  img {
-    width: 100px;
-    margin: 10px 0 40px;
-  }
   p {
     color: #ff3333;
-    margin-bottom: 15px;
+    margin-bottom: 1em;
     border: 1px solid #ff3333;
-    padding: 10px;
+    padding: 0.7em;
     width: 100%;
     text-align: center;
   }

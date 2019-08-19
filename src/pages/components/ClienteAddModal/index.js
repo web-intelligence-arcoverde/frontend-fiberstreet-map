@@ -3,7 +3,7 @@ import { Container, Form, Button, CoordForm } from "./styles";
 import api from "../../../services/api";
 // import propTypes from "prop-types";
 import Modal from "react-modal";
-import "../modalStyles/styles.css";
+import "./styles.css";
 
 // redux
 // import { canAddCoordenadas } from "../../../redux/store/actions/all";
@@ -76,7 +76,8 @@ function ClienteAddModal(props) {
     setDtInstall("");
   }
 
-  async function handleCliente() {
+  async function handleCliente(e) {
+    e.preventDefault();
     const { coordinates } = props.redux.all.modalCliente;
     const cliente = {
       nome: nome,
@@ -127,65 +128,65 @@ function ClienteAddModal(props) {
       className="modal-container"
       overlayClassName="modal-overlay"
     >
-      <Container>
-        <Form>
-          <label for="sName">Nome Cliente</label>
-          <input
-            id="sName"
-            value={nome}
-            type="text"
-            name={nome}
-            placeholder="Insira o nome do Cliente"
-            required
-            onChange={e => handleChange(e, NAME)}
-          />
-          <label for="spCpf">CPF</label>
-          <input
-            id="spCpf"
-            value={cpf}
-            type="text"
-            name={CPF}
-            placeholder="Insira o número de cpf"
-            minlength="11"
-            maxlength="11"
-            required
-            onChange={e => handleChange(e, CPF)}
-          />
-          <label for="coord">Coordenadas</label>
-          <input
-            id="coord"
-            value={JSON.stringify(props.redux.all.modalCliente.coordinates)}
-            type="text"
-            name={COORD}
-            placeholder="Coordenadas"
-            required
-            onChange={e => handleChange(e, COORD)}
-          />
-          <label for="v">Velocidade</label>
-          <input
-            id="v"
-            value={velocidade}
-            type="text"
-            name={VELOCIDADE}
-            placeholder="Velocidade"
-            required
-            onChange={e => handleChange(e, VELOCIDADE)}
-          />
-          <label for="pp">Pppoe</label>
-          <input
-            id="pp"
-            value={pppoe}
-            type="text"
-            name={PPPOE}
-            placeholder="PPPOE"
-            required
-            onChange={e => handleChange(e, PPPOE)}
-          />
+      {/* <Container> */}
+      <Form onSubmit={event => handleCliente(event)}>
+        <label for="sName">Nome Cliente</label>
+        <input
+          id="sName"
+          value={nome}
+          type="text"
+          name={nome}
+          placeholder="Insira o nome do Cliente"
+          required
+          onChange={e => handleChange(e, NAME)}
+        />
+        <label for="spCpf">CPF</label>
+        <input
+          id="spCpf"
+          value={cpf}
+          type="text"
+          name={CPF}
+          placeholder="Insira o número de cpf"
+          minlength="11"
+          maxlength="11"
+          required
+          onChange={e => handleChange(e, CPF)}
+        />
+        <label for="coord">Coordenadas</label>
+        <input
+          id="coord"
+          value={JSON.stringify(props.redux.all.modalCliente.coordinates)}
+          type="text"
+          name={COORD}
+          placeholder="Coordenadas"
+          required
+          onChange={e => handleChange(e, COORD)}
+        />
+        <label for="v">Velocidade</label>
+        <input
+          id="v"
+          value={velocidade}
+          type="text"
+          name={VELOCIDADE}
+          placeholder="Velocidade"
+          required
+          onChange={e => handleChange(e, VELOCIDADE)}
+        />
+        <label for="pp">Pppoe</label>
+        <input
+          id="pp"
+          value={pppoe}
+          type="text"
+          name={PPPOE}
+          placeholder="PPPOE"
+          required
+          onChange={e => handleChange(e, PPPOE)}
+        />
 
-          <hr />
-          <Button onClick={handleCliente}>Adicionar</Button>
-        </Form>
-      </Container>
+        <hr />
+        <Button type="submit">Adicionar</Button>
+      </Form>
+      {/* </Container> */}
     </Modal>
   );
 }

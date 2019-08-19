@@ -22,7 +22,7 @@ export const Button = styled.button`
   width: 100%;
 `;
 
-export const Form = styled.div`
+export const Form = styled.form`
   width: 400px;
   background: #fff;
   padding: 20px;

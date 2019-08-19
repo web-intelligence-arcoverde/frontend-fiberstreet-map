@@ -21,7 +21,7 @@ export const Button = styled.button`
   width: 100%;
 `;
 
-export const Form = styled.div`
+export const Form = styled.form`
   display: flex;
   flex: 1 1;
   background: #fff;

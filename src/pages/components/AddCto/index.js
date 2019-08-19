@@ -37,7 +37,8 @@ function AddCto(props) {
     set();
   }, [props.redux.all.coordenadas]);
 
-  async function handleCto() {
+  async function handleCto(e) {
+    e.preventDefault();
     const { setCtoFromServer } = props;
 
     // function verifyLength() {
@@ -120,68 +121,68 @@ function AddCto(props) {
       className="modal-container"
       overlayClassName="modal-overlay"
     >
-      <Container>
-        <Form>
-          <label for="ctoName">Nome Cto</label>
+      {/* <Container> */}
+      <Form onSubmit={event => handleCto(event)}>
+        <label for="ctoName">Nome Cto</label>
+        <input
+          id="ctoName"
+          value={name}
+          type="text"
+          name="nome"
+          placeholder="Insira o nome da CTO"
+          required
+          onChange={e => handleChange(e, TNAME)}
+        />
+        <CoordForm style={{ alignItems: "center", justifyContent: "center" }}>
+          <label for="coordenadas">Coordenadas</label>
           <input
-            id="ctoName"
-            value={name}
+            id="coordenadas"
+            value={JSON.stringify(props.redux.all.modalCto.coordinates)}
             type="text"
-            name="nome"
-            placeholder="Insira o nome da CTO"
-            // required
-            onChange={e => handleChange(e, TNAME)}
+            name="coordenadas"
+            placeholder="Coordenadas"
+            required
+            onChange={e => handleChange(e, TCOORDINATES)}
           />
-          <CoordForm style={{ alignItems: "center", justifyContent: "center" }}>
-            <label for="coordenadas">Coordenadas</label>
-            <input
-              id="coordenadas"
-              value={JSON.stringify(props.redux.all.modalCto.coordinates)}
-              type="text"
-              name="coordenadas"
-              placeholder="Coordenadas"
-              required
-              onChange={e => handleChange(e, TCOORDINATES)}
-            />
 
-            <div
-              style={{ width: 30, height: 30, backgroundColor: "#FFF" }}
-              onClick={() => {
-                canAddCoordenadas(true);
-                alert("Selecione um local precisamente no mapa;");
-              }}
-            >
-              +
-            </div>
-          </CoordForm>
-          <label for="address">Endereço</label>
-          <input
-            id="address"
-            value={address}
-            type="text"
-            name="endereco"
-            placeholder="Endereço"
-            // required
-            onChange={e => handleChange(e, TADDRESS)}
-          />
-          <label for="modelo">Modelo</label>
-          <input
-            id="modelo"
-            value={type}
-            type="text"
-            name="modelo"
-            placeholder="Modelo"
-            // required
-            onChange={e => handleChange(e, TTYPE)}
-          />
-          {/* <p>Lat: {this.props.coordinates.latitude}, Lng: {this.props.coordinates.longitude}</p> */}
-          <hr />
-          <Button onClick={() => alert("Adicionar Splitter")}>
-            Adicionar Splitter
-          </Button>
-          <Button onClick={handleCto}>Adicionar</Button>
-        </Form>
-      </Container>
+          <div
+            style={{ width: 30, height: 30, backgroundColor: "#FFF" }}
+            onClick={() => {
+              canAddCoordenadas(true);
+              alert("Selecione um local precisamente no mapa;");
+            }}
+          >
+            +
+          </div>
+        </CoordForm>
+        <label for="address">Endereço</label>
+        <input
+          id="address"
+          value={address}
+          type="text"
+          name="endereco"
+          placeholder="Endereço"
+          required
+          onChange={e => handleChange(e, TADDRESS)}
+        />
+        <label for="modelo">Modelo</label>
+        <input
+          id="modelo"
+          value={type}
+          type="text"
+          name="modelo"
+          placeholder="Modelo"
+          required
+          onChange={e => handleChange(e, TTYPE)}
+        />
+        {/* <p>Lat: {this.props.coordinates.latitude}, Lng: {this.props.coordinates.longitude}</p> */}
+        <hr />
+        {/* <Button onClick={() => alert("Adicionar Splitter")}>
+          Adicionar Splitter
+        </Button> */}
+        <Button type="submit">Adicionar</Button>
+      </Form>
+      {/* </Container> */}
     </Modal>
   );
 }

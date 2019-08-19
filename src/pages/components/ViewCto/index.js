@@ -11,6 +11,7 @@ import {
 } from "./styles";
 import "./styles.css";
 import api from "../../../services/api";
+import { ClientRequest } from "http";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -23,34 +24,59 @@ function ViewCto(props) {
   const [nome, setNome] = useState(props.redux.all.viewCto.data.nome);
   const [endereco, setEndereco] = useState("");
   const [modelo, setModelo] = useState("");
+  const [clientes, setClientes] = useState([]);
   const [splitters, setSplitters] = useState([]);
   const [saidasSplitter, setSaidasSplitter] = useState([]);
 
   /** useEffect para obter os Splitters pelo id da cto */
   useEffect(() => {
-    function getSplitters(id) {
-      api
+    async function getSplitters(id) {
+      await api
         .get(`/get/splitter/cto/${id}`)
         .then(response => {
           const sp = response.data;
-          alert(JSON.stringify(response.data));
+          // alert(JSON.stringify(response.data));
           setSplitters(sp);
+          getClientes(sp[0].id);
         })
         .catch(e => console.warn(e));
     }
     getSplitters(all.viewCto.data.id);
   }, [all.viewCto.data.id]);
 
+  function getClientes(splitterId) {
+    console.tron.log(splitterId);
+    api
+      .get(`saidasplitter/splitter/${splitterId}/clientes`)
+      .then(result => {
+        const { data: saidas } = result;
+        console.tron.log(saidas);
+
+        setSaidasSplitter(saidas);
+        console.tron.log(saidasSplitter);
+      })
+      .catch(err => console.tron.log(err));
+  }
+
+  // useEffect(() => {
+  //   async function obterClientePorSplitter() {
+  //     await api
+  //       .get(`saidasplitter/cliente/${splitters[0]}`)
+  //       .then()
+  //       .catch(e => console.warn(e))
+  //   }
+  // }, [all.viewCto.visible]);
+
   /** Obtém os clientes por cada saída do splitter existente */
-  useEffect(() => {
-    function getSaidaSpWithClientes(splitterId) {
-      api.get(`/get/cliente/splitter/${splitterId}`).then(response => {
-        const saidaSplitter = response.data;
-        setSaidasSplitter(saidaSplitter);
-      });
-    }
-    getSaidaSpWithClientes(all.viewCto.data.id);
-  }, [all.viewCto.data.id]);
+  // useEffect(() => {
+  //   function getSaidaSpWithClientes(splitterId) {
+  //     api.get(`/get/cliente/splitter/${splitterId}`).then(response => {
+  //       const saidaSplitter = response.data;
+  //       setSaidasSplitter(saidaSplitter);
+  //     });
+  //   }
+  //   getSaidaSpWithClientes(all.viewCto.data.id);
+  // }, [all.viewCto.data.id]);
 
   // useEffect(() => {
   //   function getClientesBySplitter(id){
@@ -94,6 +120,7 @@ function ViewCto(props) {
 
         <SplitterContainer>
           <h3>Splitters nesta CTO</h3>
+          <button onClick={() => getClientes(splitters[0].id)}>AAA</button>
           <table>
             <thead>
               <th>Nome</th>
@@ -123,6 +150,18 @@ function ViewCto(props) {
                         <td>Eu já não me...</td>
                         <td>Rua da curva</td>
                       </tr>
+                      {/* {clientes.map((cliente, index) => {})} */}
+                      {!!saidasSplitter.length &&
+                        saidasSplitter.map((saida, index) => {
+                          return (
+                            <tr>
+                              <td>{saida.numero}</td>
+                              <td>{saida.Cliente.nome}</td>
+                              <td>{saida.Cliente.usuario_pppoe}</td>
+                              <td>{saida.Cliente.cpf}</td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
                 </>
@@ -162,12 +201,20 @@ function ViewCto(props) {
               ))}
             </tbody>
           </table> */}
-          <button>Adicionar Cliente</button>
+          {/* <button>Adicionar Cliente</button> */}
         </SplitterContainer>
 
         <br />
         <ButtonContainer>
-          <Button onClick={() => addSplitter(all.viewCto.data.id)}>
+          <Button
+            onClick={() => {
+              if (splitters[0]) {
+                alert("Esta cto já possui um módulo");
+              } else {
+                addSplitter(all.viewCto.data.id);
+              }
+            }}
+          >
             Adicionar Splitter
           </Button>
           <Button>Editar</Button>

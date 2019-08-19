@@ -59,16 +59,28 @@ export function* addDrop(action) {
     splitter_id: null
   };
 
+  const fibra = {
+    // cabo:
+  };
+
   console.tron.log({ SAIDA_AFTER_SEQUELIZE: novaSaida });
 
   try {
-    yield call(api.post, "cabo/add", drop);
-
+    const cabo = yield call(api.post, "cabo/add", drop);
+    const fibra = yield {
+      cabo: cabo.id,
+      nome: cabo.nome
+    };
     // yield call(api.post, 'fibra/add', fibra);
     yield call(api.post, "saidasplitter/cliente/create", novaSaida);
-
-    // yield call(api.post, '')
-    // yield call(api.post, "/cabo/add", drop);
-    // yield call(api.post, "/saidasplitter/cliente/create");
+    yield call(
+      api.put,
+      `saidasplitter/cliente/${spAndCli.cliente_cod_cli}/addsp/${
+        spAndCli.splitter_cod
+      }`
+    );
+    // yield put(DropCreators.)
+    yield call(api.post, "drop-fibra/create", fibra);
+    yield put(DropCreators.hideDropAddModal());
   } catch (err) {}
 }

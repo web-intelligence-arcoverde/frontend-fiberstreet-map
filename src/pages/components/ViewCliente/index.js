@@ -8,6 +8,8 @@ import { Creators as CliCreators } from "../../../redux/store/ducks/cliente";
 import { Container, ButtonContainer, Button } from "./styles";
 import "../modalStyles/styles.css";
 
+import api from "../../../services/api";
+
 Modal.setAppElement(document.getElementById("root"));
 
 function ViewCliente(props) {
@@ -22,6 +24,9 @@ function ViewCliente(props) {
     id
   } = viewClient.data;
 
+  const [splitterId, setSplitterId] = useState("");
+  const [existsWire, setExistsWire] = useState(true);
+
   const [editar, setEditar] = useState(false);
 
   function handleHideModal() {
@@ -29,13 +34,14 @@ function ViewCliente(props) {
     hideClientViewModal();
   }
 
-  function handleCoordCabo() {
+  function addCabo() {
     let latitude = JSON.parse(props.redux.all.viewClient.data.coordenadas)
       .latitude;
     let longitude = JSON.parse(props.redux.all.viewClient.data.coordenadas)
       .longitude;
     let coord = [longitude, latitude];
     // alert(coord);
+
     const {
       addCoordCabo,
       setDelimitacaoMapa,
@@ -52,6 +58,26 @@ function ViewCliente(props) {
     console.tron.log(props.redux);
 
     hideClientViewModal();
+  }
+
+  function handleCoordCabo() {
+    api
+      .get(`saidasplitter/cliente/${id}`)
+      .then(result => {
+        const { data } = result;
+        console.log(data);
+        const { id, splitter_cod } = data;
+        setSplitterId(splitter_cod);
+
+        if (splitter_cod) {
+          alert("Este cliente já possui um drop em sua residência");
+        } else {
+          addCabo();
+        }
+      })
+      .catch(err => {
+        console.warn(err);
+      });
   }
 
   const { changeClienteData } = props;

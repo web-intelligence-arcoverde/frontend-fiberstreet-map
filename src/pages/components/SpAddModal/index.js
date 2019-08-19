@@ -31,7 +31,8 @@ function SpAddModal(props) {
     hideSplitterAddModal();
   }
 
-  async function handleSplitter() {
+  async function handleSplitter(e) {
+    e.preventDefault();
     const newSp = {
       nome: nome,
       balanceamento: balanceamento,
@@ -46,9 +47,15 @@ function SpAddModal(props) {
     } else if (type === "ceo") {
     }
 
-    const { showDataInViewModal, hideSplitterAddModal } = props;
+    const {
+      showDataInViewModal,
+      hideSplitterAddModal,
+      hideDataInViewModal
+    } = props;
     hideSplitterAddModal();
     showDataInViewModal(modalSplitter.id);
+
+    hideDataInViewModal();
   }
 
   function handleChange(event, mode) {
@@ -76,7 +83,7 @@ function SpAddModal(props) {
       overlayClassName="modal-overlay"
     >
       {/* <Container> */}
-      <Form>
+      <Form onSubmit={event => handleSplitter(event)}>
         <label for="spName">Nome Splitter</label>
         <input
           id="spName"
@@ -103,14 +110,16 @@ function SpAddModal(props) {
         <input
           id="balanceamento"
           value={balanceamento}
-          type="text"
+          type="number"
           name="balanceamento"
-          placeholder="Balanceamento"
+          placeholder="Qtd saídas do sp"
+          min={8}
+          max={16}
           required
           onChange={e => handleChange(e, TBAL)}
         />
         <hr />
-        <Button onClick={handleSplitter}>Adicionar</Button>
+        <Button type="submit">Adicionar</Button>
       </Form>
       {/* </Container> */}
     </Modal>

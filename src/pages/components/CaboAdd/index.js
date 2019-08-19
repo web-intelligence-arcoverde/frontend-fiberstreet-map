@@ -105,7 +105,7 @@ function CaboAdd(props) {
         <Form
           style={{ marginTop: 1.2 + "em" }}
           action=""
-          onSubmit={() => alert("E")}
+          onSubmit={handleSubmit}
         >
           <label for="nome">Nome (Trecho):</label>
           <input
@@ -135,6 +135,12 @@ function CaboAdd(props) {
             onChange={e => handleChange(e, "QTFIBRA")}
             required
           />
+          <button
+            type="submit"
+            style={{ height: 3 + "em", backgroundColor: "#429911" }}
+          >
+            Salvar
+          </button>
         </Form>
         <div
           style={{
@@ -144,15 +150,7 @@ function CaboAdd(props) {
             padding: 5 + "px"
           }}
         >
-          <button
-            style={{ height: 3 + "em", backgroundColor: "#429911" }}
-            onClick={() => {
-              console.tron.log({ redux: props.redux.all.modalCabo });
-              handleSubmit();
-            }}
-          >
-            Salvar
-          </button>
+          {/*  */}
           <button style={{ height: 3 + "em", backgroundColor: "red" }}>
             Sair
           </button>

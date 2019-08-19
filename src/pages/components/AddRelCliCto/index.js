@@ -9,7 +9,6 @@ import api from "../../../services/api";
 
 import { Container, ConnectionView, IconOutSp, OutView } from "./styles";
 import "./styles.css";
-import { AST_True } from "terser";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -107,13 +106,16 @@ function AddRelCliCto(props) {
           // newArray[posicaoDaSaidaNoArray].selected = false;
           // newArray[posicaoDaSaidaNoArray].splitter_id = splitter_id;
 
-          newArray[count] = {
-            id: 0,
-            numero: count + 1,
-            isActive: false,
-            select: false,
-            splitter_id
-          };
+          // CORRIGIR QUANDO ESTE PRÓXIMO ARRAY SERÁ USADO
+          if (!(count + 1 === balanceamento)) {
+            newArray[count] = {
+              id: 0,
+              numero: count + 1,
+              isActive: false,
+              select: false,
+              splitter_id
+            };
+          }
 
           // newArray[posicaoDaSaidaNoArray] = {
           //   ...saidas[count],
@@ -157,7 +159,7 @@ function AddRelCliCto(props) {
 
   async function obterSaidasDoSplitter() {
     await setSplitters(drop.data.splitters);
-    alert(JSON.stringify(drop.data.splitters));
+    // alert(JSON.stringify(drop.data.splitters));
     await getSaidasDoSplitter();
     // drop.data.splitters.forEach(element => {
     // alert(JSON.stringify(element));
@@ -200,6 +202,11 @@ function AddRelCliCto(props) {
 
     carregarSaidasSplitter();
   });
+
+  useEffect(() => {
+    obterSaidasDoSplitter();
+    obterSaidasDoSplitter();
+  }, [props.redux.drop.isVisible]);
 
   function salvarDrop() {
     //Adicionar o cliente na saída do splitter selecionada
