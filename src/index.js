@@ -8,7 +8,7 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 
-console.tron.log(process.env.NODE_ENV);
+// console.tron.log(process.env.NODE_ENV);
 const RJRedux = () => (
   <Provider store={store}>
     <App />

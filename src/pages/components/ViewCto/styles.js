@@ -12,7 +12,7 @@ export const Container = styled.div`
 
 export const SplitterContainer = styled.div`
   border-radius: 4px;
-  color: orange;
+  color: black;
   align-items: center;
   justify-content: center;
   padding: 15px;

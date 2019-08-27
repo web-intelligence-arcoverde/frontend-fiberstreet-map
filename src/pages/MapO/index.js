@@ -179,7 +179,7 @@ class Map extends Component {
         type: "geojson",
         data: url
       });
-      console.tron.log(this.props);
+      // console.tron.log(this.props);
 
       // Carrega cto
       map.loadImage(require("../../assets/images/CTO_24x24.png"), function(
@@ -293,8 +293,8 @@ class Map extends Component {
 
   handleMapClick = e => {
     const { lng: longitude, lat: latitude } = e.lngLat;
-    console.tron.log(e.lngLat);
-    console.tron.log(`Longitude: ${longitude}, Latitude: ${latitude}`);
+    // console.tron.log(e.lngLat);
+    // console.tron.log(`Longitude: ${longitude}, Latitude: ${latitude}`);
     const { addCoordenadas, canAddCoordenadas } = this.props;
     addCoordenadas({ longitude: longitude, latitude: latitude });
     canAddCoordenadas(false);
@@ -364,7 +364,7 @@ class Map extends Component {
       ...polyline,
       [coordenadas.longitude, coordenadas.latitude]
     ];
-    console.tron.log({ LINES: newPolyline });
+    // console.tron.log({ LINES: newPolyline });
 
     addCoordCabo(newPolyline);
     this.adicionarCoordenadasAoCabo(newPolyline);
@@ -442,7 +442,7 @@ class Map extends Component {
           };
         });
 
-        console.tron.log(arrayDados);
+        // console.tron.log(arrayDados);
         setPolylinesFromServer(arrayDados);
         // this.loadWires(map);
       })
@@ -479,11 +479,11 @@ class Map extends Component {
 
   async loadCtos(map) {
     let ctoFeatures = [];
-    console.tron.log({ LOADING_CTO: "Carregando ctos" });
+    // console.tron.log({ LOADING_CTO: "Carregando ctos" });
     await this.props.redux.all.mapa.cto.map((cto, index) => {
       let latitude = JSON.parse(cto.coordenadas).latitude;
       let longitude = JSON.parse(cto.coordenadas).longitude;
-      console.tron.log({ CTOS: cto });
+      // console.tron.log({ CTOS: cto });
       let data = {
         type: "Feature",
         properties: {
@@ -495,7 +495,7 @@ class Map extends Component {
         }
       };
       ctoFeatures.push(data); // nome
-      console.tron.log(ctoFeatures);
+      // console.tron.log(ctoFeatures);
 
       const myData = new MapboxLayer({
         id: "my-scatterplot",
@@ -575,13 +575,13 @@ class Map extends Component {
       };
     });
     map.on("click", "markers", function(e) {
-      console.tron.log("Você cricou nos prace");
-      console.tron.log(e.features[0]);
+      // console.tron.log("Você cricou nos prace");
+      // console.tron.log(e.features[0]);
       let coordinates = e.features[0].geometry.coordinates.slice();
       const stringed = e.features[0].properties.data;
       const description = JSON.parse(stringed).nome;
-      console.tron.log(e.features[0].properties.data);
-      console.tron.log(description);
+      // console.tron.log(e.features[0].properties.data);
+      // console.tron.log(description);
 
       // Ensure that if the map is zoomed out such that multiple
       // copies of the feature are visible, the popup appears
@@ -635,7 +635,7 @@ class Map extends Component {
 
   async loadWires(map) {
     this.props.redux.all.mapa.cabos.map((wire, index) => {
-      console.tron.log(this.props.redux);
+      // console.tron.log(this.props.redux);
       const { coordenadas } = wire;
       const layer = new MapboxLayer({
         id: `${index}`,

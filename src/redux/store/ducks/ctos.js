@@ -6,9 +6,11 @@ export const Types = {
   ADD_SUCCESS: "cto/ADD_SUCCESS",
   ADD_FAILURE: "cto/ADD_FAILURE",
 
-  VIEW_REQUEST: 'cto/VIEW_REQUEST',
-  VIEW_SUCCESS: 'cto/VIEW_SUCCESS',
-  VIEW_FAILURE: 'cto/VIEW_FAILURE'
+  VIEW_REQUEST: "cto/VIEW_REQUEST",
+  VIEW_SUCCESS: "cto/VIEW_SUCCESS",
+  VIEW_FAILURE: "cto/VIEW_FAILURE",
+
+  ADD_CTO_ID: "cto/ADD_ID"
 };
 
 const INITIAL_STATE = {
@@ -29,7 +31,10 @@ export default function(state = INITIAL_STATE, action) {
       return state;
 
     case Types.VIEW_REQUEST:
-      return {...state, ctos: action.payload.data }
+      return { ...state, ctos: action.payload.data };
+
+    case Types.ADD_CTO_ID:
+      return { ...state, ctoId: action.payload.id };
 
     default:
       return state;
@@ -53,5 +58,10 @@ export const Creators = {
   addCtoFailure: error => ({
     type: Types.ADD_FAILURE,
     payload: { error }
+  }),
+
+  addCtoId: id => ({
+    type: Types.ADD_CTO_ID,
+    payload: { id }
   })
 };

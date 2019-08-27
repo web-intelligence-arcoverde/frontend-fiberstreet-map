@@ -51,7 +51,7 @@ const PrivateRouteForLogedUser = ({ component: Component, ...rest }) => (
 const Routes = () => (
   <ConnectedRouter history={history}>
     <Switch>
-      <Route exact path="/" component={() => <Home />} />
+      <Route exact path="/" component={Signup} />
       {/* <h1>
             Rotas de boas-vindas ao sistema, informação dos serviços, e etc
           </h1> */}

@@ -42,7 +42,7 @@ function CaboAdd(props) {
     });
     let coordinatesStrinfigied = JSON.stringify(coordinates);
 
-    console.tron.log({ coord: JSON.stringify(coordinates) });
+    // console.tron.log({ coord: JSON.stringify(coordinates) });
 
     const cabo = {
       nome: nome,
@@ -141,6 +141,11 @@ function CaboAdd(props) {
           >
             Salvar
           </button>
+          <button
+            style={{ marginTop: 5, height: 3 + "em", backgroundColor: "red" }}
+          >
+            Sair
+          </button>
         </Form>
         <div
           style={{
@@ -151,9 +156,6 @@ function CaboAdd(props) {
           }}
         >
           {/*  */}
-          <button style={{ height: 3 + "em", backgroundColor: "red" }}>
-            Sair
-          </button>
         </div>
       </>
     </Modal>

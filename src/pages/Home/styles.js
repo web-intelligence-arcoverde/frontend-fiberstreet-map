@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-//Background vector created by vectorpocket - www.freepik.com
+
 export const Container = styled.div`
   align-items: center;
   justify-content: center;

@@ -74,6 +74,11 @@ function Home(props) {
 
   return (
     <Container>
+      <h3>Testando dados aqui</h3>
+      <button onClick={sendMessage}>AAA</button>
+      <button onClick={() => alert(obterDadosDoServidor("cto"))}>
+        CTO DO DATABASE
+      </button>
       <Fragment>
         <button onClick={sendMessage}>AAA</button>
         <button onClick={() => alert(obterDadosDoServidor("cto"))}>

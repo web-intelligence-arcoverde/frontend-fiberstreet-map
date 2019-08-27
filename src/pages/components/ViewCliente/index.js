@@ -55,7 +55,7 @@ function ViewCliente(props) {
     addCoordCabo(arrayDeArray);
 
     // alert(props.redux.mapa.polyline);
-    console.tron.log(props.redux);
+    // console.tron.log(props.redux);
 
     hideClientViewModal();
   }

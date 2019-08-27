@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from "../../../redux/store/actions/all";
+import { Creators as CtoCreators } from "../../../redux/store/ducks/ctos";
 import {
   Container,
   ButtonContainer,
@@ -16,7 +17,6 @@ import { ClientRequest } from "http";
 Modal.setAppElement(document.getElementById("root"));
 
 function ViewCto(props) {
-  // const { viewCto } = props.redux;
   const { all } = props.redux;
   const { data } = props.redux.all.viewCto;
   const coordinates = all.viewCto.data.coordenadas;
@@ -27,6 +27,9 @@ function ViewCto(props) {
   const [clientes, setClientes] = useState([]);
   const [splitters, setSplitters] = useState([]);
   const [saidasSplitter, setSaidasSplitter] = useState([]);
+  const [cabos, setCabos] = useState([]);
+
+  const { setDelimitacaoMapa, addCoordCabo, addCtoId } = props;
 
   /** useEffect para obter os Splitters pelo id da cto */
   useEffect(() => {
@@ -35,9 +38,9 @@ function ViewCto(props) {
         .get(`/get/splitter/cto/${id}`)
         .then(response => {
           const sp = response.data;
-          // alert(JSON.stringify(response.data));
           setSplitters(sp);
           getClientes(sp[0].id);
+          getCabosCto(id);
         })
         .catch(e => console.warn(e));
     }
@@ -45,58 +48,29 @@ function ViewCto(props) {
   }, [all.viewCto.data.id]);
 
   function getClientes(splitterId) {
-    console.tron.log(splitterId);
     api
       .get(`saidasplitter/splitter/${splitterId}/clientes`)
       .then(result => {
         const { data: saidas } = result;
-        console.tron.log(saidas);
 
         setSaidasSplitter(saidas);
-        console.tron.log(saidasSplitter);
       })
-      .catch(err => console.tron.log(err));
+      .catch(err => console.log(err));
+  }
+
+  function getCabosCto(ctoId) {
+    api
+      .get(`cabo/get/cto/${ctoId}`)
+      .then(response => {
+        const { data } = response;
+        setCabos(data);
+      })
+      .catch(err => console.warn(err));
   }
 
   useEffect(() => {
-    console.tron.log({
-      useEffect: saidasSplitter.saidas
-    });
-    console.tron.log(saidasSplitter.saidas);
-
     setClientes(saidasSplitter.saidas);
   }, [saidasSplitter]);
-
-  // useEffect(() => {
-  //   async function obterClientePorSplitter() {
-  //     await api
-  //       .get(`saidasplitter/cliente/${splitters[0]}`)
-  //       .then()
-  //       .catch(e => console.warn(e))
-  //   }
-  // }, [all.viewCto.visible]);
-
-  /** Obtém os clientes por cada saída do splitter existente */
-  // useEffect(() => {
-  //   function getSaidaSpWithClientes(splitterId) {
-  //     api.get(`/get/cliente/splitter/${splitterId}`).then(response => {
-  //       const saidaSplitter = response.data;
-  //       setSaidasSplitter(saidaSplitter);
-  //     });
-  //   }
-  //   getSaidaSpWithClientes(all.viewCto.data.id);
-  // }, [all.viewCto.data.id]);
-
-  // useEffect(() => {
-  //   function getClientesBySplitter(id){
-  //     api
-  //       .get(`/get/cliente/${id}`)
-  //       .then(response => {
-  //         const cl = response.data;
-  //         set
-  //       })
-  //   }
-  // })
 
   function handleHideModal() {
     const { hideDataInViewModal } = props;
@@ -138,58 +112,76 @@ function ViewCto(props) {
               <th>Fibra Aliment.</th>
             </thead>
             <tbody>
-              <tr>
-                <td colspan="2">2 Span's</td>
-                <td colspan="1">1 Span</td>
-              </tr>
-
               {splitters.map((splitter, index) => (
                 <>
                   <tr>
                     <td style={{ color: "rgb(20,30,40)" }}>{splitter.nome}</td>
-                    <td style={{ color: "rgb(20,30,40)" }}>
+                    <td style={{ color: "rgb(20,30,40)", textAlign: "center" }}>
                       {splitter.modelo}
                     </td>
-                    <td style={{ color: "rgb(20,30,40)" }}>
+                    <td style={{ color: "rgb(20,30,40)", textAlign: "center" }}>
                       {splitter.balanceamento}
                     </td>
                     <td style={{ color: "rgb(20,30,40)" }}>Em const.</td>
                   </tr>
                   {/* Tabela com os clientes */}
-                  <table>
-                    <thead>
-                      <th>Nome</th>
-                      <th>PPPoE</th>
-                      <th>Endereço</th>
-                    </thead>
-                    <tbody>
-                      {clientes &&
-                        clientes.map(cliente => (
-                          <tr>
-                            <td
-                              style={{
-                                // color: "rgb(22,255,3)"
-                                color: "#000"
-                              }}
-                            >
-                              {cliente.Cliente.nome}
-                            </td>
-                            <td style={{ color: "#000" }}>
-                              {cliente.Cliente.usuario_pppoe}
-                            </td>
-                            <td style={{ color: "#000" }}>
-                              {cliente.Cliente.endereco}
-                            </td>
-                          </tr>
-                        ))}
-                      {clientes &&
-                        clientes.map(cliente => {
-                          api.get("");
-                        })}
-                    </tbody>
-                  </table>
+                  <h3 style={{ paddingTop: "5px" }}>Clientes</h3>
+                  <tr>
+                    <th>Nome</th>
+                    <th>PPPoE</th>
+                    <th>Endereço</th>
+                    <th>Saída</th>
+                  </tr>
+                  {clientes &&
+                    clientes.map(cliente => (
+                      <tr>
+                        <td
+                          style={{
+                            // color: "rgb(22,255,3)"
+                            color: "#000"
+                          }}
+                        >
+                          {cliente.Cliente.nome}
+                        </td>
+                        <td style={{ color: "#000" }}>
+                          {cliente.Cliente.usuario_pppoe}
+                        </td>
+                        <td style={{ color: "#000" }}>
+                          {cliente.Cliente.endereco}
+                        </td>
+                        <td style={{ textAlign: "center" }}>
+                          {cliente.numero}
+                        </td>
+                      </tr>
+                    ))}
                 </>
               ))}
+            </tbody>
+          </table>
+        </SplitterContainer>
+
+        <SplitterContainer>
+          <h3>Cabos</h3>
+          <table>
+            <thead>
+              <th>Nome</th>
+              <th>Modelo</th>
+              <th>N° Fibras</th>
+              <th>Fibra Aliment.</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Nome de teste</td>
+                <td>Cabo de 6FO</td>
+                <td
+                  style={{
+                    textAlign: "center"
+                  }}
+                >
+                  6
+                </td>
+                <td>Saída x de tal</td>
+              </tr>
             </tbody>
           </table>
         </SplitterContainer>
@@ -207,6 +199,21 @@ function ViewCto(props) {
           >
             Adicionar Splitter
           </Button>
+          <Button
+            onClick={() => {
+              handleHideModal();
+              setDelimitacaoMapa("cabo");
+              let coordenadasObjs = JSON.parse(data.coordenadas);
+              let arrayCoordenadas = [];
+              arrayCoordenadas[0] = coordenadasObjs.longitude;
+              arrayCoordenadas[1] = coordenadasObjs.latitude;
+              // console.tron.log(arrayCoordenadas);
+              addCoordCabo([arrayCoordenadas]);
+              addCtoId(data.id);
+            }}
+          >
+            Adicionar Cabo
+          </Button>
           <Button>Editar</Button>
           <Button>Salvar</Button>
         </ButtonContainer>
@@ -219,7 +226,8 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ ...Actions, ...CtoCreators }, dispatch);
 
 export default connect(
   mapStateToProps,

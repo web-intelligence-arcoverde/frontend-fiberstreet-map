@@ -36,7 +36,7 @@ function AddRelCliCto(props) {
         const { data: Splitters } = response;
         setSplitters(Splitters);
         getSaidasDoSplitter();
-        console.tron.log(Splitters);
+        // console.tron.log(Splitters);
       })
       .catch(err => console.warn(err));
   }
@@ -47,7 +47,7 @@ function AddRelCliCto(props) {
         .get(`saidasplitter/splitter/${splitter.id}`)
         .then(response => {
           const { data: saidasAndId } = response;
-          console.tron.log(saidasAndId.saidas);
+          // console.tron.log(saidasAndId.saidas);
           criarArrayDeAcordoComOBalanceamento(
             saidasAndId.saidas,
             splitter.balanceamento,
@@ -60,7 +60,7 @@ function AddRelCliCto(props) {
           // alert(JSON.stringify(saidas))
           // console.tron.log({ sss: { saidas: saidasAndId } });
         })
-        .catch(err => console.tron.log(err));
+        .catch(err => console.warn.log(err));
     });
   }
 
@@ -85,15 +85,15 @@ function AddRelCliCto(props) {
           };
         } else {
           // Teste para adicionar saída caso não seja um número a mais do que a posição no array
-          console.tron.log(saidas[count]);
+          // console.tron.log(saidas[count]);
           let posicaoDaSaidaNoArray = saidas[count].numero - 1;
-          console.tron.log({ POSICAO: posicaoDaSaidaNoArray });
-          console.tron.log({
-            ...saidas[count],
-            isActive: true,
-            selected: false,
-            obter: true
-          });
+          // console.tron.log({ POSICAO: posicaoDaSaidaNoArray });
+          // console.tron.log({
+          //   ...saidas[count],
+          //   isActive: true,
+          //   selected: false,
+          //   obter: true
+          // });
           newArray[posicaoDaSaidaNoArray] = {
             ...saidas[count],
             isActive: true,
@@ -151,7 +151,7 @@ function AddRelCliCto(props) {
         }
       }
     }
-    console.tron.log(newArray);
+    // console.tron.log(newArray);
     // T
 
     setSaidas(newArray);
@@ -223,9 +223,9 @@ function AddRelCliCto(props) {
       saida => saida.selected === true
     );
     if (findedSelected.isActive === false) {
-      console.tron.log(
-        `Poderá ser usada a saída de número ${findedSelected.numero}`
-      );
+      // console.tron.log(
+      //   `Poderá ser usada a saída de número ${findedSelected.numero}`
+      // );
       alert(`Aguarde enquanto salvamos os dados no banco de dados`);
 
       const { addDropRequest } = props;
@@ -236,11 +236,11 @@ function AddRelCliCto(props) {
       addDropRequest({ cabo, cliente_id, cto_id, saida: findedSelected });
       // api.post(`saidasplitter/cliente/create`, );
     } else {
-      console.tron.log(
-        `A saída de número ${
-          findedSelected.numero
-        }, pois ela encontra-se ocupada`
-      );
+      // console.tron.log(
+      //   `A saída de número ${
+      //     findedSelected.numero
+      //   }, pois ela encontra-se ocupada`
+      // );
       alert(
         `A saída ${
           findedSelected.numero
@@ -284,7 +284,7 @@ function AddRelCliCto(props) {
                           ? { ...output, selected: true }
                           : { ...output, selected: false }
                       );
-                      console.tron.log(newArrayFull);
+                      // console.tron.log(newArrayFull);
 
                       // setSaidaSelecionada(newAr);
                       setSaidaSelecionada(newArrayFull);
