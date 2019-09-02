@@ -293,8 +293,6 @@ class Map extends Component {
 
   handleMapClick = e => {
     const { lng: longitude, lat: latitude } = e.lngLat;
-    // console.tron.log(e.lngLat);
-    // console.tron.log(`Longitude: ${longitude}, Latitude: ${latitude}`);
     const { addCoordenadas, canAddCoordenadas } = this.props;
     addCoordenadas({ longitude: longitude, latitude: latitude });
     canAddCoordenadas(false);
@@ -410,12 +408,6 @@ class Map extends Component {
 
         setCtoFromServer(data);
 
-        // map.on("click", "drone", function(e) {
-        //   let longitude = e.features[0].geometry.coordinates[0];
-        //   let latitude = e.features[0].geometry.coordinates[1];
-        //   let cto = e.features[0].properties.data
-        //   showDataInViewModal(JSON.parse(cto));
-        // });
         this.obterCabos(map);
       })
       .catch(err => {

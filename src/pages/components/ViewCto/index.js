@@ -52,7 +52,6 @@ function ViewCto(props) {
       .get(`saidasplitter/splitter/${splitterId}/clientes`)
       .then(result => {
         const { data: saidas } = result;
-
         setSaidasSplitter(saidas);
       })
       .catch(err => console.log(err));
@@ -82,8 +81,6 @@ function ViewCto(props) {
     hideDataInViewModal();
     showSplitterAddModal(id);
   }
-
-  var dados = {};
 
   return (
     <Modal
@@ -170,18 +167,20 @@ function ViewCto(props) {
               <th>Fibra Aliment.</th>
             </thead>
             <tbody>
-              <tr>
-                <td>Nome de teste</td>
-                <td>Cabo de 6FO</td>
-                <td
-                  style={{
-                    textAlign: "center"
-                  }}
-                >
-                  6
-                </td>
-                <td>Saída x de tal</td>
-              </tr>
+              {cabos.map(cabo => (
+                <tr>
+                  <td>{cabo.Cabo.nome}</td>
+                  <td>{cabo.Cabo.tipo}</td>
+                  <td
+                    style={{
+                      textAlign: "center"
+                    }}
+                  >
+                    {cabo.Cabo.quantidade_fibras}
+                  </td>
+                  <td>Des..</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </SplitterContainer>

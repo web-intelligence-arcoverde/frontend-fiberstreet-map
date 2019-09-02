@@ -36,7 +36,6 @@ function AddRelCliCto(props) {
         const { data: Splitters } = response;
         setSplitters(Splitters);
         getSaidasDoSplitter();
-        // console.tron.log(Splitters);
       })
       .catch(err => console.warn(err));
   }
@@ -74,10 +73,8 @@ function AddRelCliCto(props) {
     // preencher tudo com null
 
     for (let count = 0; count < balanceamento; count++) {
-      // console.tron.log(saidas);
       if (saidas[count]) {
         if (count + 1 === saidas[count].numero) {
-          //newArray[count] = saidas[count]; // FUNCIONA ESSA PORRA
           newArray[count] = {
             ...saidas[count],
             isActive: true,
@@ -85,7 +82,7 @@ function AddRelCliCto(props) {
           };
         } else {
           // Teste para adicionar saída caso não seja um número a mais do que a posição no array
-          // console.tron.log(saidas[count]);
+
           let posicaoDaSaidaNoArray = saidas[count].numero - 1;
           // console.tron.log({ POSICAO: posicaoDaSaidaNoArray });
           // console.tron.log({
@@ -116,29 +113,7 @@ function AddRelCliCto(props) {
               splitter_id
             };
           }
-
-          // newArray[posicaoDaSaidaNoArray] = {
-          //   ...saidas[count],
-          //   isActive: true,
-          //   splitter_id
-          // };
-
-          // saidas[saidas[count].numero] = {
-          //   ...saidas[count].numero,
-          //   isActive: true,
-          //   splitter_id
-          // };
-
-          // = saidas[count].numero;
-
-          // newArray[count] = {
-          //   ...saidas[count],
-          //   isActive: true,
-          //   splitter_id
-          // };
         }
-        // newArray[count] =
-        // console.tron.log(saidas[count]);
       } else {
         if (!newArray[count]) {
           newArray[count] = {
@@ -151,15 +126,12 @@ function AddRelCliCto(props) {
         }
       }
     }
-    // console.tron.log(newArray);
-    // T
-
     setSaidas(newArray);
   }
 
   async function obterSaidasDoSplitter() {
     await setSplitters(drop.data.splitters);
-    // alert(JSON.stringify(drop.data.splitters));
+
     await getSaidasDoSplitter();
     // drop.data.splitters.forEach(element => {
     // alert(JSON.stringify(element));
@@ -183,9 +155,6 @@ function AddRelCliCto(props) {
       alert("Não é possível usar uma saída já em uso");
     } else {
       setSaidaSelecionada(number);
-      // setParams({
-      //   selected: true
-      // });
 
       setParams(
         params.map((select, index) => (number === index ? true : false))
@@ -242,9 +211,7 @@ function AddRelCliCto(props) {
       //   }, pois ela encontra-se ocupada`
       // );
       alert(
-        `A saída ${
-          findedSelected.numero
-        }, encontra-se ocupada, escolha outra por favor!`
+        `A saída ${findedSelected.numero}, encontra-se ocupada, escolha outra por favor!`
       );
     }
     console.tron.log(findedSelected);

@@ -41,31 +41,16 @@ function AddCto(props) {
     e.preventDefault();
     const { setCtoFromServer } = props;
 
-    // function verifyLength() {
-    //   if (name.length > 5) {
-    //     if (coordinates.length > 5) {
-    //       if (type.length > 5) {
-    //         if (address.length > 5) {
-    //           return true;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   return false;
-    // }
-
     const newCto = {
       nome: name,
       coordenadas: coordinates,
       modelo: type,
       endereco: address
     };
-    // if (verifyLength) {
+
     await api
-      .post("/create/cto", newCto) //, newCto)
+      .post("/create/cto", newCto)
       .then(response => {
-        console.log(response);
-        // alert(JSON.stringify(response));
         handleHideModal();
         obterDadosDoServidor();
       })
@@ -121,7 +106,6 @@ function AddCto(props) {
       className="modal-container"
       overlayClassName="modal-overlay"
     >
-      {/* <Container> */}
       <Form onSubmit={event => handleCto(event)}>
         <label for="ctoName">Nome Cto</label>
         <input
@@ -175,14 +159,10 @@ function AddCto(props) {
           required
           onChange={e => handleChange(e, TTYPE)}
         />
-        {/* <p>Lat: {this.props.coordinates.latitude}, Lng: {this.props.coordinates.longitude}</p> */}
+
         <hr />
-        {/* <Button onClick={() => alert("Adicionar Splitter")}>
-          Adicionar Splitter
-        </Button> */}
         <Button type="submit">Adicionar</Button>
       </Form>
-      {/* </Container> */}
     </Modal>
   );
 }

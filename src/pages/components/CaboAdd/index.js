@@ -20,14 +20,6 @@ function CaboAdd(props) {
   const TNAME = "nome";
   const TMODEL = "modelo";
 
-  // useEffect(() => {
-  //   async function limparCampos() {
-  //     setNome("");
-  //     setModelo("");
-  //   }
-  //   limparCampos();
-  // });
-
   function handleHideModal() {
     const { hideAddCaboModal } = props;
     hideAddCaboModal();
@@ -42,13 +34,11 @@ function CaboAdd(props) {
     });
     let coordinatesStrinfigied = JSON.stringify(coordinates);
 
-    // console.tron.log({ coord: JSON.stringify(coordinates) });
-
     const cabo = {
       nome: nome,
       tipo: modelo,
       quantidade_fibras: fibra,
-      coordenadas: coordinatesStrinfigied //props.redux.mapa.polyline
+      coordenadas: coordinatesStrinfigied
     };
     const { addCoordCabo, hideAddCaboModal } = props;
     // addCoordCabo(null);
