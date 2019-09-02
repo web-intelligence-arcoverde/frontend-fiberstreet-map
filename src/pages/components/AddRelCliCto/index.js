@@ -133,7 +133,7 @@ function AddRelCliCto(props) {
     await setSplitters(drop.data.splitters);
 
     await getSaidasDoSplitter();
-    // drop.data.splitters.forEach(element => {
+    // drop.data.splitters.forEach(element => { // BRANCH FEATURE
     // alert(JSON.stringify(element));
     // getSaidasDoSplitter(element);
     // });
