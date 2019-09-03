@@ -1,19 +1,58 @@
-import React, { useState, useEffect } from "react";
-import { Container, Button, MoreInfo } from "./styles";
+//React
+import React, { useState } from "react";
 
+// Redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from "../../../redux/store/actions/all";
 import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
 
-import Modal from "react-modal";
-// import jssPluginPropsSort from "jss-plugin-props-sort";
+//React-UI
+import { Container } from "./styles";
+import { makeStyles } from '@material-ui/core/styles';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { grey } from '@material-ui/core/colors';
+import Fab from '@material-ui/core/Fab';
+import NavigationIcon from '@material-ui/icons/Navigation';
+import AddIcon from '@material-ui/icons/Add';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Paper from '@material-ui/core/Paper';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-// Modal.setAppElement(document.getElementById('root'))
+const useStyles = makeStyles(theme => ({
+  root: {
+    position: 'relative',
+  },
+  paper: {
+    position: 'absolute',
+    top: 36,
+    right: 0,
+    left: 0,
+  },
+  fake: {
+    backgroundColor: grey[200],
+    height: theme.spacing(1),
+    margin: theme.spacing(2),
+    // Selects every two elements among any group of siblings.
+    '&:nth-child(2n)': {
+      marginRight: theme.spacing(3),
+    },
+  },
+}));
 
 function LeftSelector(props) {
+
+  const [open, setOpen] = React.useState(false);
+  const [open1, setOpen1] = useState(false);
+  
+  const classes = useStyles();
+
   const [dropDownOne, setDropDownOne] = useState(false);
+  
   const [backColor, setBackColor] = useState(["#8123"]);
+  
   const {
     openModalCto,
     showModalCto,
@@ -21,157 +60,62 @@ function LeftSelector(props) {
     addCoordCabo,
     showAddNewCaboModalReserva
   } = props;
+  
   // const { cto } = props.redux;
+
+  //Fechar um quando abrir o outro.
+  const handleClick = (number) => {
+    switch(number) {
+      case 0:
+        setOpen(prev => !prev);
+        break;
+      case 1:
+        setOpen1(prev => !prev);
+        break;
+      default: break;
+    }
+    
+  };
+
+  const handleClickAway = () => {
+    setOpen(false);
+  };
+
+  const fake = <div className={classes.fake} />;
 
   return (
     <>
-      {/* <Modal
-      isOpen={true}
-    > */}
       <Container>
-        <Button onClick={() => alert("Testing")}>
-          <p>None</p>
-        </Button>
-        <Button>
-          <p onClick={() => setDropDownOne(!dropDownOne)}>ADD</p>
-          {dropDownOne == false ? (
-            <></>
-          ) : (
-            <p
-              onClick={() => {
-                // Aqui selecionaremos o tipo de delimitação do clique no mapa
-                setDelimitacaoMapa("cto");
-                setDropDownOne(!dropDownOne);
-                // showModalCto();
-              }}
-            >
-              CTO
-            </p>
-          )}
-          {dropDownOne == false ? (
-            <></>
-          ) : (
-            <p
-              onClick={() => {
-                setDelimitacaoMapa("splitter");
-                setDropDownOne(!dropDownOne);
-              }}
-            >
-              SPLITTER
-            </p>
-          )}
-          {dropDownOne == false ? (
-            <></>
-          ) : (
-            <p
-              onClick={() => {
-                setDelimitacaoMapa("ceo");
-                setDropDownOne(!dropDownOne);
-              }}
-            >
-              CEO
-            </p>
-          )}
-          {dropDownOne == false ? (
-            <></>
-          ) : (
-            <p
-              onClick={() => {
-                setDelimitacaoMapa("cliente");
-                setDropDownOne(!dropDownOne);
-              }}
-            >
-              CLIENTE
-            </p>
-          )}
-          {dropDownOne == false ? <></> : <p />}
-        </Button>
-        <Button>
-          <p onClick={() => setDropDownOne(!dropDownOne)}>CLIENTE</p>
-          {dropDownOne == false ? (
-            <></>
-          ) : (
-            <p
-              onClick={() => {
-                setDelimitacaoMapa("viabilidade");
-                setDropDownOne(!dropDownOne);
-              }}
-            >
-              Viabilidade
-            </p>
-          )}
-          {dropDownOne == false ? (
-            <></>
-          ) : (
-            <p
-              onClick={() => {
-                setDelimitacaoMapa("cliente");
-                setDropDownOne(!dropDownOne);
-              }}
-            >
-              Adicionar
-            </p>
-          )}
-        </Button>
-        <Button>
-          <p
-            onClick={() => {
-              setDropDownOne(!dropDownOne);
-            }}
-          >
-            Cabo
-          </p>
-          {dropDownOne == false ? (
-            <></>
-          ) : (
-            <p
-              onClick={() => {
-                setDelimitacaoMapa("cabo");
-                setDropDownOne(!dropDownOne);
-                // showModalCto();
-              }}
-            >
-              Add Cabo
-            </p>
-          )}
-          {props.redux.all.mapa.delimitacao === "cabo" && (
-            <p
-              onClick={() => {
-                // Aqui iremos criar o cabo para adicionarmos no banco de dados
-                // Aqui iremos fazeer abrir um modal para começarmos adicionar os dados do cabo como nome,
-                // tipo e quantidade de fibras inicio e final de coordenadas
-                // alert(JSON.stringify(props.redux.all.mapa.polyline))
-                const { showAddCaboModal } = props;
-                let coordenadasFinais = props.redux.all.mapa.polyline;
-                addCoordCabo(coordenadasFinais);
-                showAddNewCaboModalReserva(props.redux.ctos.ctoId);
-                setDelimitacaoMapa("default");
-              }}
-            >
-              FINALIZAR ADIÇÃO
-            </p>
-          )}
-          {props.redux.all.mapa.delimitacao === "cabo" && (
-            <>
-              <p
-                onClick={() => {
-                  // alert("Ao clicar aqui, a última linha do cabo será apagada");
-                  let lastPolyline = props.redux.all.mapa.polyline;
-                  if (!(lastPolyline.length === 1)) {
-                    lastPolyline.pop();
-                    addCoordCabo([]);
-                    addCoordCabo(lastPolyline);
-                    setDelimitacaoMapa("cabo");
-                  }
-                }}
-              >
-                Voltar
-              </p>
-            </>
-          )}
-        </Button>
+        
+        <div className={classes.root} >
+            <ClickAwayListener onClickAway={handleClickAway}>
+              <div style={{display:'flex', flexDirection: "column"}} >
+                <Button onClick={() => handleClick(0)}>Adicionar</Button>
+                {open ? (
+                  <Paper className={classes.paper}>
+                    <Button variant="contained" color="secondary" className={classes.button}>
+                      Delete
+                      <DeleteIcon className={classes.rightIcon} />
+                    </Button>
+                  </Paper>
+                ) : null}   
+
+              <Button onClick={() => handleClick(1)}>Open menu</Button>
+                {open1 ? (
+                  <Button variant="contained" color="secondary" className={classes.button}>
+                    Delete1
+                    <DeleteIcon className={classes.rightIcon} />
+                  </Button>
+                ) : null}        
+
+              </div>
+            </ClickAwayListener>
+        </div>
+       
       </Container>
-      {/* </Modal> */}
+
+      
+      
     </>
   );
 }
@@ -187,3 +131,5 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(LeftSelector);
+
+//
