@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { CoordForm } from "./styles";
+import { Container, Form, Button, CoordForm } from "./styles";
 import api from "../../../services/api";
 import propTypes from "prop-types";
+import Modal from "react-modal";
 import "./styles.css";
 
 // redux
@@ -11,8 +12,7 @@ import { connect } from "react-redux";
 import { obterDadosDoServidor } from "../../../services/handleInformation";
 import * as Actions from "../../../redux/store/actions/all";
 
-//UI-Components
-import {Modal,Button, Form, Row, Col} from 'react-bootstrap';
+Modal.setAppElement(document.getElementById("root"));
 
 // Vamos fazer aqui uma renderização condicional para ADIÇÃO/AMOSTRAGEM de imagens
 
@@ -43,7 +43,7 @@ function AddCto(props) {
 
     const newCto = {
       nome: name,
-      coordenadas: JSON.stringify(props.redux.all.modalCto.coordinates),
+      coordenadas: coordinates,
       modelo: type,
       endereco: address
     };
@@ -99,51 +99,70 @@ function AddCto(props) {
   }
 
   return (
-    
-    <Modal show={modalCto.visible} onHide={handleHideModal} animation={false}>
-      
-      <Form onSubmit={handleCto}>
+    <Modal
+      isOpen={modalCto.visible}
+      onRequestClose={handleHideModal}
+      contentLabel="Adicionar nova CTO"
+      className="modal-container"
+      overlayClassName="modal-overlay"
+    >
+      <Form onSubmit={event => handleCto(event)}>
+        <label for="ctoName">Nome Cto</label>
+        <input
+          id="ctoName"
+          value={name}
+          type="text"
+          name="nome"
+          placeholder="Insira o nome da CTO"
+          required
+          onChange={e => handleChange(e, TNAME)}
+        />
+        <CoordForm style={{ alignItems: "center", justifyContent: "center" }}>
+          <label for="coordenadas">Coordenadas</label>
+          <input
+            id="coordenadas"
+            value={JSON.stringify(props.redux.all.modalCto.coordinates)}
+            type="text"
+            name="coordenadas"
+            placeholder="Coordenadas"
+            required
+            onChange={e => handleChange(e, TCOORDINATES)}
+          />
 
-        <Modal.Header>
-          <Row>
-            <Col md={{ offset: 4 }}>
-              <Modal.Title>Cadastrar do CTO</Modal.Title>
-            </Col>
-          </Row>
-        </Modal.Header>
+          <div
+            style={{ width: 30, height: 30, backgroundColor: "#FFF" }}
+            onClick={() => {
+              canAddCoordenadas(true);
+              alert("Selecione um local precisamente no mapa;");
+            }}
+          >
+            +
+          </div>
+        </CoordForm>
+        <label for="address">Endereço</label>
+        <input
+          id="address"
+          value={address}
+          type="text"
+          name="endereco"
+          placeholder="Endereço"
+          required
+          onChange={e => handleChange(e, TADDRESS)}
+        />
+        <label for="modelo">Modelo</label>
+        <input
+          id="modelo"
+          value={type}
+          type="text"
+          name="modelo"
+          placeholder="Modelo"
+          required
+          onChange={e => handleChange(e, TTYPE)}
+        />
 
-               
-        <Modal.Body>
-          
-          <Form.Group>
-            <Form.Label>Nome CTO:</Form.Label>
-            <Form.Control value={name} onChange={e => setName(e.target.value)} type="text"/>
-          </Form.Group>
-                
-          <Form.Group>
-            <Form.Label>Endereço:</Form.Label>
-            <Form.Control value={address} onChange={e=>setAddress(e.target.value)} type="text"/>
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label>Modelo:</Form.Label>
-            <Form.Control value={type} onChange={e=>setType(e.target.value)} type="text"/>
-          </Form.Group>
-             
-        </Modal.Body>
-          
-        <Modal.Footer>
-            
-          <Button variant="secondary" onClick={handleHideModal}>
-            Fechar
-          </Button>
-            
-          <Button variant="primary" type='submit'>
-            Salvar
-          </Button>
-          
-        </Modal.Footer>
-      </Form>     
+        <hr />
+        <Button type="submit">Adicionar</Button>
+      </Form>
     </Modal>
   );
 }

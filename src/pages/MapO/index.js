@@ -12,7 +12,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "./map.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import Header from "./header";
+import Header from "../components/Header";
 import api from "../../services/api";
 import * as Actions from "../../redux/store/actions/all";
 import { Creators as CtosActions } from "../../redux/store/ducks/ctos";
@@ -816,13 +816,14 @@ class Map extends Component {
     this.setState({ map });
   }
 
+  //HEADER
   render() {
     const { container, classNameStyle } = this.props;
     const { polyline } = this.props.redux.all.mapa;
 
     return (
       <div id={container} className={classNameStyle}>
-        <Header title="FiberStreet Maps - GZ NET" />
+        <Header  />
       </div>
     );
   }
