@@ -10,20 +10,16 @@ import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
 //React-UI
 import { Container } from "./styles";
 import { makeStyles } from '@material-ui/core/styles';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import { grey } from '@material-ui/core/colors';
-import Fab from '@material-ui/core/Fab';
-import NavigationIcon from '@material-ui/icons/Navigation';
-import AddIcon from '@material-ui/icons/Add';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Paper from '@material-ui/core/Paper';
-import DeleteIcon from '@material-ui/icons/Delete';
+import Dropdown from 'react-bootstrap/Dropdown'
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import Button from 'react-bootstrap/Button'
+import grey from '@material-ui/core/colors/red';
 
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'relative',
+    paddingLeft: '22px',
+    paddingTop: '40px',
   },
   paper: {
     position: 'absolute',
@@ -31,14 +27,8 @@ const useStyles = makeStyles(theme => ({
     right: 0,
     left: 0,
   },
-  fake: {
-    backgroundColor: grey[200],
-    height: theme.spacing(1),
-    margin: theme.spacing(2),
-    // Selects every two elements among any group of siblings.
-    '&:nth-child(2n)': {
-      marginRight: theme.spacing(3),
-    },
+  btColor: {
+
   },
 }));
 
@@ -52,6 +42,7 @@ function LeftSelector(props) {
   const [dropDownOne, setDropDownOne] = useState(false);
   
   const [backColor, setBackColor] = useState(["#8123"]);
+  const colorButton = grey[500];
   
   const {
     openModalCto,
@@ -77,44 +68,72 @@ function LeftSelector(props) {
     
   };
 
-  const handleClickAway = () => {
-    setOpen(false);
-  };
-
-  const fake = <div className={classes.fake} />;
 
   return (
     <>
       <Container>
         
         <div className={classes.root} >
-            <ClickAwayListener onClickAway={handleClickAway}>
+            
               <div style={{display:'flex', flexDirection: "column"}} >
-                <Button onClick={() => handleClick(0)}>Adicionar</Button>
-                {open ? (
-                  <Paper className={classes.paper}>
-                    <Button variant="contained" color="secondary" className={classes.button}>
-                      Delete
-                      <DeleteIcon className={classes.rightIcon} />
-                    </Button>
-                  </Paper>
-                ) : null}   
+              
+              <ButtonGroup vertical>
+                
+                <Dropdown as={ButtonGroup}>
 
-              <Button onClick={() => handleClick(1)}>Open menu</Button>
-                {open1 ? (
-                  <Button variant="contained" color="secondary" className={classes.button}>
-                    Delete1
-                    <DeleteIcon className={classes.rightIcon} />
+                  <Button variant='warning' className={classes.button}>
+                    <i class="fa fa-plus" style={{color:'white'}}></i>
                   </Button>
-                ) : null}        
+
+                    <Dropdown.Toggle id="dropdown-split-basic" variant='warning' style={{color:'white'}}/>
+
+                    <Dropdown.Menu>
+                      
+                      <Dropdown.Item onClick={() => {
+                          //Abre o modal para adicionar um novo cliente
+                          setDelimitacaoMapa("cliente");
+                          }}>CLIENTE
+                      </Dropdown.Item>
+                      
+                      <Dropdown.Item onClick={() => {
+                        // Aqui selecionaremos o tipo de delimitação do clique no mapa
+                        setDelimitacaoMapa("cto");}}>CTO
+                      </Dropdown.Item>
+
+                      <Dropdown.Item onClick={() => {
+                        setDelimitacaoMapa("ceo");}}>CEO
+                      </Dropdown.Item>
+                    
+                    </Dropdown.Menu>
+              
+                </Dropdown>
+
+                <Dropdown as={ButtonGroup}>
+
+                <Button variant='warning' className={classes.button}>
+                  <i class="fa fa-list-alt" style={{color:'white'}}></i>
+                </Button>
+
+                  <Dropdown.Toggle id="dropdown-split-basic" variant='warning' style={{color:'white'}}/>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1"> </Dropdown.Item>
+                  
+                    <Dropdown.Item href="#/action-1">Cabo</Dropdown.Item>
+                    
+                    <Dropdown.Item href="#/action-1">CTO</Dropdown.Item>
+                  
+                  </Dropdown.Menu>
+              
+                </Dropdown>
+
+              </ButtonGroup>
 
               </div>
-            </ClickAwayListener>
+            
         </div>
        
       </Container>
-
-      
       
     </>
   );
@@ -132,4 +151,3 @@ export default connect(
   mapDispatchToProps
 )(LeftSelector);
 
-//

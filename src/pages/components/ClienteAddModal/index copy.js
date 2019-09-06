@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Container, Form, Button, CoordForm } from "./styles";
 import api from "../../../services/api";
 // import propTypes from "prop-types";
-
+import Modal from "react-modal";
 import "./styles.css";
 
 // redux
@@ -12,9 +13,7 @@ import { Creators as ClienteCreators } from "../../../redux/store/ducks/all";
 // import { obterDadosDoServidor } from "../../../services/handleInformation";
 import * as Actions from "../../../redux/store/actions/all";
 
-//UI-Components
-import {Modal,Button, Form, Row, Col} from 'react-bootstrap';
-
+Modal.setAppElement(document.getElementById("root"));
 
 // Vamos fazer aqui uma renderização condicional para ADIÇÃO/AMOSTRAGEM de imagens
 
@@ -99,7 +98,6 @@ function ClienteAddModal(props) {
   }
 
   async function obterClientes() {
-
     const { setClientFromServer } = props;
     await api
       .post("/get/cliente")
@@ -122,70 +120,74 @@ function ClienteAddModal(props) {
   //     })
   // }
 
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   return (
-    <>
+    <Modal
+      isOpen={all.modalCliente.visible}
+      onRequestClose={handleHideModal}
+      contentLabel="Adicionar novo cliente"
+      className="modal-container"
+      overlayClassName="modal-overlay"
+    >
+      {/* <Container> */}
+      <Form onSubmit={event => handleCliente(event)}>
+        <label for="sName">Nome Cliente</label>
+        <input
+          id="sName"
+          value={nome}
+          type="text"
+          name={nome}
+          placeholder="Insira o nome do Cliente"
+          required
+          onChange={e => handleChange(e, NAME)}
+        />
+        <label for="spCpf">CPF</label>
+        <input
+          id="spCpf"
+          value={cpf}
+          type="text"
+          name={CPF}
+          placeholder="Insira o número de cpf"
+          minlength="11"
+          maxlength="11"
+          required
+          onChange={e => handleChange(e, CPF)}
+        />
+        <label for="coord">Coordenadas</label>
+        <input
+          id="coord"
+          value={JSON.stringify(props.redux.all.modalCliente.coordinates)}
+          type="text"
+          name={COORD}
+          placeholder="Coordenadas"
+          required
+          onChange={e => handleChange(e, COORD)}
+        />
+        <label for="v">Velocidade</label>
+        <input
+          id="v"
+          value={velocidade}
+          type="text"
+          name={VELOCIDADE}
+          placeholder="Velocidade"
+          required
+          onChange={e => handleChange(e, VELOCIDADE)}
+        />
+        <label for="pp">Pppoe</label>
+        <input
+          id="pp"
+          value={pppoe}
+          type="text"
+          name={PPPOE}
+          placeholder="PPPOE"
+          required
+          onChange={e => handleChange(e, PPPOE)}
+        />
 
-
-      <Modal show={all.modalCliente.visible} onHide={handleHideModal} animation={false}>
-        
-         <Form onSubmit={event => handleCliente(event)}>
-          
-          <Modal.Header>
-            <Row>
-              <Col md={{ offset: 4 }}>
-                <Modal.Title>Cadastro de Cliente</Modal.Title>
-              </Col>
-            </Row>
-          </Modal.Header>
-                
-          <Modal.Body>
-              <Form.Group>
-                <Form.Label>Nome:</Form.Label>
-                <Form.Control type="text" value={nome} onChange={e=> setNome(e.target.value)}/>
-              </Form.Group>
-
-              <Form.Group>
-                <Form.Label>CPF:</Form.Label>
-                <Form.Control type="number" value={cpf} onChange={e=>setCpf(e.target.value)}/>
-              </Form.Group>
-              
-              <Form.Group>
-                <Form.Label>Planos:</Form.Label>
-                <Form.Control type='text' as="select" value={velocidade} onChange={e=>setVelocidade(e.target.value)} required>
-                  <option>10</option>
-                  <option>20</option>
-                  <option>30</option>
-                  <option>40</option>
-                  <option>50</option>
-                </Form.Control>
-              </Form.Group>
-
-              <Form.Group>
-                <Form.Label>PPPOE:</Form.Label>
-                <Form.Control type="text" value={pppoe} onChange={e=>setPppoe(e.target.value)}/>
-              </Form.Group>
-
-          </Modal.Body>
-          
-          <Modal.Footer>
-            
-            <Button variant="secondary" onClick={handleHideModal}>
-              Fechar
-            </Button>
-            
-            <Button variant="primary" type='submit'>
-              Salvar
-            </Button>
-          
-          </Modal.Footer>
-        </Form>
-      </Modal>
-    </>
+        <hr />
+        <Button type="submit">Adicionar</Button>
+      </Form>
+      {/* </Container> */}
+    </Modal>
   );
 }
 

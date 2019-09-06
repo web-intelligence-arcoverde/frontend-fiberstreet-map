@@ -1,20 +1,74 @@
 import React, { useState, useEffect } from "react";
-import Modal from "react-modal";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from "../../../redux/store/actions/all";
 import { Creators as CtoCreators } from "../../../redux/store/ducks/ctos";
-import {
-  Container,
-  ButtonContainer,
-  Button,
-  SplitterContainer
-} from "./styles";
 import "./styles.css";
 import api from "../../../services/api";
 import { ClientRequest } from "http";
+import TableUsers from './Components/TableUsers'
 
-Modal.setAppElement(document.getElementById("root"));
+//UI-Components
+import PropTypes from 'prop-types';
+
+import {Modal} from 'react-bootstrap'
+import {deepOrange} from '@material-ui/core/colors/';
+import {Tab, Paper,AppBar,makeStyles,Tabs,Typography,Box, Container} from '@material-ui/core/';
+
+
+//Icons
+import PhoneIcon from '@material-ui/icons/Phone';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
+import HelpIcon from '@material-ui/icons/Help';
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`scrollable-force-tabpanel-${index}`}
+      aria-labelledby={`scrollable-force-tab-${index}`}
+      {...other}
+    >
+      <Box p={3}>{children}</Box>
+    </Typography>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `scrollable-force-tab-${index}`,
+    'aria-controls': `scrollable-force-tabpanel-${index}`,
+  };
+}
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
+  pallet:{
+    backgroundColor: '#FFBF00',
+  },
+  bigIndicator: {
+    height: 5,
+    backgroundColor: '#FFF',
+  },
+}));
+
+
+
 
 function ViewCto(props) {
   const { all } = props.redux;
@@ -82,143 +136,54 @@ function ViewCto(props) {
     showSplitterAddModal(id);
   }
 
+  const [value, setValue] = React.useState(0);
+  const classes = useStyles();
+
+  function handleChange(event, newValue) {
+    setValue(newValue);
+  }
+
+  function handleChange(event, newValue) {
+    setValue(newValue);
+  }
+
   return (
-    <Modal
-      isOpen={all.viewCto.visible}
-      onRequestClose={handleHideModal}
-      contentLabel="Visualização dos dados da CTO"
-      // className="modal-container"
-      overlayClassName="modal-overlay"
-    >
-      <Container>
-        <h1>Caixa Terminal Óptica</h1>
-        <p>Nome: {data.nome}</p>
-        <p>Endereço: {data.endereco}</p>
-        <p>Modelo: {data.modelo}</p>
-        <p>Id: {data.id}</p>
-        <br />
-
-        <SplitterContainer>
-          <h3>Splitter</h3>
-
-          <table>
-            <thead>
-              <th>Nome</th>
-              <th>Modelo</th>
-              <th>Balanceamento</th>
-              <th>Fibra Aliment.</th>
-            </thead>
-            <tbody>
-              {splitters.map((splitter, index) => (
-                <>
-                  <tr>
-                    <td style={{ color: "rgb(20,30,40)" }}>{splitter.nome}</td>
-                    <td style={{ color: "rgb(20,30,40)", textAlign: "center" }}>
-                      {splitter.modelo}
-                    </td>
-                    <td style={{ color: "rgb(20,30,40)", textAlign: "center" }}>
-                      {splitter.balanceamento}
-                    </td>
-                    <td style={{ color: "rgb(20,30,40)" }}>Em const.</td>
-                  </tr>
-                  {/* Tabela com os clientes */}
-                  <h3 style={{ paddingTop: "5px" }}>Clientes</h3>
-                  <tr>
-                    <th>Nome</th>
-                    <th>PPPoE</th>
-                    <th>Endereço</th>
-                    <th>Saída</th>
-                  </tr>
-                  {clientes &&
-                    clientes.map(cliente => (
-                      <tr>
-                        <td
-                          style={{
-                            // color: "rgb(22,255,3)"
-                            color: "#000"
-                          }}
-                        >
-                          {cliente.Cliente.nome}
-                        </td>
-                        <td style={{ color: "#000" }}>
-                          {cliente.Cliente.usuario_pppoe}
-                        </td>
-                        <td style={{ color: "#000" }}>
-                          {cliente.Cliente.endereco}
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          {cliente.numero}
-                        </td>
-                      </tr>
-                    ))}
-                </>
-              ))}
-            </tbody>
-          </table>
-        </SplitterContainer>
-
-        <SplitterContainer>
-          <h3>Cabos</h3>
-          <table>
-            <thead>
-              <th>Nome</th>
-              <th>Modelo</th>
-              <th>N° Fibras</th>
-              <th>Fibra Aliment.</th>
-            </thead>
-            <tbody>
-              {cabos.map(cabo => (
-                <tr>
-                  <td>{cabo.Cabo.nome}</td>
-                  <td>{cabo.Cabo.tipo}</td>
-                  <td
-                    style={{
-                      textAlign: "center"
-                    }}
-                  >
-                    {cabo.Cabo.quantidade_fibras}
-                  </td>
-                  <td>Des..</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </SplitterContainer>
-
-        <br />
-        <ButtonContainer>
-          <Button
-            onClick={() => {
-              if (splitters[0]) {
-                alert("Esta cto já possui um módulo");
-              } else {
-                addSplitter(all.viewCto.data.id);
-              }
-            }}
-          >
-            Adicionar Splitter
-          </Button>
-          <Button
-            onClick={() => {
-              handleHideModal();
-              setDelimitacaoMapa("cabo");
-              let coordenadasObjs = JSON.parse(data.coordenadas);
-              let arrayCoordenadas = [];
-              arrayCoordenadas[0] = coordenadasObjs.longitude;
-              arrayCoordenadas[1] = coordenadasObjs.latitude;
-              // console.tron.log(arrayCoordenadas);
-              addCoordCabo([arrayCoordenadas]);
-              addCtoId(data.id);
-            }}
-          >
-            Adicionar Cabo
-          </Button>
-          <Button>Editar</Button>
-          <Button>Salvar</Button>
-        </ButtonContainer>
-      </Container>
+         
+      <Modal show={all.viewCto.visible} onHide={handleHideModal}>
+        
+        <div className={classes.root}>
+      
+          <AppBar position="static" className={classes.pallet} >
+            
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              classes={{ indicator: classes.bigIndicator }} 
+              variant="fullWidth"
+            >
+              <Tab icon={<PersonPinIcon />} {...a11yProps(0)} />
+              <Tab icon={<PersonPinIcon />} {...a11yProps(1)} />
+              <Tab icon={<PersonPinIcon />} {...a11yProps(2)} />
+            </Tabs>
+          
+          </AppBar>
+     
+        <TabPanel value={value} index={0} >
+          <TableUsers></TableUsers>
+        </TabPanel>
+        <TabPanel value={value} index={1} >
+          Item Two
+        </TabPanel>
+        <TabPanel value={value} index={2} >
+          Item Three
+        </TabPanel>
+      
+    </div>
+      
     </Modal>
+     
   );
+
 }
 
 const mapStateToProps = state => ({
