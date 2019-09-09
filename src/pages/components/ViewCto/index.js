@@ -6,22 +6,24 @@ import { Creators as CtoCreators } from "../../../redux/store/ducks/ctos";
 import "./styles.css";
 import api from "../../../services/api";
 import { ClientRequest } from "http";
+
+//Components
 import TableUsers from './Components/TableUsers'
+import TableSplitter from './Components/TableSplitter'
+import TableCable from './Components/TableCable'
+
 
 //UI-Components
 import PropTypes from 'prop-types';
-
-import {Modal} from 'react-bootstrap'
-import {deepOrange} from '@material-ui/core/colors/';
-import {Tab, Paper,AppBar,makeStyles,Tabs,Typography,Box, Container} from '@material-ui/core/';
-
+import {Modal,Table,ButtonGroup,Button,Row,Col} from 'react-bootstrap'
+import {Tab,AppBar,makeStyles,Tabs,Typography,Box} from '@material-ui/core/';
 
 //Icons
-import PhoneIcon from '@material-ui/icons/Phone';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
-import HelpIcon from '@material-ui/icons/Help';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
+//Tamanho das box
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -34,7 +36,10 @@ function TabPanel(props) {
       aria-labelledby={`scrollable-force-tab-${index}`}
       {...other}
     >
-      <Box p={3}>{children}</Box>
+      <Box style={{ paddingTop: '0px',
+                    paddingRight: '0px',
+                    paddingBottom: '10px',
+                    paddingLeft: '0px',}} p={3}>{children}</Box>
     </Typography>
   );
 }
@@ -63,7 +68,23 @@ const useStyles = makeStyles(theme => ({
   },
   bigIndicator: {
     height: 5,
-    backgroundColor: '#FFF',
+    backgroundColor: '#F2F2F2',
+  },
+  buttonsActions:{
+    paddingTop: '0px',
+    paddingRight: '0px',
+    paddingLeft: '0px',
+    borderBottomWidth: '0px',
+    paddingBottom: '0px',
+    borderTopWidth: '0px',
+    marginBottom: '15px',
+    color:'#D8D8D8',
+  },
+  modalBody:{
+    paddingLeft: '0px',
+    paddingRight: '0px',
+    paddingBottom: '0px',
+    paddingTop: '10px',
   },
 }));
 
@@ -150,35 +171,74 @@ function ViewCto(props) {
   return (
          
       <Modal show={all.viewCto.visible} onHide={handleHideModal}>
-        
-        <div className={classes.root}>
-      
-          <AppBar position="static" className={classes.pallet} >
-            
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              classes={{ indicator: classes.bigIndicator }} 
-              variant="fullWidth"
-            >
-              <Tab icon={<PersonPinIcon />} {...a11yProps(0)} />
-              <Tab icon={<PersonPinIcon />} {...a11yProps(1)} />
-              <Tab icon={<PersonPinIcon />} {...a11yProps(2)} />
-            </Tabs>
+
+        <Modal.Body className={classes.modalBody}>
           
-          </AppBar>
-     
-        <TabPanel value={value} index={0} >
-          <TableUsers></TableUsers>
-        </TabPanel>
-        <TabPanel value={value} index={1} >
-          Item Two
-        </TabPanel>
-        <TabPanel value={value} index={2} >
-          Item Three
-        </TabPanel>
+          <h2 style={{color:'#FFBF00',textAlign:'center'}}>Informações da CTO</h2>
+          <Table responsive>
+            <thead>
+              <tr style={{backgroundColor:'#fff',color:'#6E6E6E'}}>
+                <th>Nome</th>
+                <th>Endereço</th>
+                <th>Modelo</th>
+                <th>ID</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style={{color:'#BDBDBD',backgroundColor:'#fff'}}>
+                <td>{data.nome}</td>
+                <td>{data.endereco}</td>
+                <td>{data.modelo}</td>
+                <td>{data.id}</td>
+                <td>
+                  
+                  <Button variant='link' className={classes.buttonsActions}>
+                    <EditIcon></EditIcon>
+                  </Button>
+                  
+                  <Button variant='link' className={classes.buttonsActions} >
+                    <DeleteIcon></DeleteIcon>
+                  </Button>
+                  
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+
+          <div className={classes.root}>
+        
+            <AppBar position="static" className={classes.pallet} >
+              
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                classes={{ indicator: classes.bigIndicator }} 
+                variant="fullWidth">
+                <Tab icon={<PersonPinIcon />} {...a11yProps(0)} />
+                <Tab icon={<PersonPinIcon />} {...a11yProps(1)} />
+                <Tab icon={<PersonPinIcon />} {...a11yProps(2)} />
+              </Tabs>
+            
+            </AppBar>
       
-    </div>
+            <TabPanel value={value} index={0}>
+              
+              <TableUsers ></TableUsers>
+                
+            </TabPanel>
+            
+            <TabPanel value={value} index={1} > 
+             <TableSplitter></TableSplitter>
+            </TabPanel>
+            
+            <TabPanel value={value} index={2} >
+              <TableCable></TableCable>
+            </TabPanel>
+        
+          </div>
+      
+        </Modal.Body>
       
     </Modal>
      

@@ -69,8 +69,8 @@ function EnhancedTableHead(props) {
   };
 
   return (
-    <TableHead>
-      <TableRow>
+    <TableHead >
+      <TableRow>  
         <TableCell padding="checkbox">
           <Checkbox
             style={{color:'#FFBF00'}}
@@ -117,7 +117,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const useToolbarStyles = makeStyles(theme => ({
-  root: {
+  root2: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
   },
@@ -152,8 +152,9 @@ const EnhancedTableToolbar = props => {
       className={clsx(classes.root, {
         [classes.highlight]: numSelected > 0,
       })}
+      
     >
-      <div className={classes.title}>
+      <div className={classes.title} >
         {numSelected > 0 ? (
           <Typography variant="subtitle1">
             {numSelected} selecionado(s)
@@ -165,7 +166,7 @@ const EnhancedTableToolbar = props => {
         )}
       </div>
       <div className={classes.spacer} />
-      <div className={classes.actions}>
+      <div className={classes.actions} >
         {numSelected > 0 ? (
           <Tooltip title="Delete">
             <IconButton aria-label="delete">
@@ -194,8 +195,8 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(3),
   },
   paper: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
+    width: '498px',
+    marginBottom: '0px', 
   },
   table: {
     minWidth: 750,
@@ -223,6 +224,7 @@ export default function EnhancedTable() {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
 
   function handleRequestSort(event, property) {
     const isDesc = orderBy === property && order === 'desc';
@@ -274,14 +276,15 @@ export default function EnhancedTable() {
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <div className={classes.tableWrapper}>
+    <div className={classes.root2} >
+      <Paper className={classes.paper} >
+        <EnhancedTableToolbar  style={{marginTop:'0px'}} numSelected={selected.length} />
+        <div className={classes.tableWrapper} >
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
             size={'small'}
+            
           >
             <EnhancedTableHead
               classes={classes}
@@ -291,6 +294,7 @@ export default function EnhancedTable() {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              
             />
             <TableBody>
               {stableSort(rows, getSorting(order, orderBy))
