@@ -171,13 +171,7 @@ function ViewCto(props) {
                 <tr>
                   <td>{cabo.Cabo.nome}</td>
                   <td>{cabo.Cabo.tipo}</td>
-                  <td
-                    style={{
-                      textAlign: "center"
-                    }}
-                  >
-                    {cabo.Cabo.quantidade_fibras}
-                  </td>
+                  <td>{cabo.Cabo.quantidade_fibras}</td>
                   <td>Des..</td>
                 </tr>
               ))}
