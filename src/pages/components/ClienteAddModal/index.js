@@ -137,7 +137,7 @@ function ClienteAddModal(props) {
           
           <Modal.Header>
             <Row>
-              <Col md={{ offset: 4 }}>
+              <Col md={{ offset: 2 }}>
                 <Modal.Title>Cadastro de Cliente</Modal.Title>
               </Col>
             </Row>
