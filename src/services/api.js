@@ -37,7 +37,9 @@ export const API = {
   GET_CABO_GEOJSON: "/cabo/geojson",
   GET_CABO_BY_CTO: "/cabo/cto",
   SAIDA_SP_ADD_CLIENTE: "/saidasplitter/cliente",
-  GET_SAIDA_SP_BY_SP: "/saidasplitter/splitter"
+  GET_SAIDA_SP_BY_SP: "/saidasplitter/splitter",
+  GET_SAIDA_SP_BY_CLIENTE: "/saidasplitter/cliente",
+  GET_CLIENTE_BY_SAIDA_SP: id => `/saidasplitter/splitter/${id}/clientes`
 };
 
 export default api;
