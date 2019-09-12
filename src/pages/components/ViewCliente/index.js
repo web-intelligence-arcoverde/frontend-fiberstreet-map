@@ -472,6 +472,12 @@ function ViewCliente(props) {
         
         </Paper>
 
+      <Modal.Footer>
+      <Button variant="warning" style={{color:'#F2F2F2'}} onClick={handleCoordCabo}>
+        Adicionar cabo
+      </Button>
+      </Modal.Footer>
+
 
       </Modal.Body>
    

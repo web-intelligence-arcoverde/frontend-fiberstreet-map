@@ -172,11 +172,8 @@ class Map extends Component {
         //   */
         // }
       });
-      map.on("mouseenter", "wires", function(e) {
-        new mapboxgl.Popup()
-                  .setLngLat(e.lngLat)
-                  .setHTML(e.features[0].properties.name)
-                  .addTo(map);
+      map.on("click", "wires", function(e) {
+        window.alert("Teste");
       });
       // end Carrega cabos
 
@@ -740,7 +737,7 @@ class Map extends Component {
     //   type: "geojson",
     //   data: datab
     // })
-    map.getSource("putaquepariu").setData({
+    map.getSource("linhas").setData({
       type: "Feature",
       properties: {},
       geometry: {
