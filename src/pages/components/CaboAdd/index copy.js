@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-
-//API
-import { Creators as AllCreators } from "../../../redux/store/ducks/all";
-import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
-import api from "../../../services/api";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from "../../../redux/store/actions/all";
+import { Creators as AllCreators } from "../../../redux/store/ducks/all";
+import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
+import Modal from "react-modal";
+import { Form } from "../modalStyles/styles";
+import "../modalStyles/styles.css";
+import api from "../../../services/api";
 
-//Components
-import { Modal, Button, Container, Form } from "react-bootstrap/";
+Modal.setAppElement(document.getElementById("root"));
 
 function CaboAdd(props) {
   const { modalCabo } = props.redux.all;
@@ -25,8 +25,7 @@ function CaboAdd(props) {
     hideAddCaboModal();
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit() {
     let coordinates = props.redux.all.mapa.polyline.map(linha => {
       return {
         longitude: linha[0],
@@ -83,59 +82,73 @@ function CaboAdd(props) {
     }
   }
 
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   return (
-    <Container>
-      <Modal show={modalCabo.visible} onHide={handleHideModal}>
-        <Form onSubmit={handleSubmit}>
-          <Modal.Header>
-            <Modal.Title>Cabo</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <Form.Group>
-              <Form.Label>Nome do cabo:</Form.Label>
-              <Form.Control
-                value={nome}
-                onChange={e => setNome(e.target.value)}
-                type="text"
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Modelo do cabo:</Form.Label>
-              <Form.Control
-                value={modelo}
-                onChange={e => setModelo(e.target.value)}
-                type="text"
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Quantidade de fibras:</Form.Label>
-              <Form.Control
-                value={fibra}
-                onChange={e => setFibra(e.target.value)}
-                type="number"
-              />
-            </Form.Group>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="warning" onClick={handleClose}>
-              Sair
-            </Button>
-            <Button variant="warning" type="submit" onClick={handleClose}>
-              Salvar
-            </Button>
-          </Modal.Footer>
+    <Modal
+      isOpen={modalCabo.visible}
+      contentLabel="Cabo"
+      onRequestClose={handleHideModal}
+      className="modal-container"
+      overlayClassName="modal-overlay"
+    >
+      <>
+        <h3 style={{ color: "orange" }}>Cabo</h3>
+        <Form
+          style={{ marginTop: 1.2 + "em" }}
+          action=""
+          onSubmit={handleSubmit}
+        >
+          <label for="nome">Nome (Trecho):</label>
+          <input
+            id="nome"
+            name="nome"
+            placeholder="Nome do cabo"
+            value={nome}
+            onChange={e => handleChange(e, TNAME)}
+            required
+          />
+          <label for="modelo">Modelo</label>
+          <input
+            id="modelo"
+            name="tipo"
+            placeholder="Modelo do cabo"
+            value={modelo}
+            onChange={e => handleChange(e, TMODEL)}
+            required
+          />
+          <label for="qtfibra">Número de fibras</label>
+          <input
+            id="qtfibra"
+            name="quantidade_fibras"
+            placeholder="1, 6, 24, 36, 72..."
+            max="172"
+            type="number"
+            onChange={e => handleChange(e, "QTFIBRA")}
+            required
+          />
+          <button
+            type="submit"
+            style={{ height: 3 + "em", backgroundColor: "#429911" }}
+          >
+            Salvar
+          </button>
+          <button
+            style={{ marginTop: 5, height: 3 + "em", backgroundColor: "red" }}
+          >
+            Sair
+          </button>
         </Form>
-      </Modal>
-    </Container>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            flexDirection: "row",
+            padding: 5 + "px"
+          }}
+        >
+          {/*  */}
+        </div>
+      </>
+    </Modal>
   );
 }
 
