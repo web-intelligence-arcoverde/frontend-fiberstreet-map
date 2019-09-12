@@ -172,6 +172,12 @@ class Map extends Component {
         //   */
         // }
       });
+      map.on("mouseenter", "wires", function(e) {
+        new mapboxgl.Popup()
+                  .setLngLat(e.lngLat)
+                  .setHTML(e.features[0].properties.name)
+                  .addTo(map);
+      });
       // end Carrega cabos
 
       // Adiciona cto
@@ -596,6 +602,9 @@ class Map extends Component {
     map.on("mouseleave", "markers", function() {
       map.getCanvas().style.cursor = "";
     });
+    // map.on("click", "putaquepariu", function(e) {
+    //   alert("Vai tomar no cu");
+    // });
 
     /* Image: An image is loaded and added to the map. */
     map.on("load", function() {
@@ -763,7 +772,7 @@ class Map extends Component {
     const { map } = this.state;
     const { polyline } = this.props.redux.all.mapa;
     map.on("load", () => {
-      map.addSource("putaquepariu", {
+      map.addSource("linhas", {
         type: "geojson",
         data: {
           type: "Feature",
@@ -800,9 +809,9 @@ class Map extends Component {
       });
 
       map.addLayer({
-        id: "putaquepariu",
+        id: "linhas",
         type: "line",
-        source: "putaquepariu",
+        source: "linhas",
         layout: {
           "line-join": "round",
           "line-cap": "round"
@@ -813,6 +822,7 @@ class Map extends Component {
         }
       });
     });
+
     this.setState({ map });
   }
 
@@ -823,7 +833,7 @@ class Map extends Component {
 
     return (
       <div id={container} className={classNameStyle}>
-        <Header  />
+        <Header />
       </div>
     );
   }
