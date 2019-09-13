@@ -36,7 +36,6 @@ export const ConnectionView = styled.div`
 `;
 
 export const OutView = styled.div`
-  margin-left: 2.4em;
   flex-direction: row;
   justify-content: center;
   align-items: center;

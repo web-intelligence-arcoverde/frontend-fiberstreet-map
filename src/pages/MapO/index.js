@@ -390,7 +390,23 @@ class Map extends Component {
   adicionarCoordenadasAoCabo(coordinates) {
     const { map } = this.state;
     const { polyline } = this.props.redux.all.mapa;
-    map.getSource("putaquepariu").setData({
+    // alert(polyline)
+    // alert(map.getSource('putaquepariu'))
+    // alert(map.getSource('drone'))
+    // const datab = {
+    //   'type': 'Feature',
+    //   'properties': {},
+    //   'geometry': {
+    //     'type': "LineString",
+    //     'coordinates': [[-77.03202080476535, 38.91454768710531], [-78.03, 39.91]]
+    //   }
+    // }
+    // console.log(map)
+    // map.getSource('putaquepariu').setData({
+    //   type: "geojson",
+    //   data: datab
+    // })
+    map.getSource("linhas").setData({
       type: "Feature",
       properties: {},
       geometry: {
