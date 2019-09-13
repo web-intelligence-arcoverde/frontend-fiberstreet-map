@@ -1,31 +1,16 @@
 import React, { useState, useEffect } from "react";
+import Modal from "react-modal";
 
-//API
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
 
-import api, { API } from "../../../services/api";
+import api from "../../../services/api";
 
-//Components
-import { Modal, Container, Button } from "react-bootstrap";
-import { OutView, IconOutSp } from "./styles";
+import { Container, ConnectionView, IconOutSp, OutView } from "./styles";
 import "./styles.css";
-import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import CachedIcon from "@material-ui/icons/Cached";
-import AlarmIcon from "@material-ui/icons/Alarm";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: "100%",
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper
-  }
-}));
+Modal.setAppElement(document.getElementById("root"));
 
 function AddRelCliCto(props) {
   const [saidas, setSaidas] = useState([]);
@@ -46,10 +31,7 @@ function AddRelCliCto(props) {
   function getCliById() {}
   async function getSpByCtoId() {
     api
-      .get(
-        `${API.GET_SPLITTER_BY_CTO}/${cto_id}`
-        // `/get/splitter/cto/${cto_id}`
-        )
+      .get(`/get/splitter/cto/${cto_id}`)
       .then(response => {
         const { data: Splitters } = response;
         setSplitters(Splitters);
@@ -236,89 +218,67 @@ function AddRelCliCto(props) {
     // Add fibra drop cliente no cabo
   }
 
-  const classes = useStyles();
-  const [checked, setChecked] = React.useState([1]);
-
-  const handleToggle = value => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
-
   return (
-    <Container>
-      <Modal show={props.redux.drop.isVisible} onHide={handleHideModal}>
-        <Modal.Header style={{ justifyContent: "center" }}>
-          <Modal.Title style={{ color: "#FF8000" }}>
-            Mostrar as portas -
-            <CachedIcon
-              onClick={obterSaidasDoSplitter}
-              style={{ marginLeft: "5px", color: "#FF8000" }}
-              aria-label="add an alarm"
-            >
-              <AlarmIcon />
-            </CachedIcon>
-          </Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <List dense className={classes.root} style={{ maxWidth: "100%" }}>
+    <Modal
+      isOpen={props.redux.drop.isVisible}
+      onRequestClose={handleHideModal}
+      contentLabel="Fibra + Splitter"
+      className="modal-container"
+      overlayClassName="modal-overlay"
+    >
+      <Container>
+        <button onClick={obterSaidasDoSplitter}>Carregar Saidas</button>
+        <h3>Clique onde o drop irá ficar</h3>
+        <ConnectionView>
+          <div>DROP</div>
+          <div>
             {saidas.map((saida, index) => {
-              const labelId = `checkbox-list-secondary-label-${index}`;
+              // console.tron.log(saida);
               return (
-                <ListItem key={index} button>
-                  <ListItemText
-                    style={{ color: "#FF8000" }}
-                    id={labelId}
-                    primary={`Porta ${index + 1}`}
+                <OutView>
+                  <span>{saida.numero}</span>
+                  <IconOutSp
+                    active={saida.isActive}
+                    onClick={() => {
+                      let newAr = saidas.map((output, indice) =>
+                        index === indice
+                          ? (output.selected = true)
+                          : (output.selected = false)
+                      );
+
+                      let newArrayFull = saidas.map((output, indx) =>
+                        index === indx
+                          ? { ...output, selected: true }
+                          : { ...output, selected: false }
+                      );
+                      // console.tron.log(newArrayFull);
+
+                      // setSaidaSelecionada(newAr);
+                      setSaidaSelecionada(newArrayFull);
+                    }}
+                    selected={saida.selected}
+                    // {...params[index]}
+                    // selected={true}
                   />
-
-                  <ListItemSecondaryAction>
-                    <OutView>
-                      <IconOutSp
-                        active={saida.isActive}
-                        onClick={() => {
-                          let newAr = saidas.map((output, indice) =>
-                            index === indice
-                              ? (output.selected = true)
-                              : (output.selected = false)
-                          );
-
-                          let newArrayFull = saidas.map((output, indx) =>
-                            index === indx
-                              ? { ...output, selected: true }
-                              : { ...output, selected: false }
-                          );
-
-                          setSaidaSelecionada(newArrayFull);
-                        }}
-                        selected={saida.selected}
-                      />
-                    </OutView>
-                  </ListItemSecondaryAction>
-                </ListItem>
+                </OutView>
               );
             })}
-          </List>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="warning" onClick={handleHideModal}>
-            Fechar
-          </Button>
-          <Button variant="warning" onClick={salvarDrop}>
-            Salvar
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </Container>
+          </div>
+        </ConnectionView>
+        <OutView>
+          <p>Legenda</p>
+          <span>Já está ativa</span>
+          <IconOutSp active />
+          <span>Não está em uso</span>
+          <IconOutSp active={false} />
+          <span>Selecionada</span>
+          <IconOutSp selected />
+        </OutView>
+        <span>
+          <button onClick={salvarDrop}>Salvar</button>
+        </span>
+      </Container>
+    </Modal>
   );
 }
 
@@ -336,6 +296,6 @@ export default connect(
 )(AddRelCliCto);
 
 /** Ações necessárias */
+
 // - Recuperar o id da Cto
 // - Listas o Splitter e as saídas dele
-//<span>{saida.numero}</span>
