@@ -15,7 +15,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import Typography from '@material-ui/core/Typography';
 import DraftsIcon from '@material-ui/icons/Drafts';
 
-import api from "../../../services/api";
+import api, { API } from "../../../services/api";
 
 const useStyles = makeStyles({
   root: {
@@ -115,7 +115,7 @@ function ViewCliente(props) {
 
   function handleCoordCabo() {
     api
-      .get(`saidasplitter/cliente/${id}`)
+      .get(`${API.GET_SAIDA_SP_BY_CLIENTE}/${id}`)
       .then(result => {
         const { data } = result;
         console.log(data);

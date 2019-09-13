@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../../../services/api";
+import api, { API } from "../../../services/api";
 // import propTypes from "prop-types";
 
 import "./styles.css";
@@ -13,8 +13,7 @@ import { Creators as ClienteCreators } from "../../../redux/store/ducks/all";
 import * as Actions from "../../../redux/store/actions/all";
 
 //UI-Components
-import {Modal,Button, Form, Row, Col} from 'react-bootstrap';
-
+import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 
 // Vamos fazer aqui uma renderização condicional para ADIÇÃO/AMOSTRAGEM de imagens
 
@@ -90,7 +89,7 @@ function ClienteAddModal(props) {
     };
 
     await api
-      .post("/create/cliente", cliente)
+      .post(API.CREATE_CLIENTE, cliente)
       .then(response => {
         handleHideModal();
         obterClientes();
@@ -99,10 +98,9 @@ function ClienteAddModal(props) {
   }
 
   async function obterClientes() {
-
     const { setClientFromServer } = props;
     await api
-      .post("/get/cliente")
+      .get(API.GET_CLIENTE)
       .then(result => {
         let data = result.data;
         setClientFromServer(data);
@@ -129,12 +127,12 @@ function ClienteAddModal(props) {
 
   return (
     <>
-
-
-      <Modal show={all.modalCliente.visible} onHide={handleHideModal} animation={false}>
-        
-         <Form onSubmit={event => handleCliente(event)}>
-          
+      <Modal
+        show={all.modalCliente.visible}
+        onHide={handleHideModal}
+        animation={false}
+      >
+        <Form onSubmit={event => handleCliente(event)}>
           <Modal.Header>
             <Row>
               <Col md={{ offset: 2 }}>
@@ -142,46 +140,61 @@ function ClienteAddModal(props) {
               </Col>
             </Row>
           </Modal.Header>
-                
+
           <Modal.Body>
-              <Form.Group>
-                <Form.Label>Nome:</Form.Label>
-                <Form.Control type="text" value={nome} onChange={e=> setNome(e.target.value)}/>
-              </Form.Group>
+            <Form.Group>
+              <Form.Label>Nome:</Form.Label>
+              <Form.Control
+                type="text"
+                value={nome}
+                onChange={e => setNome(e.target.value)}
+              />
+            </Form.Group>
 
-              <Form.Group>
-                <Form.Label>CPF:</Form.Label>
-                <Form.Control type="number" value={cpf} onChange={e=>setCpf(e.target.value)}/>
-              </Form.Group>
-              
-              <Form.Group>
-                <Form.Label>Planos:</Form.Label>
-                <Form.Control type='text' as="select" value={velocidade} onChange={e=>setVelocidade(e.target.value)} required>
-                  <option>10</option>
-                  <option>20</option>
-                  <option>30</option>
-                  <option>40</option>
-                  <option>50</option>
-                </Form.Control>
-              </Form.Group>
+            <Form.Group>
+              <Form.Label>CPF:</Form.Label>
+              <Form.Control
+                type="number"
+                value={cpf}
+                onChange={e => setCpf(e.target.value)}
+              />
+            </Form.Group>
 
-              <Form.Group>
-                <Form.Label>PPPOE:</Form.Label>
-                <Form.Control type="text" value={pppoe} onChange={e=>setPppoe(e.target.value)}/>
-              </Form.Group>
+            <Form.Group>
+              <Form.Label>Planos:</Form.Label>
+              <Form.Control
+                type="text"
+                as="select"
+                value={velocidade}
+                onChange={e => setVelocidade(e.target.value)}
+                required
+              >
+                <option>10</option>
+                <option>20</option>
+                <option>30</option>
+                <option>40</option>
+                <option>50</option>
+              </Form.Control>
+            </Form.Group>
 
+            <Form.Group>
+              <Form.Label>PPPOE:</Form.Label>
+              <Form.Control
+                type="text"
+                value={pppoe}
+                onChange={e => setPppoe(e.target.value)}
+              />
+            </Form.Group>
           </Modal.Body>
-          
+
           <Modal.Footer>
-            
             <Button variant="secondary" onClick={handleHideModal}>
               Fechar
             </Button>
-            
-            <Button variant="primary" type='submit'>
+
+            <Button variant="primary" type="submit">
               Salvar
             </Button>
-          
           </Modal.Footer>
         </Form>
       </Modal>

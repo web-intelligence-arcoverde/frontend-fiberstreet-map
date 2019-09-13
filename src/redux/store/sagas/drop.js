@@ -1,5 +1,5 @@
 import { call, put } from "redux-saga/effects";
-import api from "../../../services/api";
+import api, { API } from "../../../services/api";
 
 import { Creators as DropCreators } from "../ducks/drop";
 
@@ -16,7 +16,11 @@ export function* loadSplitters(action) {
   let ssp = [];
 
   try {
-    const response = yield call(api.get, `/get/splitter/cto/${cto_id}`);
+    const response = yield call(
+      api.get,
+      `${API.GET_SPLITTER_BY_CTO}/${cto_id}`
+    );
+    //`/get/splitter/cto/${cto_id}`);
 
     if (response.status >= 200 && response.status < 300) {
       console.tron.log(response);
@@ -66,7 +70,7 @@ export function* addDrop(action) {
   console.tron.log({ SAIDA_AFTER_SEQUELIZE: novaSaida });
 
   try {
-    const cabo = yield call(api.post, "cabo/add", drop);
+    const cabo = yield call(api.post, API.CREATE_CABO, drop);
     const fibra = yield {
       cabo: cabo.id,
       nome: cabo.nome
@@ -75,9 +79,7 @@ export function* addDrop(action) {
     yield call(api.post, "saidasplitter/cliente/create", novaSaida);
     yield call(
       api.put,
-      `saidasplitter/cliente/${spAndCli.cliente_cod_cli}/addsp/${
-        spAndCli.splitter_cod
-      }`
+      `saidasplitter/cliente/${spAndCli.cliente_cod_cli}/addsp/${spAndCli.splitter_cod}`
     );
     // yield put(DropCreators.)
     yield call(api.post, "drop-fibra/create", fibra);

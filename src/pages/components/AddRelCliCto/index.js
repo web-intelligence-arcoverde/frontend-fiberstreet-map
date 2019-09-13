@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
 
-import api from "../../../services/api";
+import api, { API } from "../../../services/api";
 
 import { Container, ConnectionView, IconOutSp, OutView } from "./styles";
 import "./styles.css";
@@ -31,7 +31,10 @@ function AddRelCliCto(props) {
   function getCliById() {}
   async function getSpByCtoId() {
     api
-      .get(`/get/splitter/cto/${cto_id}`)
+      .get(
+        `${API.GET_SPLITTER_BY_CTO}/${cto_id}`
+        // `/get/splitter/cto/${cto_id}`
+        )
       .then(response => {
         const { data: Splitters } = response;
         setSplitters(Splitters);
