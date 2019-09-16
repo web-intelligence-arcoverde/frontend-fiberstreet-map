@@ -3,8 +3,8 @@ import { getToken } from "./api";
 
 // const serverOne = "http://localhost:3334";
 // const serverTwo = "http://localhost:3001";
-const server = "http://192.168.0.131:3334";
-const local = "http://45.224.40.252";
+const local = "http://192.168.0.131:3334";
+const server = "http://45.224.40.252";
 
 /** This API will connect to NodeJS Server */
 const api = axios.create({
