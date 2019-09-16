@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, Container } from "./styles";
 import Modal from "react-modal";
 
-import api from "../../../services/api";
+import api, { API } from "../../../services/api";
 
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -41,7 +41,7 @@ function SpAddModal(props) {
 
     if (type === "cto") {
       api
-        .post(`/create/splitter/${modalSplitter.id}`, newSp)
+        .post(`${API.CREATE_SPLITTER}/${modalSplitter.id}`, newSp)
         .then(e => console.log(e))
         .catch(e => console.warn(e));
     } else if (type === "ceo") {

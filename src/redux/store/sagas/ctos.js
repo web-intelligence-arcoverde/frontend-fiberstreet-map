@@ -1,10 +1,10 @@
 import { call, put } from "redux-saga/effects";
-import api from "../../../services/api";
+import api, { API } from "../../../services/api";
 import { Creators as CtoActions } from "../ducks/ctos";
 
 export function* loadCto(action) {
   try {
-    const { data } = yield call(api.post, `/get/cto`);
+    const { data } = yield call(api.get, API.GET_CTO_GEOJSON);
 
     let ctoFeatures = [];
     yield data.map((cto, index) => {
