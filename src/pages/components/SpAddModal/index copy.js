@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { Button, Form, Container } from "./styles";
+import Modal from "react-modal";
 
-//API
 import api, { API } from "../../../services/api";
+
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import * as Actions from "../../../redux/store/actions/all";
 
-//Componentes
-import Modal from "react-bootstrap/Modal";
-import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+Modal.setAppElement(document.getElementById("root"));
 
 function SpAddModal(props) {
   const { modalSplitter } = props.redux.all;
@@ -77,50 +75,54 @@ function SpAddModal(props) {
   }
 
   return (
-    <Container>
-      <Modal show={modalSplitter.visible} onHide={handleHideModal}>
-        <Modal.Header style={{ justifyContent: "center", color: "#FFBF00" }}>
-          <Modal.Title>Adicionar splitter</Modal.Title>
-        </Modal.Header>
-        <Form onSubmit={handleSplitter}>
-          <Modal.Body>
-            <Form.Group>
-              <Form.Label>Nome Splitter:</Form.Label>
-              <Form.Control
-                type="text"
-                value={nome}
-                onChange={e => handleChange(e, TNAME)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Modelo:</Form.Label>
-              <Form.Control
-                type="text"
-                value={modelo}
-                onChange={e => handleChange(e, TMODEL)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Balanceamento:</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Quantidade de saidas do splitter"
-                value={balanceamento}
-                onChange={e => handleChange(e, TBAL)}
-              />
-            </Form.Group>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="warning" onClick={handleHideModal}>
-              Fechar
-            </Button>
-            <Button variant="warning" type="submit">
-              Salvar
-            </Button>
-          </Modal.Footer>
-        </Form>
-      </Modal>
-    </Container>
+    <Modal
+      isOpen={modalSplitter.visible}
+      onRequestClose={handleHideModal}
+      contentLabel="Adicionar Splitter"
+      className="modal-container"
+      overlayClassName="modal-overlay"
+    >
+      {/* <Container> */}
+      <Form onSubmit={event => handleSplitter(event)}>
+        <label for="spName">Nome Splitter</label>
+        <input
+          id="spName"
+          value={nome}
+          type="text"
+          name="nome"
+          placeholder="Insira o nome do Splitter"
+          required
+          onChange={e => handleChange(e, TNAME)}
+        />
+
+        <label for="modelo">Modelo</label>
+        <input
+          id="modelo"
+          value={modelo}
+          type="text"
+          name="modelo"
+          placeholder="Modelo"
+          required
+          onChange={e => handleChange(e, TMODEL)}
+        />
+
+        <label for="balanceamento">Balanceamento</label>
+        <input
+          id="balanceamento"
+          value={balanceamento}
+          type="number"
+          name="balanceamento"
+          placeholder="Qtd saídas do sp"
+          min={8}
+          max={16}
+          required
+          onChange={e => handleChange(e, TBAL)}
+        />
+        <hr />
+        <Button type="submit">Adicionar</Button>
+      </Form>
+      {/* </Container> */}
+    </Modal>
   );
 }
 
