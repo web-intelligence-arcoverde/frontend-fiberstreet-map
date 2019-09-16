@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 // import Logo from "../../assets/airbnb-logo.svg";
 import api from "../../services/api";
 
-import { Form, Container } from "./styles";
+import "./style.css";
 
 class SignUp extends Component {
   state = {
@@ -33,30 +33,30 @@ class SignUp extends Component {
 
   render() {
     return (
-      <Container>
-        <Form onSubmit={this.handleSignUp}>
-          {/* <img src={Logo} alt="Airbnb logo" /> */}
-          {this.state.error && <p>{this.state.error}</p>}
-          <input
-            type="text"
-            placeholder="Nome de usuário"
-            onChange={e => this.setState({ username: e.target.value })}
-          />
-          <input
-            type="email"
-            placeholder="Endereço de e-mail"
-            onChange={e => this.setState({ email: e.target.value })}
-          />
-          <input
-            type="password"
-            placeholder="Senha"
-            onChange={e => this.setState({ password: e.target.value })}
-          />
-          <button type="submit">Cadastrar grátis</button>
-          <hr />
-          <Link to="/login">Fazer login</Link>
-        </Form>
-      </Container>
+      <body>
+        <section class="form-section">
+          <h1>FiberStreet</h1>
+
+          <div class="form-wrapper">
+            <form action="" onSubmit={this.handleSignUp}>
+              <div class="input-block">
+                <label for="login-email">Email:</label>
+                <input type="email" id="login-email" />
+              </div>
+              <div class="input-block">
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" />
+              </div>
+              <a class="link" href="#">
+                Recuperar senha
+              </a>
+              <button type="submit" class="btn-login">
+                Entrar
+              </button>
+            </form>
+          </div>
+        </section>
+      </body>
     );
   }
 }
