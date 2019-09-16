@@ -8,7 +8,7 @@ const server = "http://45.224.40.252";
 
 /** This API will connect to NodeJS Server */
 const api = axios.create({
-  baseURL: server
+  baseURL: local
 });
 
 // api.interceptors.request.use(async config => {

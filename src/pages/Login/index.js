@@ -1,32 +1,37 @@
 import React, { Component, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Container, Form } from "./styles";
-import { login } from '../../services/auth'
+import { login } from "../../services/auth";
+
+//Componentes
+import { Form, Container, Button } from "react-bootstrap";
 
 export default function Login(props) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   function handleLogin() {}
 
   return (
     <Container>
-      <Form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Insira seu e-mail"
-          required
-          onChange={setEmail}
-        />
-        <input
-          type="password"
-          placeholder="Insira sua senha secreta"
-          required
-          onChange={setPassword}
-        />
-        <button type="submit">Entrar</button>
-        <hr />
-        <Link to="/signup">Ainda não possui conta? Cadastre-se</Link>
+      <Form>
+        <Form.Group controlId="formBasicEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control type="email" placeholder="Enter email" />
+          <Form.Text className="text-muted">
+            We'll never share your email with anyone else.
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" placeholder="Password" />
+        </Form.Group>
+        <Form.Group controlId="formBasicCheckbox">
+          <Form.Check type="checkbox" label="Check me out" />
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
       </Form>
     </Container>
   );

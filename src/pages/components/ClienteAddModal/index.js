@@ -133,12 +133,8 @@ function ClienteAddModal(props) {
         animation={false}
       >
         <Form onSubmit={event => handleCliente(event)}>
-          <Modal.Header>
-            <Row>
-              <Col md={{ offset: 2 }}>
-                <Modal.Title>Cadastro de Cliente</Modal.Title>
-              </Col>
-            </Row>
+          <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
+            <Modal.Title>Cadastro de Cliente</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>

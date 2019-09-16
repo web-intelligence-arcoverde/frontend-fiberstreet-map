@@ -109,12 +109,8 @@ function AddCto(props) {
   return (
     <Modal show={modalCto.visible} onHide={handleHideModal} animation={false}>
       <Form onSubmit={handleCto}>
-        <Modal.Header>
-          <Row>
-            <Col md={{ offset: 4 }}>
-              <Modal.Title>Cadastrar do CTO</Modal.Title>
-            </Col>
-          </Row>
+        <Modal.Header style={{ justifyContent: "center" }}>
+          <Modal.Title>Cadastrar do CTO</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
