@@ -16,7 +16,7 @@ import Home from "../pages/Home";
 
 /** Rotas de autenticação */
 import Signup from "../pages/Signup";
-import Login from "../pages/Login";
+import Signin from "../pages/Signin";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -51,7 +51,9 @@ const PrivateRouteForLogedUser = ({ component: Component, ...rest }) => (
 const Routes = () => (
   <ConnectedRouter history={history}>
     <Switch>
-      <Route exact path="/" component={Signup} />
+      <Route exact path="/" component={Signin} />
+      {/* <Route exact path="/" component={Signup} /> */}
+      {/* <PrivateRouteForLogedUser exact path="/" component={Signin} /> */}
       {/* <h1>
             Rotas de boas-vindas ao sistema, informação dos serviços, e etc
           </h1> */}
@@ -97,7 +99,7 @@ const Routes = () => (
         exact
         path="/login"
         // component={() => <Login />}
-        component={Login}
+        component={Signin}
       />
 
       <PrivateRouteForLogedUser exact path="/signup" component={Signup} />
