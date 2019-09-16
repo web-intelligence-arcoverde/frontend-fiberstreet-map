@@ -7,8 +7,12 @@ import Button from "@material-ui/core/Button";
 
 import Routes from "./routes";
 import GlobalStyle from "./styles/global";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import { muiTheme } from "./themes";
+
+import { ThemeProvider } from "@material-ui/styles";
+import { CssBaseline } from "@material-ui/core";
+import Themes from "./themes";
+import { LayoutProvider } from "./context/LayoutContext";
+import { UserProvider } from "./context/UserContext";
 
 const TOKEN =
   "pk.eyJ1IjoidWxpbmt1eCIsImEiOiJjanczamF5cG8wNWt0NDltcnkydXQybGdjIn0.F1PkG0rCiHhf-jhnRMMdTg";
@@ -16,10 +20,14 @@ const TOKEN =
 const App = () => {
   return (
     <>
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <GlobalStyle />
-        <Routes />
-      </MuiThemeProvider>
+      <LayoutProvider>
+        <UserProvider>
+          <ThemeProvider theme={Themes.default}>
+            <CssBaseline />
+            <Routes />
+          </ThemeProvider>
+        </UserProvider>
+      </LayoutProvider>
     </>
   );
 };

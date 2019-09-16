@@ -219,6 +219,8 @@ function ViewCto(props) {
               value={value}
               onChange={handleChange}
               classes={{ indicator: classes.bigIndicator }}
+              classes={{ indicator: classes.bigIndicator }}
+              classes={{ indicator: classes.bigIndicator }}
               variant="fullWidth"
             >
               <Tab icon={<PersonPinIcon />} {...a11yProps(0)} />
@@ -232,10 +234,7 @@ function ViewCto(props) {
           </TabPanel>
 
           <TabPanel value={value} index={1}>
-            <TableSplitter
-              event={() => addSplitter(all.viewCto.data.id)}
-              data={splitters}
-            ></TableSplitter>
+            <TableSplitter></TableSplitter>
           </TabPanel>
 
           <TabPanel value={value} index={2}>
