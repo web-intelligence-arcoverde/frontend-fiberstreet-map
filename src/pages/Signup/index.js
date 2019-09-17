@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 
 // import Logo from "../../assets/airbnb-logo.svg";
 import api from "../../services/api";
+import axios from "axios";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -15,15 +16,59 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import NativeSelect from "@material-ui/core/NativeSelect";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputBase from "@material-ui/core/InputBase";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import CachedIcon from "@material-ui/icons/Cached";
+import AlarmIcon from "@material-ui/icons/Alarm";
+import InputAdornment from "@material-ui/core/InputAdornment";
+
+const BootstrapInput = withStyles(theme => ({
+  root: {
+    "label + &": {
+      marginTop: theme.spacing(3)
+    }
+  },
+  input: {
+    borderRadius: 4,
+    position: "relative",
+    backgroundColor: theme.palette.background.paper,
+    border: "1px solid #ced4da",
+    fontSize: 16,
+    padding: "10px 26px 10px 12px",
+    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"'
+    ].join(","),
+    "&:focus": {
+      borderRadius: 4,
+      borderColor: "#80bdff",
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)"
+    }
+  }
+}))(InputBase);
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="#">
+        GzNet
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -59,15 +104,25 @@ const useStyles = makeStyles(theme => ({
 export default function SignUp() {
   const classes = useStyles();
 
+  const [cep, setCep] = React.useState("");
+
+  const [age, setAge] = React.useState("");
+  const handleChange = event => {
+    setAge(event.target.value);
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
+        <Avatar
+          className={classes.avatar}
+          style={{ backgroundColor: "#F7BE81" }}
+        >
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Criar conta
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -79,7 +134,7 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="firstName"
-                label="First Name"
+                label="Nome"
                 autoFocus
               />
             </Grid>
@@ -89,7 +144,7 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="lastName"
-                label="Last Name"
+                label="Ultimo nome"
                 name="lastName"
                 autoComplete="lname"
               />
@@ -100,7 +155,7 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Email"
                 name="email"
                 autoComplete="email"
               />
@@ -118,9 +173,94 @@ export default function SignUp() {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
+              <TextField
+                autoComplete="nomeProvedor"
+                name="nomeprovedor"
+                variant="outlined"
+                required
+                fullWidth
+                id="nomeProvedor"
+                label="Nome do provedor"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="cnpj"
+                name="cnpj"
+                variant="outlined"
+                required
+                fullWidth
+                id="cnpj"
+                label="CNPJ"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="cep"
+                name="cep"
+                variant="outlined"
+                required
+                fullWidth
+                id="cep"
+                value={cep}
+                label="CEP"
+                onChange={event => setCep(event.target.value)}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="cidade"
+                name="cidade"
+                variant="outlined"
+                required
+                fullWidth
+                id="cidade"
+                label="Cidade"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="bairro"
+                name="bairro"
+                variant="outlined"
+                required
+                fullWidth
+                id="bairro"
+                label="Bairro"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="rua"
+                name="rua"
+                variant="outlined"
+                required
+                fullWidth
+                id="rua"
+                label="Rua"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="numero"
+                name="numero"
+                variant="outlined"
+                required
+                fullWidth
+                id="numero"
+                label="Numero"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="pontoRef"
+                name="pontoRef"
+                variant="outlined"
+                required
+                fullWidth
+                id="pontoRef"
+                label="Ponto de Ref"
               />
             </Grid>
           </Grid>
@@ -131,12 +271,12 @@ export default function SignUp() {
             color="primary"
             className={classes.submit}
           >
-            Sign Up
+            Entrar
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
+              <Link href="/" variant="body2">
+                Você já tem uma conta? Entre aqui
               </Link>
             </Grid>
           </Grid>
@@ -149,59 +289,6 @@ export default function SignUp() {
   );
 }
 
-// class SignUp extends Component {
-//   state = {
-//     username: "",
-//     email: "",
-//     password: "",
-//     error: ""
-//   };
-
-//   handleSignUp = async e => {
-//     e.preventDefault();
-//     const { username, email, password } = this.state;
-//     if (!username || !email || !password) {
-//       this.setState({ error: "Preencha todos os dados para se cadastrar" });
-//     } else {
-//       try {
-//         await api.post("/users", { username, email, password });
-//         this.props.history.push("/");
-//       } catch (err) {
-//         console.log(err);
-//         this.setState({ error: "Ocorreu um erro ao registrar sua conta. T.T" });
-//       }
-//     }
-//     alert("Eu vou te registrar");
-//   };
-
-//   render() {
-//     return (
-//       <body>
-//         <section class="form-section">
-//           <h1>FiberStreet</h1>
-
-//           <div class="form-wrapper">
-//             <form action="" onSubmit={this.handleSignUp}>
-//               <div class="input-block">
-//                 <label for="login-email">Email:</label>
-//                 <input type="email" id="login-email" />
-//               </div>
-//               <div class="input-block">
-//                 <label for="login-password">Password:</label>
-//                 <input type="password" id="login-password" />
-//               </div>
-//               <a class="link" href="#">
-//                 Recuperar senha
-//               </a>
-//               <button type="submit" class="btn-login">
-//                 Entrar
-//               </button>
-//             </form>
-//           </div>
-//         </section>
-//       </body>
-//     );
-//   }
-// }
-
-// export default withRouter(SignUp);
+function serviceCep(cep) {
+  return "https://viacep.com.br/ws/" + cep + "/json/?callback=meu_callback";
+}

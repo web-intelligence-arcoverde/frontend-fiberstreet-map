@@ -17,6 +17,7 @@ import Home from "../pages/Home";
 /** Rotas de autenticação */
 import Signup from "../pages/Signup";
 import Signin from "../pages/Signin";
+import Recover from "../pages/Recover";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -94,6 +95,8 @@ const Routes = () => (
         path="/companys"
         component={() => <h1>Empresas que estão usando o sistema</h1>}
       />
+
+      <Route exact path="/recover" component={Recover} />
 
       <PrivateRouteForLogedUser
         exact
