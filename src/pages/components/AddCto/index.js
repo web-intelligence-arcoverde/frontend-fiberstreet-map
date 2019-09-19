@@ -107,9 +107,17 @@ function AddCto(props) {
   }
 
   return (
-    <Modal show={modalCto.visible} onHide={handleHideModal} animation={false}>
+    <Modal
+      show={modalCto.visible}
+      onHide={handleHideModal}
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      style={{ overflow: "scroll" }}
+    >
       <Form onSubmit={handleCto}>
-        <Modal.Header style={{ justifyContent: "center" }}>
+        <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
           <Modal.Title>Cadastrar do CTO</Modal.Title>
         </Modal.Header>
 
@@ -143,11 +151,14 @@ function AddCto(props) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleHideModal}>
+          <Button
+            style={{ backgroundColor: "#0174DF" }}
+            onClick={handleHideModal}
+          >
             Fechar
           </Button>
 
-          <Button variant="primary" type="submit">
+          <Button style={{ backgroundColor: "#0174DF" }} type="submit">
             Salvar
           </Button>
         </Modal.Footer>

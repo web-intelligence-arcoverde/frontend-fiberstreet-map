@@ -184,11 +184,14 @@ function ClienteAddModal(props) {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleHideModal}>
+            <Button
+              style={{ backgroundColor: "#0174DF" }}
+              onClick={handleHideModal}
+            >
               Fechar
             </Button>
 
-            <Button variant="primary" type="submit">
+            <Button style={{ backgroundColor: "#0174DF" }} type="submit">
               Salvar
             </Button>
           </Modal.Footer>
