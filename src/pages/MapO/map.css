@@ -17,3 +17,21 @@
   border-radius: 50%;
   cursor: pointer;
 }
+
+.distance-container {
+  position: absolute;
+  top: 70px;
+  left: 40%;
+  z-index: 1;
+}
+
+.distance-container > * {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 11px;
+  line-height: 18px;
+  display: block;
+  margin: 0;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
