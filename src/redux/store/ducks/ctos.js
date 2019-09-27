@@ -2,22 +2,27 @@
  * Types
  */
 export const Types = {
-  ADD_REQUEST: "cto/ADD_REQUEST",
-  ADD_SUCCESS: "cto/ADD_SUCCESS",
-  ADD_FAILURE: "cto/ADD_FAILURE",
+  //Modal {Recuperando dados}
+  SHOWNEWMODALCTO: "cto/SHOW_NEW_MODAL",
+  HIDENEWMODALCTO: "cto/HIDE_NEW_MODAL",
 
-  VIEW_REQUEST: "cto/VIEW_REQUEST",
-  VIEW_SUCCESS: "cto/VIEW_SUCCESS",
-  VIEW_FAILURE: "cto/VIEW_FAILURE",
-
-  ADD_CTO_ID: "cto/ADD_ID"
+  //Modal {Novo}
+  SHOWVIEWMODALCTO: "cto/SHOW_VIEW_MODAL",
+  HIDEVIEWMODALCTO: "cto/HIDE_VIEW_MODAL"
 };
 
 const INITIAL_STATE = {
-  ctos: []
+  //Estado inicial do modal {Mostrar Informações do CTO}
+  viewCto: {
+    visible: false,
+    data: ""
+  },
+  viewNewCto: {
+    visible: false,
+    coordinates: []
+  }
 };
 
-var initial = {};
 /**
  * Reducer
  * @param {*} state
@@ -25,17 +30,38 @@ var initial = {};
  */
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case Types.ADD_SUCCESS:
-      return { ...state, ctos: action.payload.data };
-    case Types.ADD_FAILURE:
-      return state;
-
-    case Types.VIEW_REQUEST:
-      return { ...state, ctos: action.payload.data };
-
-    case Types.ADD_CTO_ID:
-      return { ...state, ctoId: action.payload.id };
-
+    case Types.SHOWVIEWMODALCTO:
+      return {
+        ...state,
+        viewCto: {
+          visible: true,
+          data: action.payload.data
+        }
+      };
+    case Types.HIDEVIEWMODALCTO:
+      return {
+        ...state,
+        viewCto: {
+          visible: false,
+          data: ""
+        }
+      };
+    case Types.SHOWNEWMODALCTO:
+      return {
+        ...state,
+        viewNewCto: {
+          coordinates: action.payload.coordinates,
+          visible: true
+        }
+      };
+    case Types.HIDENEWMODALCTO:
+      return {
+        ...state,
+        viewNewCto: {
+          visible: false,
+          coordinates: []
+        }
+      };
     default:
       return state;
   }
@@ -45,23 +71,29 @@ export default function(state = INITIAL_STATE, action) {
  * Actions
  */
 export const Creators = {
-  addCtoRequest: request => ({
-    type: Types.ADD_REQUEST,
-    payload: { request }
+  showNewViewModal: coordinates => ({
+    type: Types.SHOWNEWMODALCTO,
+    payload: {
+      visible: true,
+      coordinates
+    }
   }),
-
-  addCtoSuccess: data => ({
-    type: Types.ADD_SUCCESS,
-    payload: { data }
-  }),
-
-  addCtoFailure: error => ({
-    type: Types.ADD_FAILURE,
-    payload: { error }
-  }),
-
-  addCtoId: id => ({
-    type: Types.ADD_CTO_ID,
-    payload: { id }
+  HideNewViewModal: () => ({
+    type: Types.HIDENEWMODALCTO,
+    payload: {
+      visible: false,
+      coordinates: []
+    }
   })
 };
+
+// showViewModal: data => ({
+//   type: Types.SHOWVIEWMODALCTO,
+//   payload: {
+//     data: data
+//   }
+// }),
+// hideViewModal: () => ({
+//   type: Types.HIDEVIEWMODALCTO,
+//   payload: {}
+// }),
