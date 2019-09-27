@@ -3,21 +3,19 @@ import React from "react";
 import { isAuthenticated } from "../services/auth";
 
 /** Imports de rotas */
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 
 /** ReactRouterDom + Redux */
 import { ConnectedRouter } from "connected-react-router";
 import history from "./history";
 
 /** Rota Mapbox */
-import Map from "../pages/Map";
-import MainMap from "../pages/MainMap";
-import Home from "../pages/Home";
+import MainMap from "../pages/Mapa/MainMap";
 
 /** Rotas de autenticação */
-import Signup from "../pages/Signup";
-import Signin from "../pages/Signin";
-import Recover from "../pages/Recover";
+import Signup from "../pages/Account/SignUp/index";
+import Signin from "../pages/Account/SignIn/index";
+import Recover from "../pages/Account/Recorvery/index";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route

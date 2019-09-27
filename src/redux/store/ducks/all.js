@@ -4,15 +4,7 @@
 
 export const Types = {
   addMarker: "ADD_MARKER",
-  addCto: "ADD_CTO",
-  addDelimitacao: "ADD_DELIMITACAO",
-  addCoordenadas: "ADD_COORDENADAS",
-  openModalCto: "OPEN_MODAL_CTO",
-  canAddCoordenadas: "CAN_ADD_COORD",
-  SHOWMODALCTO: "modal/SHOW",
-  HIDEMODALCTO: "modal/HIDE",
-  delimitacaoMapa: "delimitacaoSelecionada",
-  obtainCtoFromServer: "obtainCtoFromServer",
+
   showDataViewModal: "ADD_DATA_VIEWMODAL",
   hideDataViewModal: "REMOVE_DATA_VIEWMODAL",
   showSpAddModal: "modalAddSp/SHOW",
@@ -20,8 +12,11 @@ export const Types = {
   showAddClientModal: "modalAddCl/SHOW",
   hideAddClientModal: "modalAddCl/HIDE",
   obtainClientFromServer: "obtainClientFromServer",
+
+  //Cliente
   showClientViewModal: "modalClient/SHOW",
   hideClientViewModal: "modalClient/HIDE",
+
   changeClienteData: "ccdata",
   addCoordCabo: "coordaddcabo",
   showAddCabo: "show/ADDCabo",
@@ -37,13 +32,6 @@ const INITIAL_STATE = {
     longitude: ""
   },
   canAddCoordenadas: true,
-  modalCto: {
-    visible: false
-  },
-  viewCto: {
-    visible: false,
-    data: {}
-  },
   modalSplitter: {
     visible: false,
     id: 9999999
@@ -54,14 +42,6 @@ const INITIAL_STATE = {
   },
   modalCabo: {
     visible: false
-  },
-  mapa: {
-    map: {},
-    delimitacao: "default",
-    cto: [],
-    cliente: [],
-    cabos: [],
-    polyline: []
   },
   viewClient: {
     visible: false,
@@ -78,45 +58,13 @@ export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case Types.addMarker:
       return { ...state, markers: [...state.markers, action.payload.markers] };
-    case Types.addCto:
-      return { ...state, cto: [...state.cto, action.payload.cto] };
-    case Types.openModalCto:
-      return { ...state, modalCto: action.payload.modalCto };
     case Types.addCoordenadas:
       return { ...state, coordenadas: action.payload.coordenadas };
     case Types.canAddCoordenadas:
       return { ...state, canAddCoordenadas: action.payload.canAddCoordenadas };
-    case Types.delimitacaoMapa:
-      return {
-        ...state,
-        mapa: { ...state.mapa, delimitacao: action.payload.delimitacao }
-      };
+
     // CTO MODAL
-    case Types.SHOWMODALCTO:
-      return {
-        ...state,
-        modalCto: {
-          visible: true,
-          coordinates: action.payload.coordinates
-        }
-      };
-    case Types.HIDEMODALCTO:
-      return {
-        ...state,
-        modalCto: {
-          visible: false,
-          coordinates: null
-        }
-      };
-    // CTO SERVER HANDLE DATA TO STORE
-    case Types.obtainCtoFromServer:
-      return {
-        ...state,
-        mapa: {
-          ...state.mapa,
-          cto: action.payload.cto
-        }
-      };
+
     // CLIENTE SERVER HANDLE DATA TO STORE
     case Types.obtainClientFromServer:
       return {
@@ -159,6 +107,7 @@ export default function(state = INITIAL_STATE, action) {
           id: null
         }
       };
+
     case Types.showAddClientModal:
       return {
         ...state,
@@ -254,27 +203,6 @@ export const Creators = {
     }
   }),
 
-  addCto: cto => ({
-    type: Types.addCto,
-    payload: {
-      cto
-    }
-  }),
-
-  addDelimitacao: delimitacao => ({
-    type: Types.addDelimitacao,
-    payload: {
-      delimitacao
-    }
-  }),
-
-  openModalCto: modal => ({
-    type: "OPEN_MODAL_CTO",
-    payload: {
-      modalCto: modal
-    }
-  }),
-
   addCoordenadas: coord => ({
     type: Types.addCoordenadas,
     payload: {
@@ -286,33 +214,6 @@ export const Creators = {
     type: Types.canAddCoordenadas,
     payload: {
       canAddCoordenadas: boolean
-    }
-  }),
-
-  showModalCto: coordinates => ({
-    type: Types.showAddCabo,
-    payload: { coordinates }
-  }),
-
-  hideModalCto: () => ({
-    type: Types.hideAddCabo
-  }),
-
-  /** Seleciona o tipo de delimitação do mapa
-   * @param delimitacao tipo de delimitação, podendo ser
-   * cto, ceo, cliente, switch, rb, etc.
-   */
-  setDelimitacaoMapa: delimitacao => ({
-    type: Types.delimitacaoMapa,
-    payload: {
-      delimitacao
-    }
-  }),
-
-  setCtoFromServer: cto => ({
-    type: Types.obtainCtoFromServer,
-    payload: {
-      cto
     }
   }),
 

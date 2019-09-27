@@ -6,6 +6,7 @@
   "author": "Kevin Cavalcanti <k.w9cavalcanti@gmail.com>",
   "dependencies": {
     "@deck.gl/mapbox": "^7.1.7",
+    "@mapbox/mapbox-gl-geocoder": "^4.4.2",
     "@material-ui/core": "^4.0.0-rc.0",
     "@material-ui/icons": "^4.2.1",
     "@turf/line-distance": "^4.7.3",
@@ -13,6 +14,7 @@
     "axios": "^0.18.0",
     "connected-react-router": "^6.5.2",
     "deck.gl": "^7.1.4",
+    "dotenv": "^8.1.0",
     "font-awesome": "^4.7.0",
     "history": "^4.9.0",
     "immutable": "^4.0.0-rc.12",

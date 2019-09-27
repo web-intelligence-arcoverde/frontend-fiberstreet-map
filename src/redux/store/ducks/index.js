@@ -1,22 +1,28 @@
 import { combineReducers } from "redux";
-
-import all from "./all";
-import ctos from "./ctos";
-import map from "./map";
-import drop from "./drop";
-import cliente from "./cliente";
-import cabo from "./cabo";
-// import { reducer } from "../../store";
-
 import { connectRouter } from "connected-react-router";
 import history from "../../../routes/history";
 
+/*
+  Distribuir ações para suas devidas reducers
+          (Organizar este arquivo)
+                {Reducers}
+*/
+
+import ctos from "./ctos";
+
+import user from "./user";
+
+import map from "./map";
+
+import provider from "./provider";
+
+import client from "./cliente";
+
 export default combineReducers({
-  all,
-  ctos,
+  provider,
+  client,
+  user,
   map,
-  drop,
-  cliente,
-  cabo,
+  ctos,
   router: connectRouter(history)
 });

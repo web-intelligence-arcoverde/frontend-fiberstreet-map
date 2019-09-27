@@ -1,23 +1,51 @@
 export const Types = {
-  ADD_CLIENTE_ID: "ADD_ID/cliente"
+  SHOWNEWMODALCLIENT: "client/SHOW_NEW_MODAL_CLIENT",
+  HIDENEWMODALCLIENT: "client/HIDE_NEW_MODAL_CLIENT"
 };
 
 const INITIAL_STATE = {
-  cliente_id: null
+  viewNewClient: {
+    visible: false,
+    coordinates: []
+  }
 };
 
 export default function(state = INITIAL_STATE, action) {
+  console.log(state);
   switch (action.type) {
-    case Types.ADD_CLIENTE_ID:
-      return { ...state, cliente_id: action.payload.cliente_id };
+    case Types.SHOWNEWMODALCLIENT:
+      return {
+        ...state,
+        viewNewClient: {
+          visible: true,
+          coordinates: action.payload.coordinates
+        }
+      };
+    case Types.HIDENEWMODALCLIENT:
+      return {
+        ...state,
+        viewNewClient: {
+          visible: false,
+          coordinates: {}
+        }
+      };
     default:
       return state;
   }
 }
 
 export const Creators = {
-  addClienteId: cliente_id => ({
-    type: Types.ADD_CLIENTE_ID,
-    payload: { cliente_id }
+  showNewModalClient: coordinates => ({
+    type: Types.SHOWNEWMODALCLIENT,
+    payload: {
+      visible: true,
+      coordinates
+    }
+  }),
+  hideNewModalClient: () => ({
+    type: Types.HIDENEWMODALCLIENT,
+    payload: {
+      visible: false
+    }
   })
 };
