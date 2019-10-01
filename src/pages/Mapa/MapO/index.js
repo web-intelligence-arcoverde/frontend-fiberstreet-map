@@ -21,6 +21,7 @@ import { Creators as userCreators } from "../../../redux/store/ducks/user";
 import { Creators as providerCreators } from "../../../redux/store/ducks/provider";
 import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
+import { actions as ToastrActions } from 'react-redux-toastr'
 
 //Websockets
 import socket from '../../../services/socket'
@@ -163,10 +164,20 @@ class Map extends Component {
       function handleCable(data) {
         // map.getSource()
       }
+      // ToastrActions.add({
+      //     type: 'error',
+      //     title: 'REALTIME BIRRL',
+      //     message: 'data'
+      //   })
       socket.connect()
       const cables = socket.subscribe('cables')
       cables.on('message', data => {
         alert(data)
+        // ToastrActions.add({
+        //   type: 'error',
+        //   title: 'REALTIME BIRRL',
+        //   message: 'data'
+        // })
       })
       //socket.subscribe("cables", data => handleCable(data))
     })

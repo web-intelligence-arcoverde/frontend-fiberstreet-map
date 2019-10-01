@@ -3,7 +3,11 @@
  */
 export const Types = {
   SHOWNEWMODALCEO: "ceo/SHOW_NEW_MODAL",
-  HIDENEWMODALCEO: "ceo/HIDE_NEW_MODAL"
+  HIDENEWMODALCEO: "ceo/HIDE_NEW_MODAL",
+
+  // Creation { saving data }
+  CREATE_CEO_REQUEST: "@ceo/CREATE_REQUEST",
+  CREATE_CEO_SUCCESS: "@ceo/CREATE_SUCCESS"
 };
 
 const INITIAL_STATE = {
@@ -58,5 +62,15 @@ export const Creators = {
       visible: false,
       coordinates: []
     }
+  }),
+
+  createCeoRequest: ceo => ({
+    type: Types.CREATE_CEO_REQUEST,
+    payload: { ceo }
+  }),
+
+  createCeoSuccess: ceo => ({
+    type: Types.CREATE_CEO_SUCCESS,
+    payload: { ceo }
   })
 };

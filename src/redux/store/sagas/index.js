@@ -10,6 +10,12 @@ import { createClient } from "./cliente";
 import { Types as CtoTypes } from "../ducks/ctos";
 import { store as storeCto } from "./ctos";
 
+import { Types as CeoTypes } from "../ducks/ceo";
+import { store as storeCeo } from "./ceo";
+
+import { Types as ProvidersTypes } from "../ducks/provider";
+import { getProviders } from "./provider";
+
 // import { Types as CaboTypes } from '../ducks/cabo'
 // import { createCabo } from './cabo'
 
@@ -25,9 +31,13 @@ export default function* rootSaga() {
     takeLatest(AuthTypes.SIGN_OUT, signOut),
     takeLatest(AuthTypes.SIGN_UP_REQUEST, signUp),
 
+    // ProvidersTypes
+    takeLatest(ProvidersTypes.GET_PROVIDERS_REQUEST, getProviders),
+
     // Adding data on server
     takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient),
-    takeLatest(CtoTypes.CREATE_CTO_REQUEST, storeCto)
+    takeLatest(CtoTypes.CREATE_CTO_REQUEST, storeCto),
+    takeLatest(CeoTypes.CREATE_CEO_REQUEST, storeCeo)
     // takeLatest(CaboTypes.CREATE_CABO_REQUEST, createCabo)
     //takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient)
     //takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient)
