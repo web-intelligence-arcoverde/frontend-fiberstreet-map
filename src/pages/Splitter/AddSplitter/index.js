@@ -38,9 +38,9 @@ function SpAddModal(props) {
   async function handleSplitter(e) {
     e.preventDefault();
     const newSp = {
-      nome: nome,
-      balanceamento: balanceamento,
-      modelo: modelo
+      name: nome,
+      balancing: balanceamento,
+      model: modelo
     };
 
     if (type === "cto") {

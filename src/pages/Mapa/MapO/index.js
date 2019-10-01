@@ -122,96 +122,6 @@ class Map extends Component {
       mapboxgl: mapboxgl
     });
 
-    document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
-
-    // var distanceContainer = document.getElementById("distance");
-    // this.measureDistance(map, distanceContainer);
-
-    // eslint-disable-next-line react/no-direct-mutation-state
-    this.state.map = map;
-  };
-
-  /* Faz a configuração inicial do mapa */
-  firstConfigure() {
-    let { map } = this.state;
-
-    map.on("click", e => this.handleMapClick(e));
-  }
-
-  handleMapClick = e => {
-    const { lng: longitude, lat: latitude } = e.lngLat;
-    const { addCoordenadas, canAddCoordenadas } = this.props;
-    addCoordenadas({ longitude: longitude, latitude: latitude });
-    canAddCoordenadas(false);
-    let coordinates = {
-      latitude: latitude,
-      longitude: longitude
-    };
-
-    this.checkDelemitation(coordinates);
-  };
-
-  /*
-    Verificar qual ação está sendo chamada.
-  */
-  checkDelemitation(coordinates) {
-    const { map } = this.props.redux;
-
-    console.log(map.delimitacao);
-
-    switch (map.delimitacao) {
-      case "perfil":
-        break;
-      case "cliente":
-        this.openNewModalClient(coordinates);
-        break;
-      case "cto":
-        this.openNewModalCtos(coordinates);
-        break;
-      case "funcionario":
-        this.openNewModalFuncionario();
-        break;
-      case "provider":
-        this.openNewModalProvider();
-        break;
-      case "measure":
-        break;
-      case "reset":
-        break;
-      default:
-        break;
-    }
-  }
-
-  // New Modal CTO
-  async openNewModalCtos(coordinates) {
-    const { showNewViewModal, setDelemitationMap } = this.props;
-    await showNewViewModal(coordinates);
-    setDelemitationMap("default");
-  }
-
-  async openNewModalClient(coordinates) {
-    const { setDelemitationMap, showNewModalClient } = this.props;
-    await showNewModalClient(coordinates);
-    setDelemitationMap("default");
-  }
-
-  openNewModalFuncionario() {
-    const { showModalNewUser, setDelemitationMap } = this.props;
-    showModalNewUser();
-    setDelemitationMap("default");
-  }
-
-  openNewModalProvider() {
-    const { showModalNewProvider, setDelemitationMap } = this.props;
-    showModalNewProvider();
-    setDelemitationMap("default");
-  }
-
-  /*
-    Função para medir distancia entre 2 pontos no mapa 
-  */
-  measureDistance(map, distanceContainer) {
     map.on("load", function() {
       map.addSource("geojson", {
         type: "geojson",
@@ -243,60 +153,135 @@ class Map extends Component {
         },
         filter: ["in", "$type", "LineString"]
       });
+    });
 
-      map.on("click", function(e) {
-        var features = map.queryRenderedFeatures(e.point, {
-          layers: ["measure-points"]
-        });
+    document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
-        // Remove the linestring from the group
-        // So we can redraw it based on the points collection
-        if (geojson.features.length > 1) geojson.features.pop();
+    var distanceContainer = document.getElementById("distance");
 
-        // Clear the Distance container to populate it with a new value
-        distanceContainer.innerHTML = "";
+    this.measureDistance(map, distanceContainer);
 
-        // If a feature was clicked, remove it from the map
-        if (features.length) {
-          var id = features[0].properties.id;
-          geojson.features = geojson.features.filter(function(point) {
-            return point.properties.id !== id;
+    // eslint-disable-next-line react/no-direct-mutation-state
+    this.state.map = map;
+  };
+
+  /* Faz a configuração inicial do mapa */
+  firstConfigure() {
+    let { map } = this.state;
+
+    map.on("click", e => this.handleMapClick(e));
+  }
+
+  handleMapClick = e => {
+    const { lng: longitude, lat: latitude } = e.lngLat;
+    const { addCoordenadas, canAddCoordenadas } = this.props;
+    addCoordenadas({ longitude: longitude, latitude: latitude });
+    canAddCoordenadas(false);
+    let coordinates = {
+      latitude: latitude,
+      longitude: longitude
+    };
+
+    this.checkDelemitation(coordinates);
+  };
+
+  /*
+    Verificar qual ação está sendo chamada.
+  */
+  checkDelemitation(coordinates) {
+    const { map } = this.props.redux;
+
+    switch (map.delimitacao) {
+      case "perfil":
+        break;
+      case "cliente":
+        this.openNewModalClient(coordinates);
+        break;
+      case "cto":
+        this.openNewModalCtos(coordinates);
+        break;
+      case "funcionario":
+        this.openNewModalFuncionario();
+        break;
+      case "provider":
+        this.openNewModalProvider();
+        break;
+      default:
+        break;
+    }
+  }
+
+  async openNewModalCtos(coordinates) {
+    const { showNewViewModal, setDelemitationMap } = this.props;
+    await showNewViewModal(coordinates);
+    setDelemitationMap("default");
+  }
+
+  async openNewModalClient(coordinates) {
+    const { setDelemitationMap, showNewModalClient } = this.props;
+    await showNewModalClient(coordinates);
+    setDelemitationMap("default");
+  }
+
+  openNewModalFuncionario() {
+    const { showModalNewUser, setDelemitationMap } = this.props;
+    showModalNewUser();
+    setDelemitationMap("default");
+  }
+
+  openNewModalProvider() {
+    const { showModalNewProvider, setDelemitationMap } = this.props;
+    showModalNewProvider();
+    setDelemitationMap("default");
+  }
+
+  /*
+    Função para medir distancia entre 2 pontos no mapa 
+    e.originalEvent.button [Mostra o id do button clicado]
+  */
+  measureDistance(map, distanceContainer) {
+    map.on("load", function() {
+      map.on("mouseup", function(e) {
+        if (e.originalEvent.button === 2) {
+          var features = map.queryRenderedFeatures(e.point, {
+            layers: ["measure-points"]
           });
-        } else {
-          var point = {
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: [e.lngLat.lng, e.lngLat.lat]
-            },
-            properties: {
-              id: String(new Date().getTime())
-            }
-          };
-
-          geojson.features.push(point);
+          if (geojson.features.length > 1) geojson.features.pop();
+          distanceContainer.innerHTML = "";
+          if (features.length) {
+            var id = features[0].properties.id;
+            geojson.features = geojson.features.filter(function(point) {
+              return point.properties.id !== id;
+            });
+          } else {
+            var point = {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [e.lngLat.lng, e.lngLat.lat]
+              },
+              properties: {
+                id: String(new Date().getTime())
+              }
+            };
+            geojson.features.push(point);
+          }
+          if (geojson.features.length > 1) {
+            linestring.geometry.coordinates = geojson.features.map(function(
+              point
+            ) {
+              return point.geometry.coordinates;
+            });
+            geojson.features.push(linestring);
+            var value = document.createElement("pre");
+            value.textContent =
+              "Total distance: " +
+              lineDistance(linestring, "kilometers").toLocaleString() +
+              "km";
+            distanceContainer.appendChild(value);
+          }
+          map.getSource("geojson").setData(geojson);
         }
-
-        if (geojson.features.length > 1) {
-          linestring.geometry.coordinates = geojson.features.map(function(
-            point
-          ) {
-            return point.geometry.coordinates;
-          });
-
-          geojson.features.push(linestring);
-
-          // Populate the distanceContainer with total distance
-
-          var value = document.createElement("pre");
-          value.textContent =
-            "Total distance: " +
-            lineDistance(linestring, "kilometers").toLocaleString() +
-            "km";
-          distanceContainer.appendChild(value);
-        }
-
-        map.getSource("geojson").setData(geojson);
       });
     });
   }

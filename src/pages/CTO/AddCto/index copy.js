@@ -12,19 +12,17 @@ import { connect } from "react-redux";
 import { obterDadosDoServidor } from "../../../../services/handleInformation";
 import * as Actions from "../../../../redux/store/actions/all";
 
-Modal.setAppElement(document.getElementById("root"));
-
-// Vamos fazer aqui uma renderização condicional para ADIÇÃO/AMOSTRAGEM de imagens
-
 function AddCto(props) {
   const [name, setName] = useState("");
   const [coordinates, setCoordinates] = useState(
     JSON.stringify(props.redux.all.coordenadas)
   );
   // JSON.stringify(props.redux.coordenadas)
+
+  const { modalCto } = props.redux.all;
+
   const [type, setType] = useState("");
   const [address, setAddress] = useState("");
-  const { modalCto } = props.redux.all;
   const TNAME = "name";
   const TCOORDINATES = "coordinates";
   const TTYPE = "type";
@@ -89,6 +87,8 @@ function AddCto(props) {
         break;
       case "address":
         setAddress(value);
+        break;
+      default:
         break;
     }
   }

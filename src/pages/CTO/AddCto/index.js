@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import "./styles.css";
 
@@ -17,7 +17,6 @@ import { Modal, Button, Form } from "react-bootstrap";
 
 function AddNewCto(props) {
   const { HideNewViewModal } = props;
-
   const { viewNewCto } = props.redux.ctos;
 
   function handleSubmit(e) {
@@ -51,6 +50,11 @@ function AddNewCto(props) {
           <Form.Group>
             <Form.Label>Modelo:</Form.Label>
             <Form.Control type="text" />
+          </Form.Group>
+
+          <Form.Group controlId="exampleForm.ControlTextarea1">
+            <Form.Label>Observações:</Form.Label>
+            <Form.Control as="textarea" rows="3" />
           </Form.Group>
         </Modal.Body>
 
