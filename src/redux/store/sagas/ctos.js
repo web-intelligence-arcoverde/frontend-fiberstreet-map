@@ -45,7 +45,7 @@ export function* viewCto(action) {
  * Obs -> Podemos salvar o interval no redux e ativar/desativar ele
  *
  */
-export function* addCto(action) {
+export function* store(action) {
   try {
     yield put();
   } catch (err) {}

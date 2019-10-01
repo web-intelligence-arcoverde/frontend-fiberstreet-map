@@ -14,7 +14,9 @@ import sagas from "./store/sagas";
 import createSagaMiddleware from "redux-saga";
 
 const middlewares = [];
+
 const sagaMiddlewares = createSagaMiddleware();
+
 middlewares.push(sagaMiddlewares);
 middlewares.push(routerMiddleware(history));
 
