@@ -20,13 +20,19 @@ function AddNewCto(props) {
 
   const { viewNewCto } = props.redux.ctos;
 
+  function handleSubmit(e) {
+    const { createCtoRequest } = props;
+    createCtoRequest()
+    HideNewViewModal()
+  }
+
   return (
     <Modal
       show={viewNewCto.visible}
       onHide={HideNewViewModal}
       style={{ overflow: "scroll" }}
     >
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
           <Modal.Title>Cadastrar do CTO</Modal.Title>
         </Modal.Header>

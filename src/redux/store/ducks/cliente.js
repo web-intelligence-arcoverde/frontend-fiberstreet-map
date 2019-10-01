@@ -1,6 +1,10 @@
+import { createClient } from "reactotron-core-client";
+
 export const Types = {
   SHOWNEWMODALCLIENT: "client/SHOW_NEW_MODAL_CLIENT",
-  HIDENEWMODALCLIENT: "client/HIDE_NEW_MODAL_CLIENT"
+  HIDENEWMODALCLIENT: "client/HIDE_NEW_MODAL_CLIENT",
+  CREATE_CLIENT_REQUEST: "@cliente/CREATE_REQUEST",
+  CREATE_CLIENT_SUCCESS: "@cliente/CREATE_SUCCESS"
 };
 
 const INITIAL_STATE = {
@@ -42,10 +46,21 @@ export const Creators = {
       coordinates
     }
   }),
+
   hideNewModalClient: () => ({
     type: Types.HIDENEWMODALCLIENT,
     payload: {
       visible: false
     }
+  }),
+
+  createClientRequest: client => ({
+    type: Types.CREATE_CLIENT_REQUEST,
+    payload: { client }
+  }),
+
+  createClientSuccess: client => ({
+    type: Types.CREATE_CLIENT_SUCCESS,
+    payload: { client }
   })
 };

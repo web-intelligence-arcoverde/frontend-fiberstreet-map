@@ -8,7 +8,11 @@ export const Types = {
 
   //Modal {Novo}
   SHOWVIEWMODALCTO: "cto/SHOW_VIEW_MODAL",
-  HIDEVIEWMODALCTO: "cto/HIDE_VIEW_MODAL"
+  HIDEVIEWMODALCTO: "cto/HIDE_VIEW_MODAL",
+
+  // Creation { saving data }
+  CREATE_CTO_REQUEST: "@cto/CREATE_REQUEST",
+  CREATE_CTO_SUCCESS: "@cto/CREATE_SUCCESS"
 };
 
 const INITIAL_STATE = {
@@ -84,6 +88,16 @@ export const Creators = {
       visible: false,
       coordinates: []
     }
+  }),
+
+  createCtoRequest: cto => ({
+    type: Types.CREATE_CTO_REQUEST,
+    payload: { cto }
+  }),
+
+  createCtoSuccess: cto => ({
+    type: Types.CREATE_CTO_SUCCESS,
+    payload: { cto }
   })
 };
 
