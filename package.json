@@ -5,6 +5,7 @@
   "repository": "https://gitlab.com/gtc3300k/fiberstreet-web",
   "author": "Kevin Cavalcanti <k.w9cavalcanti@gmail.com>",
   "dependencies": {
+    "@adonisjs/websocket-client": "^1.0.9",
     "@deck.gl/mapbox": "^7.1.7",
     "@mapbox/mapbox-gl-geocoder": "^4.4.2",
     "@material-ui/core": "^4.0.0-rc.0",

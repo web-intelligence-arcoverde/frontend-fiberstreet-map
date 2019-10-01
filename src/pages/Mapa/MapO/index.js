@@ -22,6 +22,9 @@ import { Creators as providerCreators } from "../../../redux/store/ducks/provide
 import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
 
+//Websockets
+import socket from '../../../services/socket'
+
 //Componentes
 import LeftSelector from "./Components/LeftSelector/index";
 
@@ -155,6 +158,18 @@ class Map extends Component {
         filter: ["in", "$type", "LineString"]
       });
     });
+
+    map.on("load", function(e) {
+      function handleCable(data) {
+        // map.getSource()
+      }
+      socket.connect()
+      const cables = socket.subscribe('cables')
+      cables.on('message', data => {
+        alert(data)
+      })
+      //socket.subscribe("cables", data => handleCable(data))
+    })
 
     document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
