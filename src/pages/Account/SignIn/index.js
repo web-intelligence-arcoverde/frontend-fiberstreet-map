@@ -1,6 +1,9 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 
-import { login } from "../../../services/auth";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import AuthActions from "../../../redux/store/ducks/auth";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -54,12 +57,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Signin(props) {
+function Signin(props) {
   const classes = useStyles();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleLogin() {}
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const { signInRequest } = props;
+
+    signInRequest(email, password);
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -74,7 +84,7 @@ export default function Signin(props) {
         <Typography component="h1" variant="h5">
           Entrar
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -84,6 +94,8 @@ export default function Signin(props) {
             label="Email"
             name="email"
             autoComplete="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
             autoFocus
           />
           <TextField
@@ -95,6 +107,8 @@ export default function Signin(props) {
             label="Password"
             type="password"
             id="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
             autoComplete="current-password"
           />
           <FormControlLabel
@@ -130,3 +144,11 @@ export default function Signin(props) {
     </Container>
   );
 }
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(AuthActions, dispatch);
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Signin);

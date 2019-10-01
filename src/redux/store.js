@@ -20,18 +20,12 @@ middlewares.push(routerMiddleware(history));
 
 const composer =
   process.env.NODE_ENV === "development"
-    ? compose(
-        applyMiddleware(...middlewares),
-        console.tron.createEnhancer()
-      )
+    ? compose(applyMiddleware(...middlewares))
     : applyMiddleware(...middlewares);
-
-// const rootReducer = combineReducers(reducer );
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || store;
 
 const store = createStore(connectRouter(history)(reducers), composer);
-// const store = createStore(rootReducer, composer);
 
 sagaMiddlewares.run(sagas);
 

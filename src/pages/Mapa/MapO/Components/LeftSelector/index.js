@@ -7,6 +7,7 @@ import { bindActionCreators } from "redux";
 
 //Creators
 import { Creators as MapCreators } from "../../../../../redux/store/ducks/map";
+import AuthActions from "../../../../../redux/store/ducks/auth";
 
 //React-UI
 import { Container } from "./styles";
@@ -88,7 +89,7 @@ function LeftSelector(props) {
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={() => {
-                      setDelemitationMap("logout");
+                      props.signOut();
                     }}
                   >
                     logout
@@ -217,7 +218,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...MapCreators }, dispatch);
+  bindActionCreators({ ...MapCreators, ...AuthActions }, dispatch);
 
 export default connect(
   mapStateToProps,

@@ -18,7 +18,12 @@ import provider from "./provider";
 
 import client from "./cliente";
 
+import { reducer as auth } from "./auth";
+import { reducer as toastr } from "react-redux-toastr";
+
 export default combineReducers({
+  toastr,
+  auth,
   provider,
   client,
   user,
