@@ -10,11 +10,14 @@ import AddNewProvider from "../../Provider/AddProvider/index";
 
 import AddNewClient from "../../Client/AddClient/index";
 
+import AddCeo from "../../CEO/AddCeo/index";
+
 const TOKEN =
   "pk.eyJ1IjoidWxpbmt1eCIsImEiOiJjanczamF5cG8wNWt0NDltcnkydXQybGdjIn0.F1PkG0rCiHhf-jhnRMMdTg";
 
 const MainMap = props => (
   <div>
+    <AddCeo />
     <AddNewProvider />
     <AddNewClient />
     <AddNewCto />
