@@ -168,44 +168,6 @@ function LeftSelector(props) {
                 </Dropdown.Menu>
               </Dropdown>
             </ButtonGroup>
-
-            <ButtonGroup vertical style={{ marginTop: "40px" }}>
-              <Dropdown as={ButtonGroup}>
-                <OverlayTrigger
-                  overlay={
-                    <Tooltip id="tooltip-disabled">
-                      Distancia de um ponto a outro
-                    </Tooltip>
-                  }
-                >
-                  <Button variant="warning" className={classes.button}>
-                    <i class="fa fa-arrows-v" style={{ color: "white" }}></i>
-                  </Button>
-                </OverlayTrigger>
-                <Dropdown.Toggle
-                  id="dropdown-split-basic"
-                  variant="warning"
-                  style={{ color: "white" }}
-                />
-
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setDelemitationMap("measure");
-                    }}
-                  >
-                    medir
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setDelemitationMap("reset");
-                    }}
-                  >
-                    desfazer
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </ButtonGroup>
           </div>
         </div>
       </Container>
