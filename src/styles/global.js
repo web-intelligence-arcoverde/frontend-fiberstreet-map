@@ -2,6 +2,8 @@ import { createGlobalStyle } from "styled-components";
 
 import "font-awesome/css/font-awesome.css";
 
+import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
+
 const GlobalStyle = createGlobalStyle`
 * {
   box-sizing: border-box;

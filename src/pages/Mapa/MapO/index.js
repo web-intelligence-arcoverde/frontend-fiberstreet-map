@@ -162,8 +162,6 @@ class Map extends Component {
     switch (map.delimitacao) {
       case "perfil":
         break;
-      case "logout":
-        break;
       case "cliente":
         this.openNewModalClient(coordinates);
         break;

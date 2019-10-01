@@ -1,24 +1,28 @@
 import axios from "axios";
 import { getToken } from "./api";
+import store from "../redux/store";
 
 // const serverOne = "http://localhost:3334";
 // const serverTwo = "http://localhost:3001";
-const local = "http://192.168.0.131:3334";
+const local = "http://192.168.0.104:3333";
 const server = "http://45.224.40.252";
 
 /** This API will connect to NodeJS Server */
 const api = axios.create({
-  baseURL: server
+  baseURL: local
 });
 
-// api.interceptors.request.use(async config => {
-//   const token = getToken();
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
+api.interceptors.request.use(config => {
+  const { token } = store.getState().auth;
 
-//   return config;
-// });
+  const headers = { ...config.headers };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return { ...config, headers };
+});
 
 export const API = {
   CREATE_CTO: "/cto",
