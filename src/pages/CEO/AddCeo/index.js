@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
 
 function AddCeo(props) {
-  const { HideNewViewModal } = props;
+  const { HideNewViewModalCeo } = props;
   const { viewNewCeo } = props.redux.ceo;
 
   const [model, setModel] = useState("");
@@ -37,7 +37,7 @@ function AddCeo(props) {
   return (
     <Modal
       show={viewNewCeo.visible}
-      onHide={HideNewViewModal}
+      onHide={HideNewViewModalCeo}
       style={{ overflow: "scroll" }}
     >
       <Form>
@@ -85,7 +85,12 @@ function AddCeo(props) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button style={{ backgroundColor: "#0174DF" }}>Fechar</Button>
+          <Button
+            style={{ backgroundColor: "#0174DF" }}
+            onClick={HideNewViewModalCeo}
+          >
+            Fechar
+          </Button>
 
           <Button style={{ backgroundColor: "#0174DF" }} type="submit">
             Salvar

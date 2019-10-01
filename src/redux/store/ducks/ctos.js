@@ -75,14 +75,14 @@ export default function(state = INITIAL_STATE, action) {
  * Actions
  */
 export const Creators = {
-  showNewViewModal: coordinates => ({
+  showNewViewModalCto: coordinates => ({
     type: Types.SHOWNEWMODALCTO,
     payload: {
       visible: true,
       coordinates
     }
   }),
-  HideNewViewModal: () => ({
+  HideNewViewModalCto: () => ({
     type: Types.HIDENEWMODALCTO,
     payload: {
       visible: false,

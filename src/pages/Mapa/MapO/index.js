@@ -24,7 +24,7 @@ import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
 import { actions as ToastrActions } from 'react-redux-toastr'
 
 //Websockets
-import socket from '../../../services/socket'
+import socket from "../../../services/socket";
 
 //Componentes
 import LeftSelector from "./Components/LeftSelector/index";
@@ -180,7 +180,7 @@ class Map extends Component {
         // })
       })
       //socket.subscribe("cables", data => handleCable(data))
-    })
+    });
 
     document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
@@ -242,8 +242,14 @@ class Map extends Component {
   }
 
   async openNewModalCtos(coordinates) {
-    const { showNewViewModal, setDelemitationMap } = this.props;
-    await showNewViewModal(coordinates);
+    const { showNewViewModalCto, setDelemitationMap } = this.props;
+    await showNewViewModalCto(coordinates);
+    setDelemitationMap("default");
+  }
+
+  openNewModalCeo(coordinates) {
+    const { showNewViewModalCeo, setDelemitationMap } = this.props;
+    showNewViewModalCeo(coordinates);
     setDelemitationMap("default");
   }
 
@@ -262,12 +268,6 @@ class Map extends Component {
   openNewModalProvider() {
     const { showModalNewProvider, setDelemitationMap } = this.props;
     showModalNewProvider();
-    setDelemitationMap("default");
-  }
-
-  openNewModalCeo(coordinates) {
-    const { showNewViewModal, setDelemitationMap } = this.props;
-    showNewViewModal(coordinates);
     setDelemitationMap("default");
   }
 

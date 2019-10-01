@@ -16,7 +16,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 //  para ADIÇÃO/AMOSTRAGEM de imagens
 
 function AddNewCto(props) {
-  const { HideNewViewModal } = props;
+  const { HideNewViewModalCto } = props;
   const { viewNewCto } = props.redux.ctos;
 
   const [name, setName] = useState("");
@@ -54,10 +54,10 @@ function AddNewCto(props) {
   return (
     <Modal
       show={viewNewCto.visible}
-      onHide={HideNewViewModal}
+      onHide={HideNewViewModalCto}
       style={{ overflow: "scroll" }}
     >
-      <Form onSubmit={handleSubmit}>
+      <Form>
         <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
           <Modal.Title>Cadastrar do CTO</Modal.Title>
         </Modal.Header>
@@ -99,24 +99,12 @@ function AddNewCto(props) {
               onChange={e => setObservacao(e.target.value)}
             />
           </Form.Group>
-
-          <Form.Group controlId="exampleForm.ControlTextarea1">
-            <Form.Label>Observações:</Form.Label>
-            <Form.Control as="textarea" rows="3" />
-          </Form.Group>
         </Modal.Body>
 
         <Modal.Footer>
-          <Button
-            style={{ backgroundColor: "#0174DF" }}
-            onClick={HideNewViewModal}
-          >
-            Fechar
-          </Button>
+          <Button onClick={HideNewViewModalCto}>Fechar</Button>
 
-          <Button style={{ backgroundColor: "#0174DF" }} type="submit">
-            Salvar
-          </Button>
+          <Button type="submit">Salvar</Button>
         </Modal.Footer>
       </Form>
     </Modal>

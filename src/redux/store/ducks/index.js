@@ -9,21 +9,18 @@ import history from "../../../routes/history";
 */
 
 import ctos from "./ctos";
-
 import user from "./user";
-
 import map from "./map";
-
 import provider from "./provider";
-
 import client from "./cliente";
-
 import ceo from "./ceo";
+import splitter from "./splitter";
 
 import { reducer as auth } from "./auth";
 import { reducer as toastr } from "react-redux-toastr";
 
 export default combineReducers({
+  splitter,
   ceo,
   toastr,
   auth,
