@@ -2,7 +2,7 @@ import Ws from "@adonisjs/websocket-client";
 
 export class SocketConnection {
   connect() {
-    this.ws = Ws("ws://192.168.0.104:3333").connect();
+    this.ws = Ws("ws://192.168.0.143:3333").connect();
 
     this.ws.on("open", () => {
       console.log("Connection initialized");
