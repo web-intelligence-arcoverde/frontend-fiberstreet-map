@@ -20,6 +20,7 @@ import { Creators as CtosCreators } from "../../../redux/store/ducks/ctos";
 import { Creators as userCreators } from "../../../redux/store/ducks/user";
 import { Creators as providerCreators } from "../../../redux/store/ducks/provider";
 import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
+import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
 
 //Componentes
 import LeftSelector from "./Components/LeftSelector/index";
@@ -206,6 +207,9 @@ class Map extends Component {
       case "provider":
         this.openNewModalProvider();
         break;
+      case "ceo":
+        this.openNewModalCeo(coordinates);
+        break;
       default:
         break;
     }
@@ -232,6 +236,12 @@ class Map extends Component {
   openNewModalProvider() {
     const { showModalNewProvider, setDelemitationMap } = this.props;
     showModalNewProvider();
+    setDelemitationMap("default");
+  }
+
+  openNewModalCeo(coordinates) {
+    const { showNewViewModal, setDelemitationMap } = this.props;
+    showNewViewModal(coordinates);
     setDelemitationMap("default");
   }
 
@@ -354,7 +364,8 @@ const mapDispatchToProps = dispatch =>
       ...CtosCreators,
       ...userCreators,
       ...providerCreators,
-      ...clientCreators
+      ...clientCreators,
+      ...ceoCreators
     },
     dispatch
   );

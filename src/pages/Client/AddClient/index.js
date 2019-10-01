@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 //Conectores dos Creators
 import { bindActionCreators } from "redux";
@@ -15,6 +15,26 @@ import "./styles.css";
 
 function ClienteAddModal(props) {
   const { viewNewClient } = props.redux.client;
+
+  const [name, setName] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [plano, setPlano] = useState("");
+  const [address, setAddress] = useState("");
+  const [PPPOE, setPPPOE] = useState("");
+  const [coordinates, setCoordinates] = useState("");
+  const [observacao, setObservacao] = useState("");
+
+  async function handleClient(e) {
+    const newClient = {
+      name: name,
+      coordinates: coordinates,
+      cpf: cpf,
+      speed: plano,
+      pppoe: PPPOE,
+      address: address,
+      obs: observacao
+    };
+  }
 
   function handleHideModal() {
     const { hideNewModalClient } = props;
@@ -44,28 +64,64 @@ function ClienteAddModal(props) {
           <Modal.Body>
             <Form.Group>
               <Form.Label>Nome:</Form.Label>
-              <Form.Control type="text" />
+              <Form.Control
+                type="text"
+                value={name}
+                onChange={e => setName(e.target.value)}
+              />
             </Form.Group>
 
             <Form.Group>
               <Form.Label>CPF:</Form.Label>
-              <Form.Control type="number" />
+              <Form.Control
+                type="text"
+                value={cpf}
+                onChange={e => setCpf(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Endereço:</Form.Label>
+              <Form.Control
+                type="text"
+                value={address}
+                onChange={e => setAddress(e.target.value)}
+              />
             </Form.Group>
 
             <Form.Group>
               <Form.Label>Planos:</Form.Label>
-              <Form.Control type="text" as="select">
+              <Form.Control
+                type="text"
+                as="select"
+                value={plano}
+                onChange={e => setPlano(e.target.value)}
+              >
                 <option>10</option>
                 <option>20</option>
-                <option>30</option>
-                <option>40</option>
-                <option>50</option>
+                <option>100</option>
+                <option>250</option>
+                <option>500</option>
               </Form.Control>
             </Form.Group>
 
             <Form.Group>
               <Form.Label>PPPOE:</Form.Label>
-              <Form.Control type="text" />
+              <Form.Control
+                type="text"
+                value={PPPOE}
+                onChange={e => setPPPOE(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="exampleForm.ControlTextarea1">
+              <Form.Label>Observações:</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows="3"
+                value={observacao}
+                onChange={e => setObservacao(e.target.value)}
+              />
             </Form.Group>
           </Modal.Body>
 

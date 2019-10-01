@@ -1,73 +1,66 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-import "./styles.css";
+//Components
+import { Modal, Form, Button } from "react-bootstrap";
 
 // redux
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 //Creators redux
-import { Creators as ctoCreators } from "../../../redux/store/ducks/ctos";
+import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
 
-//UI-Components
-import { Modal, Button, Form } from "react-bootstrap";
-
-//  Vamos fazer aqui uma renderização condicional
-//  para ADIÇÃO/AMOSTRAGEM de imagens
-
-function AddNewCto(props) {
+function AddCeo(props) {
   const { HideNewViewModal } = props;
-  const { viewNewCto } = props.redux.ctos;
+  const { viewNewCeo } = props.redux.ceo;
 
-  const [name, setName] = useState("");
+  const [model, setModel] = useState("");
   const [coordinates, setCoordinates] = useState("");
   //   JSON.stringify(props.redux.all.coordenadas)
   // );
   const [observacao, setObservacao] = useState("");
-  const [model, setModel] = useState("");
+  const [type, setType] = useState("");
   const [address, setAddress] = useState("");
 
-  async function handleCto(e) {
+  async function handleCeo(e) {
     // e.preventDefault();
-    const { setCtoFromServer } = props;
 
-    const newCto = {
-      name: name,
+    const newCeo = {
+      type: type,
       coordinates: coordinates,
       model: model,
       address: address,
       obs: observacao
     };
-
-    // await api
-    //   .post("/create/cto", newCto)
-    //   .then(response => {
-    //     HideNewViewModal();
-    //     obterDadosDoServidor();
-    //   })
-    //   .catch(err => {
-    //     console.warn(err);
-    //   });
   }
 
   return (
     <Modal
-      show={viewNewCto.visible}
+      show={viewNewCeo.visible}
       onHide={HideNewViewModal}
       style={{ overflow: "scroll" }}
     >
-      <Form onSubmit={handleSubmit}>
+      <Form>
         <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
-          <Modal.Title>Cadastrar do CTO</Modal.Title>
+          <Modal.Title>Cadastrar da CEO</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <Form.Group>
-            <Form.Label>Nome CTO:</Form.Label>
+            <Form.Label>Modelo:</Form.Label>
             <Form.Control
               type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
+              value={model}
+              onChange={e => setModel(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Tipo:</Form.Label>
+            <Form.Control
+              type="text"
+              value={type}
+              onChange={e => setType(e.target.value)}
             />
           </Form.Group>
 
@@ -80,15 +73,6 @@ function AddNewCto(props) {
             />
           </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Modelo:</Form.Label>
-            <Form.Control
-              type="text"
-              value={model}
-              onChange={e => setModel(e.target.value)}
-            />
-          </Form.Group>
-
           <Form.Group controlId="exampleForm.ControlTextarea1">
             <Form.Label>Observações:</Form.Label>
             <Form.Control
@@ -98,20 +82,10 @@ function AddNewCto(props) {
               onChange={e => setObservacao(e.target.value)}
             />
           </Form.Group>
-
-          <Form.Group controlId="exampleForm.ControlTextarea1">
-            <Form.Label>Observações:</Form.Label>
-            <Form.Control as="textarea" rows="3" />
-          </Form.Group>
         </Modal.Body>
 
         <Modal.Footer>
-          <Button
-            style={{ backgroundColor: "#0174DF" }}
-            onClick={HideNewViewModal}
-          >
-            Fechar
-          </Button>
+          <Button style={{ backgroundColor: "#0174DF" }}>Fechar</Button>
 
           <Button style={{ backgroundColor: "#0174DF" }} type="submit">
             Salvar
@@ -127,9 +101,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...ctoCreators }, dispatch);
+  bindActionCreators({ ...ceoCreators }, dispatch);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddNewCto);
+)(AddCeo);

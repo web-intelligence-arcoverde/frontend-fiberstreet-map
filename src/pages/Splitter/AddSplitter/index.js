@@ -7,10 +7,7 @@ import { connect } from "react-redux";
 import * as Actions from "../../../redux/store/actions/all";
 
 //Componentes
-import Modal from "react-bootstrap/Modal";
-import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { Modal, Container, Button, Form } from "react-bootstrap/";
 
 function SpAddModal(props) {
   const { splitter } = props.redux;
