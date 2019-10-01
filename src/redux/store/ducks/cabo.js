@@ -3,7 +3,12 @@ export const Types = {
   HIDE_MODAL_NEW_CABO: "hide_new/CABO",
 
   SHOW_MODAL_NEW_CABO_RESERVA: "add_new_reserva/CABO",
-  HIDE_MODAL_NEW_CABO_RESERVA: "hide_new_reserva/CABO"
+  HIDE_MODAL_NEW_CABO_RESERVA: "hide_new_reserva/CABO",
+
+  // Creating
+
+  CREATE_CABLE_REQUEST: "@cable/CREATE_CABLE_REQUEST",
+  CREATE_CABLE_SUCCESS: "@cable/CREATE_CABLE_SUCCESS"
 };
 
 const INITIAL = {
@@ -50,5 +55,15 @@ export const Creators = {
 
   hideAddNewCaboModalReserva: () => ({
     type: Types.HIDE_MODAL_NEW_CABO_RESERVA
+  }),
+
+  createCableRequest: cable => ({
+    type: Types.CREATE_CABLE_REQUEST,
+    payload: { cable }
+  }),
+
+  createCableSuccess: cable => ({
+    type: Types.CREATE_CABLE_SUCCESS,
+    payload: { cable }
   })
 };

@@ -21,6 +21,14 @@ function ClienteAddModal(props) {
     hideNewModalClient();
   }
 
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const { createClienteRequest } = props;
+    createClienteRequest();
+    handleHideModal();
+  }
+
   return (
     <>
       <Modal
@@ -28,7 +36,7 @@ function ClienteAddModal(props) {
         onHide={handleHideModal}
         animation={false}
       >
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
             <Modal.Title>Cadastro de Cliente</Modal.Title>
           </Modal.Header>
