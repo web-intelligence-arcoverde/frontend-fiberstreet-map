@@ -1,31 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 //API
 import api, { API } from "../../../services/api";
+
+//Conectores
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import * as Actions from "../../../redux/store/actions/all";
+
+//Creators
+import { Creators as splitterCreators } from "../../../redux/store/ducks/splitter";
 
 //Componentes
 import { Modal, Container, Button, Form } from "react-bootstrap/";
 
-function SpAddModal(props) {
-  const { splitter } = props.redux;
+function AddNewSplitter(props) {
+  const { hideSplitterAddModal } = props;
+  const { modalNewSplitter } = props.redux.splitter;
 
-  // nome modelo balanceamento cto ceo fibraalimentacao
-
-  const [nome, setNome] = useState("");
-  const [balanceamento, setBalanceamento] = useState("");
-  const [ctoId, setCtoId] = useState("");
-  const [ceoId, setCeoId] = useState("");
-  const [id, setId] = useState("");
-  const [fibra, setFibra] = useState("");
-  const [modelo, setModelo] = useState("");
-  const [type, setType] = useState("cto");
-  const TNAME = "nome";
-  const TBAL = "balanceamento";
-  const TMODEL = "modelo";
-  const TADDRESS = "address";
+  const [name, setName] = useState("");
+  const [model, setModel] = useState("");
+  const [balancing, setBalancing] = useState("");
 
   function handleHideModal() {
     const { hideSplitterAddModal } = props;
@@ -34,50 +28,16 @@ function SpAddModal(props) {
 
   async function handleSplitter(e) {
     e.preventDefault();
-    const newSp = {
-      name: nome,
-      balancing: balanceamento,
-      model: modelo
+    const newSplitter = {
+      name: name,
+      balancing: balancing,
+      model: model
     };
-
-    if (type === "cto") {
-      api
-        .post(`${API.CREATE_SPLITTER}/${splitter.id}`, newSp)
-        .then(e => console.log(e))
-        .catch(e => console.warn(e));
-    } else if (type === "ceo") {
-    }
-
-    const {
-      showDataInViewModal,
-      hideSplitterAddModal,
-      hideDataInViewModal
-    } = props;
-    hideSplitterAddModal();
-    showDataInViewModal(splitter.id);
-
-    hideDataInViewModal();
-  }
-
-  function handleChange(event, mode) {
-    const { value } = event.target;
-
-    switch (mode) {
-      case TNAME:
-        setNome(value);
-        break;
-      case TBAL:
-        setBalanceamento(value);
-        break;
-      case TMODEL:
-        setModelo(value);
-        break;
-    }
   }
 
   return (
     <Container>
-      <Modal show={splitter.visible} onHide={handleHideModal}>
+      <Modal show={modalNewSplitter.visible} onHide={handleHideModal}>
         <Modal.Header style={{ justifyContent: "center", color: "#FFBF00" }}>
           <Modal.Title>Adicionar splitter</Modal.Title>
         </Modal.Header>
@@ -87,16 +47,16 @@ function SpAddModal(props) {
               <Form.Label>Nome Splitter:</Form.Label>
               <Form.Control
                 type="text"
-                value={nome}
-                onChange={e => handleChange(e, TNAME)}
+                value={name}
+                onChange={e => setName(e.target.value)}
               />
             </Form.Group>
             <Form.Group>
               <Form.Label>Modelo:</Form.Label>
               <Form.Control
                 type="text"
-                value={modelo}
-                onChange={e => handleChange(e, TMODEL)}
+                value={model}
+                onChange={e => setModel(e.target.value)}
               />
             </Form.Group>
             <Form.Group>
@@ -104,8 +64,8 @@ function SpAddModal(props) {
               <Form.Control
                 type="number"
                 placeholder="Quantidade de saidas do splitter"
-                value={balanceamento}
-                onChange={e => handleChange(e, TBAL)}
+                value={balancing}
+                onChange={e => setBalancing(e.target.value)}
               />
             </Form.Group>
           </Modal.Body>
@@ -127,9 +87,10 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ ...splitterCreators }, dispatch);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SpAddModal);
+)(AddNewSplitter);

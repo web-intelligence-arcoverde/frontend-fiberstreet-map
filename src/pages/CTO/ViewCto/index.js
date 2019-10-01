@@ -109,9 +109,6 @@ const useStyles = makeStyles(theme => ({
 function ViewCto(props) {
   const { ctos } = props.redux;
 
-  console.log(ctos);
-  console.log("informações");
-
   function handleHideModal() {
     const { hideViewModal } = props;
     hideViewModal();

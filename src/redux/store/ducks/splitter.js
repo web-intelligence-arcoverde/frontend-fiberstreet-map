@@ -1,32 +1,31 @@
 export const Types = {
-  //Modal
-  SHOWMODALSPLITTER: "splitter/MODAL_SHOW",
-  HIDEMODALSPLITTER: "splitter/MODAL_HIDE"
+  SHOWNEWMODALSPLITTER: "splitter/MODAL_SHOW",
+  HIDENEWMODALSPLITTER: "splitter/MODAL_HIDE"
 };
 
 const INITIAL_STATE = {
-  modalSplitter: {
+  modalNewSplitter: {
     visible: false,
-    id: 9999999
+    id: null
   }
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case Types.SHOWMODALSPLITTER:
+    case Types.SHOWNEWMODALSPLITTER:
       return {
         ...state,
-        modalSplitter: {
+        modalNewSplitter: {
           visible: true,
-          coordinates: action.payload.coordinates
+          id: action.payload.id
         }
       };
-    case Types.HIDEMODALSPLITTER:
+    case Types.HIDENEWMODALSPLITTER:
       return {
         ...state,
-        modalSplitter: {
+        modalNewSplitter: {
           visible: false,
-          coordinates: null
+          id: null
         }
       };
     default:
