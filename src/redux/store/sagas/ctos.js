@@ -47,7 +47,8 @@ export function* viewCto(action) {
  */
 export function* store(action) {
   try {
-    const cable = yield call([api, "post"], "/cables", action.payload);
-    alert(JSON.stringify(cable));
+    const cto = yield call([api, "post"], "/ctos", action.payload.cto);
+    alert(`Cto adicionado ${cto.data.name}`);
+    // alert(JSON.stringify(action.payload));
   } catch (err) {}
 }

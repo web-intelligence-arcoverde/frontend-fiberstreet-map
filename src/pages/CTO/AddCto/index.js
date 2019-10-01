@@ -29,26 +29,17 @@ function AddNewCto(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // const { setCtoFromServer } = props;
-
+    
     const newCto = {
       name: name,
-      coordinates: coordinates,
+      coordinates: JSON.stringify(props.redux.ctos.viewNewCto.coordinates),
       model: model,
       address: address,
       obs: observacao
     };
     const { createCtoRequest } = props;
     createCtoRequest(newCto);
-    // await api
-    //   .post("/create/cto", newCto)
-    //   .then(response => {
-    //     HideNewViewModal();
-    //     obterDadosDoServidor();
-    //   })
-    //   .catch(err => {
-    //     console.warn(err);
-    //   });
+    
   }
 
   return (
@@ -57,7 +48,7 @@ function AddNewCto(props) {
       onHide={HideNewViewModalCto}
       style={{ overflow: "scroll" }}
     >
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
           <Modal.Title>Cadastrar do CTO</Modal.Title>
         </Modal.Header>
