@@ -59,7 +59,9 @@ export class SocketConnection {
 
       result.on("message", message => {
         console.log("Incoming", message);
-        handler(message);
+        try {
+          handler(message);
+        } catch (err) {}
       });
 
       result.on("error", error => {

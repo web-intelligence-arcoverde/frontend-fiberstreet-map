@@ -27,9 +27,9 @@ function AddNewCto(props) {
   const [model, setModel] = useState("");
   const [address, setAddress] = useState("");
 
-  async function handleCto(e) {
-    // e.preventDefault();
-    const { setCtoFromServer } = props;
+  function handleSubmit(e) {
+    e.preventDefault();
+    // const { setCtoFromServer } = props;
 
     const newCto = {
       name: name,
@@ -38,7 +38,8 @@ function AddNewCto(props) {
       address: address,
       obs: observacao
     };
-
+    const { createCtoRequest } = props;
+    createCtoRequest(newCto);
     // await api
     //   .post("/create/cto", newCto)
     //   .then(response => {

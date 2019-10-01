@@ -47,6 +47,7 @@ export function* viewCto(action) {
  */
 export function* store(action) {
   try {
-    yield put();
+    const cable = yield call([api, "post"], "/cables", action.payload);
+    alert(JSON.stringify(cable));
   } catch (err) {}
 }
