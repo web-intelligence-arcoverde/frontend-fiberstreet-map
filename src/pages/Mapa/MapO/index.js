@@ -21,7 +21,9 @@ import { Creators as userCreators } from "../../../redux/store/ducks/user";
 import { Creators as providerCreators } from "../../../redux/store/ducks/provider";
 import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
-import { actions as ToastrActions } from 'react-redux-toastr'
+
+//API
+import api, { API } from "../../../services/api";
 
 //Websockets
 import socket from "../../../services/socket";
@@ -90,7 +92,7 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      center: [-37.0601269, -8.424398] //Centralizar mapa
+      center: [-37.0601269, -8.424398] //Inicialização do mapa.
     };
 
     this.handleMap = this.handleMap.bind(this);
@@ -114,6 +116,8 @@ class Map extends Component {
    * Passa para o state a constante de mapa para não ficarmos criando objetos globais
    */
   handleMap = (container, style, center, zoom, accessToken) => {
+    var url = "https://wanderdrone.appspot.com";
+
     mapboxgl.accessToken = accessToken;
     var map = new mapboxgl.Map({
       container: container,
@@ -131,6 +135,26 @@ class Map extends Component {
       map.addSource("geojson", {
         type: "geojson",
         data: geojson
+      });
+
+      map.addSource("cliente", {
+        type: "geojson",
+        data: url
+      });
+
+      map.addSource("wires", {
+        type: "geojson",
+        data: url
+      });
+      map.addLayer({
+        id: "wires",
+        source: "wires",
+        type: "line"
+      });
+
+      map.addSource("cto", {
+        type: "geojson",
+        data: url
       });
 
       // Add styles to the map
@@ -161,25 +185,12 @@ class Map extends Component {
     });
 
     map.on("load", function(e) {
-      function handleCable(data) {
-        // map.getSource()
-      }
-      // ToastrActions.add({
-      //     type: 'error',
-      //     title: 'REALTIME BIRRL',
-      //     message: 'data'
-      //   })
-      socket.connect()
-      const cables = socket.subscribe('cables')
-      cables.on('message', data => {
-        alert(data)
-        // ToastrActions.add({
-        //   type: 'error',
-        //   title: 'REALTIME BIRRL',
-        //   message: 'data'
-        // })
-      })
-      //socket.subscribe("cables", data => handleCable(data))
+      function handleCable(data) {}
+      socket.connect();
+      const cables = socket.subscribe("cables");
+      cables.on("message", data => {
+        console.log(data);
+      });
     });
 
     document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
@@ -188,6 +199,10 @@ class Map extends Component {
 
     this.measureDistance(map, distanceContainer);
 
+    this.loadCto(map);
+    this.loadClient(map);
+    this.loadCable(map);
+
     // eslint-disable-next-line react/no-direct-mutation-state
     this.state.map = map;
   };
@@ -195,7 +210,7 @@ class Map extends Component {
   /* Faz a configuração inicial do mapa */
   firstConfigure() {
     let { map } = this.state;
-
+    this.handleClicks(map);
     map.on("click", e => this.handleMapClick(e));
   }
 
@@ -213,10 +228,49 @@ class Map extends Component {
   };
 
   /*
+   * Configuração de evento de clique nos objetos que estão no mapa
+   * 'drone' now 'cto' -> Representa a CTO
+   */
+  handleClicks(map) {
+    // Cliques na cto
+    map.on("click", "cto", e => this.handleCtoClick(e.features[0]));
+    // Evento de clique nos Clientes
+    map.on("click", "cliente", e => this.handleCtoCaboClick(e));
+  }
+
+  handleCtoClick = features => {
+    const { properties } = features;
+    let longitude = features.geometry.coordinates[0];
+    let latitude = features.geometry.coordinates[1];
+
+    const data = JSON.parse(properties.data);
+
+    this.handleCtoClickTwoFactor(data, longitude, latitude);
+  };
+
+  handleCtoClickTwoFactor(cto, longitude, latitude) {
+    if (this.props.redux.all.mapa.delimitacao === "cabo") {
+      const { addCoordCabo, setDelimitacaoMapa, showAddCaboModal } = this.props;
+      const { polyline } = this.props.redux.all.mapa;
+      let newPolyline = [...polyline, [longitude, latitude]];
+
+      addCoordCabo(newPolyline);
+      showAddCaboModal(cto.id);
+      setDelimitacaoMapa("default");
+    } else {
+      const { showDataInViewModal } = this.props;
+      showDataInViewModal(cto);
+    }
+  }
+
+  /*
     Verificar qual ação está sendo chamada.
   */
   checkDelemitation(coordinates) {
     const { map } = this.props.redux;
+
+    console.log("Mostra a porra das props");
+    console.log(this.props);
 
     switch (map.delimitacao) {
       case "perfil":
@@ -269,6 +323,80 @@ class Map extends Component {
     const { showModalNewProvider, setDelemitationMap } = this.props;
     showModalNewProvider();
     setDelemitationMap("default");
+  }
+
+  loadCto(map) {
+    // Carrega as CTOS
+    map.on("load", function() {
+      api.get(API.GET_CTO_GEOJSON).then(result => {
+        const { data } = result;
+        const dados = {
+          type: "FeatureCollection",
+          features: data
+        };
+        map.getSource("cto").setData(dados);
+      });
+
+      //Carregar imagens ctos images/CTO_24x24.png
+      map.loadImage(require("../../../assets/images/CTO_24x24.png"), function(
+        error,
+        image
+      ) {
+        if (error) throw error;
+        map.addImage("custom-CTO", image);
+        map.addLayer({
+          id: "cto",
+          type: "symbol",
+          source: "cto",
+          layout: {
+            "icon-image": "custom-CTO"
+          }
+        });
+      });
+    });
+  }
+
+  // Carrega os Clientes
+  loadClient(map) {
+    map.on("load", function() {
+      api.get(API.GET_CLIENTE_GEOJSON).then(result => {
+        const { data } = result;
+        const dados = {
+          type: "FeatureCollection",
+          features: data
+        };
+        map.getSource("cliente").setData(dados);
+      });
+      map.loadImage(
+        require("../../../assets/images/clienteCom24x12.png"),
+        function(error, image) {
+          if (error) throw error;
+          map.addImage("custom-cliente", image);
+          /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+          map.addLayer({
+            id: "cliente",
+            type: "symbol",
+            source: "cliente",
+            layout: {
+              "icon-image": "custom-cliente"
+            }
+          });
+        }
+      );
+    });
+  }
+
+  loadCable(map) {
+    map.on("load", function() {
+      api.get(API.GET_CABO_GEOJSON).then(result => {
+        const { data } = result;
+        const dados = {
+          type: "FeatureCollection",
+          features: data
+        };
+        map.getSource("wires").setData(dados);
+      });
+    });
   }
 
   /*
