@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getToken } from "./api";
 import store from "../redux/store";
 
 // const serverOne = "http://localhost:3334";
@@ -30,20 +29,25 @@ api.interceptors.request.use(config => {
 });
 
 export const API = {
-  CREATE_CTO: "/cto",
-  GET_CTO: "/cto",
-  GET_CTO_GEOJSON: "/cto/geojson",
+  //Geojson
+  GET_CABO_GEOJSON: "/gj/cables",
+  GET_CTO_GEOJSON: "/gj/ctos",
+  GET_CLIENTE_GEOJSON: "/gj/clients",
+
+  CREATE_CTO: "/ctos",
+  GET_CTO: "/ctos",
+
   CREATE_SPLITTER: "/splitter/cto",
   GET_SPLITTER_BY_CTO: "/splitter/cto",
   CREATE_CLIENTE: "/cliente",
   GET_CLIENTE: "/cliente",
-  GET_CLIENTE_GEOJSON: "/cliente/geojson",
+
   GET_CLIENTE_BY_SP: "/cliente/splitter",
   DELETE_CLIENTE: "/cliente",
   CREATE_CABO: "/cabo",
   CREATE_CABO_REL: "/cabo",
   GET_CABO: "/cabo",
-  GET_CABO_GEOJSON: "/cabo/geojson",
+
   GET_CABO_BY_CTO: "/cabo/cto",
   SAIDA_SP_ADD_CLIENTE: "/saidasplitter/cliente",
   GET_SAIDA_SP_BY_SP: "/saidasplitter/splitter",
