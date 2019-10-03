@@ -14,7 +14,7 @@ import { Types as CeoTypes } from "../ducks/ceo";
 import { store as storeCeo } from "./ceo";
 
 import { Types as ProvidersTypes } from "../ducks/provider";
-import { getProviders } from "./provider";
+import { getProviders, init } from "./provider";
 
 // import { Types as CaboTypes } from '../ducks/cabo'
 // import { createCabo } from './cabo'
@@ -27,6 +27,7 @@ import { getProviders } from "./provider";
 
 export default function* rootSaga() {
   yield all([
+    init(),
     takeLatest(AuthTypes.SIGN_IN_REQUEST, signIn),
     takeLatest(AuthTypes.SIGN_OUT, signOut),
     takeLatest(AuthTypes.SIGN_UP_REQUEST, signUp),

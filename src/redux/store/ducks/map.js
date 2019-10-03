@@ -6,14 +6,17 @@ export const Types = {
 
   addCoordenadas: "ADD_COORDENADAS",
 
-  canAddCoordenadas: "CAN_ADD_COORD"
+  canAddCoordenadas: "CAN_ADD_COORD",
+
+  ADD_COORD_CABO: "@map/ADD_COORD_CABO"
 };
 
 /**
  * Reducer
  */
 let INITIAL_STATE = {
-  delimitacao: "default"
+  delimitacao: "default",
+  polyline: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -27,6 +30,9 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, coordenadas: action.payload.coordenadas };
     case Types.canAddCoordenadas:
       return { ...state, canAddCoordenadas: action.payload.canAddCoordenadas };
+
+    case Types.ADD_COORD_CABO:
+      return { ...state, polyline: action.payload.polyline };
     default:
       return state;
   }
@@ -55,5 +61,10 @@ export const Creators = {
     payload: {
       coordenadas: coord
     }
+  }),
+
+  addCoordCabo: polyline => ({
+    type: Types.addCoordCabo,
+    payload: { polyline }
   })
 };

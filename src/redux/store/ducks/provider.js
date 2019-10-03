@@ -18,6 +18,7 @@ const initialState = {
     visible: false,
     data: ""
   },
+  data: {}, // aqui tem os providers
   active: JSON.parse(localStorage.getItem("@gz-net-fs:provider")) || null
 };
 
