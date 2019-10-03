@@ -1,510 +1,134 @@
-import React, { useState } from "react";
-
-
+import React from "react";
 
 //Redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-//Creators que está em uso agora.
-import { Creators as ClienteCreators } from "../../../redux/store/ducks/all";
-
 //Creators que era para ser usado.
-//import { Creators as CliCreators } from "../../../redux/store/ducks/cliente";
+import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
+
+//EditComponents
+import InputField from "./Components/InputFieldComponent";
+import CommentDialog from "./Components/DialogComment";
 
 //UI-Components
-import {Modal,Row,Container,Col,Button,Form} from 'react-bootstrap';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import EditIcon from '@material-ui/icons/Edit';
-import Typography from '@material-ui/core/Typography';
-import DraftsIcon from '@material-ui/icons/Drafts';
+import { Modal, Card, ListGroup, Button } from "react-bootstrap";
+import { makeStyles } from "@material-ui/core/styles";
+import Account from "@material-ui/icons/AccountCircle";
 
-//API
-import api, { API } from "../../../services/api";
-
-
-const useStyles = makeStyles({
-  root: {
-    width: '100%',
-    paddingTop: '0px',
-    paddingBottom: '0px',
-    paddingLeft: '0px',
-    paddingRight: '0px',
+const useStyles = makeStyles(theme => ({
+  button: {
+    margin: theme.spacing(1)
   },
-});
+  input: {
+    display: "none"
+  }
+}));
 
 function ViewCliente(props) {
-  
-  const { viewClient } = props.redux.all;
-  
-  const { changeClienteData } = props;
-
-  const [splitterId, setSplitterId] = useState("");
-  
-  const [existsWire, setExistsWire] = useState(true);
- 
-  const [editar, setEditar] = useState(false);
-
-  const [show, setShow] = useState(false);
-  
-  const modelCpfClose = () => setShow(false);
- 
-  const modelCpfShow = () => setShow(true);
-
-  // visibility modal
-  const [modalVisible, setModalVisible] = useState([
-    {
-      nome: 'cpf',
-      visible: false
-    },
-    {
-      nome: 'nome',
-      visible: false
-    },
-    {
-      nome: 'velocidade',
-      visible: false
-    },
-    {
-      nome:'instalacao',
-      visible:false
-    },
-    {
-      nome:'pppoe',
-      visible:false
-    },
-  ])
-
-  function handleChangeModalEdition(name) {
-    let data = [];
-    data = modalVisible.map(modal => modal.nome === name ? {...modal, visible: !modal.visible } : modal );
-    setModalVisible(data);
-  }
+  const { hideClientModal } = props;
+  const { viewClient } = props.redux.client;
 
   const classes = useStyles();
+  const { data } = viewClient; //Informações do usuario.
 
   let {
-    nome,
-    usuario_pppoe,
+    provider_id,
+    name,
     cpf,
-    velocidade,
-    data_instalacao,
-    id
-  } = viewClient.data;
-
-  function handleHideModal() {
-    const { hideClientViewModal } = props;
-    hideClientViewModal();
-  }
-
-  function addCabo() {
-    let latitude = JSON.parse(props.redux.all.viewClient.data.coordenadas)
-      .latitude;
-    let longitude = JSON.parse(props.redux.all.viewClient.data.coordenadas)
-      .longitude;
-    let coord = [longitude, latitude];
-    // alert(coord);
-
-    const {
-      addCoordCabo,
-      setDelimitacaoMapa,
-      hideClientViewModal,
-      addClienteId
-    } = props;
-    setDelimitacaoMapa("cabo");
-    let arrayDeArray = new Array(coord);
-    // addCoordCabo(coord);
-    addClienteId(id);
-    addCoordCabo(arrayDeArray);
-    hideClientViewModal();
-  }
-
-  function handleCoordCabo() {
-    api
-      .get(`${API.GET_SAIDA_SP_BY_CLIENTE}/${id}`)
-      .then(result => {
-        const { data } = result;
-        console.log(data);
-        const { id, splitter_cod } = data;
-        setSplitterId(splitter_cod);
-
-        if (splitter_cod) {
-          alert("Este cliente já possui um drop em sua residência");
-        } else {
-          addCabo();
-        }
-      })
-      .catch(err => {
-        console.warn(err);
-      });
-  }
+    speed,
+    pppoe,
+    obs,
+    installation_date,
+    created_at
+  } = data;
 
   return (
-    
-    <Modal show={viewClient.visible} onHide={handleHideModal} >
+    <>
+      <CommentDialog />
 
-      <Modal.Header closeButton>
-          <h3 style={{marginTop:'10px',color:'#A4A4A4'}}>Informações do usuario</h3>
-      </Modal.Header>
+      <Modal size="lg" show={viewClient.visible} onHide={hideClientModal}>
+        <Modal.Header
+          style={{
+            justifyContent: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            backgroundColor: "#F7D358"
+          }}
+        >
+          <h6 style={{ fontSize: "10px" }}>23/08/2018</h6>
+          <Account
+            style={{
+              display: "block",
+              fontSize: "50px",
+              marginTop: "10px",
+              marginBottom: "10px"
+            }}
+          />
+          <Modal.Title style={{ color: "#585858" }}>
+            Lucas Henrique Paes De carvalho
+          </Modal.Title>
+        </Modal.Header>
 
-      <Modal.Body style={{paddingLeft:'0px',paddingRight:'0px',paddingBottom:'0px',paddingTop:'0px'}}>
+        <Modal.Body style={{ backgroundColor: "#FFFFFF" }}>
+          <Card style={{ width: "100%" }}>
+            <Card.Header
+              style={{ backgroundColor: "#D8D8D8", textAlign: "center" }}
+            >
+              Informações do cliente
+            </Card.Header>
+            <ListGroup variant="flush">
+              <ListGroup.Item>
+                <InputField name="Nome:" atributo="Lucas" tipo="text" />
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <InputField name="CPF:" atributo="111.111.111-11" tipe="text" />
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <InputField name="Plano:" atributo="1gb" tipo="text" />
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <InputField
+                  name="PPPOE:"
+                  atributo="00000000@teste"
+                  tipo="text"
+                />
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <InputField
+                  name="Data da instalação:"
+                  atributo=""
+                  tipo="date"
+                />
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <InputField
+                  name="Comentario:"
+                  atributo="Mora lá na casa "
+                  tipo="text"
+                />
+              </ListGroup.Item>
+            </ListGroup>
+          </Card>
+        </Modal.Body>
 
-        <Paper className={classes.root}>
-          
-          <MenuList style={{paddingTop: '0px', paddingBottom: '0px'}}>                
-                
-            <MenuItem 
-            onClick={() => handleChangeModalEdition('cpf')} 
-            style={{paddingRight: '0px',paddingLeft: '0px',paddingTop: '0px',paddingBottom: '0px'}}>
-
-              <Container>
-                  <Row>    
-                          
-                    <Col sm='4'>
-                            
-                      <Typography variant="inherit" style={{paddingLeft: '0px',paddingBottom: '0px',paddingRight: '0px',paddingTop: '0px',color:'#FFBF00'}} noWrap>
-                        <span>CPF:</span>
-                        <h6>{cpf}</h6>
-                      </Typography>
-                          
-                    </Col>                                          
-
-                    <Col sm={7}></Col>    
-
-                    <Col sm={1} style={{ marginTop: '15px' }}>                                           
-                          
-                      <EditIcon style={{width:'22px',minWidth: '22px', color:'#BDBDBD'}}>
-                        <DraftsIcon style={{width:'22px',minWidth: '22px'}}></DraftsIcon>
-                      </EditIcon>
-                          
-                    </Col> 
-                        
-                  </Row>
-                </Container>  
-            
-            </MenuItem>
-
-            <MenuItem onClick={() => handleChangeModalEdition('nome')} 
-                      style={{paddingRight: '0px',paddingLeft: '0px',paddingTop: '0px',paddingBottom: '0px'}}>
-
-              <Container>
-
-                <Row>    
-                          
-                  <Col sm='4'>
-                    
-                    <Typography variant="inherit" style={{paddingLeft: '0px',paddingBottom: '0px',paddingRight: '0px',paddingTop: '0px',color:'#FFBF00'}} noWrap>
-                      <span>Nome:</span>
-                      <h6>{nome}</h6>
-                    </Typography>
-                          
-                  </Col>                                          
-
-                  <Col sm={7}></Col>    
-
-                  <Col sm={1} style={{ marginTop: '15px' }}>                                           
-                    <EditIcon style={{width:'22px',minWidth: '22px', color:'#BDBDBD'}}>
-                      <DraftsIcon style={{width:'22px',minWidth: '22px'}}></DraftsIcon>
-                    </EditIcon>
-                  </Col> 
-                        
-                </Row>
-
-              </Container>
-
-            </MenuItem>
-
-            <MenuItem onClick={() => handleChangeModalEdition('velocidade')}  
-                      style={{paddingRight: '0px',paddingLeft: '0px',paddingTop: '0px',paddingBottom: '0px'}}>
-                
-                <Container>
-                  
-                  <Row>
-                    
-                    <Col sm='4'>
-                              
-                      <Typography variant="inherit" style={{paddingLeft: '0px',paddingBottom: '0px',paddingRight: '0px',paddingTop: '0px',color:'#FFBF00'}} noWrap>
-                        <span>Velocidade:</span>
-                        <h6>{velocidade}</h6>
-                      </Typography>
-                            
-                    </Col>                                          
-    
-                    <Col sm={7}></Col>    
-    
-                    <Col sm={1} style={{ marginTop: '15px' }}>                                           
-                      <EditIcon style={{width:'22px',minWidth: '22px', color:'#BDBDBD'}}>
-                        <DraftsIcon style={{width:'22px',minWidth: '22px'}}></DraftsIcon>
-                      </EditIcon>
-                    </Col> 
-                          
-                    </Row>
-
-                </Container>
-            
-            </MenuItem>
-
-            <MenuItem onClick={() => handleChangeModalEdition('instalacao')} style={{paddingRight: '0px',paddingLeft: '0px',paddingTop: '0px',paddingBottom: '0px'}}>
-              
-                <Container>
-
-                  <Row>
-                  
-                    <Col sm='4'>
-                      
-                      <Typography variant="inherit" 
-                                  style={{paddingLeft: '0px',
-                                          paddingBottom: '0px',
-                                          paddingRight: '0px',
-                                          paddingTop: '0px',
-                                          color:'#FFBF00'}} noWrap>
-                      
-                        <span>Data da instação:</span>
-                        <h6>{data_instalacao}</h6>
-                              
-                      </Typography>
-                            
-                    </Col>                                          
-    
-                    <Col sm={7}></Col>    
-    
-                    <Col sm={1} style={{ marginTop: '15px' }}>                                           
-                        <EditIcon style={{width:'22px',minWidth: '22px', color:'#BDBDBD'}}>
-                          <DraftsIcon style={{width:'22px',minWidth: '22px'}}></DraftsIcon>
-                        </EditIcon>
-                    </Col> 
-                        
-                  </Row>
-
-                </Container>
-
-            </MenuItem>
-
-            <MenuItem onClick={() => handleChangeModalEdition('pppoe')} style={{paddingRight: '0px',paddingLeft: '0px',paddingTop: '0px',paddingBottom: '0px'}}>
-                    
-                    <Container>
-                        
-                      <Row>    
-                          
-                        <Col sm='4'>
-                            
-                          <Typography variant="inherit" style={{paddingLeft: '0px',paddingBottom: '0px',paddingRight: '0px',paddingTop: '0px',color:'#FFBF00'}} noWrap>
-                              
-                              <span>PPPOE:</span>
-                              <h6>{usuario_pppoe}</h6>
-                            
-                          </Typography>
-                          
-                        </Col>                                          
-  
-                        <Col sm={7}></Col>    
-  
-                        <Col sm={1} style={{ marginTop: '15px' }}>                                           
-                          
-                        <EditIcon style={{width:'22px',minWidth: '22px', color:'#BDBDBD'}}>
-                          <DraftsIcon style={{width:'22px',minWidth: '22px'}}></DraftsIcon>
-                        </EditIcon>
-                          
-                        
-                        </Col> 
-                        
-                      </Row>
-                    
-                    </Container>
-                      
-                  </MenuItem>
-   
-          </MenuList>
-
-            <Container>
-
-                <Modal 
-                  show={modalVisible[0].visible} 
-                  onHide={() => handleChangeModalEdition('cpf')}
-                >
-
-                  <Modal.Header>
-                    <Modal.Title>Alterar CPF</Modal.Title>
-                  </Modal.Header>
-
-                  <Modal.Body>
-                          
-                    <Form.Group>
-                      <Form.Label>CPF:</Form.Label>
-                      <Form.Control type="text" value={cpf}/>
-                    </Form.Group>
-                        
-                  </Modal.Body>
-                        
-                  <Modal.Footer>
-                    <Button variant="secondary" onClick={() => handleChangeModalEdition('cpf')}>
-                      Cancelar
-                    </Button>
-                          
-                    <Button variant="primary" onClick={() => handleChangeModalEdition('cpf')}>
-                      Salvar
-                    </Button>                        
-                  </Modal.Footer>
-                      
-                </Modal>
-
-              </Container>
-
-              <Container>
-
-              <Modal  show={modalVisible[1].visible} 
-                      onHide={() => handleChangeModalEdition('nome')}>
-                      
-                <Modal.Header>
-                  <Modal.Title>Alterar nome</Modal.Title>
-                </Modal.Header>
-
-                <Modal.Body>
-                        
-                  <Form.Group>
-                    <Form.Label>Nome:</Form.Label>
-                    <Form.Control type="text" value={nome} onChange={ e => {
-                                                                      nome = e.target.value;
-                                                                      changeClienteData({
-                                                                        nome: e.target.value,
-                                                                        ...viewClient.data
-                                                                      });
-                    }}/>
-                  </Form.Group>
-                      
-                </Modal.Body>
-                      
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={() => handleChangeModalEdition('nome')}>
-                    Cancelar
-                  </Button>
-                        
-                  <Button variant="primary" onClick={() => handleChangeModalEdition('nome')}>
-                    Salvar
-                  </Button>
-                      
-                </Modal.Footer>
-                    
-              </Modal>
-            </Container>
-
-            <Container>
-                <Modal  show={modalVisible[2].visible} 
-                        onHide={() => handleChangeModalEdition('velocidade')}>
-                  <Modal.Header>
-                    <Modal.Title>Alterar velocidade</Modal.Title>
-                  </Modal.Header>
-
-                  <Modal.Body>
-                    <Form.Group>
-                      <Form.Label>velocidade:</Form.Label>
-                      <Form.Control type="text" value={velocidade}/>
-                    </Form.Group>
-                  </Modal.Body>
-                      
-                  <Modal.Footer>
-                    <Button variant="secondary" onClick={() => handleChangeModalEdition('velocidade')}>
-                      Cancelar
-                    </Button>
-                    
-                    <Button variant="primary" onClick={() => handleChangeModalEdition('velocidade')}>
-                      Salvar
-                    </Button>
-                  </Modal.Footer>
-
-                </Modal>
-              </Container>
-
-              <Container>
-                
-                <Modal show={modalVisible[3].visible} 
-                      onHide={() => handleChangeModalEdition('instalacao')}>
-                      
-                  <Modal.Header>
-                    <Modal.Title>Alterar data de instalação</Modal.Title>
-                  </Modal.Header>
-
-                  <Modal.Body>
-                        
-                    <Form.Group>
-                      <Form.Label>Data de instalaçao:</Form.Label>
-                      <Form.Control type="date" value={data_instalacao}/>
-                    </Form.Group>
-                      
-                  </Modal.Body>
-                      
-                  <Modal.Footer>
-                    <Button variant="secondary" onClick={() => handleChangeModalEdition('instalacao')}>
-                      Cancelar
-                    </Button>
-                    
-                    <Button variant="primary" onClick={() => handleChangeModalEdition('instalacao')}>
-                      Salvar
-                    </Button>
-                  </Modal.Footer>
-
-                </Modal>
-              </Container>
-
-
-              <Container>
-              <Modal  show={modalVisible[4].visible} 
-                      onHide={() => handleChangeModalEdition('pppoe')}>
-                      
-                        <Modal.Header>
-                          <Modal.Title>Alterar PPOE</Modal.Title>
-                        </Modal.Header>
-
-                        <Modal.Body>
-                          
-                          <Form.Group>
-                            <Form.Label>PPPOE</Form.Label>
-                            <Form.Control type="text" value={usuario_pppoe}/>
-                          </Form.Group>
-                        
-                        </Modal.Body>
-                        
-                        <Modal.Footer>
-                          <Button variant="secondary" onClick={() => handleChangeModalEdition('pppoe')}>
-                            Cancelar
-                          </Button>
-                          <Button variant="primary" onClick={() => handleChangeModalEdition('pppoe')}>
-                            Salvar
-                          </Button>
-                        </Modal.Footer>
-
-                      </Modal>
-                    </Container>
-        
-        </Paper>
-
-      <Modal.Footer>
-      <Button variant="warning" style={{color:'#F2F2F2'}} onClick={handleCoordCabo}>
-        Adicionar cabo
-      </Button>
-      </Modal.Footer>
-
-
-      </Modal.Body>
-   
-    </Modal> 
-          
-    
+        <Modal.Footer>
+          <Button variant="secondary">Adicionar Cabo</Button>
+          <Button variant="secondary">Fechar</Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
-
 }
 
 const mapStateToProps = state => ({
   redux: state
 });
 
-
 //Ações
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...ClienteCreators }, dispatch);
+  bindActionCreators({ ...clientCreators }, dispatch);
 
 export default connect(
   mapStateToProps,

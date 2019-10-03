@@ -9,10 +9,10 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 //Creators
-import { Creators as splitterCreators } from "../../../redux/store/ducks/splitter";
+// import { Creators as splitterCreators } from "../../../redux/store/ducks/splitter";
 
 function TableSplitter(props) {
-  const { modalNewSplitter } = props.redux.splitter;
+  // const { modalNewSplitter } = props.redux.splitter;
 
   return (
     <Container>
@@ -47,7 +47,6 @@ function TableSplitter(props) {
         variant="warning"
         size="lg"
         block
-        onClick={modalNewSplitter.visible}
       >
         Adicionar splitter
       </Button>
@@ -59,8 +58,7 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...splitterCreators }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default connect(
   mapStateToProps,
