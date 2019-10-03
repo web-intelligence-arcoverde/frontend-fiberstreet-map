@@ -21,6 +21,7 @@ import { Creators as userCreators } from "../../../redux/store/ducks/user";
 import { Creators as providerCreators } from "../../../redux/store/ducks/provider";
 import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
+import store from "../../../redux/store";
 
 //API
 import api, { API } from "../../../services/api";
@@ -184,15 +185,6 @@ class Map extends Component {
       });
     });
 
-    map.on("load", function(e) {
-      function handleCable(data) {}
-      socket.connect();
-      const cables = socket.subscribe("cables");
-      cables.on("message", data => {
-        console.log(data);
-      });
-    });
-
     document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
     var distanceContainer = document.getElementById("distance");
@@ -202,6 +194,7 @@ class Map extends Component {
     this.loadCto(map);
     this.loadClient(map);
     this.loadCable(map);
+    this.loadSocket(map);
 
     // eslint-disable-next-line react/no-direct-mutation-state
     this.state.map = map;
@@ -290,6 +283,8 @@ class Map extends Component {
       case "ceo":
         this.openNewModalCeo(coordinates);
         break;
+      case "cabo":
+        this.addCoordenadasCabo(coordinates);
       default:
         break;
     }
@@ -323,6 +318,120 @@ class Map extends Component {
     const { showModalNewProvider, setDelemitationMap } = this.props;
     showModalNewProvider();
     setDelemitationMap("default");
+  }
+
+  /** Adiciona coordenadas ao JSON de coordenadas de polyline contido no redux store
+   * mapa.polyline - REDUX
+   */
+  addCoordenadasCabo(coordenadas) {
+    const { addCoordCabo } = this.props;
+    const { polyline } = this.props.redux.map;
+    let newPolyline = [
+      ...polyline,
+      [coordenadas.longitude, coordenadas.latitude]
+    ];
+    addCoordCabo(newPolyline);
+    this.adicionarCoordenadasAoCabo(newPolyline);
+  }
+
+  adicionarCoordenadasAoCabo(coordinates) {
+    const { map } = this.state;
+    const { polyline } = this.props.redux.map;
+
+    map.getSource("linhas").setData({
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "LineString",
+        coordinates: polyline
+      }
+    });
+  }
+
+  resetarCoordenadasAoCabo() {
+    const { map } = this.state;
+    const datab = {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "LineString",
+        coordinates: [[-77.03202080476535, 38.91454768710531], [-78.03, 39.91]]
+      }
+    };
+    map.getSource("lollipop").setData({
+      type: "geojson",
+      data: datab
+    });
+  }
+
+  /**
+   * Método responsável por criar a polyline de adição atual
+   */
+  desenharPolylineAtual() {
+    const { map } = this.state;
+    const { polyline } = this.props.redux.all.mapa;
+    map.on("load", () => {
+      map.addSource("linhas", {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "LineString",
+            coordinates: polyline
+          }
+        }
+      });
+
+      map.addLayer({
+        id: "linhas",
+        type: "line",
+        source: "linhas",
+        layout: {
+          "line-join": "round",
+          "line-cap": "round"
+        },
+        paint: {
+          "line-color": "#13d",
+          "line-width": 4
+        }
+      });
+    });
+
+    this.setState({ map });
+  }
+
+  loadSocket(map) {
+    map.on("load", function() {
+      const { token } = store.getState().auth;
+      const { active: provider } = store.getState().provider;
+
+      socket.connect(token);
+
+      const clients = socket.subscribe(`clients:${provider.id}`);
+
+      clients.on("open", () => alert("DESGRAÇA"));
+      clients.on("open", () => console.log("DESGRAÇA"));
+
+      clients.on("newClient", async client => {
+        const data = await store.getState().client.clients;
+
+        let clientes = data;
+        clientes.push(client);
+        
+        await store.dispatch({
+          type: "@cliente/LOAD_SUCCESS",
+          payload: { clients: clientes }
+        });
+
+        const dados = await {
+          type: "FeatureCollection",
+          features: [...data, client]
+        };
+
+        await map.getSource("cliente").setData(dados);
+      });
+    });
   }
 
   loadCto(map) {
@@ -365,7 +474,15 @@ class Map extends Component {
           type: "FeatureCollection",
           features: data
         };
+
+        store.dispatch({
+          type: "@cliente/LOAD_SUCCESS",
+          payload: { clients: data }
+        });
+
         map.getSource("cliente").setData(dados);
+        // const source = map.getSource("cliente");
+        //console.log(JSON.stringify(source));
       });
       map.loadImage(
         require("../../../assets/images/clienteCom24x12.png"),

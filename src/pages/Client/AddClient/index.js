@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 //Creators {reducers}
-import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
+import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
 
 //UI-Components
 import { Modal, Button, Form } from "react-bootstrap";
@@ -21,10 +21,19 @@ function ClienteAddModal(props) {
   const [plano, setPlano] = useState("");
   const [address, setAddress] = useState("");
   const [PPPOE, setPPPOE] = useState("");
-  const [coordinates, setCoordinates] = useState("");
+
   const [observacao, setObservacao] = useState("");
 
-  async function handleClient(e) {
+  function handleHideModal() {
+    const { hideNewModalClient } = props;
+    hideNewModalClient();
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const { coordinates } = props.redux.client.viewNewClient;
+
+    const { createClientRequest } = props;
     const newClient = {
       name: name,
       coordinates: coordinates,
@@ -34,18 +43,7 @@ function ClienteAddModal(props) {
       address: address,
       obs: observacao
     };
-  }
-
-  function handleHideModal() {
-    const { hideNewModalClient } = props;
-    hideNewModalClient();
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    const { createClienteRequest } = props;
-    createClienteRequest();
+    createClientRequest(newClient);
     handleHideModal();
   }
 
@@ -137,6 +135,11 @@ function ClienteAddModal(props) {
               Salvar
             </Button>
           </Modal.Footer>
+          {/* <input
+            hidden
+            value={props.redux.viewNewClient.coordinates}
+            required
+          /> */}
         </Form>
       </Modal>
     </>
@@ -148,7 +151,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...clientCreators }, dispatch);
+  bindActionCreators(ClientActions, dispatch);
 
 export default connect(
   mapStateToProps,

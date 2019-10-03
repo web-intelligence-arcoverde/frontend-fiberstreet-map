@@ -9,9 +9,19 @@ export const Types = {
 
   CREATE_CLIENT_REQUEST: "@cliente/CREATE_REQUEST",
   CREATE_CLIENT_SUCCESS: "@cliente/CREATE_SUCCESS",
+  
+  LOAD_CLIENT_REQUEST: "@cliente/LOAD_REQUEST",
+  LOAD_CLIENT_SUCCESS: "@cliente/LOAD_SUCCESS",
+
+  UPDATE_CLIENT_REQUEST: "@cliente/UPDATE_REQUEST",
+  UPDATE_CLIENT_SUCCESS: "@cliente/UPDATE_SUCCESS",
+
+  DELETE_CLIENT_REQUEST: "@cliente/DELETE_REQUEST",
+  DELETE_CLIENT_SUCCESS: "@cliente/DELETE_SUCCESS",
 
   SHOWVIEWCLIENTCOMMENT: "client/SHOW_VIEW_CLIENT_COMMENT",
   HIVEVIEWCLIENTCOMMENT: "client/HIDE_VIEW_CLIENT_COMMENT"
+
 };
 
 const INITIAL_STATE = {
@@ -19,6 +29,9 @@ const INITIAL_STATE = {
     visible: false,
     coordinates: []
   },
+
+  clients: [],
+
   viewClient: {
     data: {},
     visible: false
@@ -27,6 +40,7 @@ const INITIAL_STATE = {
     // comment: {},
     visible: false
   }
+
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -48,6 +62,17 @@ export default function(state = INITIAL_STATE, action) {
           coordinates: {}
         }
       };
+
+
+    // GET
+    case Types.LOAD_CLIENT_SUCCESS:
+      return { ...state, clients: action.payload.clients };
+
+    // POST - PUT - DELETE
+    // Não iremos usar os métodos agora pois já iremos fazer a atualização pelo socket
+    case Types.CREATE_CLIENT_SUCCESS:
+      return { ...state, clients: action.payload.clients };
+
     case Types.SHOWVIEWCLIENTMODAL:
       return {
         ...state,
@@ -79,6 +104,7 @@ export default function(state = INITIAL_STATE, action) {
         }
       };
 
+
     default:
       return state;
   }
@@ -105,8 +131,37 @@ export const Creators = {
     payload: { client }
   }),
 
-  createClientSuccess: client => ({
+  createClientSuccess: clients => ({
     type: Types.CREATE_CLIENT_SUCCESS,
+    payload: { clients }
+  }),
+
+  loadClientRequest: () => ({
+    type: Types.LOAD_CLIENT_REQUEST
+  }),
+
+  loadClientSuccess: clients => ({
+    type: Types.LOAD_CLIENT_SUCCESS,
+    payload: { clients }
+  }),
+
+  updateClientRequest: (client, id) => ({
+    type: Types.UPDATE_CLIENT_REQUEST,
+    payload: { client, id }
+  }),
+
+  updateClientSuccess: client => ({
+    type: Types.UPDATE_CLIENT_SUCCESS,
+    payload: { client }
+  }),
+
+  deleteClientRequest: id => ({
+    type: Types.DELETE_CLIENT_REQUEST,
+    payload: { id }
+  }),
+
+  deleteClientSuccess: client => ({
+    type: Types.DELETE_CLIENT_SUCCESS,
     payload: { client }
   }),
 
