@@ -12,11 +12,19 @@ import AddNewClient from "../../Client/AddClient/index";
 
 import AddCeo from "../../CEO/AddCeo/index";
 
+import ViewClient from "../../Client/ViewClient/index";
+import ViewCeo from "../../CEO/ViewCeo/index";
+import ViewCto from "../../CTO/ViewCto/index";
+
 const TOKEN =
   "pk.eyJ1IjoidWxpbmt1eCIsImEiOiJjanczamF5cG8wNWt0NDltcnkydXQybGdjIn0.F1PkG0rCiHhf-jhnRMMdTg";
 
 const MainMap = props => (
   <div>
+    <ViewClient />
+    <ViewCeo />
+    <ViewCto />
+
     <AddCeo />
     <AddNewProvider />
     <AddNewClient />
