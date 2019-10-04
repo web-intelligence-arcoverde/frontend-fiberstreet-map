@@ -416,23 +416,20 @@ class Map extends Component {
       clients.on("newClient", async client => {
         const data = await store.getState().client.clients;
 
+        let clientes = data;
+        clientes.push(client);
+        
         await store.dispatch({
           type: "@cliente/LOAD_SUCCESS",
-          payload: { client: [...data, client] }
+          payload: { clients: clientes }
         });
 
         const dados = await {
           type: "FeatureCollection",
           features: [...data, client]
-          // features: [...data, client]
         };
 
-        // alert(JSON.stringify(client));
-        alert(JSON.stringify(dados));
         await map.getSource("cliente").setData(dados);
-        //await map.getSource("cliente").setData(dados);
-
-        console.log(client);
       });
     });
   }

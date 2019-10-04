@@ -15,7 +15,6 @@ import { Creators as ctosActions } from "../../../redux/store/ducks/ctos";
 import TableUsers from "./Components/TableUsers";
 import TableSplitter from "./Components/TableSplitter";
 import TableCable from "./Components/TableCable";
-import "./styles.css";
 
 //UI-Components
 import PropTypes from "prop-types";
@@ -122,67 +121,17 @@ function ViewCto(props) {
   }
 
   return (
-    <Modal show={ctos.viewCto.visible} onHide={handleHideModal}>
-      <Modal.Body className={classes.modalBody}>
-        <h2 style={{ color: "#FFBF00", textAlign: "center" }}>
-          Informações da CTO
-        </h2>
-        <Table responsive>
-          <thead>
-            <tr style={{ backgroundColor: "#fff", color: "#6E6E6E" }}>
-              <th>Nome</th>
-              <th>Endereço</th>
-              <th>Modelo</th>
-              <th>ID</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style={{ color: "#BDBDBD", backgroundColor: "#fff" }}>
-              <td>{ctos.nome}</td>
-              <td>{ctos.endereco}</td>
-              <td>{ctos.modelo}</td>
-              <td>{ctos.id}</td>
-              <td>
-                <Button variant="link" className={classes.buttonsActions}>
-                  <EditIcon></EditIcon>
-                </Button>
+    <Modal show={true} onHide={handleHideModal} size="lg">
+      <Modal.Header
+        style={{
+          justifyContent: "center",
+          backgroundColor: "#F7D358"
+        }}
+      >
+        <Modal.Title>Informações da caixa terminal optica</Modal.Title>
+      </Modal.Header>
 
-                <Button variant="link" className={classes.buttonsActions}>
-                  <DeleteIcon></DeleteIcon>
-                </Button>
-              </td>
-            </tr>
-          </tbody>
-        </Table>
-
-        <div className={classes.root}>
-          <AppBar position="static" className={classes.pallet}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              classes={{ indicator: classes.bigIndicator }}
-              variant="fullWidth"
-            >
-              <Tab icon={<PersonPinIcon />} {...a11yProps(0)} />
-              <Tab icon={<PersonPinIcon />} {...a11yProps(1)} />
-              <Tab icon={<PersonPinIcon />} {...a11yProps(2)} />
-            </Tabs>
-          </AppBar>
-
-          <TabPanel value={value} index={0}>
-            <TableUsers></TableUsers>
-          </TabPanel>
-
-          <TabPanel value={value} index={1}>
-            <TableSplitter></TableSplitter>
-          </TabPanel>
-
-          <TabPanel value={value} index={2}>
-            <TableCable></TableCable>
-          </TabPanel>
-        </div>
-      </Modal.Body>
+      <Modal.Body></Modal.Body>
     </Modal>
   );
 }
