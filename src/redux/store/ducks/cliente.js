@@ -9,7 +9,7 @@ export const Types = {
 
   CREATE_CLIENT_REQUEST: "@cliente/CREATE_REQUEST",
   CREATE_CLIENT_SUCCESS: "@cliente/CREATE_SUCCESS",
-  
+
   LOAD_CLIENT_REQUEST: "@cliente/LOAD_REQUEST",
   LOAD_CLIENT_SUCCESS: "@cliente/LOAD_SUCCESS",
 
@@ -21,7 +21,6 @@ export const Types = {
 
   SHOWVIEWCLIENTCOMMENT: "client/SHOW_VIEW_CLIENT_COMMENT",
   HIVEVIEWCLIENTCOMMENT: "client/HIDE_VIEW_CLIENT_COMMENT"
-
 };
 
 const INITIAL_STATE = {
@@ -40,7 +39,6 @@ const INITIAL_STATE = {
     // comment: {},
     visible: false
   }
-
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -63,7 +61,6 @@ export default function(state = INITIAL_STATE, action) {
         }
       };
 
-
     // GET
     case Types.LOAD_CLIENT_SUCCESS:
       return { ...state, clients: action.payload.clients };
@@ -85,7 +82,8 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         viewClient: {
-          visible: false
+          visible: false,
+          data: {}
         }
       };
     case Types.SHOWVIEWCLIENTCOMMENT:
@@ -103,7 +101,6 @@ export default function(state = INITIAL_STATE, action) {
           visible: false
         }
       };
-
 
     default:
       return state;
@@ -172,10 +169,11 @@ export const Creators = {
     }
   }),
 
-  hideClientModal: () => ({
+  hideClientViewModal: data => ({
     type: Types.HIDEVIEWCLIENTMODAL,
     payload: {
-      visible: false
+      visible: false,
+      data: ""
     }
   }),
   //comment como atributo[Ta bugado essa porra vai tomar no cu]

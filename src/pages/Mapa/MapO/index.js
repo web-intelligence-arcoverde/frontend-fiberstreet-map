@@ -242,18 +242,32 @@ class Map extends Component {
   };
 
   handleCtoClickTwoFactor(cto, longitude, latitude) {
-    if (this.props.redux.all.mapa.delimitacao === "cabo") {
+    if (this.props.redux.map.delimitacao === "cabo") {
       const { addCoordCabo, setDelimitacaoMapa, showAddCaboModal } = this.props;
-      const { polyline } = this.props.redux.all.mapa;
+      const { polyline } = this.props.redux.map.polyline;
       let newPolyline = [...polyline, [longitude, latitude]];
 
       addCoordCabo(newPolyline);
       showAddCaboModal(cto.id);
       setDelimitacaoMapa("default");
     } else {
-      const { showDataInViewModal } = this.props;
-      showDataInViewModal(cto);
+      const { showViewModalCto } = this.props;
+      showViewModalCto(cto);
     }
+  }
+
+  handleCtoCaboClick = e => {
+    let coordenadas = {
+      longitude: e.features[0].geometry.coordinates[0],
+      latitude: e.features[0].geometry.coordinates[1]
+    };
+    let cliente = JSON.parse(e.features[0].properties.data);
+    this.handleCtoCaboClickTwoFactor(cliente);
+  };
+
+  handleCtoCaboClickTwoFactor(cliente) {
+    const { showClientViewModal } = this.props;
+    showClientViewModal(cliente);
   }
 
   /*
@@ -261,9 +275,6 @@ class Map extends Component {
   */
   checkDelemitation(coordinates) {
     const { map } = this.props.redux;
-
-    console.log("Mostra a porra das props");
-    console.log(this.props);
 
     switch (map.delimitacao) {
       case "perfil":
@@ -418,7 +429,7 @@ class Map extends Component {
 
         let clientes = data;
         clientes.push(client);
-        
+
         await store.dispatch({
           type: "@cliente/LOAD_SUCCESS",
           payload: { clients: clientes }
@@ -582,9 +593,7 @@ class Map extends Component {
           center: center
         });
       },
-      err => {
-        console.log(err);
-      },
+      err => {},
       options
     );
   }

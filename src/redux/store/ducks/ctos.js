@@ -47,7 +47,7 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         viewCto: {
           visible: false,
-          data: ""
+          data: {}
         }
       };
     case Types.SHOWNEWMODALCTO:
@@ -98,16 +98,16 @@ export const Creators = {
   createCtoSuccess: cto => ({
     type: Types.CREATE_CTO_SUCCESS,
     payload: { cto }
+  }),
+  showViewModalCto: data => ({
+    type: Types.SHOWVIEWMODALCTO,
+    payload: {
+      visible: true,
+      data: data
+    }
+  }),
+  hideViewModalCto: () => ({
+    type: Types.HIDEVIEWMODALCTO,
+    payload: { visible: false }
   })
 };
-
-// showViewModal: data => ({
-//   type: Types.SHOWVIEWMODALCTO,
-//   payload: {
-//     data: data
-//   }
-// }),
-// hideViewModal: () => ({
-//   type: Types.HIDEVIEWMODALCTO,
-//   payload: {}
-// }),
