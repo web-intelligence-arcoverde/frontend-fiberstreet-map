@@ -15,7 +15,7 @@ import AddCeo from "../../CEO/AddCeo/index";
 import ViewClient from "../../Client/ViewClient/index";
 import ViewCeo from "../../CEO/ViewCeo/index";
 import ViewCto from "../../CTO/ViewCto/index";
-import TableTest from "../../View/Components/Table";
+import ModalTabList from "../../View/index";
 
 const TOKEN =
   "pk.eyJ1IjoidWxpbmt1eCIsImEiOiJjanczamF5cG8wNWt0NDltcnkydXQybGdjIn0.F1PkG0rCiHhf-jhnRMMdTg";
@@ -25,7 +25,7 @@ const MainMap = props => (
     <ViewClient />
     <ViewCeo />
     <ViewCto />
-    <TableTest />
+    <ModalTabList />
 
     <AddCeo />
     <AddNewProvider />

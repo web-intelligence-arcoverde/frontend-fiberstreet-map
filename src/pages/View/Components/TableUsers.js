@@ -2,34 +2,44 @@ import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import EditIcon from "@material-ui/icons/Edit";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TableSortLabel,
+  Toolbar,
+  Typography,
+  Paper,
+  Checkbox,
+  IconButton,
+  Tooltip
+} from "@material-ui/core/";
 import { Modal } from "react-bootstrap/";
 
-function createData(cpf, nome, plano, pppoe, port) {
-  return { cpf, nome, plano, pppoe, port };
+// redux
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
+//Creators redux
+import { Creators as clienteCreators } from "../../../redux/store/ducks/cliente";
+
+//Icons
+import { Delete, FilterList, Edit } from "@material-ui/icons/";
+
+function createData(cpf, nome, plano, pppoe) {
+  return { cpf, nome, plano, pppoe };
 }
 
 const rows = [
-  createData("1", "Lucas", 30, "@ppoe1", 1),
-  createData("2", "Henrique", 250, "@ppoe2", 2),
-  createData("3", "Paes", 160, "@ppoe3", 3),
-  createData("4", "Carvalho", 60, "@ppoe4", 4),
-  createData("5", "João", 160, "@ppoe5", 5)
+  createData("1", "Lucas", 30, "@ppoe1"),
+  createData("2", "Henrique", 250, "@ppoe2"),
+  createData("3", "Paes", 160, "@ppoe3"),
+  createData("4", "Carvalho", 60, "@ppoe4"),
+  createData("5", "João", 160, "@ppoe5")
 ];
 
 function desc(a, b, orderBy) {
@@ -61,9 +71,13 @@ function getSorting(order, orderBy) {
 const headCells = [
   { id: "cpf", numeric: false, disablePadding: true, label: "CPF" },
   { id: "nome", numeric: true, disablePadding: false, label: "Nome" },
-  { id: "plano", numeric: true, disablePadding: false, label: "Plano" },
-  { id: "pppoe", numeric: true, disablePadding: false, label: "PPPOE" },
-  { id: "port", numeric: true, disablePadding: false, label: "Porta" }
+  { id: "funcao", numeric: true, disablePadding: false, label: "Função" },
+  {
+    id: "obs",
+    numeric: true,
+    disablePadding: false,
+    label: "Observação"
+  }
 ];
 
 function EnhancedTableHead(props) {
@@ -181,19 +195,19 @@ const EnhancedTableToolbar = props => {
           <>
             <Tooltip title="Excluir">
               <IconButton aria-label="delete">
-                <DeleteIcon />
+                <Delete />
               </IconButton>
             </Tooltip>
             <Tooltip title="Excluir">
               <IconButton aria-label="delete">
-                <EditIcon />
+                <Edit />
               </IconButton>
             </Tooltip>
           </>
         ) : (
           <Tooltip title="Filter list">
             <IconButton aria-label="filter list">
-              <FilterListIcon />
+              <FilterList />
             </IconButton>
           </Tooltip>
         )}
@@ -234,7 +248,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function EnhancedTable() {
+function EnhancedTable(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -292,113 +306,108 @@ export default function EnhancedTable() {
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   return (
-    <Modal size="lg">
-      <Modal.Header
-        style={{
-          justifyContent: "center",
-          backgroundColor: "#F7D358"
-        }}
-      >
-        <Modal.Title>Clientes</Modal.Title>
-      </Modal.Header>
-
-      <Modal.Body>
-        <div className={classes.root2}>
-          <Paper className={classes.paper}>
-            <EnhancedTableToolbar
-              style={{ marginTop: "0px" }}
+    <div className={classes.root2}>
+      <Paper className={classes.paper}>
+        <EnhancedTableToolbar
+          style={{ marginTop: "0px" }}
+          numSelected={selected.length}
+        />
+        <div className={classes.tableWrapper}>
+          <Table
+            className={classes.table}
+            aria-labelledby="tableTitle"
+            size={"medium"}
+          >
+            <EnhancedTableHead
+              classes={classes}
               numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={rows.length}
             />
-            <div className={classes.tableWrapper}>
-              <Table
-                className={classes.table}
-                aria-labelledby="tableTitle"
-                size={"medium"}
-              >
-                <EnhancedTableHead
-                  classes={classes}
-                  numSelected={selected.length}
-                  order={order}
-                  orderBy={orderBy}
-                  onSelectAllClick={handleSelectAllClick}
-                  onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
-                />
-                <TableBody>
-                  {stableSort(rows, getSorting(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.cpf);
-                      const labelId = `enhanced-table-checkbox-${index}`;
+            <TableBody>
+              {stableSort(rows, getSorting(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.cpf);
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                      return (
-                        <TableRow
-                          hover
-                          onClick={event => handleClick(event, row.cpf)}
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={row.cpf}
-                          selected={isItemSelected}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              inputProps={{ "aria-labelledby": labelId }}
-                              style={{ color: "#FFBF00" }}
-                            />
-                          </TableCell>
+                  return (
+                    <TableRow
+                      hover
+                      onClick={event => handleClick(event, row.cpf)}
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.cpf}
+                      selected={isItemSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isItemSelected}
+                          inputProps={{ "aria-labelledby": labelId }}
+                          style={{ color: "#FFBF00" }}
+                        />
+                      </TableCell>
 
-                          <TableCell
-                            component="th"
-                            style={{ color: "#BDBDBD" }}
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                          >
-                            {row.cpf}
-                          </TableCell>
-                          <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                            {row.nome}
-                          </TableCell>
-                          <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                            {row.plano}
-                          </TableCell>
-                          <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                            {row.pppoe}
-                          </TableCell>
-                          <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                            {row.port}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 49 * emptyRows }}>
-                      <TableCell colSpan={6} />
+                      <TableCell
+                        component="th"
+                        style={{ color: "#BDBDBD" }}
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                      >
+                        {row.cpf}
+                      </TableCell>
+                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
+                        {row.nome}
+                      </TableCell>
+                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
+                        {row.plano}
+                      </TableCell>
+                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
+                        {row.pppoe}
+                      </TableCell>
                     </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              backIconButtonProps={{
-                "aria-label": "previous page"
-              }}
-              nextIconButtonProps={{
-                "aria-label": "next page"
-              }}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-          </Paper>
+                  );
+                })}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 49 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </div>
-      </Modal.Body>
-    </Modal>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          backIconButtonProps={{
+            "aria-label": "previous page"
+          }}
+          nextIconButtonProps={{
+            "aria-label": "next page"
+          }}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </div>
   );
 }
+
+const mapStateToProps = state => ({
+  redux: state
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EnhancedTable);

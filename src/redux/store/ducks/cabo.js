@@ -38,7 +38,7 @@ export default function(state = INITIAL, action) {
     case Types.HIDE_MODAL_NEW_CABO_RESERVA:
       return { ...state, newCabo: { isVisible: false } };
     case Types.ADD_CLIENTE_ID:
-      return { ...state, cliente_id: action.payload.cliente_id };
+      return { ...state, id: action.payload.id };
 
     default:
       return state;
