@@ -89,16 +89,16 @@ const useStyles = makeStyles(theme => ({
 
 function ViewCto(props) {
   const { ctos } = props.redux;
+  const { hideViewModalCto } = props;
 
-  const [value, setValue] = React.useState(0);
-  const classes = useStyles();
+  const { viewCto } = ctos; //Recuperando o estado inicial da CTO
+  const { data } = viewCto; //Recuperando os dados da CTO
 
-  function handleChange(event, newValue) {
-    setValue(newValue);
-  }
+  console.log("informações da cto");
+  console.log(data);
 
   return (
-    <Modal size="lg">
+    <Modal size="lg" show={viewCto.visible} onHide={hideViewModalCto}>
       <Modal.Header
         style={{
           justifyContent: "center",
@@ -124,7 +124,12 @@ function ViewCto(props) {
               </tr>
             </thead>
 
-            <tbody></tbody>
+            <tbody>
+              <td>{data.name}</td>
+              <td>{data.model}</td>
+              <td>{data.address}</td>
+              <td>{data.obs}</td>
+            </tbody>
           </Table>
         </Container>
 
@@ -139,7 +144,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...ctosActions }, dispatch);
+  bindActionCreators(ctosActions, dispatch);
 
 export default connect(
   mapStateToProps,
