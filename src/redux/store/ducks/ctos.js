@@ -14,6 +14,9 @@ export const Types = {
   CREATE_CTO_REQUEST: "@cto/CREATE_REQUEST",
   CREATE_CTO_SUCCESS: "@cto/CREATE_SUCCESS",
 
+  LOAD_CTO_GEOJSON_REQUEST: "@cto/LOAD_GJ_REQUEST",
+  LOAD_CTO_GEOJSON_SUCCESS: "@cto/LOAD_GJ_SUCCESS",
+
   // Loading
   LOAD_SUCCESS: "@cto/LOAD_SUCCESS"
 };
@@ -23,6 +26,10 @@ const INITIAL_STATE = {
   viewCto: {
     visible: false,
     data: ""
+  },
+  ctos: [],
+  geojson: {
+    ctos: []
   },
   viewNewCto: {
     visible: false,
@@ -53,6 +60,10 @@ export default function(state = INITIAL_STATE, action) {
           data: {}
         }
       };
+    case Types.LOAD_CTO_GEOJSON_SUCCESS:
+      return { ...state, geojson: { ctos: action.payload.ctos } };
+    case Types.LOAD_CTO_GEOJSON_REQUEST:
+      return { ...state, geojson: { ctos: action.payload.ctos } };
     case Types.SHOWNEWMODALCTO:
       return {
         ...state,
@@ -110,8 +121,9 @@ export const Creators = {
   }),
 
   loadCtoSuccess: ctos => ({
-  type: Types.LOAD_SUCCESS,
-  payload: { ctos },
+    type: Types.LOAD_SUCCESS,
+    payload: { ctos }
+  }),
 
   showViewModalCto: data => ({
     type: Types.SHOWVIEWMODALCTO,
@@ -123,5 +135,13 @@ export const Creators = {
   hideViewModalCto: () => ({
     type: Types.HIDEVIEWMODALCTO,
     payload: { visible: false }
+  }),
+  loadCtoGeoJsonRequest: () => ({
+    type: Types.LOAD_CTO_GEOJSON_REQUEST
+  }),
+
+  loadCtoGeoJsonSuccess: ctos => ({
+    type: Types.LOAD_CTO_GEOJSON_SUCCESS,
+    payload: { ctos }
   })
 };
