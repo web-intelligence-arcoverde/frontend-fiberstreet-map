@@ -13,6 +13,9 @@ export const Types = {
   LOAD_CLIENT_REQUEST: "@cliente/LOAD_REQUEST",
   LOAD_CLIENT_SUCCESS: "@cliente/LOAD_SUCCESS",
 
+  LOAD_CLIENT_GEOJSON_REQUEST: "@cliente/LOAD_GJ_REQUEST",
+  LOAD_CLIENT_GEOJSON_SUCCESS: "@cliente/LOAD_GJ_SUCCESS",
+
   UPDATE_CLIENT_REQUEST: "@cliente/UPDATE_REQUEST",
   UPDATE_CLIENT_SUCCESS: "@cliente/UPDATE_SUCCESS",
 
@@ -30,6 +33,12 @@ const INITIAL_STATE = {
   },
 
   clients: [],
+  geojson: {
+    clients: []
+  },
+  data: {
+    clients: []
+  },
 
   viewClient: {
     data: {},
@@ -65,8 +74,13 @@ export default function(state = INITIAL_STATE, action) {
     case Types.LOAD_CLIENT_SUCCESS:
       return { ...state, clients: action.payload.clients };
 
+    //GEOJSON
+    case Types.LOAD_CLIENT_GEOJSON_SUCCESS:
+      return { ...state, geojson: { clients: action.payload.clients } };
+    case Types.LOAD_CLIENT_GEOJSON_REQUEST:
+      return { ...state, geojson: { clients: action.payload.clients } };
+
     // POST - PUT - DELETE
-    // Não iremos usar os métodos agora pois já iremos fazer a atualização pelo socket
     case Types.CREATE_CLIENT_SUCCESS:
       return { ...state, clients: action.payload.clients };
 
@@ -139,6 +153,15 @@ export const Creators = {
 
   loadClientSuccess: clients => ({
     type: Types.LOAD_CLIENT_SUCCESS,
+    payload: { clients }
+  }),
+
+  loadClientGeoJsonRequest: () => ({
+    type: Types.LOAD_CLIENT_GEOJSON_REQUEST
+  }),
+
+  loadClientGeoJsonSuccess: clients => ({
+    type: Types.LOAD_CLIENT_GEOJSON_SUCCESS,
     payload: { clients }
   }),
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
@@ -20,15 +20,27 @@ import {
 } from "@material-ui/core/";
 import { Modal } from "react-bootstrap/";
 
-//Icons
-import { Delete, FilterList, Edit } from "@material-ui/icons/";
-
 // redux
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 //Creators redux
 import { Creators as clienteCreators } from "../../../redux/store/ducks/cliente";
+
+//Icons
+import { Delete, FilterList, Edit } from "@material-ui/icons/";
+
+function createData(cpf, nome, plano, pppoe) {
+  return { cpf, nome, plano, pppoe };
+}
+
+// const rows = [
+//   createData("1", "Lucas", 30, "@ppoe1"),
+//   createData("2", "Henrique", 250, "@ppoe2"),
+//   createData("3", "Paes", 160, "@ppoe3"),
+//   createData("4", "Carvalho", 60, "@ppoe4"),
+//   createData("5", "João", 160, "@ppoe5")
+// ];
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -56,6 +68,18 @@ function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
+const headCells = [
+  { id: "cpf", numeric: false, disablePadding: true, label: "CPF" },
+  { id: "nome", numeric: true, disablePadding: false, label: "Nome" },
+  { id: "funcao", numeric: true, disablePadding: false, label: "Função" },
+  {
+    id: "obs",
+    numeric: true,
+    disablePadding: false,
+    label: "Observação"
+  }
+];
+
 function EnhancedTableHead(props) {
   const {
     classes,
@@ -69,14 +93,6 @@ function EnhancedTableHead(props) {
   const createSortHandler = property => event => {
     onRequestSort(event, property);
   };
-
-  const headCells = [
-    { id: "cpf", numeric: false, disablePadding: true, label: "CPF" },
-    { id: "name", numeric: true, disablePadding: false, label: "Nome" },
-    { id: "speed", numeric: true, disablePadding: false, label: "Plano" },
-    { id: "pppoe", numeric: true, disablePadding: false, label: "PPPOE" },
-    { id: "port", numeric: true, disablePadding: false, label: "Porta" }
-  ];
 
   return (
     <TableHead>
@@ -240,9 +256,18 @@ function EnhancedTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const clientes = props.redux.client.clients;
+  // props.redux.clients.data.clients
 
-  console.log(clientes);
+  useEffect(() => {
+    const { loadClientRequest } = props;
+    loadClientRequest();
+  });
+
+  useEffect(() => {
+    console.log(props.redux.client.data);
+  });
+  console.log("aqui essa porra");
+  console.log(props);
 
   function handleRequestSort(event, property) {
     const isDesc = orderBy === property && order === "desc";
@@ -252,7 +277,7 @@ function EnhancedTable(props) {
 
   function handleSelectAllClick(event) {
     if (event.target.checked) {
-      const newSelecteds = clientes.map(n => n.cpf);
+      const newSelecteds = props.redux.client.data.clients.map(n => n.cpf);
       setSelected(newSelecteds);
       return;
     }
@@ -291,7 +316,11 @@ function EnhancedTable(props) {
   const isSelected = name => selected.indexOf(name) !== -1;
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, clientes.length - page * rowsPerPage);
+    rowsPerPage -
+    Math.min(
+      rowsPerPage,
+      props.redux.client.data.clients.length - page * rowsPerPage
+    );
 
   return (
     <div className={classes.root2}>
@@ -313,57 +342,58 @@ function EnhancedTable(props) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={clientes.length}
+              rowCount={props.redux.client.data.clients.length}
             />
             <TableBody>
-              {stableSort(clientes, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.cpf);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+              {props.redux.client.data.clients &&
+                stableSort(
+                  props.redux.client.data.clients,
+                  getSorting(order, orderBy)
+                )
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.cpf);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={event => handleClick(event, row.cpf)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.cpf}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                          style={{ color: "#FFBF00" }}
-                        />
-                      </TableCell>
-
-                      <TableCell
-                        component="th"
-                        style={{ color: "#BDBDBD" }}
-                        id={labelId}
-                        scope="row"
-                        padding="none"
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event => handleClick(event, row.cpf)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.cpf}
+                        selected={isItemSelected}
                       >
-                        {row.cpf}
-                      </TableCell>
-                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                        {row.nome}
-                      </TableCell>
-                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                        {row.plano}
-                      </TableCell>
-                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                        {row.pppoe}
-                      </TableCell>
-                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                        {row.port}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isItemSelected}
+                            inputProps={{ "aria-labelledby": labelId }}
+                            style={{ color: "#FFBF00" }}
+                          />
+                        </TableCell>
+
+                        <TableCell
+                          component="th"
+                          style={{ color: "#BDBDBD" }}
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                        >
+                          {row.cpf}
+                        </TableCell>
+                        <TableCell align="right" style={{ color: "#BDBDBD" }}>
+                          {row.nome}
+                        </TableCell>
+                        <TableCell align="right" style={{ color: "#BDBDBD" }}>
+                          {row.plano}
+                        </TableCell>
+                        <TableCell align="right" style={{ color: "#BDBDBD" }}>
+                          {row.pppoe}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 49 * emptyRows }}>
                   <TableCell colSpan={6} />
@@ -375,7 +405,7 @@ function EnhancedTable(props) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={clientes.length}
+          count={props.redux.client.data.clients.length}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{
@@ -397,7 +427,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...clienteCreators }, dispatch);
+  bindActionCreators(clienteCreators, dispatch);
 
 export default connect(
   mapStateToProps,

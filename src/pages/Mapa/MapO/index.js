@@ -423,13 +423,13 @@ class Map extends Component {
 
     map.on("load", function() {
       clients.on("newClient", async client => {
-        const data = await store.getState().client.clients;
+        const data = await store.getState().client.geojson.clients;
 
         let clientes = data;
         clientes.push(client);
 
         await store.dispatch({
-          type: "@cliente/LOAD_SUCCESS",
+          type: "@cliente/LOAD_GJ_SUCCESS",
           payload: { clients: clientes }
         });
 
@@ -448,7 +448,7 @@ class Map extends Component {
         ctos.push(cto);
 
         await store.dispatch({
-          type: "@cto/LOAD_SUCCESS",
+          type: "@cto/LOAD_GJ_SUCCESS",
           payload: { ctos }
         });
 
@@ -484,7 +484,7 @@ class Map extends Component {
           features: data
         };
         store.dispatch({
-          type: "@cto/LOAD_SUCCESS",
+          type: "@cto/LOAD_GJ_SUCCESS",
           payload: { ctos: data }
         });
         map.getSource("cto").setData(dados);
@@ -513,7 +513,7 @@ class Map extends Component {
   loadClient(map) {
     map.on("load", function() {
       api.get(API.GET_CLIENTE_GEOJSON).then(result => {
-        console.log("resultado");
+        console.log("DESGRAÇAAAAAAAA");
         console.log(result);
 
         const { data } = result;
@@ -540,7 +540,7 @@ class Map extends Component {
         };
 
         store.dispatch({
-          type: "@cliente/LOAD_SUCCESS",
+          type: "@cliente/LOAD_GJ_SUCCESS",
           payload: { clients: data }
         });
 
