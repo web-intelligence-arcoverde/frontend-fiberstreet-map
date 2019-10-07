@@ -29,17 +29,16 @@ function AddNewCto(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    
+
     const newCto = {
       name: name,
-      coordinates: JSON.stringify(props.redux.ctos.viewNewCto.coordinates),
+      coordinates: props.redux.ctos.viewNewCto.coordinates,
       model: model,
       address: address,
       obs: observacao
     };
     const { createCtoRequest } = props;
     createCtoRequest(newCto);
-    
   }
 
   return (

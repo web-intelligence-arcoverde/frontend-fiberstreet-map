@@ -12,7 +12,10 @@ export const Types = {
 
   // Creation { saving data }
   CREATE_CTO_REQUEST: "@cto/CREATE_REQUEST",
-  CREATE_CTO_SUCCESS: "@cto/CREATE_SUCCESS"
+  CREATE_CTO_SUCCESS: "@cto/CREATE_SUCCESS",
+
+  // Loading
+  LOAD_SUCCESS: "@cto/LOAD_SUCCESS"
 };
 
 const INITIAL_STATE = {
@@ -66,6 +69,12 @@ export default function(state = INITIAL_STATE, action) {
           coordinates: []
         }
       };
+
+    case Types.LOAD_SUCCESS:
+      return {
+        ...state,
+        ctos: action.payload.ctos
+      };
     default:
       return state;
   }
@@ -99,6 +108,11 @@ export const Creators = {
     type: Types.CREATE_CTO_SUCCESS,
     payload: { cto }
   }),
+
+  loadCtoSuccess: ctos => ({
+  type: Types.LOAD_SUCCESS,
+  payload: { ctos },
+
   showViewModalCto: data => ({
     type: Types.SHOWVIEWMODALCTO,
     payload: {

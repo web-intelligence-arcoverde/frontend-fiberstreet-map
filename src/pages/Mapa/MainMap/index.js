@@ -35,7 +35,7 @@ const MainMap = props => (
     <MapO
       container="map"
       // eslint-disable-next-line react/style-prop-object
-      style="mapbox://styles/mapbox/light-v9"
+      style="mapbox://styles/mapbox/streets-v11"
       zoom={14}
       classNameStyle="mapContainer"
       accessToken={TOKEN}

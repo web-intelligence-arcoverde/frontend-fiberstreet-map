@@ -16,12 +16,12 @@ api.interceptors.request.use(config => {
 
   if (token) {
     headers.Authorization = `Bearer ${token}`;
+    headers.PROVIDER = "gz-net-provider";
   }
 
   // if (provider) {
   //   headers.PROVIDER = provider.slug;
   // }
-  headers.PROVIDER = "gz-net-provider";
 
   return { ...config, headers };
 });

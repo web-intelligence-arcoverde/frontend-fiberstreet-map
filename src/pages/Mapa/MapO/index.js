@@ -413,17 +413,15 @@ class Map extends Component {
   }
 
   loadSocket(map) {
+    const { token } = store.getState().auth;
+    const { active: provider } = store.getState().provider;
+
+    socket.connect(token);
+    const clients = socket.subscribe(`clients:${provider.id}`);
+    const ctos = socket.subscribe(`ctos:${provider.id}`);
+    const ceos = socket.subscribe(`ceos:${provider.id}`);
+
     map.on("load", function() {
-      const { token } = store.getState().auth;
-      const { active: provider } = store.getState().provider;
-
-      socket.connect(token);
-
-      const clients = socket.subscribe(`clients:${provider.id}`);
-
-      clients.on("open", () => alert("DESGRAÇA"));
-      clients.on("open", () => console.log("DESGRAÇA"));
-
       clients.on("newClient", async client => {
         const data = await store.getState().client.clients;
 
@@ -439,9 +437,40 @@ class Map extends Component {
           type: "FeatureCollection",
           features: [...data, client]
         };
-
+        console.log(dados);
         await map.getSource("cliente").setData(dados);
       });
+
+      ctos.on("newCto", async cto => {
+        const data = await store.getState().ctos.ctos;
+
+        let ctos = data;
+        ctos.push(cto);
+
+        await store.dispatch({
+          type: "@cto/LOAD_SUCCESS",
+          payload: { ctos }
+        });
+
+        const dados = await {
+          type: "FeatureCollection",
+          features: [...data, cto]
+        };
+        console.log(dados);
+        await map.getSource("cto").setData(dados);
+      });
+
+      // clients.on("deleteClient", async clientId => {
+      //   const data = await store.getState().client.clients;
+
+      //   let clientes = data;
+      //   let newClients = [];
+      //   clientes.forEach(client => {
+      //     if (client.properties.data.id === clientId) {
+      //       newClients.push(client);
+      //     }
+      //   });
+      // });
     });
   }
 
@@ -454,6 +483,10 @@ class Map extends Component {
           type: "FeatureCollection",
           features: data
         };
+        store.dispatch({
+          type: "@cto/LOAD_SUCCESS",
+          payload: { ctos: data }
+        });
         map.getSource("cto").setData(dados);
       });
 
@@ -480,7 +513,27 @@ class Map extends Component {
   loadClient(map) {
     map.on("load", function() {
       api.get(API.GET_CLIENTE_GEOJSON).then(result => {
+        console.log("resultado");
+        console.log(result);
+
         const { data } = result;
+
+        let clientsActive = [];
+        data.forEach(client => {
+          if (client.properties.data.status === "active") {
+            clientsActive.push(client);
+          }
+        });
+        let clientsInactive = [];
+        data.forEach(client => {
+          if (client.properties.data.status !== "active") {
+            clientsInactive.push(client);
+          }
+        });
+        console.log("Clientes ativos");
+        console.log(clientsActive);
+        console.log("Inativos");
+        console.log(clientsInactive);
         const dados = {
           type: "FeatureCollection",
           features: data
@@ -492,8 +545,6 @@ class Map extends Component {
         });
 
         map.getSource("cliente").setData(dados);
-        // const source = map.getSource("cliente");
-        //console.log(JSON.stringify(source));
       });
       map.loadImage(
         require("../../../assets/images/clienteCom24x12.png"),
