@@ -13,9 +13,9 @@ export function* getProviders() {
 
 export function* init() {
   try {
-    const response = yield call(api.get, "providers");
+    //const response = yield call(api.get, "providers");
     // alert(JSON.stringify(response.data[0]));
-    yield put(ProvidersActions.selectProvider(response.data[0]));
+    //yield put(ProvidersActions.selectProvider(response.data[0]));
   } catch (err) {
     // {
     //   "id":1,"name":"GZ Net Provider",
