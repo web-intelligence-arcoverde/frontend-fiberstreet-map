@@ -1,4 +1,4 @@
-import { call, put } from "redux-saga/effects";
+import { call, put, select } from "redux-saga/effects";
 
 import api from "../../../services/api";
 
@@ -13,9 +13,15 @@ export function* getProviders() {
 
 export function* init() {
   try {
-    //const response = yield call(api.get, "providers");
-    // alert(JSON.stringify(response.data[0]));
-    //yield put(ProvidersActions.selectProvider(response.data[0]));
+    const signedIn = yield select(state => state.auth.signedIn);
+    // Se o método acima não der certo, tenta obter o token do localStorage para fazer a verificação
+    if (signedIn) {
+      const response = yield call(api.get, "providers");
+      yield put(ProvidersActions.getProvidersSuccess(response.data));
+      yield put(ProvidersActions.selectProvider(response.data[0]));
+    }
+
+    //alert(JSON.stringify(response.data[0]));
   } catch (err) {
     // {
     //   "id":1,"name":"GZ Net Provider",

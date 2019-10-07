@@ -4,6 +4,7 @@ import api from "../../../services/api";
 import { actions as toastrActions } from "react-redux-toastr";
 
 import AuthActions from "../ducks/auth";
+import { Creators as ProvidersActions } from "../ducks/provider";
 
 export function* signIn({ email, password }) {
   try {
@@ -12,6 +13,11 @@ export function* signIn({ email, password }) {
     localStorage.setItem("@Omni:token", response.data.token);
 
     yield put(AuthActions.signInSuccess(response.data.token));
+
+    const res = yield call(api.get, "providers");
+    yield put(ProvidersActions.getProvidersSuccess(res.data));
+    yield put(ProvidersActions.selectProvider(res.data[0]));
+
     yield put(push("/map"));
   } catch (err) {
     yield put(

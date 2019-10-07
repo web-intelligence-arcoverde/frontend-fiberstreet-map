@@ -6,22 +6,21 @@ const server = "http://45.224.40.252";
 
 /** This API will connect to NodeJS Server */
 const api = axios.create({
-  baseURL: server
+  baseURL: local
 });
 
 api.interceptors.request.use(config => {
   const { token } = store.getState().auth;
-  const { ative: provider } = store.getState().provider;
+  const { active: provider } = store.getState().provider;
   const headers = { ...config.headers };
 
   if (token) {
     headers.Authorization = `Bearer ${token}`;
-    headers.PROVIDER = "gz-net-provider";
   }
 
-  // if (provider) {
-  //   headers.PROVIDER = provider.slug;
-  // }
+  if (provider) {
+    headers.PROVIDER = provider.slug;
+  }
 
   return { ...config, headers };
 });

@@ -26,7 +26,6 @@ export const INITIAL_STATE = Immutable({
 /* Reducers */
 
 export const success = (state, { token }) => {
-  console.log(token);
   return state.merge({ signedIn: true, token });
 };
 export const logout = state => state.merge({ signedIn: false, token: null });

@@ -1,14 +1,5 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  display: flex;
-  align-items: center,
-  justify-content: center,
-  border-radius: 4px;
-  padding: 20px;
-  height: 100vh;
-`;
-
 export const Button = styled.button`
   color: #fff;
   font-size: 16px;
@@ -79,5 +70,3 @@ export const CoordForm = styled.div`
   display: flex;
   flex-direction: row;
 `;
-
-// #fc6963;
