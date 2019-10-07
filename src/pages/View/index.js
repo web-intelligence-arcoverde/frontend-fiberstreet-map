@@ -68,7 +68,7 @@ export default function FullWidthTabs() {
   };
 
   return (
-    <Modal size="lg" show={true}>
+    <Modal size="lg" show={false}>
       <Modal.Body>
         <div className={classes.root}>
           <AppBar position="static" color="default">

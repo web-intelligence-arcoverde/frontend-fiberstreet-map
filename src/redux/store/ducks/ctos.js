@@ -132,6 +132,7 @@ export const Creators = {
       data: data
     }
   }),
+
   hideViewModalCto: () => ({
     type: Types.HIDEVIEWMODALCTO,
     payload: { visible: false }

@@ -7,12 +7,12 @@ export class SocketConnection {
     this.ws.connect();
 
     this.ws.on("open", () => {
-      console.log("Connection initialized");
+      // console.log("Connection initialized");
       // alert("desgraça");
     });
 
     this.ws.on("close", () => {
-      console.log("Connection closed");
+      // console.log("Connection closed");
     });
     // this.subscribeCto();
     // this.subscribeCables();
@@ -60,14 +60,14 @@ export class SocketConnection {
       const result = this.ws.subscribe(channel);
 
       result.on("message", message => {
-        console.log("Incoming", message);
+        // console.log("Incoming", message);
         try {
           handler(message);
         } catch (err) {}
       });
 
       result.on("error", error => {
-        console.error(error);
+        // console.error(error);
       });
 
       return result;
