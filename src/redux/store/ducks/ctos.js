@@ -12,7 +12,10 @@ export const Types = {
 
   // Creation { saving data }
   CREATE_CTO_REQUEST: "@cto/CREATE_REQUEST",
-  CREATE_CTO_SUCCESS: "@cto/CREATE_SUCCESS"
+  CREATE_CTO_SUCCESS: "@cto/CREATE_SUCCESS",
+
+  // Loading
+  LOAD_SUCCESS: "@cto/LOAD_SUCCESS"
 };
 
 const INITIAL_STATE = {
@@ -47,7 +50,7 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         viewCto: {
           visible: false,
-          data: ""
+          data: {}
         }
       };
     case Types.SHOWNEWMODALCTO:
@@ -65,6 +68,12 @@ export default function(state = INITIAL_STATE, action) {
           visible: false,
           coordinates: []
         }
+      };
+
+    case Types.LOAD_SUCCESS:
+      return {
+        ...state,
+        ctos: action.payload.ctos
       };
     default:
       return state;
@@ -98,16 +107,21 @@ export const Creators = {
   createCtoSuccess: cto => ({
     type: Types.CREATE_CTO_SUCCESS,
     payload: { cto }
+  }),
+
+  loadCtoSuccess: ctos => ({
+  type: Types.LOAD_SUCCESS,
+  payload: { ctos },
+
+  showViewModalCto: data => ({
+    type: Types.SHOWVIEWMODALCTO,
+    payload: {
+      visible: true,
+      data: data
+    }
+  }),
+  hideViewModalCto: () => ({
+    type: Types.HIDEVIEWMODALCTO,
+    payload: { visible: false }
   })
 };
-
-// showViewModal: data => ({
-//   type: Types.SHOWVIEWMODALCTO,
-//   payload: {
-//     data: data
-//   }
-// }),
-// hideViewModal: () => ({
-//   type: Types.HIDEVIEWMODALCTO,
-//   payload: {}
-// }),

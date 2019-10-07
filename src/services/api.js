@@ -1,14 +1,12 @@
 import axios from "axios";
 import store from "../redux/store";
 
-// const serverOne = "http://localhost:3334";
-// const serverTwo = "http://localhost:3001";
 const local = "http://192.168.0.143:3333";
 const server = "http://45.224.40.252";
 
 /** This API will connect to NodeJS Server */
 const api = axios.create({
-  baseURL: local
+  baseURL: server
 });
 
 api.interceptors.request.use(config => {
@@ -18,12 +16,12 @@ api.interceptors.request.use(config => {
 
   if (token) {
     headers.Authorization = `Bearer ${token}`;
+    headers.PROVIDER = "gz-net-provider";
   }
 
   // if (provider) {
   //   headers.PROVIDER = provider.slug;
   // }
-  headers.PROVIDER = "gz-net-provider";
 
   return { ...config, headers };
 });

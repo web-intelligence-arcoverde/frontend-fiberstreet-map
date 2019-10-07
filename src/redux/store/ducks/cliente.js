@@ -82,7 +82,8 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         viewClient: {
-          visible: false
+          visible: false,
+          data: {}
         }
       };
     case Types.SHOWVIEWCLIENTCOMMENT:
@@ -168,10 +169,11 @@ export const Creators = {
     }
   }),
 
-  hideClientModal: () => ({
+  hideClientViewModal: data => ({
     type: Types.HIDEVIEWCLIENTMODAL,
     payload: {
-      visible: false
+      visible: false,
+      data: ""
     }
   }),
   //comment como atributo[Ta bugado essa porra vai tomar no cu]

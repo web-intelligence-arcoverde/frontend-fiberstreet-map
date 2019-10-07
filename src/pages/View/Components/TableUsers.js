@@ -2,32 +2,44 @@ import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
 
-function createData(cpf, nome, plano, pppoe, port) {
-  return { cpf, nome, plano, pppoe, port };
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TableSortLabel,
+  Toolbar,
+  Typography,
+  Paper,
+  Checkbox,
+  IconButton,
+  Tooltip
+} from "@material-ui/core/";
+import { Modal } from "react-bootstrap/";
+
+// redux
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
+//Creators redux
+import { Creators as clienteCreators } from "../../../redux/store/ducks/cliente";
+
+//Icons
+import { Delete, FilterList, Edit } from "@material-ui/icons/";
+
+function createData(cpf, nome, plano, pppoe) {
+  return { cpf, nome, plano, pppoe };
 }
 
 const rows = [
-  createData("1", "Lucas", 30, "@ppoe1", 1),
-  createData("2", "Henrique", 250, "@ppoe2", 2),
-  createData("3", "Paes", 160, "@ppoe3", 3),
-  createData("4", "Carvalho", 60, "@ppoe4", 4),
-  createData("5", "João", 160, "@ppoe5", 5)
+  createData("1", "Lucas", 30, "@ppoe1"),
+  createData("2", "Henrique", 250, "@ppoe2"),
+  createData("3", "Paes", 160, "@ppoe3"),
+  createData("4", "Carvalho", 60, "@ppoe4"),
+  createData("5", "João", 160, "@ppoe5")
 ];
 
 function desc(a, b, orderBy) {
@@ -59,9 +71,13 @@ function getSorting(order, orderBy) {
 const headCells = [
   { id: "cpf", numeric: false, disablePadding: true, label: "CPF" },
   { id: "nome", numeric: true, disablePadding: false, label: "Nome" },
-  { id: "plano", numeric: true, disablePadding: false, label: "Plano" },
-  { id: "pppoe", numeric: true, disablePadding: false, label: "PPPOE" },
-  { id: "port", numeric: true, disablePadding: false, label: "Porta" }
+  { id: "funcao", numeric: true, disablePadding: false, label: "Função" },
+  {
+    id: "obs",
+    numeric: true,
+    disablePadding: false,
+    label: "Observação"
+  }
 ];
 
 function EnhancedTableHead(props) {
@@ -145,7 +161,8 @@ const useToolbarStyles = makeStyles(theme => ({
     flex: "1 1 100%"
   },
   actions: {
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
+    display: "inherit"
   },
   title: {
     flex: "0 0 auto",
@@ -175,15 +192,22 @@ const EnhancedTableToolbar = props => {
       <div className={classes.spacer} />
       <div className={classes.actions}>
         {numSelected > 0 ? (
-          <Tooltip title="Excluir">
-            <IconButton aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
+          <>
+            <Tooltip title="Excluir">
+              <IconButton aria-label="delete">
+                <Delete />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Excluir">
+              <IconButton aria-label="delete">
+                <Edit />
+              </IconButton>
+            </Tooltip>
+          </>
         ) : (
           <Tooltip title="Filter list">
             <IconButton aria-label="filter list">
-              <FilterListIcon />
+              <FilterList />
             </IconButton>
           </Tooltip>
         )}
@@ -224,7 +248,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function EnhancedTable() {
+function EnhancedTable(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -346,9 +370,6 @@ export default function EnhancedTable() {
                       <TableCell align="right" style={{ color: "#BDBDBD" }}>
                         {row.pppoe}
                       </TableCell>
-                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                        {row.port}
-                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -379,3 +400,14 @@ export default function EnhancedTable() {
     </div>
   );
 }
+
+const mapStateToProps = state => ({
+  redux: state
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EnhancedTable);

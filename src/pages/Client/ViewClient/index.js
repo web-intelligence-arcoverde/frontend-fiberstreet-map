@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 //Redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+
+//API
+import api, { API } from "../../../services/api";
 
 //Creators que era para ser usado.
 import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
@@ -32,22 +35,64 @@ function ViewCliente(props) {
   const classes = useStyles();
   const { data } = viewClient; //Informações do usuario.
 
-  let {
-    provider_id,
-    name,
-    cpf,
-    speed,
-    pppoe,
-    obs,
-    installation_date,
-    created_at
-  } = data;
+  const [splitterId, setSplitterId] = useState("");
+
+  console.log("PROSPSSSDOJFJOSJOFOJGOJGFJOGOJFGJOFGJO");
+  console.log(props);
+  console.log(props.redux.map.coordenadas);
+
+  function addCabo() {
+    let latitude = JSON.parse(props.redux.map.coordenadas).latitude;
+    let longitude = JSON.parse(props.redux.map.coordenadas).longitude;
+    let coord = [longitude, latitude];
+
+    const {
+      addCoordCabo,
+      setDelemitationMap,
+      hideClientViewModal,
+      addCableClient
+    } = props;
+    setDelemitationMap("cabo");
+    let arrayDeArray = new Array(coord);
+    addCableClient(data.id);
+    addCoordCabo(arrayDeArray);
+    hideClientViewModal();
+  }
+
+  function handleCoordCabo() {
+    api
+      .get(`${API.GET_SAIDA_SP_BY_CLIENTE}/${data.id}`)
+      .then(result => {
+        const { data } = result;
+        console.log(data);
+        const { id, splitter_cod } = data;
+        setSplitterId(splitter_cod);
+
+        if (splitter_cod) {
+          alert("Este cliente já possui um drop em sua residência");
+        } else {
+          addCabo();
+        }
+      })
+      .catch(err => {
+        console.warn(err);
+      });
+  }
+
+  console.log("informações do cliente");
+  console.log(data);
+  console.log(props.hideClientViewModal);
+
+  function handleHideModal() {
+    const { hideClientViewModal } = props;
+    hideClientViewModal();
+  }
 
   return (
     <>
       <CommentDialog />
 
-      <Modal size="lg" show={viewClient.visible} onHide={hideClientModal}>
+      <Modal size="lg" show={viewClient.visible} onHide={handleHideModal}>
         <Modal.Header
           style={{
             justifyContent: "center",
@@ -57,7 +102,7 @@ function ViewCliente(props) {
             backgroundColor: "#F7D358"
           }}
         >
-          <h6 style={{ fontSize: "10px" }}>23/08/2018</h6>
+          <h6 style={{ fontSize: "10px" }}>{data.created_at}</h6>
           <Account
             style={{
               display: "block",
@@ -66,9 +111,7 @@ function ViewCliente(props) {
               marginBottom: "10px"
             }}
           />
-          <Modal.Title style={{ color: "#585858" }}>
-            Lucas Henrique Paes De carvalho
-          </Modal.Title>
+          <Modal.Title style={{ color: "#585858" }}>{data.name}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body style={{ backgroundColor: "#FFFFFF" }}>
@@ -80,32 +123,28 @@ function ViewCliente(props) {
             </Card.Header>
             <ListGroup variant="flush">
               <ListGroup.Item>
-                <InputField name="Nome:" atributo="Lucas" tipo="text" />
+                <InputField name="Nome:" atributo={data.name} tipo="text" />
               </ListGroup.Item>
               <ListGroup.Item>
-                <InputField name="CPF:" atributo="111.111.111-11" tipe="text" />
+                <InputField name="CPF:" atributo={data.cpf} tipe="text" />
               </ListGroup.Item>
               <ListGroup.Item>
-                <InputField name="Plano:" atributo="1gb" tipo="text" />
+                <InputField name="Plano:" atributo={data.speed} tipo="text" />
               </ListGroup.Item>
               <ListGroup.Item>
-                <InputField
-                  name="PPPOE:"
-                  atributo="00000000@teste"
-                  tipo="text"
-                />
+                <InputField name="PPPOE:" atributo={data.pppoe} tipo="text" />
               </ListGroup.Item>
               <ListGroup.Item>
                 <InputField
                   name="Data da instalação:"
-                  atributo=""
+                  atributo={data.installation_date}
                   tipo="date"
                 />
               </ListGroup.Item>
               <ListGroup.Item>
                 <InputField
                   name="Comentario:"
-                  atributo="Mora lá na casa "
+                  atributo={data.obs}
                   tipo="text"
                 />
               </ListGroup.Item>
@@ -114,7 +153,9 @@ function ViewCliente(props) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary">Adicionar Cabo</Button>
+          <Button variant="secondary" onClick={() => addCabo()}>
+            Adicionar Cabo
+          </Button>
           <Button variant="secondary">Fechar</Button>
         </Modal.Footer>
       </Modal>

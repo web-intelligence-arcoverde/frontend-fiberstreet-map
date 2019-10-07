@@ -7,6 +7,8 @@ export const Types = {
 
   // Creating
 
+  ADD_CLIENTE_ID: "ADD_ID/cliente",
+
   CREATE_CABLE_REQUEST: "@cable/CREATE_CABLE_REQUEST",
   CREATE_CABLE_SUCCESS: "@cable/CREATE_CABLE_SUCCESS"
 };
@@ -16,8 +18,10 @@ const INITIAL = {
   data: {},
   newCabo: {
     isVisible: false,
+    clientId: null,
     data: {}
-  }
+  },
+  cliente_id: null
 };
 
 export default function(state = INITIAL, action) {
@@ -33,18 +37,29 @@ export default function(state = INITIAL, action) {
       };
     case Types.HIDE_MODAL_NEW_CABO_RESERVA:
       return { ...state, newCabo: { isVisible: false } };
+    case Types.ADD_CLIENTE_ID:
+      return { ...state, id: action.payload.id };
+
     default:
       return state;
   }
 }
 
 export const Creators = {
-  showAddNewCaboModal: data => ({
+  //Adicionar cabo aparti do cliente. *addClienteId*
+  addCableClient: id => ({
+    type: Types.ADD_CLIENTE_ID,
+    payload: { id }
+  }),
+
+  //showAddNewCaboModal
+  showAddCableCto: data => ({
     type: Types.SHOW_MODAL_NEW_CABO,
     payload: { data }
   }),
 
-  hideAddNewCaboModal: () => ({
+  //hideAddNewCaboModal
+  hideAddCableCto: () => ({
     type: Types.HIDE_MODAL_NEW_CABO
   }),
 

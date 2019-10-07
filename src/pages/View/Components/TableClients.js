@@ -2,33 +2,33 @@ import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
 
-function createData(cpf, nome, plano, pppoe, port) {
-  return { cpf, nome, plano, pppoe, port };
-}
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TableSortLabel,
+  Toolbar,
+  Typography,
+  Paper,
+  Checkbox,
+  IconButton,
+  Tooltip
+} from "@material-ui/core/";
+import { Modal } from "react-bootstrap/";
 
-const rows = [
-  createData("1", "Lucas", 30, "@ppoe1", 1),
-  createData("2", "Henrique", 250, "@ppoe2", 2),
-  createData("3", "Paes", 160, "@ppoe3", 3),
-  createData("4", "Carvalho", 60, "@ppoe4", 4),
-  createData("5", "João", 160, "@ppoe5", 5)
-];
+//Icons
+import { Delete, FilterList, Edit } from "@material-ui/icons/";
+
+// redux
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
+//Creators redux
+import { Creators as clienteCreators } from "../../../redux/store/ducks/cliente";
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -56,14 +56,6 @@ function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
-const headCells = [
-  { id: "cpf", numeric: false, disablePadding: true, label: "CPF" },
-  { id: "nome", numeric: true, disablePadding: false, label: "Nome" },
-  { id: "plano", numeric: true, disablePadding: false, label: "Plano" },
-  { id: "pppoe", numeric: true, disablePadding: false, label: "PPPOE" },
-  { id: "port", numeric: true, disablePadding: false, label: "Porta" }
-];
-
 function EnhancedTableHead(props) {
   const {
     classes,
@@ -77,6 +69,14 @@ function EnhancedTableHead(props) {
   const createSortHandler = property => event => {
     onRequestSort(event, property);
   };
+
+  const headCells = [
+    { id: "cpf", numeric: false, disablePadding: true, label: "CPF" },
+    { id: "name", numeric: true, disablePadding: false, label: "Nome" },
+    { id: "speed", numeric: true, disablePadding: false, label: "Plano" },
+    { id: "pppoe", numeric: true, disablePadding: false, label: "PPPOE" },
+    { id: "port", numeric: true, disablePadding: false, label: "Porta" }
+  ];
 
   return (
     <TableHead>
@@ -145,7 +145,8 @@ const useToolbarStyles = makeStyles(theme => ({
     flex: "1 1 100%"
   },
   actions: {
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
+    display: "inherit"
   },
   title: {
     flex: "0 0 auto",
@@ -175,15 +176,22 @@ const EnhancedTableToolbar = props => {
       <div className={classes.spacer} />
       <div className={classes.actions}>
         {numSelected > 0 ? (
-          <Tooltip title="Excluir">
-            <IconButton aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
+          <>
+            <Tooltip title="Excluir">
+              <IconButton aria-label="delete">
+                <Delete />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Excluir">
+              <IconButton aria-label="delete">
+                <Edit />
+              </IconButton>
+            </Tooltip>
+          </>
         ) : (
           <Tooltip title="Filter list">
             <IconButton aria-label="filter list">
-              <FilterListIcon />
+              <FilterList />
             </IconButton>
           </Tooltip>
         )}
@@ -224,13 +232,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function EnhancedTable() {
+function EnhancedTable(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const clientes = props.redux.client.clients;
+
+  console.log(clientes);
 
   function handleRequestSort(event, property) {
     const isDesc = orderBy === property && order === "desc";
@@ -240,7 +252,7 @@ export default function EnhancedTable() {
 
   function handleSelectAllClick(event) {
     if (event.target.checked) {
-      const newSelecteds = rows.map(n => n.cpf);
+      const newSelecteds = clientes.map(n => n.cpf);
       setSelected(newSelecteds);
       return;
     }
@@ -279,7 +291,7 @@ export default function EnhancedTable() {
   const isSelected = name => selected.indexOf(name) !== -1;
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, clientes.length - page * rowsPerPage);
 
   return (
     <div className={classes.root2}>
@@ -301,10 +313,10 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={clientes.length}
             />
             <TableBody>
-              {stableSort(rows, getSorting(order, orderBy))
+              {stableSort(clientes, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.cpf);
@@ -363,7 +375,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={clientes.length}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{
@@ -379,3 +391,15 @@ export default function EnhancedTable() {
     </div>
   );
 }
+
+const mapStateToProps = state => ({
+  redux: state
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ ...clienteCreators }, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EnhancedTable);

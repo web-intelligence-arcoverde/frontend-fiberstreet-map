@@ -1,8 +1,5 @@
-/**
- *  ORGANIZANDO ESSA BAGAÇA.
- */
-
 import React from "react";
+import PropTypes from "prop-types";
 
 //Redux
 import { connect } from "react-redux";
@@ -11,27 +8,12 @@ import { bindActionCreators } from "redux";
 //Creators do redux
 import { Creators as ctosActions } from "../../../redux/store/ducks/ctos";
 
-//Components
-import TableUsers from "./Components/TableUsers";
-import TableSplitter from "./Components/TableSplitter";
-import TableCable from "./Components/TableCable";
+//Componentes "criados"
+import Tabs from "./Components/Tabs";
 
-//UI-Components
-import PropTypes from "prop-types";
-import { Modal, Table, Button } from "react-bootstrap";
-import {
-  Tab,
-  AppBar,
-  makeStyles,
-  Tabs,
-  Typography,
-  Box
-} from "@material-ui/core/";
-
-//Icons
-import PersonPinIcon from "@material-ui/icons/PersonPin";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
+//Componentes importados
+import { makeStyles, Typography, Box, Container } from "@material-ui/core/";
+import { Table, Modal } from "react-bootstrap";
 
 //Tamanho das box
 function TabPanel(props) {
@@ -107,21 +89,16 @@ const useStyles = makeStyles(theme => ({
 
 function ViewCto(props) {
   const { ctos } = props.redux;
+  const { hideViewModalCto } = props;
 
-  function handleHideModal() {
-    const { hideViewModal } = props;
-    hideViewModal();
-  }
+  const { viewCto } = ctos; //Recuperando o estado inicial da CTO
+  const { data } = viewCto; //Recuperando os dados da CTO
 
-  const [value, setValue] = React.useState(0);
-  const classes = useStyles();
-
-  function handleChange(event, newValue) {
-    setValue(newValue);
-  }
+  console.log("informações da cto");
+  console.log(data);
 
   return (
-    <Modal show={true} onHide={handleHideModal} size="lg">
+    <Modal size="lg" show={viewCto.visible} onHide={hideViewModalCto}>
       <Modal.Header
         style={{
           justifyContent: "center",
@@ -131,7 +108,33 @@ function ViewCto(props) {
         <Modal.Title>Informações da caixa terminal optica</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body></Modal.Body>
+      <Modal.Body>
+        <Container>
+          <h2 style={{ color: "#F5DA81", textAlign: "center" }}>
+            Informações dos cabos
+          </h2>
+
+          <Table responsive>
+            <thead>
+              <tr style={{ backgroundColor: "#fff", color: "#6E6E6E" }}>
+                <th>Nome</th>
+                <th>Modelo</th>
+                <th>Endereço</th>
+                <th>Observação</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <td>{data.name}</td>
+              <td>{data.model}</td>
+              <td>{data.address}</td>
+              <td>{data.obs}</td>
+            </tbody>
+          </Table>
+        </Container>
+
+        <Tabs />
+      </Modal.Body>
     </Modal>
   );
 }
@@ -141,7 +144,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...ctosActions }, dispatch);
+  bindActionCreators(ctosActions, dispatch);
 
 export default connect(
   mapStateToProps,

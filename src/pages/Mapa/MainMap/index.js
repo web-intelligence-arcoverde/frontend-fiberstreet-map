@@ -15,6 +15,7 @@ import AddCeo from "../../CEO/AddCeo/index";
 import ViewClient from "../../Client/ViewClient/index";
 import ViewCeo from "../../CEO/ViewCeo/index";
 import ViewCto from "../../CTO/ViewCto/index";
+import ModalTabList from "../../View/index";
 
 const TOKEN =
   "pk.eyJ1IjoidWxpbmt1eCIsImEiOiJjanczamF5cG8wNWt0NDltcnkydXQybGdjIn0.F1PkG0rCiHhf-jhnRMMdTg";
@@ -24,6 +25,7 @@ const MainMap = props => (
     <ViewClient />
     <ViewCeo />
     <ViewCto />
+    <ModalTabList />
 
     <AddCeo />
     <AddNewProvider />
@@ -33,7 +35,7 @@ const MainMap = props => (
     <MapO
       container="map"
       // eslint-disable-next-line react/style-prop-object
-      style="mapbox://styles/mapbox/light-v9"
+      style="mapbox://styles/mapbox/streets-v11"
       zoom={14}
       classNameStyle="mapContainer"
       accessToken={TOKEN}
