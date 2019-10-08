@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
+import moment from "moment";
 
 import {
   Table,
@@ -30,17 +31,17 @@ import { Creators as clienteCreators } from "../../../redux/store/ducks/cliente"
 //Icons
 import { Delete, FilterList, Edit } from "@material-ui/icons/";
 
-function createData(cpf, nome, plano, pppoe) {
-  return { cpf, nome, plano, pppoe };
+function createData(cpf, name, speed, pppoe) {
+  return { cpf, name, speed, pppoe };
 }
 
-const rows = [
-  createData("1", "Lucas", 30, "@ppoe1"),
-  createData("2", "Henrique", 250, "@ppoe2"),
-  createData("3", "Paes", 160, "@ppoe3"),
-  createData("4", "Carvalho", 60, "@ppoe4"),
-  createData("5", "João", 160, "@ppoe5")
-];
+// const rows = [
+//   createData("1", "Lucas", 30, "@ppoe1"),
+//   createData("2", "Henrique", 250, "@ppoe2"),
+//   createData("3", "Paes", 160, "@ppoe3"),
+//   createData("4", "Carvalho", 60, "@ppoe4"),
+//   createData("5", "João", 160, "@ppoe5")
+// ];
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -69,15 +70,23 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  { id: "cpf", numeric: false, disablePadding: true, label: "CPF" },
-  { id: "nome", numeric: true, disablePadding: false, label: "Nome" },
-  { id: "funcao", numeric: true, disablePadding: false, label: "Função" },
+  { id: "cpf", numeric: false, disablePadding: false, label: "CPF" },
+  { id: "name", numeric: false, disablePadding: false, label: "Nome" },
+  { id: "ppoe", numeric: false, disablePadding: false, label: "PPPOE" },
+  { id: "speed", numeric: false, disablePadding: false, label: "Plano" },
   {
-    id: "obs",
-    numeric: true,
+    id: "created_at",
+    numeric: false,
     disablePadding: false,
-    label: "Observação"
-  }
+    label: "Criação"
+  },
+  {
+    id: "installation_date",
+    numeric: false,
+    disablePadding: false,
+    label: "Instalação"
+  },
+  { id: "obs", numeric: false, disablePadding: false, label: "Obs." }
 ];
 
 function EnhancedTableHead(props) {
@@ -109,7 +118,7 @@ function EnhancedTableHead(props) {
         {headCells.map(headCell => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align={headCell.numeric ? "right" : "center"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -248,13 +257,23 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function EnhancedTable(props) {
+function TableFuncionarios(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  useEffect(() => {
+    const { loadClientRequest } = props;
+    loadClientRequest();
+  });
+
+  console.log("aqui essa porra");
+  const data = props.redux.client.geojson.clients;
+
+  console.log(props.redux);
 
   function handleRequestSort(event, property) {
     const isDesc = orderBy === property && order === "desc";
@@ -264,11 +283,51 @@ function EnhancedTable(props) {
 
   function handleSelectAllClick(event) {
     if (event.target.checked) {
-      const newSelecteds = rows.map(n => n.cpf);
+      const newSelecteds = data.map(row => row.properties.data.cpf);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
+  }
+
+  function formatDate(data) {
+    const date = moment(data).format("DD/MM/YYYY");
+    return date;
+  }
+
+  function formatCpfCnpj(v) {
+    //Remove tudo o que não é dígito
+    v = v.replace(/\D/g, "");
+
+    if (v.length <= 14) {
+      //CPF
+
+      //Coloca um ponto entre o terceiro e o quarto dígitos
+      v = v.replace(/(\d{3})(\d)/, "$1.$2");
+
+      //Coloca um ponto entre o terceiro e o quarto dígitos
+      //de novo (para o segundo bloco de números)
+      v = v.replace(/(\d{3})(\d)/, "$1.$2");
+
+      //Coloca um hífen entre o terceiro e o quarto dígitos
+      v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    } else {
+      //CNPJ
+
+      //Coloca ponto entre o segundo e o terceiro dígitos
+      v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+
+      //Coloca ponto entre o quinto e o sexto dígitos
+      v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+
+      //Coloca uma barra entre o oitavo e o nono dígitos
+      v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+
+      //Coloca um hífen depois do bloco de quatro dígitos
+      v = v.replace(/(\d{4})(\d)/, "$1-$2");
+    }
+
+    return v;
   }
 
   function handleClick(event, name) {
@@ -291,9 +350,7 @@ function EnhancedTable(props) {
     setSelected(newSelected);
   }
 
-  function handleChangePage(event, newPage) {
-    setPage(newPage);
-  }
+  function handleChangePage(event, newPage) {}
 
   function handleChangeRowsPerPage(event) {
     setRowsPerPage(+event.target.value);
@@ -303,7 +360,7 @@ function EnhancedTable(props) {
   const isSelected = name => selected.indexOf(name) !== -1;
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
   return (
     <div className={classes.root2}>
@@ -325,66 +382,78 @@ function EnhancedTable(props) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={data.length}
             />
             <TableBody>
-              {stableSort(rows, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.cpf);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+              {data &&
+                stableSort(data, getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.properties.data.cpf);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={event => handleClick(event, row.cpf)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.cpf}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                          style={{ color: "#FFBF00" }}
-                        />
-                      </TableCell>
-
-                      <TableCell
-                        component="th"
-                        style={{ color: "#BDBDBD" }}
-                        id={labelId}
-                        scope="row"
-                        padding="none"
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event =>
+                          handleClick(event, row.properties.data.cpf)
+                        }
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.properties.data.cpf}
+                        selected={isItemSelected}
                       >
-                        {row.cpf}
-                      </TableCell>
-                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                        {row.nome}
-                      </TableCell>
-                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                        {row.plano}
-                      </TableCell>
-                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                        {row.pppoe}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isItemSelected}
+                            inputProps={{ "aria-labelledby": labelId }}
+                            style={{ color: "#FFBF00" }}
+                          />
+                        </TableCell>
+
+                        <TableCell
+                          component="th"
+                          style={{ color: "#BDBDBD" }}
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                        >
+                          {formatCpfCnpj(row.properties.data.cpf)}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {row.properties.data.name}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {row.properties.data.pppoe}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {row.properties.data.speed}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {formatDate(row.properties.data.created_at)}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {formatDate(row.properties.data.installation_date)}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {row.properties.data.obs}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
+                  <TableCell colSpan={10} />
                 </TableRow>
               )}
             </TableBody>
           </Table>
         </div>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, data.length]}
           component="div"
-          count={rows.length}
+          count={data.length}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{
@@ -405,9 +474,10 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(clienteCreators, dispatch);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(EnhancedTable);
+)(TableFuncionarios);
