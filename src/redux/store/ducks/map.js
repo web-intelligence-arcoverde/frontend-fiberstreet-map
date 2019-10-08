@@ -31,6 +31,7 @@ export default function(state = INITIAL_STATE, action) {
     case Types.canAddCoordenadas:
       return { ...state, canAddCoordenadas: action.payload.canAddCoordenadas };
 
+    // correto
     case Types.ADD_COORD_CABO:
       return { ...state, polyline: action.payload.polyline };
     default:
@@ -64,7 +65,7 @@ export const Creators = {
   }),
 
   addCoordCabo: polyline => ({
-    type: Types.addCoordCabo,
+    type: Types.ADD_COORD_CABO,
     payload: { polyline }
   })
 };

@@ -18,7 +18,10 @@ export const Types = {
   LOAD_CTO_GEOJSON_SUCCESS: "@cto/LOAD_GJ_SUCCESS",
 
   // Loading
-  LOAD_SUCCESS: "@cto/LOAD_SUCCESS"
+  LOAD_SUCCESS: "@cto/LOAD_SUCCESS",
+
+  LOAD_SPLITTER_CLIENT_BY_CTO_REQUEST: "cto/LOAD_SP_CL_CTO_REQUEST",
+  LOAD_SPLITTER_CLIENT_BY_CTO_SUCCESS: "cto/LOAD_SP_CL_CTO_SUCCESS"
 };
 
 const INITIAL_STATE = {
@@ -144,5 +147,15 @@ export const Creators = {
   loadCtoGeoJsonSuccess: ctos => ({
     type: Types.LOAD_CTO_GEOJSON_SUCCESS,
     payload: { ctos }
+  }),
+
+  loadSplitterAndClientByCtoRequest: ctoId => ({
+    type: Types.LOAD_SPLITTER_CLIENT_BY_CTO_REQUEST,
+    payload: { ctoId }
+  }),
+
+  loadSplitterAndClientByCtoSuccess: (splitter, clients) => ({
+    type: Types.LOAD_SPLITTER_CLIENT_BY_CTO_SUCCESS,
+    payload: { splitter, clients }
   })
 };
