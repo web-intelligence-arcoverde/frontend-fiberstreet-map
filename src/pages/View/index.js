@@ -9,8 +9,6 @@ import Modal from "react-bootstrap/Modal";
 
 //ComponentsEditados
 import TableClients from "./Components/TableClients";
-import TableUsers from "./Components/TableUsers";
-import TableProvider from "./Components/TableProvider";
 import TableCtos from "./Components/TableCtos";
 
 function TabPanel(props) {
@@ -68,7 +66,7 @@ export default function FullWidthTabs() {
   };
 
   return (
-    <Modal size="lg" show={false}>
+    <Modal size="lg" show={true}>
       <Modal.Body>
         <div className={classes.root}>
           <AppBar position="static" color="default">
@@ -79,12 +77,10 @@ export default function FullWidthTabs() {
               scrollButtons="auto"
               classes={{ indicator: classes.bigIndicator }}
             >
-              <Tab label="Funcionarios" {...a11yProps(0)} />
-              <Tab label="Clientes" {...a11yProps(1)} />
-              <Tab label="Provedores" {...a11yProps(2)} />
-              <Tab label="Ctos" {...a11yProps(3)} />
-              <Tab label="Ceos" {...a11yProps(4)} />
-              <Tab label="Splitters" {...a11yProps(5)} />
+              <Tab label="Clientes" {...a11yProps(0)} />
+              <Tab label="Ctos" {...a11yProps(1)} />
+              <Tab label="Ceos" {...a11yProps(2)} />
+              <Tab label="Splitters" {...a11yProps(3)} />
             </Tabs>
           </AppBar>
           <SwipeableViews
@@ -93,21 +89,15 @@ export default function FullWidthTabs() {
             onChangeIndex={handleChangeIndex}
           >
             <TabPanel value={value} index={0} dir={theme.direction}>
-              <TableUsers />
-            </TabPanel>
-            <TabPanel value={value} index={1} dir={theme.direction}>
               <TableClients />
             </TabPanel>
-            <TabPanel value={value} index={2} dir={theme.direction}>
-              <TableProvider />
-            </TabPanel>
-            <TabPanel value={value} index={3} dir={theme.direction}>
+            <TabPanel value={value} index={1} dir={theme.direction}>
               <TableCtos />
             </TabPanel>
-            <TabPanel value={value} index={4} dir={theme.direction}>
+            <TabPanel value={value} index={2} dir={theme.direction}>
               Text 3
             </TabPanel>
-            <TabPanel value={value} index={5} dir={theme.direction}>
+            <TabPanel value={value} index={3} dir={theme.direction}>
               Text 3
             </TabPanel>
           </SwipeableViews>

@@ -21,6 +21,7 @@ import { Creators as userCreators } from "../../../redux/store/ducks/user";
 import { Creators as providerCreators } from "../../../redux/store/ducks/provider";
 import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
+import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
 import store from "../../../redux/store";
 
 //API
@@ -143,6 +144,11 @@ class Map extends Component {
         data: url
       });
 
+      map.addSource("cliente_inativo", {
+        type: "geojson",
+        data: url
+      });
+
       map.addSource("wires", {
         type: "geojson",
         data: url
@@ -195,6 +201,7 @@ class Map extends Component {
     this.loadClient(map);
     this.loadCable(map);
     this.loadSocket(map);
+    this.desenharPolylineAtual(map);
 
     // eslint-disable-next-line react/no-direct-mutation-state
     this.state.map = map;
@@ -229,6 +236,7 @@ class Map extends Component {
     map.on("click", "cto", e => this.handleCtoClick(e.features[0]));
     // Evento de clique nos Clientes
     map.on("click", "cliente", e => this.handleCtoCaboClick(e));
+    map.on("click", "cliente_inativo", e => this.handleCtoCaboClick(e))
   }
 
   handleCtoClick = features => {
@@ -252,6 +260,8 @@ class Map extends Component {
       setDelimitacaoMapa("default");
     } else {
       const { showViewModalCto } = this.props;
+      // const { getSplitterByCto } = this.props;
+      // Inserir o método do redux-sagas para obter o splitter e os clientes desta cto
       showViewModalCto(cto);
     }
   }
@@ -369,7 +379,7 @@ class Map extends Component {
         coordinates: [[-77.03202080476535, 38.91454768710531], [-78.03, 39.91]]
       }
     };
-    map.getSource("lollipop").setData({
+    map.getSource("linhas").setData({
       type: "geojson",
       data: datab
     });
@@ -378,9 +388,9 @@ class Map extends Component {
   /**
    * Método responsável por criar a polyline de adição atual
    */
-  desenharPolylineAtual() {
-    const { map } = this.state;
-    const { polyline } = this.props.redux.all.mapa;
+  desenharPolylineAtual(map) {
+    // const { map } = this.state;
+    const { polyline } = this.props.redux.map;
     map.on("load", () => {
       map.addSource("linhas", {
         type: "geojson",
@@ -409,7 +419,7 @@ class Map extends Component {
       });
     });
 
-    this.setState({ map });
+    // this.setState({ map });
   }
 
   loadSocket(map) {
@@ -426,23 +436,88 @@ class Map extends Component {
         const data = await store.getState().client.geojson.clients;
 
         let clientes = data;
-        clientes.push(client);
+        clientes.push(client); // Adiciona o cliente novo
 
         await store.dispatch({
           type: "@cliente/LOAD_GJ_SUCCESS",
           payload: { clients: clientes }
+        }); // Dispara no store
+
+        let clientsActive = [];
+        let clientsInactive = [];
+
+        data.forEach(client => {
+          if (client.properties.data.status === "active") {
+            clientsActive.push(client);
+          }
+        });
+        
+        data.forEach(client => {
+          if (client.properties.data.status !== "active") {
+            clientsInactive.push(client);
+          }
         });
 
-        const dados = await {
+        // Todos os clientes
+        // const dados = await {
+        //   type: "FeatureCollection",
+        //   features: [...data, client]
+        // };
+
+        if (client.properties.data.status === "active") {
+          const activeClients = await {
+            type: "FeatureCollection",
+            features: [...clientsActive, client]
+          };
+          await map.getSource("cliente").setData(activeClients);
+        } else {
+          const inactiveClients = await {
+            type: "FeatureCollection",
+            features: [...clientsInactive, client]
+          };
+          await map.getSource("cliente_inativo").setData(inactiveClients);
+        }
+      });
+
+      clients.on("deletedClient", async clientDeleted => {
+        const data = await store.getState().client.geojson.clients;
+
+        let clientsActive = [];
+        data.forEach(client => {
+          if (client.properties.data.status === "active") {
+            if (client.properties.data.id !== clientDeleted.id)
+              clientsActive.push(client);
+          }
+        });
+        let clientsInactive = [];
+        data.forEach(client => {
+          if (client.properties.data.status !== "active") {
+            if (client.properties.data.id !== clientDeleted.id)
+              clientsInactive.push(client);
+          }
+        });
+
+        const clientesAtivos = {
           type: "FeatureCollection",
-          features: [...data, client]
+          features: clientsActive
         };
-        console.log(dados);
-        await map.getSource("cliente").setData(dados);
+
+        const clientesInativos = {
+          type: "FeatureCollection",
+          features: clientsInactive
+        };
+
+        store.dispatch({
+          type: "@cliente/LOAD_GJ_SUCCESS",
+          payload: { clients: data }
+        });
+
+        map.getSource("cliente").setData(clientesAtivos);
+        map.getSource("cliente_inativo").setData(clientesInativos);
       });
 
       ctos.on("newCto", async cto => {
-        const data = await store.getState().ctos.ctos;
+        const data = await store.getState().ctos.geojson.ctos;
 
         let ctos = data;
         ctos.push(cto);
@@ -513,9 +588,6 @@ class Map extends Component {
   loadClient(map) {
     map.on("load", function() {
       api.get(API.GET_CLIENTE_GEOJSON).then(result => {
-        console.log("DESGRAÇAAAAAAAA");
-        console.log(result);
-
         const { data } = result;
 
         let clientsActive = [];
@@ -539,13 +611,26 @@ class Map extends Component {
           features: data
         };
 
+        const clientesAtivos = {
+          type: "FeatureCollection",
+          features: clientsActive
+        };
+
+        const clientesInativos = {
+          type: "FeatureCollection",
+          features: clientsInactive
+        };
+
         store.dispatch({
           type: "@cliente/LOAD_GJ_SUCCESS",
           payload: { clients: data }
         });
 
-        map.getSource("cliente").setData(dados);
+        // map.getSource("cliente").setData(dados);
+        map.getSource("cliente").setData(clientesAtivos);
+        map.getSource("cliente_inativo").setData(clientesInativos);
       });
+      // ativo
       map.loadImage(
         require("../../../assets/images/clienteCom24x12.png"),
         function(error, image) {
@@ -558,6 +643,22 @@ class Map extends Component {
             source: "cliente",
             layout: {
               "icon-image": "custom-cliente"
+            }
+          });
+        }
+      );
+      // inativo
+      map.loadImage(
+        require("../../../assets/images/clientesem12x24.png"),
+        function(error, image) {
+          if (error) throw error;
+          map.addImage("cliente-inativo", image);
+          map.addLayer({
+            id: "cliente_inativo",
+            type: "symbol",
+            source: "cliente_inativo",
+            layout: {
+              "icon-image": "cliente-inativo"
             }
           });
         }
@@ -696,7 +797,8 @@ const mapDispatchToProps = dispatch =>
       ...userCreators,
       ...providerCreators,
       ...clientCreators,
-      ...ceoCreators
+      ...ceoCreators,
+      ...CaboCreators
     },
     dispatch
   );
