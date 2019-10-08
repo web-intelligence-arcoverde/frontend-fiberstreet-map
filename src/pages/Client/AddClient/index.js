@@ -21,8 +21,7 @@ function ClienteAddModal(props) {
   const [plano, setPlano] = useState("");
   const [address, setAddress] = useState("");
   const [PPPOE, setPPPOE] = useState("");
-
-  const [observacao, setObservacao] = useState("");
+  const [obs, setObs] = useState("");
 
   function handleHideModal() {
     const { hideNewModalClient } = props;
@@ -41,7 +40,7 @@ function ClienteAddModal(props) {
       speed: plano,
       pppoe: PPPOE,
       address: address,
-      obs: observacao
+      obs: obs
     };
     createClientRequest(newClient);
     handleHideModal();
@@ -117,8 +116,8 @@ function ClienteAddModal(props) {
               <Form.Control
                 as="textarea"
                 rows="3"
-                value={observacao}
-                onChange={e => setObservacao(e.target.value)}
+                value={obs}
+                onChange={e => setObs(e.target.value)}
               />
             </Form.Group>
           </Modal.Body>
