@@ -7,8 +7,10 @@ import { bindActionCreators } from "redux";
 //API
 import api, { API } from "../../../services/api";
 
-//Creators que era para ser usado.
-import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
+//Creators
+import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
+import { Creators as MapActions } from "../../../redux/store/ducks/map";
+import { Creators as CaboActions } from "../../../redux/store/ducks/cabo";
 
 //EditComponents
 import InputField from "./Components/InputFieldComponent";
@@ -29,34 +31,35 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function ViewCliente(props) {
-  const { hideClientModal } = props;
+  const classes = useStyles();
+
   const { viewClient } = props.redux.client;
 
-  const classes = useStyles();
   const { data } = viewClient; //Informações do usuario.
 
   const [splitterId, setSplitterId] = useState("");
 
-  console.log("PROSPSSSDOJFJOSJOFOJGOJGFJOGOJFGJOFGJO");
-  console.log(props);
-  console.log(props.redux.map.coordenadas);
+  function handleHideModal() {
+    const { hideClientViewModal } = props;
+    hideClientViewModal();
+  }
 
   function addCabo() {
-    let latitude = JSON.parse(props.redux.map.coordenadas).latitude;
-    let longitude = JSON.parse(props.redux.map.coordenadas).longitude;
+    let latitude = JSON.parse(data.coordinates).latitude;
+    let longitude = JSON.parse(data.coordinates).longitude;
     let coord = [longitude, latitude];
 
     const {
-      addCoordCabo,
+      addCoordCabo, // setPolyline
       setDelemitationMap,
-      hideClientViewModal,
-      addCableClient
+      addCableClientId
     } = props;
-    setDelemitationMap("cabo");
+
+    setDelemitationMap("cabo"); // map - map.delimitacao
     let arrayDeArray = new Array(coord);
-    addCableClient(data.id);
-    addCoordCabo(arrayDeArray);
-    hideClientViewModal();
+    addCoordCabo(arrayDeArray); // map - map.polyline
+    addCableClientId(data.id); // cabo - cabo.id
+    handleHideModal();
   }
 
   function handleCoordCabo() {
@@ -79,13 +82,11 @@ function ViewCliente(props) {
       });
   }
 
-  console.log("informações do cliente");
-  console.log(data);
-  console.log(props.hideClientViewModal);
-
-  function handleHideModal() {
-    const { hideClientViewModal } = props;
-    hideClientViewModal();
+  function deleteClient() {
+    const { id } = data;
+    const { deleteClientRequest } = props;
+    deleteClientRequest(id);
+    handleHideModal();
   }
 
   return (
@@ -153,7 +154,10 @@ function ViewCliente(props) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => addCabo()}>
+          <Button variant="danger" onClick={deleteClient}>
+            Excluir
+          </Button>
+          <Button variant="secondary" onClick={addCabo}>
             Adicionar Cabo
           </Button>
           <Button variant="secondary">Fechar</Button>
@@ -169,7 +173,10 @@ const mapStateToProps = state => ({
 
 //Ações
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...clientCreators }, dispatch);
+  bindActionCreators(
+    { ...ClientActions, ...MapActions, ...CaboActions },
+    dispatch
+  );
 
 export default connect(
   mapStateToProps,

@@ -47,7 +47,7 @@ export default function(state = INITIAL, action) {
 
 export const Creators = {
   //Adicionar cabo aparti do cliente. *addClienteId*
-  addCableClient: id => ({
+  addCableClientId: id => ({
     type: Types.ADD_CLIENTE_ID,
     payload: { id }
   }),
