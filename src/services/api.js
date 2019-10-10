@@ -2,11 +2,11 @@ import axios from "axios";
 import store from "../redux/store";
 
 const local = "http://192.168.0.143:3333";
-const server = "http://45.224.40.252";
+const server = "https://45.224.40.252";
 
 /** This API will connect to NodeJS Server */
 const api = axios.create({
-  baseURL: server
+  baseURL: local
 });
 
 api.interceptors.request.use(config => {

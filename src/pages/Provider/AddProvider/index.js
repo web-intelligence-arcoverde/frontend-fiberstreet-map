@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 //Conectores
 import { bindActionCreators } from "redux";
@@ -17,37 +17,90 @@ function AddProvider(props) {
 
   const { viewNewProvider } = props.redux.provider;
 
+  const [name, setName] = useState("");
+  const [cnpj, setCnpj] = useState("");
+  const [cnpjUnmasked, setCnpjUnmasked] = useState("");
+  const [address, setAddress] = useState("");
+
+  function cpfCnpj(v) {
+    //Remove tudo o que não é dígito
+    v = v.replace(/\D/g, "");
+    //CNPJ
+    //Coloca ponto entre o segundo e o terceiro dígitos
+    v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+    //Coloca ponto entre o quinto e o sexto dígitos
+    v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+    //Coloca uma barra entre o oitavo e o nono dígitos
+    v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+    //Coloca um hífen depois do bloco de quatro dígitos
+    v = v.replace(/(\d{4})(\d)/, "$1-$2");
+    return v;
+  }
+
+  async function handleCeo(e) {
+    e.preventDefault();
+
+    const newProvider = {
+      name: name,
+      cnpj: cnpjUnmasked,
+      address: address
+    };
+
+    hideModalNewProvider();
+    setName("");
+    setCnpj("");
+    setAddress("");
+  }
+
   return (
-    <Modal
-      animation={false}
-      show={viewNewProvider.visible}
-      onHide={hideModalNewProvider}
-    >
-      <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
-        <Modal.Title>Cadastrar Provedor</Modal.Title>
-      </Modal.Header>
+    <Modal show={viewNewProvider.visible} onHide={hideModalNewProvider}>
+      <Form onSubmit={handleCeo}>
+        <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
+          <Modal.Title>Cadastrar Provedor</Modal.Title>
+        </Modal.Header>
 
-      <Modal.Body>
-        <Form.Group>
-          <Form.Label>Nome</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>CNPJ</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Endereco</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-      </Modal.Body>
+        <Modal.Body>
+          <Form.Group>
+            <Form.Label>Nome</Form.Label>
+            <Form.Control
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>CNPJ</Form.Label>
+            <Form.Control
+              type="text"
+              maxlength="18"
+              value={cnpj}
+              onChange={e => {
+                setCnpjUnmasked(e.target.value);
+                setCnpj(cpfCnpj(e.target.value));
+              }}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Endereco</Form.Label>
+            <Form.Control
+              type="text"
+              onChange={e => {
+                setAddress(e.target.value);
+              }}
+              value={address}
+            />
+          </Form.Group>
+        </Modal.Body>
 
-      <Modal.Footer>
-        <Button variant="secondary" onClick={hideModalNewProvider}>
-          Fechar
-        </Button>
-        <Button variant="primary">Salvar</Button>
-      </Modal.Footer>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={hideModalNewProvider}>
+            Fechar
+          </Button>
+          <Button variant="secondary" type="submit">
+            Salvar
+          </Button>
+        </Modal.Footer>
+      </Form>
     </Modal>
   );
 }

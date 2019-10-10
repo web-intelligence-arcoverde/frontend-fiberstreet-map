@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 //Conectors
 import { bindActionCreators } from "redux";
@@ -16,7 +16,19 @@ function AddUser(props) {
   const { hideModalNewUser } = props;
   const { viewNewUser } = props.redux.user;
 
-  console.log(props);
+  const [email, setEmail] = useState("");
+
+  const [validated, setValidated] = useState(false);
+
+  const handleSubmit = event => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setValidated(true);
+  };
 
   return (
     <Modal
@@ -27,22 +39,33 @@ function AddUser(props) {
       <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
         <Modal.Title>Cadastrar Funcionario</Modal.Title>
       </Modal.Header>
+      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Modal.Body>
+          <Form.Group>
+            <Form.Label>Insira o e-mail do funcionario:</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Email"
+              value={email}
+              minLength="2"
+              onChange={e => setEmail(e.target.value)}
+            />
+          </Form.Group>
+        </Modal.Body>
 
-      <Modal.Body>
-        <Form.Group>
-          <Form.Label>Insira o e-mail do funcionario:</Form.Label>
-          <Form.Control type="email" />
-        </Form.Group>
-      </Modal.Body>
-
-      <Modal.Footer>
-        <Button variant="secondary" onClick={hideModalNewUser}>
-          Fechar
-        </Button>
-        <Button variant="primary" onClick={hideModalNewUser}>
-          Salvar
-        </Button>
-      </Modal.Footer>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={hideModalNewUser}>
+            Fechar
+          </Button>
+          {email.length > 5 ? (
+            <Button variant="primary" type="submit">
+              Enviar
+            </Button>
+          ) : (
+            console.log("teste")
+          )}
+        </Modal.Footer>
+      </Form>
     </Modal>
   );
 }

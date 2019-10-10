@@ -10,6 +10,7 @@ import Modal from "react-bootstrap/Modal";
 //ComponentsEditados
 import TableClients from "./Components/TableClients";
 import TableCtos from "./Components/TableCtos";
+import TableSplitters from "./Components/TableSplitters";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,7 +67,7 @@ export default function FullWidthTabs() {
   };
 
   return (
-    <Modal size="lg" show={true}>
+    <Modal size="lg" show={false}>
       <Modal.Body>
         <div className={classes.root}>
           <AppBar position="static" color="default">
@@ -79,8 +80,8 @@ export default function FullWidthTabs() {
             >
               <Tab label="Clientes" {...a11yProps(0)} />
               <Tab label="Ctos" {...a11yProps(1)} />
-              <Tab label="Ceos" {...a11yProps(2)} />
-              <Tab label="Splitters" {...a11yProps(3)} />
+              <Tab label="Splitters" {...a11yProps(2)} />
+              <Tab label="Ceos" {...a11yProps(3)} />
             </Tabs>
           </AppBar>
           <SwipeableViews
@@ -95,7 +96,7 @@ export default function FullWidthTabs() {
               <TableCtos />
             </TabPanel>
             <TabPanel value={value} index={2} dir={theme.direction}>
-              Text 3
+              <TableSplitters />
             </TabPanel>
             <TabPanel value={value} index={3} dir={theme.direction}>
               Text 3

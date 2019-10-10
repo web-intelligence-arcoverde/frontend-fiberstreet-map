@@ -35,6 +35,7 @@ import LeftSelector from "./Components/LeftSelector/index";
 
 //CSS
 import "./map.css";
+import Header from "./Components/Header";
 
 const myDeckLayer = new MapboxLayer({
   id: "my-scatterplot",
@@ -236,7 +237,7 @@ class Map extends Component {
     map.on("click", "cto", e => this.handleCtoClick(e.features[0]));
     // Evento de clique nos Clientes
     map.on("click", "cliente", e => this.handleCtoCaboClick(e));
-    map.on("click", "cliente_inativo", e => this.handleCtoCaboClick(e))
+    map.on("click", "cliente_inativo", e => this.handleCtoCaboClick(e));
   }
 
   handleCtoClick = features => {
@@ -451,7 +452,7 @@ class Map extends Component {
             clientsActive.push(client);
           }
         });
-        
+
         data.forEach(client => {
           if (client.properties.data.status !== "active") {
             clientsInactive.push(client);
@@ -479,17 +480,60 @@ class Map extends Component {
         }
       });
 
+      clients.on('updatedClient', async clientUpdated => {
+        const data = await store.getState().client.geojson.clients
+
+        const clientsActive = []
+        const clientsInactive = []
+
+        data.forEach(client => {
+          // verify if the client update is !== of the actual client in the forEach
+          if(client.properties.data.id !== clientUpdated.id) {
+            if(client.properties.data.active === 'active')
+              clientsActive.push(client)
+            else
+              clientsInactive.push(client)
+          } else {
+            if(client.properties.data.active === 'active')
+              clientsActive.push(clientUpdated) // Insert the updated client
+            else
+              clientsInactive.push(clientUpdated) // Insert the updated client
+          }
+        })
+
+        const dataClientsActive = {
+          type: 'FeatureCollection',
+          features: clientsActive
+        }
+
+        const dataClientsInactive = {
+          type: 'FeatureCollection',
+          features: clientsInactive
+        }
+
+        await map.getSource('cliente').setData(dataClientsActive)
+        await map.getSource('cliente_inativo').setData(dataClientsInactive)
+      })
+
       clients.on("deletedClient", async clientDeleted => {
         const data = await store.getState().client.geojson.clients;
 
         let clientsActive = [];
+        let clientsInactive = [];
+
+        // Se estiver ativo e o id
+        // for diferente do cliente deletado
+        // adiciona no array clientsActive
         data.forEach(client => {
           if (client.properties.data.status === "active") {
             if (client.properties.data.id !== clientDeleted.id)
               clientsActive.push(client);
           }
         });
-        let clientsInactive = [];
+
+        // Se estiver diferente de ativo e o id
+        // for diferente do cliente deletado
+        // adiciona no array clientsActive
         data.forEach(client => {
           if (client.properties.data.status !== "active") {
             if (client.properties.data.id !== clientDeleted.id)
@@ -507,9 +551,9 @@ class Map extends Component {
           features: clientsInactive
         };
 
-        store.dispatch({
+        await store.dispatch({
           type: "@cliente/LOAD_GJ_SUCCESS",
-          payload: { clients: data }
+          payload: { clients: [...clientsActive, ...clientsInactive] }
         });
 
         map.getSource("cliente").setData(clientesAtivos);
@@ -531,9 +575,63 @@ class Map extends Component {
           type: "FeatureCollection",
           features: [...data, cto]
         };
-        console.log(dados);
         await map.getSource("cto").setData(dados);
       });
+
+
+      ctos.on('deletedCto', async ctoDeleted => {
+        const data = await store.getState().ctos.geojson.ctos;
+
+        let ctos = [];
+
+        data.forEach(cto => {
+          if (cto.properties.data.id !== ctoDeleted.id) {
+            ctos.push(cto)
+          }
+        })
+
+        await store.dispatch({
+          type: '@cto/LOAD_GJ_SUCCESS',
+          payload: { ctos }
+        })
+
+        const dados = {
+          type: 'FeatureCollection',
+          features: ctos
+        }
+
+        await map.getSource('cto').setData(dados)
+      })
+      // Não testado
+      ctos.on("updatedCto", async ctoUpdated => {
+        const data = await store.getState().ctos.geojson.ctos;
+
+        let ctos = [];
+
+        // Se o id
+        // for diferente da cto atualizada
+        // adiciona no array, se for igual
+        // ao invés de adicionar a do forEach, adiciona
+        // a que vem do banco de dados
+        data.forEach(cto => {
+            if (cto.properties.data.id !== ctoUpdated.id)
+              ctos.push(cto);
+            else 
+              ctos.push(ctoUpdated)
+        });
+    
+        const dados = {
+          type: "FeatureCollection",
+          features: ctos
+        };
+
+        await store.dispatch({
+          type: "@cto/LOAD_GJ_SUCCESS",
+          payload: { ctos }
+        });
+
+        await map.getSource('cto').setData(dados)
+      })
 
       // clients.on("deleteClient", async clientId => {
       //   const data = await store.getState().client.clients;

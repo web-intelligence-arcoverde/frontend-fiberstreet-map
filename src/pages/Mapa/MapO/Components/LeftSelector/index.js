@@ -17,6 +17,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import Badge from "@material-ui/core/Badge";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,8 +30,7 @@ const useStyles = makeStyles(theme => ({
     top: 36,
     right: 0,
     left: 0
-  },
-  btColor: {}
+  }
 }));
 
 function LeftSelector(props) {
@@ -62,7 +62,52 @@ function LeftSelector(props) {
       <Container>
         <div className={classes.root}>
           <div style={{ display: "flex", flexDirection: "column" }}>
+            {/* Menssagens */}
             <ButtonGroup vertical>
+              <Dropdown as={ButtonGroup}>
+                <Badge
+                  badgeContent={4}
+                  color="primary"
+                  style={{ width: "100%" }}
+                >
+                  <OverlayTrigger
+                    overlay={
+                      <Tooltip id="tooltip-disabled">Log de alterações</Tooltip>
+                    }
+                  >
+                    <Button variant="warning" style={{ width: "100%" }}>
+                      <i
+                        class="fa fa-exclamation-circle"
+                        style={{ color: "white" }}
+                      ></i>
+                    </Button>
+                  </OverlayTrigger>
+                </Badge>
+              </Dropdown>
+
+              <Dropdown as={ButtonGroup} style={{ marginTop: "10px" }}>
+                <OverlayTrigger
+                  overlay={<Tooltip id="tooltip-disabled">Mensagens</Tooltip>}
+                >
+                  <Button variant="warning" className={classes.button}>
+                    <i class="fa fa-envelope" style={{ color: "white" }}></i>
+                  </Button>
+                </OverlayTrigger>
+                <Dropdown.Toggle
+                  id="dropdown-split-basic"
+                  variant="warning"
+                  style={{ color: "white" }}
+                />
+
+                <Dropdown.Menu>
+                  <Dropdown.Item>Caixa de mensagens</Dropdown.Item>
+                  <Dropdown.Item>Enviar Mensagem</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </ButtonGroup>
+
+            {/* Adicão/Listar */}
+            <ButtonGroup vertical style={{ marginTop: "20px" }}>
               <Dropdown as={ButtonGroup}>
                 <OverlayTrigger
                   overlay={

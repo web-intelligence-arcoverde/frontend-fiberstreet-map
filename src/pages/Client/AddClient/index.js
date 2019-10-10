@@ -18,6 +18,7 @@ function ClienteAddModal(props) {
 
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
+  const [cpfUnmasked, setCpfUnmasked] = useState("");
   const [plano, setPlano] = useState("");
   const [address, setAddress] = useState("");
   const [PPPOE, setPPPOE] = useState("");
@@ -26,6 +27,12 @@ function ClienteAddModal(props) {
   function handleHideModal() {
     const { hideNewModalClient } = props;
     hideNewModalClient();
+    setName("");
+    setCpf("");
+    setPlano("");
+    setAddress("");
+    setPPPOE("");
+    setObs("");
   }
 
   function handleSubmit(e) {
@@ -36,7 +43,7 @@ function ClienteAddModal(props) {
     const newClient = {
       name: name,
       coordinates: coordinates,
-      cpf: cpf,
+      cpf: cpfUnmasked,
       speed: plano,
       pppoe: PPPOE,
       address: address,
@@ -44,6 +51,36 @@ function ClienteAddModal(props) {
     };
     createClientRequest(newClient);
     handleHideModal();
+  }
+
+  function handleFormReset() {
+    this.setState(() => this.initialState);
+  }
+
+  function cpfCnpj(v) {
+    //Remove tudo o que não é dígito
+    v = v.replace(/\D/g, "");
+    if (v.length <= 11) {
+      //CPF
+      //Coloca um ponto entre o terceiro e o quarto dígitos
+      v = v.replace(/(\d{3})(\d)/, "$1.$2");
+      //Coloca um ponto entre o terceiro e o quarto dígitos
+      //de novo (para o segundo bloco de números)
+      v = v.replace(/(\d{3})(\d)/, "$1.$2");
+      //Coloca um hífen entre o terceiro e o quarto dígitos
+      v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    } else if (v.length <= 14) {
+      //CNPJ
+      //Coloca ponto entre o segundo e o terceiro dígitos
+      v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+      //Coloca ponto entre o quinto e o sexto dígitos
+      v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+      //Coloca uma barra entre o oitavo e o nono dígitos
+      v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+      //Coloca um hífen depois do bloco de quatro dígitos
+      v = v.replace(/(\d{4})(\d)/, "$1-$2");
+    }
+    return v;
   }
 
   return (
@@ -72,8 +109,12 @@ function ClienteAddModal(props) {
               <Form.Label>CPF:</Form.Label>
               <Form.Control
                 type="text"
+                maxlength="18"
                 value={cpf}
-                onChange={e => setCpf(e.target.value)}
+                onChange={e => {
+                  setCpfUnmasked(e.target.value);
+                  setCpf(cpfCnpj(e.target.value));
+                }}
               />
             </Form.Group>
 
