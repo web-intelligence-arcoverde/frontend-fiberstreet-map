@@ -9,10 +9,30 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 //Creators
-// import { Creators as splitterCreators } from "../../../redux/store/ducks/splitter";
+import { Creators as splitterCreators } from "../../../../redux/store/ducks/splitter";
+import { Creators as ctosCreators } from "../../../../redux/store/ducks/ctos";
 
 function TableSplitter(props) {
-  // const { modalNewSplitter } = props.redux.splitter;
+  const { modalNewSplitter } = props.redux.splitter;
+
+  const { data } = props.redux.ctos.viewCto;
+
+  console.log("informações da cto {splitter(id)}");
+  console.log(data.id); //pegando o id da cto selecionada.
+
+  //   function getSplitters(id) {
+  //     api
+  //       .get(`/get/splitter/cto/${id}`)
+  //       .then(response => {
+  //         const sp = response.data;
+  //         setSplitters(sp);
+  //         getClientes(sp[0].id);
+  //         getCabosCto(id);
+  //       })
+  //       .catch(e => console.warn(e));
+  //   }
+  //   getSplitters(all.viewCto.data.id);
+  // }, [all.viewCto.data.id]);
 
   return (
     <Container>

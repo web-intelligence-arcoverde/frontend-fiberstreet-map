@@ -94,9 +94,6 @@ function ViewCto(props) {
   const { viewCto } = ctos; //Recuperando o estado inicial da CTO
   const { data } = viewCto; //Recuperando os dados da CTO
 
-  console.log("informações da cto");
-  console.log(data);
-
   return (
     <Modal size="lg" show={viewCto.visible} onHide={hideViewModalCto}>
       <Modal.Header

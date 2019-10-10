@@ -255,7 +255,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function TableClients(props) {
+function TableSplitters(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -268,6 +268,9 @@ function TableClients(props) {
     const { loadClientRequest } = props;
     loadClientRequest();
   });
+
+  console.log("Procurar os splitters");
+  console.log(props.redux);
 
   function handleRequestSort(event, property) {
     const isDesc = orderBy === property && order === "desc";
@@ -476,4 +479,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TableClients);
+)(TableSplitters);

@@ -1,34 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
+import moment from "moment";
 
-function createData(cpf, nome, plano, pppoe, port) {
-  return { cpf, nome, plano, pppoe, port };
-}
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TableSortLabel,
+  Toolbar,
+  Typography,
+  Paper,
+  Checkbox,
+  IconButton,
+  Tooltip
+} from "@material-ui/core/";
 
-const rows = [
-  createData("1", "Lucas", 30, "@ppoe1", 1),
-  createData("2", "Henrique", 250, "@ppoe2", 2),
-  createData("3", "Paes", 160, "@ppoe3", 3),
-  createData("4", "Carvalho", 60, "@ppoe4", 4),
-  createData("5", "João", 160, "@ppoe5", 5)
-];
+// redux
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
+//Creators redux
+import { Creators as clienteCreators } from "../../../../redux/store/ducks/cliente";
+import { Creators as ctosCreators } from "../../../../redux/store/ducks/ctos";
+
+//Icons
+import { Delete, FilterList, LocationOn, Edit } from "@material-ui/icons/";
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -57,11 +58,23 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  { id: "cpf", numeric: false, disablePadding: true, label: "CPF" },
-  { id: "nome", numeric: true, disablePadding: false, label: "Nome" },
-  { id: "plano", numeric: true, disablePadding: false, label: "Plano" },
-  { id: "pppoe", numeric: true, disablePadding: false, label: "PPPOE" },
-  { id: "port", numeric: true, disablePadding: false, label: "Porta" }
+  { id: "cpf", numeric: false, disablePadding: false, label: "CPF" },
+  { id: "name", numeric: false, disablePadding: false, label: "Nome" },
+  { id: "ppoe", numeric: false, disablePadding: false, label: "PPPOE" },
+  { id: "speed", numeric: false, disablePadding: false, label: "Plano" },
+  {
+    id: "created_at",
+    numeric: false,
+    disablePadding: false,
+    label: "Criação"
+  },
+  {
+    id: "installation_date",
+    numeric: false,
+    disablePadding: false,
+    label: "Instalação"
+  },
+  { id: "obs", numeric: false, disablePadding: false, label: "Obs." }
 ];
 
 function EnhancedTableHead(props) {
@@ -93,7 +106,7 @@ function EnhancedTableHead(props) {
         {headCells.map(headCell => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align={headCell.numeric ? "right" : "center"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -145,7 +158,8 @@ const useToolbarStyles = makeStyles(theme => ({
     flex: "1 1 100%"
   },
   actions: {
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
+    display: "inherit"
   },
   title: {
     flex: "0 0 auto",
@@ -175,15 +189,33 @@ const EnhancedTableToolbar = props => {
       <div className={classes.spacer} />
       <div className={classes.actions}>
         {numSelected > 0 ? (
-          <Tooltip title="Excluir">
-            <IconButton aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
+          <>
+            {numSelected === 1 && (
+              <>
+                <Tooltip title="Ir para o cliente">
+                  <IconButton aria-label="ir">
+                    <LocationOn />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Edit">
+                  <IconButton aria-label="editar">
+                    <Edit />
+                  </IconButton>
+                </Tooltip>
+              </>
+            )}
+
+            <Tooltip title="Excluir">
+              <IconButton aria-label="delete">
+                <Delete />
+              </IconButton>
+            </Tooltip>
+          </>
         ) : (
           <Tooltip title="Filter list">
             <IconButton aria-label="filter list">
-              <FilterListIcon />
+              <FilterList />
             </IconButton>
           </Tooltip>
         )}
@@ -224,13 +256,23 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function EnhancedTable() {
+function TableClients(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const clients = props.redux.client.geojson.clients;
+  const { data } = props.redux.ctos.viewCto;
+
+  console.log("informações da cto {Clientes(id)}");
+  console.log(data.id); //pegando o id da cto selecionada.
+
+  useEffect(() => {
+    const { loadClientRequest } = props;
+    loadClientRequest();
+  });
 
   function handleRequestSort(event, property) {
     const isDesc = orderBy === property && order === "desc";
@@ -240,11 +282,51 @@ export default function EnhancedTable() {
 
   function handleSelectAllClick(event) {
     if (event.target.checked) {
-      const newSelecteds = rows.map(n => n.cpf);
+      const newSelecteds = clients.map(row => row.properties.data.cpf);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
+  }
+
+  function formatDate(data) {
+    const date = moment(data).format("DD/MM/YYYY");
+    return date;
+  }
+
+  function formatCpfCnpj(v) {
+    //Remove tudo o que não é dígito
+    v = v.replace(/\D/g, "");
+
+    if (v.length <= 14) {
+      //CPF
+
+      //Coloca um ponto entre o terceiro e o quarto dígitos
+      v = v.replace(/(\d{3})(\d)/, "$1.$2");
+
+      //Coloca um ponto entre o terceiro e o quarto dígitos
+      //de novo (para o segundo bloco de números)
+      v = v.replace(/(\d{3})(\d)/, "$1.$2");
+
+      //Coloca um hífen entre o terceiro e o quarto dígitos
+      v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    } else {
+      //CNPJ
+
+      //Coloca ponto entre o segundo e o terceiro dígitos
+      v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+
+      //Coloca ponto entre o quinto e o sexto dígitos
+      v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+
+      //Coloca uma barra entre o oitavo e o nono dígitos
+      v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+
+      //Coloca um hífen depois do bloco de quatro dígitos
+      v = v.replace(/(\d{4})(\d)/, "$1-$2");
+    }
+
+    return v;
   }
 
   function handleClick(event, name) {
@@ -268,7 +350,7 @@ export default function EnhancedTable() {
   }
 
   function handleChangePage(event, newPage) {
-    setPage(newPage);
+    console.log("");
   }
 
   function handleChangeRowsPerPage(event) {
@@ -279,7 +361,7 @@ export default function EnhancedTable() {
   const isSelected = name => selected.indexOf(name) !== -1;
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, clients.length - page * rowsPerPage);
 
   return (
     <div className={classes.root2}>
@@ -301,69 +383,78 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={clients.length}
             />
             <TableBody>
-              {stableSort(rows, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.cpf);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+              {clients &&
+                stableSort(clients, getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.properties.data.cpf);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={event => handleClick(event, row.cpf)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.cpf}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                          style={{ color: "#FFBF00" }}
-                        />
-                      </TableCell>
-
-                      <TableCell
-                        component="th"
-                        style={{ color: "#BDBDBD" }}
-                        id={labelId}
-                        scope="row"
-                        padding="none"
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event =>
+                          handleClick(event, row.properties.data.cpf)
+                        }
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.properties.data.cpf}
+                        selected={isItemSelected}
                       >
-                        {row.cpf}
-                      </TableCell>
-                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                        {row.nome}
-                      </TableCell>
-                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                        {row.plano}
-                      </TableCell>
-                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                        {row.pppoe}
-                      </TableCell>
-                      <TableCell align="right" style={{ color: "#BDBDBD" }}>
-                        {row.port}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isItemSelected}
+                            inputProps={{ "aria-labelledby": labelId }}
+                            style={{ color: "#FFBF00" }}
+                          />
+                        </TableCell>
+
+                        <TableCell
+                          component="th"
+                          style={{ color: "#BDBDBD" }}
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                        >
+                          {formatCpfCnpj(row.properties.data.cpf)}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {row.properties.data.name}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {row.properties.data.pppoe}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {row.properties.data.speed}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {formatDate(row.properties.data.created_at)}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {formatDate(row.properties.data.installation_date)}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {row.properties.data.obs}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
+                  <TableCell colSpan={10} />
                 </TableRow>
               )}
             </TableBody>
           </Table>
         </div>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, clients.length]}
           component="div"
-          count={rows.length}
+          count={clients.length}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{
@@ -379,3 +470,15 @@ export default function EnhancedTable() {
     </div>
   );
 }
+
+const mapStateToProps = state => ({
+  redux: state
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(clienteCreators, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TableClients);
