@@ -7,19 +7,17 @@ import { actions as toastrActions, toastr } from "react-redux-toastr";
 
 export function* createClient({ payload }) {
   try {
-    const cliente = yield call([api, "post"], "/clients", payload.client);
+    const response = yield call([api, "post"], "/clients", payload.client);
     // yield put(ClientCreators.createClientSuccess(cliente));
-    toastrActions.add({
-      type: "error",
-      title: "Deu certo",
-      message: "Sucesso ao criar cliente, eu acho"
-    });
+    yield toastr.success(
+      "Sucesso",
+      `Cliente ${payload.client.name} adicionado com sucesso!`
+    );
   } catch (err) {
-    toastrActions.add({
-      type: "error",
-      title: "Erro",
-      message: "Falha ao criar cliente"
-    });
+    yield toastr.error(
+      "Erro",
+      `Cliente ${payload.client.name} não foi adicionado!`
+    );
   }
 }
 
@@ -28,11 +26,7 @@ export function* loadClient(action) {
     const response = yield call([api, "get"], "clients");
     yield put(ClientCreators.loadClientSuccess(response.data));
   } catch (err) {
-    toastrActions.add({
-      type: "error",
-      title: "Erro",
-      message: "Falha ao carregar clientes"
-    });
+    yield toastr.error("Falha", "Falha ao carregar clientes");
   }
 }
 
