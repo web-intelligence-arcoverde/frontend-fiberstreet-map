@@ -27,6 +27,12 @@ function ClienteAddModal(props) {
   function handleHideModal() {
     const { hideNewModalClient } = props;
     hideNewModalClient();
+    setName("");
+    setCpf("");
+    setPlano("");
+    setAddress("");
+    setPPPOE("");
+    setObs("");
   }
 
   function handleSubmit(e) {
@@ -45,6 +51,10 @@ function ClienteAddModal(props) {
     };
     createClientRequest(newClient);
     handleHideModal();
+  }
+
+  function handleFormReset() {
+    this.setState(() => this.initialState);
   }
 
   function cpfCnpj(v) {

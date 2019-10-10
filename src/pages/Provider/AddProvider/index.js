@@ -20,12 +20,11 @@ function AddProvider(props) {
   const [name, setName] = useState("");
   const [cnpj, setCnpj] = useState("");
   const [cnpjUnmasked, setCnpjUnmasked] = useState("");
-  const [plano, setPlano] = useState("");
+  const [address, setAddress] = useState("");
 
   function cpfCnpj(v) {
     //Remove tudo o que não é dígito
     v = v.replace(/\D/g, "");
-
     //CNPJ
     //Coloca ponto entre o segundo e o terceiro dígitos
     v = v.replace(/^(\d{2})(\d)/, "$1.$2");
@@ -35,17 +34,27 @@ function AddProvider(props) {
     v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
     //Coloca um hífen depois do bloco de quatro dígitos
     v = v.replace(/(\d{4})(\d)/, "$1-$2");
-
     return v;
   }
 
+  async function handleCeo(e) {
+    e.preventDefault();
+
+    const newProvider = {
+      name: name,
+      cnpj: cnpjUnmasked,
+      address: address
+    };
+
+    hideModalNewProvider();
+    setName("");
+    setCnpj("");
+    setAddress("");
+  }
+
   return (
-    <Modal
-      animation={false}
-      show={viewNewProvider.visible}
-      onHide={hideModalNewProvider}
-    >
-      <Form>
+    <Modal show={viewNewProvider.visible} onHide={hideModalNewProvider}>
+      <Form onSubmit={handleCeo}>
         <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
           <Modal.Title>Cadastrar Provedor</Modal.Title>
         </Modal.Header>
@@ -53,7 +62,11 @@ function AddProvider(props) {
         <Modal.Body>
           <Form.Group>
             <Form.Label>Nome</Form.Label>
-            <Form.Control type="text" />
+            <Form.Control
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+            />
           </Form.Group>
           <Form.Group>
             <Form.Label>CNPJ</Form.Label>
@@ -69,7 +82,13 @@ function AddProvider(props) {
           </Form.Group>
           <Form.Group>
             <Form.Label>Endereco</Form.Label>
-            <Form.Control type="text" />
+            <Form.Control
+              type="text"
+              onChange={e => {
+                setAddress(e.target.value);
+              }}
+              value={address}
+            />
           </Form.Group>
         </Modal.Body>
 
@@ -77,7 +96,9 @@ function AddProvider(props) {
           <Button variant="secondary" onClick={hideModalNewProvider}>
             Fechar
           </Button>
-          <Button variant="primary">Salvar</Button>
+          <Button variant="secondary" type="submit">
+            Salvar
+          </Button>
         </Modal.Footer>
       </Form>
     </Modal>
