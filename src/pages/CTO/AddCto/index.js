@@ -21,8 +21,6 @@ function AddNewCto(props) {
 
   const [name, setName] = useState("");
   const [coordinates, setCoordinates] = useState("");
-  //   JSON.stringify(props.redux.all.coordenadas)
-  // );
   const [observacao, setObservacao] = useState("");
   const [model, setModel] = useState("");
   const [address, setAddress] = useState("");
@@ -39,6 +37,11 @@ function AddNewCto(props) {
     };
     const { createCtoRequest } = props;
     createCtoRequest(newCto);
+    HideNewViewModalCto();
+    setName("");
+    setAddress("");
+    setModel("");
+    setObservacao("");
   }
 
   return (
@@ -54,7 +57,7 @@ function AddNewCto(props) {
 
         <Modal.Body>
           <Form.Group>
-            <Form.Label>Nome CTO:</Form.Label>
+            <Form.Label>Nome da CTO:</Form.Label>
             <Form.Control
               type="text"
               value={name}
@@ -92,9 +95,13 @@ function AddNewCto(props) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button onClick={HideNewViewModalCto}>Fechar</Button>
+          <Button variant="secondary" onClick={HideNewViewModalCto}>
+            Fechar
+          </Button>
 
-          <Button type="submit">Salvar</Button>
+          <Button variant="secondary" type="submit">
+            Salvar
+          </Button>
         </Modal.Footer>
       </Form>
     </Modal>

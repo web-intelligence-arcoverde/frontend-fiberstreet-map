@@ -35,6 +35,7 @@ import LeftSelector from "./Components/LeftSelector/index";
 
 //CSS
 import "./map.css";
+import Header from "./Components/Header";
 
 const myDeckLayer = new MapboxLayer({
   id: "my-scatterplot",
@@ -236,7 +237,7 @@ class Map extends Component {
     map.on("click", "cto", e => this.handleCtoClick(e.features[0]));
     // Evento de clique nos Clientes
     map.on("click", "cliente", e => this.handleCtoCaboClick(e));
-    map.on("click", "cliente_inativo", e => this.handleCtoCaboClick(e))
+    map.on("click", "cliente_inativo", e => this.handleCtoCaboClick(e));
   }
 
   handleCtoClick = features => {
@@ -451,7 +452,7 @@ class Map extends Component {
             clientsActive.push(client);
           }
         });
-        
+
         data.forEach(client => {
           if (client.properties.data.status !== "active") {
             clientsInactive.push(client);

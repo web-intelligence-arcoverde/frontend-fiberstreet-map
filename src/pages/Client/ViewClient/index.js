@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import moment from "moment";
 
 //Redux
 import { connect } from "react-redux";
@@ -89,6 +90,11 @@ function ViewCliente(props) {
     handleHideModal();
   }
 
+  function formatDate(data) {
+    const date = moment(data).format("DD/MM/YYYY");
+    return date;
+  }
+
   return (
     <>
       <CommentDialog />
@@ -103,7 +109,7 @@ function ViewCliente(props) {
             backgroundColor: "#F7D358"
           }}
         >
-          <h6 style={{ fontSize: "10px" }}>{data.created_at}</h6>
+          <h6 style={{ fontSize: "10px" }}>{formatDate(data.created_at)}</h6>
           <Account
             style={{
               display: "block",
@@ -154,6 +160,15 @@ function ViewCliente(props) {
         </Modal.Body>
 
         <Modal.Footer>
+          {data.status === null ? (
+            <Button variant="primary" onClick={deleteClient}>
+              Ativar cliente
+            </Button>
+          ) : (
+            <Button variant="danger" onClick={deleteClient}>
+              Desativar
+            </Button>
+          )}
           <Button variant="danger" onClick={deleteClient}>
             Excluir
           </Button>

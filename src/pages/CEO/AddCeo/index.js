@@ -14,24 +14,32 @@ function AddCeo(props) {
   const { HideNewViewModalCeo } = props;
   const { viewNewCeo } = props.redux.ceo;
 
+  const [name, setName] = useState("");
   const [model, setModel] = useState("");
   const [coordinates, setCoordinates] = useState("");
-  //   JSON.stringify(props.redux.all.coordenadas)
-  // );
+
   const [observacao, setObservacao] = useState("");
   const [type, setType] = useState("");
   const [address, setAddress] = useState("");
 
   async function handleCeo(e) {
-    // e.preventDefault();
+    e.preventDefault();
 
     const newCeo = {
       type: type,
-      coordinates: coordinates,
+      coordinates: viewNewCeo.coordinates,
       model: model,
       address: address,
       obs: observacao
     };
+
+    HideNewViewModalCeo();
+
+    setName("");
+    setModel("");
+    setType("");
+    setAddress("");
+    setObservacao("");
   }
 
   return (
@@ -40,12 +48,20 @@ function AddCeo(props) {
       onHide={HideNewViewModalCeo}
       style={{ overflow: "scroll" }}
     >
-      <Form>
+      <Form onSubmit={handleCeo}>
         <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
           <Modal.Title>Cadastrar da CEO</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
+          <Form.Group>
+            <Form.Label>Nome:</Form.Label>
+            <Form.Control
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+            />
+          </Form.Group>
           <Form.Group>
             <Form.Label>Modelo:</Form.Label>
             <Form.Control
@@ -85,14 +101,11 @@ function AddCeo(props) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button
-            style={{ backgroundColor: "#0174DF" }}
-            onClick={HideNewViewModalCeo}
-          >
+          <Button variant="secondary" onClick={HideNewViewModalCeo}>
             Fechar
           </Button>
 
-          <Button style={{ backgroundColor: "#0174DF" }} type="submit">
+          <Button variant="secondary" type="submit">
             Salvar
           </Button>
         </Modal.Footer>
