@@ -18,6 +18,7 @@ import { bindActionCreators } from "redux";
 import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
 import { Creators as MapActions } from "../../../redux/store/ducks/map";
 import { Creators as CaboActions } from "../../../redux/store/ducks/cabo";
+import { Creators as DropActions } from "../../../redux/store/ducks/drop";
 
 function formatDate(data) {
   const date = moment(data).format("YYYY-MM-DD");
@@ -52,9 +53,31 @@ function ViewClient(props) {
     setObs("");
   }
 
+
+  function addCabo() {
+    let latitude = JSON.parse(data.coordinates).latitude;
+    let longitude = JSON.parse(data.coordinates).longitude;
+    let coord = [longitude, latitude];
+
+    const {
+      addCoordCabo, // setPolyline
+      setDelemitationMap,
+      addCableClientId,
+      addDropClientId
+    } = props;
+
+    setDelemitationMap("cabo"); // map - map.delimitacao
+    let arrayDeArray = new Array(coord);
+    addCoordCabo(arrayDeArray); // map - map.polyline
+    addCableClientId(data.id); // cabo - cabo.id
+    addDropClientId(data.id);
+    handleHideModal();
+  }
+
   useEffect(() => {
     firstLoad();
   }, [viewClient.visible]);
+
 
   function click(e) {
     setTeste(!teste);
@@ -221,7 +244,7 @@ const mapStateToProps = state => ({
 //Ações
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { ...ClientActions, ...MapActions, ...CaboActions },
+    { ...ClientActions, ...MapActions, ...CaboActions, ...DropActions },
     dispatch
   );
 

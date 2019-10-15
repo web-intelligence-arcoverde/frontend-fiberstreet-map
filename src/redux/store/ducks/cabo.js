@@ -14,31 +14,36 @@ export const Types = {
 };
 
 const INITIAL = {
-  isVisible: false,
-  data: {},
   newCabo: {
+    isVisible: false,
+    ctoId: null,
+    data: {}
+  },
+  newCaboReserva: {
     isVisible: false,
     clientId: null,
     data: {}
-  },
-  cliente_id: null
+  }
 };
 
 export default function(state = INITIAL, action) {
   switch (action.type) {
     case Types.SHOW_MODAL_NEW_CABO:
-      return { ...state, isVisible: true, data: action.payload.data };
+      return {
+        ...state,
+        newCabo: { isVisible: true, ctoId: action.payload.id }
+      };
     case Types.HIDE_MODAL_NEW_CABO:
-      return { ...state, isVisible: false };
+      return { ...state, newCabo: { isVisible: false } };
     case Types.SHOW_MODAL_NEW_CABO_RESERVA:
       return {
         ...state,
-        newCabo: { isVisible: true, data: action.payload.data }
+        newCaboReserva: { isVisible: true, data: action.payload.data }
       };
     case Types.HIDE_MODAL_NEW_CABO_RESERVA:
-      return { ...state, newCabo: { isVisible: false } };
+      return { ...state, newCaboReserva: { isVisible: false } };
     case Types.ADD_CLIENTE_ID:
-      return { ...state, id: action.payload.id };
+      return { ...state, newCto: { ...state.newCto, id: action.payload.id } };
 
     default:
       return state;
@@ -53,9 +58,9 @@ export const Creators = {
   }),
 
   //showAddNewCaboModal
-  showAddCableCto: data => ({
+  showAddCableCto: id => ({
     type: Types.SHOW_MODAL_NEW_CABO,
-    payload: { data }
+    payload: { id }
   }),
 
   //hideAddNewCaboModal

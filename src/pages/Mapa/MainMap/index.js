@@ -18,6 +18,9 @@ import ViewCto from "../../CTO/ViewCto/index";
 import ModalTabList from "../../View/index";
 import ModalSplitter from "../../Splitter/AddSplitter/index";
 
+import CaboAdd from "../../Cable/CaboAdd";
+import AddRelCliCto from "../../Splitter/AddRelCliCto";
+
 const TOKEN =
   "pk.eyJ1IjoidWxpbmt1eCIsImEiOiJjanczamF5cG8wNWt0NDltcnkydXQybGdjIn0.F1PkG0rCiHhf-jhnRMMdTg";
 
@@ -34,6 +37,8 @@ const MainMap = props => (
     <AddNewClient />
     <AddNewCto />
     <AddNewFuncionario />
+    <CaboAdd />
+    <AddRelCliCto />
     <MapO
       container="map"
       // eslint-disable-next-line react/style-prop-object
@@ -52,7 +57,7 @@ const MainMap = props => (
 <SpAddModel />
 <ClienteAddModal />
 <ViewCliente />
-<AddRelCliCto />
+
 */
 
 /* Importando components
