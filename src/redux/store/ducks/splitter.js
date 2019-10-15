@@ -1,6 +1,8 @@
 export const Types = {
-  SHOWNEWMODALSPLITTER: "splitter/MODAL_SHOW",
-  HIDENEWMODALSPLITTER: "splitter/MODAL_HIDE"
+  SHOW_NEW_MODAL_SPLITTER: "@splitter/MODAL_SHOW",
+  HIDE_NEW_MODAL_SPLITTER: "@splitter/MODAL_HIDE",
+  CREATE_SP_REQUEST: "@splitter/CREATE_REQUEST",
+  CREATE_SP_SUCCESS: "@splitter/CREATE_SUCCESS"
 };
 
 const INITIAL_STATE = {
@@ -12,15 +14,15 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case Types.SHOWNEWMODALSPLITTER:
+    case Types.SHOW_NEW_MODAL_SPLITTER:
       return {
         ...state,
         modalNewSplitter: {
           visible: true,
-          id: action.payload.id
+          cto_id: action.payload.ctoId
         }
       };
-    case Types.HIDENEWMODALSPLITTER:
+    case Types.HIDE_NEW_MODAL_SPLITTER:
       return {
         ...state,
         modalNewSplitter: {
@@ -34,14 +36,24 @@ export default function(state = INITIAL_STATE, action) {
 }
 
 export const Creators = {
-  showSplitterAddModal: id => ({
-    type: Types.SHOWMODALSPLITTER,
+  showSplitterAddModal: ctoId => ({
+    type: Types.SHOW_NEW_MODAL_SPLITTER,
     payload: {
-      id
+      ctoId
     }
   }),
 
   hideSplitterAddModal: () => ({
-    type: Types.HIDEMODALSPLITTER
+    type: Types.HIDE_NEW_MODAL_SPLITTER
+  }),
+
+  createSplitterRequest: (splitter) => ({
+    type: Types.CREATE_SP_REQUEST,
+    payload: { splitter }
+  }),
+
+  createSplitterSuccess: splitter => ({
+    type: Types.CREATE_SP_SUCCESS,
+    payload: { splitter }
   })
 };

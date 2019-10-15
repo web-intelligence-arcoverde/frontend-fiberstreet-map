@@ -114,6 +114,7 @@ function ViewCto(props) {
           <Table responsive>
             <thead>
               <tr style={{ backgroundColor: "#fff", color: "#6E6E6E" }}>
+                <th>Id</th>
                 <th>Nome</th>
                 <th>Modelo</th>
                 <th>Endereço</th>
@@ -122,6 +123,7 @@ function ViewCto(props) {
             </thead>
 
             <tbody>
+              <td>{data.id}</td>
               <td>{data.name}</td>
               <td>{data.model}</td>
               <td>{data.address}</td>

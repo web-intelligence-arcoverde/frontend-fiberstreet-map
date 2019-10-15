@@ -30,6 +30,7 @@ export const API = {
   GET_CABO_GEOJSON: "/gj/cables",
   GET_CTO_GEOJSON: "/gj/ctos",
   GET_CLIENTE_GEOJSON: "/gj/clients",
+  GET_CEO_GEOJSON: "/gj/ceos",
 
   CREATE_CTO: "/ctos",
   GET_CTO: "/ctos",

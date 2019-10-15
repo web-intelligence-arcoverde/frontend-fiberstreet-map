@@ -6,6 +6,7 @@ import { bindActionCreators } from "redux";
 import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
 
 import api, { API } from "../../../services/api";
+import axios from "axios";
 
 //Components
 import { Modal, Container, Button } from "react-bootstrap";
@@ -47,9 +48,10 @@ function AddRelCliCto(props) {
   async function getSpByCtoId() {
     api
       .get(
-        `${API.GET_SPLITTER_BY_CTO}/${cto_id}`
+        `splittercto/${cto_id}`
+        // `${API.GET_SPLITTER_BY_CTO}/${cto_id}`
         // `/get/splitter/cto/${cto_id}`
-        )
+      )
       .then(response => {
         const { data: Splitters } = response;
         setSplitters(Splitters);
@@ -59,15 +61,20 @@ function AddRelCliCto(props) {
   }
   async function getSaidasDoSplitter() {
     await splitters.map((splitter, index) => {
-      alert(JSON.stringify(splitter));
+      // alert(JSON.stringify(splitter));
+      console.log(splitter);
       api
-        .get(`saidasplitter/splitter/${splitter.id}`)
+        // axios
+        // .get(`http://192.168.0.143:3334/saidasplitter/splitter/13`)
+        .get(`splitteroutcto/${splitter.id}`)
         .then(response => {
           const { data: saidasAndId } = response;
           // console.tron.log(saidasAndId.saidas);
           criarArrayDeAcordoComOBalanceamento(
-            saidasAndId.saidas,
-            splitter.balanceamento,
+            // saidasAndId.saidas,
+            saidasAndId, //.saidas,
+            splitter.balancing,
+            // splitter.balanceamento,
             splitter.id
           );
           // console.tron.log(saidasAndId.saidas);
@@ -77,7 +84,7 @@ function AddRelCliCto(props) {
           // alert(JSON.stringify(saidas))
           // console.tron.log({ sss: { saidas: saidasAndId } });
         })
-        .catch(err => console.warn.log(err));
+        .catch(err => console.warn(err));
     });
   }
 
@@ -92,7 +99,7 @@ function AddRelCliCto(props) {
 
     for (let count = 0; count < balanceamento; count++) {
       if (saidas[count]) {
-        if (count + 1 === saidas[count].numero) {
+        if (count + 1 === saidas[count].number /*numero*/) {
           newArray[count] = {
             ...saidas[count],
             isActive: true,
@@ -101,7 +108,7 @@ function AddRelCliCto(props) {
         } else {
           // Teste para adicionar saída caso não seja um número a mais do que a posição no array
 
-          let posicaoDaSaidaNoArray = saidas[count].numero - 1;
+          let posicaoDaSaidaNoArray = saidas[count].number /*numero*/ - 1;
           // console.tron.log({ POSICAO: posicaoDaSaidaNoArray });
           // console.tron.log({
           //   ...saidas[count],
@@ -125,7 +132,8 @@ function AddRelCliCto(props) {
           if (!(count + 1 === balanceamento)) {
             newArray[count] = {
               id: 0,
-              numero: count + 1,
+              // numero: count + 1,
+              number: count + 1,
               isActive: false,
               select: false,
               splitter_id
@@ -136,7 +144,8 @@ function AddRelCliCto(props) {
         if (!newArray[count]) {
           newArray[count] = {
             id: 0,
-            numero: count + 1,
+            // numero: count + 1,
+            number: count + 1,
             isActive: false,
             selected: false,
             splitter_id
@@ -144,6 +153,9 @@ function AddRelCliCto(props) {
         }
       }
     }
+    console.log("newArray");
+    console.error(newArray);
+
     setSaidas(newArray);
   }
 
@@ -181,19 +193,19 @@ function AddRelCliCto(props) {
     }
   }
 
-  useEffect(() => {
-    function* carregarSaidasSplitter() {
-      const { splitters, cto_id, drop } = props.drop.data;
-      alert(JSON.stringify({ splitters, cto_id, drop }));
-    }
+  // useEffect(() => {
+  //   function* carregarSaidasSplitter() {
+  //     const { splitters, cto_id, drop } = props.drop.data;
+  //     alert(JSON.stringify({ splitters, cto_id, drop }));
+  //   }
 
-    carregarSaidasSplitter();
-  });
+  //   carregarSaidasSplitter();
+  // });
 
   useEffect(() => {
-    obterSaidasDoSplitter();
-    obterSaidasDoSplitter();
-  }, [props.redux.drop.isVisible]);
+    // obterSaidasDoSplitter();
+    if (props.redux.drop.isVisible) obterSaidasDoSplitter();
+  }, [props.redux.drop.isVisible]); //obterSaidasDoSplitter,
 
   function salvarDrop() {
     //Adicionar o cliente na saída do splitter selecionada
@@ -209,30 +221,31 @@ function AddRelCliCto(props) {
     let findedSelected = saidaSelecionada.find(
       saida => saida.selected === true
     );
-    if (findedSelected.isActive === false) {
-      // console.tron.log(
-      //   `Poderá ser usada a saída de número ${findedSelected.numero}`
-      // );
-      alert(`Aguarde enquanto salvamos os dados no banco de dados`);
+    if (findedSelected) {
+      if (findedSelected.isActive === false) {
+        alert(`Aguarde enquanto salvamos os dados no banco de dados`);
 
-      const { addDropRequest } = props;
-      const cabo = drop.data.drop;
-      const { cto_id } = drop.data;
+        const { addDropRequest } = props;
+        const cabo = drop.data.drop;
+        const { cto_id, client_id } = drop.data;
 
-      const { cliente_id } = cliente;
-      addDropRequest({ cabo, cliente_id, cto_id, saida: findedSelected });
-      // api.post(`saidasplitter/cliente/create`, );
+        addDropRequest({ cabo, client_id, cto_id, saida: findedSelected });
+        // api.post(`saidasplitter/cliente/create`, );
+      } else {
+        // console.tron.log(
+        //   `A saída de número ${
+        //     findedSelected.numero
+        //   }, pois ela encontra-se ocupada`
+        // );
+        alert(
+          `A saída ${findedSelected.numero}, encontra-se ocupada, escolha outra por favor!`
+        );
+      }
     } else {
-      // console.tron.log(
-      //   `A saída de número ${
-      //     findedSelected.numero
-      //   }, pois ela encontra-se ocupada`
-      // );
-      alert(
-        `A saída ${findedSelected.numero}, encontra-se ocupada, escolha outra por favor!`
-      );
+      alert("Marque uma saída");
     }
-    console.tron.log(findedSelected);
+
+    //console.tron.log(findedSelected);
     // Add fibra drop cliente no cabo
   }
 

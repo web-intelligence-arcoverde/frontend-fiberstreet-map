@@ -21,6 +21,12 @@ import { store as storeCeo } from "./ceo";
 import { Types as ProvidersTypes } from "../ducks/provider";
 import { getProviders, init } from "./provider";
 
+import { Types as DropTypes } from "../ducks/drop";
+import { loadSplitters, addDrop } from "./drop";
+
+import { Types as SplitterTypes } from "../ducks/splitter";
+import { createSplitter } from "./splitter";
+
 // import { Types as CaboTypes } from '../ducks/cabo'
 // import { createCabo } from './cabo'
 
@@ -47,9 +53,18 @@ export default function* rootSaga() {
 
     // Clientes
     takeLatest(ClientTypes.DELETE_CLIENT_REQUEST, deleteClient),
-    takeLatest(ClientTypes.UPDATE_CLIENT_REQUEST, updateClient)
-    //takeLatest(ClientTypes.LOAD_CLIENT_REQUEST, loadClient)
 
+
+    takeLatest(ClientTypes.UPDATE_CLIENT_REQUEST, updateClient),
+
+    //takeLatest(ClientTypes.LOAD_CLIENT_REQUEST, loadClient)
+    // Ceo
+    takeLatest(CeoTypes.CREATE_CEO_REQUEST, storeCeo),
+    // Drop
+    takeLatest(DropTypes.SHOW_DROP_MODAL_REQUEST, loadSplitters),
+    takeLatest(DropTypes.ADD_DROP_REQUEST, addDrop),
+
+    takeLatest(SplitterTypes.CREATE_SP_REQUEST, createSplitter)
     // takeLatest(CaboTypes.CREATE_CABO_REQUEST, createCabo)
     //takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient)
     //takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient)

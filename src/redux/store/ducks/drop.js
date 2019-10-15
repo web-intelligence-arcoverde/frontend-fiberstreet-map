@@ -7,7 +7,9 @@ export const Types = {
   SHOW_DROP_MODAL: "SHOW_MODAL/drop",
   HIDE_DROP_MODAL: "HIDE_MODAL/drop",
 
-  ADD_SAIDAS_SPLITTER: "ADD_SAIDAS_SPLITTER/drop"
+  ADD_SAIDAS_SPLITTER: "ADD_SAIDAS_SPLITTER/drop",
+
+  ADD_DROP_CLIENT_ID: "@drop/ADD_CLIENT_ID"
 };
 
 const INITIAL_STATE = {
@@ -35,12 +37,23 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, request: true };
     case Types.ADD_SAIDAS_SPLITTER:
       return { ...state, saidas: action.payload.saidas };
+    case Types.ADD_DROP_CLIENT_ID:
+      return {
+        ...state,
+        client_id: action.payload.clientId
+        // data: { ...state.data, client_id:  }
+      };
     default:
       return state;
   }
 }
 
 export const Creators = {
+  addDropClientId: clientId => ({
+    type: Types.ADD_DROP_CLIENT_ID,
+    payload: { clientId }
+  }),
+
   addDropRequest: data => ({
     type: Types.ADD_DROP_REQUEST,
     payload: { data }

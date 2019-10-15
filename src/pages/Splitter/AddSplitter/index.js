@@ -28,11 +28,18 @@ function AddNewSplitter(props) {
 
   async function handleSplitter(e) {
     e.preventDefault();
+
+    const { cto_id } = props.redux.splitter.modalNewSplitter;
     const newSplitter = {
       name: name,
       balancing: balancing,
-      model: model
+      model: model,
+      cto_id
     };
+
+    const { createSplitterRequest } = props;
+    await createSplitterRequest(newSplitter);
+    handleHideModal();
   }
 
   return (
