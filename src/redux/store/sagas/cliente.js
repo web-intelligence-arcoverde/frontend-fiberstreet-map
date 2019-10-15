@@ -35,9 +35,10 @@ export function* updateClient({ payload }) {
     const response = yield call(
       [api, "put"],
       `clients/${payload.id}`,
-      payload.cliente
+      payload.client
     );
     yield put(ClientCreators.updateClientSuccess(response.data));
+    yield toastr.success("Sucesso", "Sucesso ao atualizar cliente");
   } catch (err) {
     toastrActions.add({
       type: "error",

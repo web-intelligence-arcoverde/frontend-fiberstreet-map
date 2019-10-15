@@ -5,7 +5,12 @@ import { AuthTypes } from "../ducks/auth";
 import { signIn, signOut, signUp, getPermissions } from "./auth";
 
 import { Types as ClientTypes } from "../ducks/cliente";
-import { createClient, loadClient, deleteClient } from "./cliente";
+import {
+  createClient,
+  loadClient,
+  deleteClient,
+  updateClient
+} from "./cliente";
 
 import { Types as CtoTypes } from "../ducks/ctos";
 import { store as storeCto } from "./ctos";
@@ -41,7 +46,8 @@ export default function* rootSaga() {
     takeLatest(CeoTypes.CREATE_CEO_REQUEST, storeCeo),
 
     // Clientes
-    takeLatest(ClientTypes.DELETE_CLIENT_REQUEST, deleteClient)
+    takeLatest(ClientTypes.DELETE_CLIENT_REQUEST, deleteClient),
+    takeLatest(ClientTypes.UPDATE_CLIENT_REQUEST, updateClient)
     //takeLatest(ClientTypes.LOAD_CLIENT_REQUEST, loadClient)
 
     // takeLatest(CaboTypes.CREATE_CABO_REQUEST, createCabo)
