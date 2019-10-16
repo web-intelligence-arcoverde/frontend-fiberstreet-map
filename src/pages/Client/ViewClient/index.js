@@ -8,7 +8,6 @@ import Account from "@material-ui/icons/AccountCircle";
 //Reecriação de componentes
 import { Field } from "./Components/InputBase";
 import { InputField } from "./Components/InputFieldComponent";
-// import { InputField } from "./Components/Input";
 
 //Redux
 import { connect } from "react-redux";
@@ -38,7 +37,7 @@ function ViewClient(props) {
   const [address, setAddress] = useState("");
   const [installation, setInstallation] = useState("");
   const [obs, setObs] = useState("");
-  const [teste, setTeste] = useState(true);
+  const [teste, setTeste] = useState("");
 
   function handleHideModal() {
     const { hideClientViewModal } = props;
@@ -52,7 +51,6 @@ function ViewClient(props) {
     setInstallation("");
     setObs("");
   }
-
 
   function addCabo() {
     let latitude = JSON.parse(data.coordinates).latitude;
@@ -76,11 +74,15 @@ function ViewClient(props) {
 
   useEffect(() => {
     firstLoad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewClient.visible]);
 
-
   function click(e) {
-    setTeste(!teste);
+    if (e && teste === "active") {
+      setTeste(null);
+    } else {
+      setTeste("active");
+    }
   }
 
   function firstLoad() {
@@ -101,7 +103,7 @@ function ViewClient(props) {
 
     const { updateClientRequest } = props;
     const updateClient = {
-      id: data.id,
+      id: id,
       address: address,
       cpf: cpf,
       name: name,
@@ -109,9 +111,17 @@ function ViewClient(props) {
       speed: speed,
       pppoe: pppoe,
       obs: obs,
+      status: teste,
       installation_date: formatDate(installation)
     };
-    updateClientRequest(updateClient, data.id);
+    updateClientRequest(updateClient, id);
+    handleHideModal();
+  }
+
+  function deleteClient() {
+    const { id } = data;
+    const { deleteClientRequest } = props;
+    deleteClientRequest(id);
     handleHideModal();
   }
 
@@ -205,7 +215,11 @@ function ViewClient(props) {
                   <Field
                     component={InputField}
                     name={"Observação:"}
-                    type={"text"}
+                    type={"textarea"}
+                    required
+                    as="textarea"
+                    rows="3"
+                    maxLength="300"
                     value={obs}
                     onChange={e => setObs(e.target.value)}
                   />
@@ -227,8 +241,12 @@ function ViewClient(props) {
                 Desativar
               </Button>
             )}
-            <Button variant="danger">Excluir</Button>
-            <Button variant="secondary">Adicionar Cabo</Button>
+            <Button variant="danger" onClick={deleteClient}>
+              Excluir
+            </Button>
+            <Button variant="secondary" onClick={addCabo}>
+              Adicionar Cabo
+            </Button>
             <Button variant="secondary">Fechar</Button>
           </Modal.Footer>
         </form>
