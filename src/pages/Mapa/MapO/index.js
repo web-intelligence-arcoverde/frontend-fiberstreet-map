@@ -135,11 +135,6 @@ class Map extends Component {
     });
 
     map.on("load", function() {
-      map.addSource("geojson", {
-        type: "geojson",
-        data: geojson
-      });
-
       map.addSource("cliente", {
         type: "geojson",
         data: url
@@ -163,6 +158,16 @@ class Map extends Component {
       map.addSource("cto", {
         type: "geojson",
         data: url
+      });
+
+      map.addSource("ceo", {
+        type: "geojson",
+        data: url
+      });
+
+      map.addSource("geojson", {
+        type: "geojson",
+        data: geojson
       });
 
       // Add styles to the map
@@ -199,8 +204,10 @@ class Map extends Component {
     this.measureDistance(map, distanceContainer);
 
     this.loadCto(map);
+    this.loadCeo(map);
     this.loadClient(map);
-    this.loadCable(map);
+    // this.loadCable(map);
+
     this.loadSocket(map);
     this.desenharPolylineAtual(map);
 
@@ -252,13 +259,13 @@ class Map extends Component {
 
   handleCtoClickTwoFactor(cto, longitude, latitude) {
     if (this.props.redux.map.delimitacao === "cabo") {
-      const { addCoordCabo, setDelimitacaoMapa, showAddCaboModal } = this.props;
-      const { polyline } = this.props.redux.map.polyline;
+      const { addCoordCabo, setDelemitationMap, showAddCableCto } = this.props;
+      const { polyline } = this.props.redux.map;
       let newPolyline = [...polyline, [longitude, latitude]];
 
       addCoordCabo(newPolyline);
-      showAddCaboModal(cto.id);
-      setDelimitacaoMapa("default");
+      showAddCableCto(cto.id);
+      setDelemitationMap("default");
     } else {
       const { showViewModalCto } = this.props;
       // const { getSplitterByCto } = this.props;
@@ -430,7 +437,7 @@ class Map extends Component {
     socket.connect(token);
     const clients = socket.subscribe(`clients:${provider.id}`);
     const ctos = socket.subscribe(`ctos:${provider.id}`);
-    const ceos = socket.subscribe(`ceos:${provider.id}`);
+    // const ceos = socket.subscribe(`ceos:${provider.id}`);
 
     map.on("load", function() {
       clients.on("newClient", async client => {
@@ -480,40 +487,39 @@ class Map extends Component {
         }
       });
 
-      clients.on('updatedClient', async clientUpdated => {
-        const data = await store.getState().client.geojson.clients
+      clients.on("updatedClient", async clientUpdated => {
+        const data = await store.getState().client.geojson.clients;
 
-        const clientsActive = []
-        const clientsInactive = []
+        const clientsActive = [];
+        const clientsInactive = [];
 
         data.forEach(client => {
           // verify if the client update is !== of the actual client in the forEach
-          if(client.properties.data.id !== clientUpdated.id) {
-            if(client.properties.data.active === 'active')
-              clientsActive.push(client)
-            else
-              clientsInactive.push(client)
+          if (client.properties.data.id !== clientUpdated.id) {
+            if (client.properties.data.active === "active")
+              clientsActive.push(client);
+            else clientsInactive.push(client);
           } else {
-            if(client.properties.data.active === 'active')
-              clientsActive.push(clientUpdated) // Insert the updated client
-            else
-              clientsInactive.push(clientUpdated) // Insert the updated client
+            if (client.properties.data.active === "active")
+              clientsActive.push(clientUpdated);
+            // Insert the updated client
+            else clientsInactive.push(clientUpdated); // Insert the updated client
           }
-        })
+        });
 
         const dataClientsActive = {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           features: clientsActive
-        }
+        };
 
         const dataClientsInactive = {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           features: clientsInactive
-        }
+        };
 
-        await map.getSource('cliente').setData(dataClientsActive)
-        await map.getSource('cliente_inativo').setData(dataClientsInactive)
-      })
+        await map.getSource("cliente").setData(dataClientsActive);
+        await map.getSource("cliente_inativo").setData(dataClientsInactive);
+      });
 
       clients.on("deletedClient", async clientDeleted => {
         const data = await store.getState().client.geojson.clients;
@@ -578,30 +584,29 @@ class Map extends Component {
         await map.getSource("cto").setData(dados);
       });
 
-
-      ctos.on('deletedCto', async ctoDeleted => {
+      ctos.on("deletedCto", async ctoDeleted => {
         const data = await store.getState().ctos.geojson.ctos;
 
         let ctos = [];
 
         data.forEach(cto => {
           if (cto.properties.data.id !== ctoDeleted.id) {
-            ctos.push(cto)
+            ctos.push(cto);
           }
-        })
+        });
 
         await store.dispatch({
-          type: '@cto/LOAD_GJ_SUCCESS',
+          type: "@cto/LOAD_GJ_SUCCESS",
           payload: { ctos }
-        })
+        });
 
         const dados = {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           features: ctos
-        }
+        };
 
-        await map.getSource('cto').setData(dados)
-      })
+        await map.getSource("cto").setData(dados);
+      });
       // Não testado
       ctos.on("updatedCto", async ctoUpdated => {
         const data = await store.getState().ctos.geojson.ctos;
@@ -614,12 +619,10 @@ class Map extends Component {
         // ao invés de adicionar a do forEach, adiciona
         // a que vem do banco de dados
         data.forEach(cto => {
-            if (cto.properties.data.id !== ctoUpdated.id)
-              ctos.push(cto);
-            else 
-              ctos.push(ctoUpdated)
+          if (cto.properties.data.id !== ctoUpdated.id) ctos.push(cto);
+          else ctos.push(ctoUpdated);
         });
-    
+
         const dados = {
           type: "FeatureCollection",
           features: ctos
@@ -630,8 +633,8 @@ class Map extends Component {
           payload: { ctos }
         });
 
-        await map.getSource('cto').setData(dados)
-      })
+        await map.getSource("cto").setData(dados);
+      });
 
       // clients.on("deleteClient", async clientId => {
       //   const data = await store.getState().client.clients;
@@ -764,18 +767,53 @@ class Map extends Component {
     });
   }
 
-  loadCable(map) {
+  loadCeo(map) {
+    // Carrega as CTOS
     map.on("load", function() {
-      api.get(API.GET_CABO_GEOJSON).then(result => {
+      api.get(API.GET_CEO_GEOJSON).then(result => {
         const { data } = result;
         const dados = {
           type: "FeatureCollection",
           features: data
         };
-        map.getSource("wires").setData(dados);
+        store.dispatch({
+          type: "@ceo/LOAD_GJ_SUCCESS",
+          payload: { ceos: data }
+        });
+        map.getSource("ceo").setData(dados);
+      });
+
+      //Carregar imagens ctos images/CTO_24x24.png
+      map.loadImage(require("../../../assets/images/ceo_24.png"), function(
+        error,
+        image
+      ) {
+        if (error) throw error;
+        map.addImage("custom-CEO", image);
+        map.addLayer({
+          id: "ceo",
+          type: "symbol",
+          source: "ceo",
+          layout: {
+            "icon-image": "custom-CEO"
+          }
+        });
       });
     });
   }
+
+  // loadCable(map) {
+  //   map.on("load", function() {
+  //     api.get(API.GET_CABO_GEOJSON).then(result => {
+  //       const { data } = result;
+  //       const dados = {
+  //         type: "FeatureCollection",
+  //         features: data
+  //       };
+  //       map.getSource("wires").setData(dados);
+  //     });
+  //   });
+  // }
 
   /*
     Função para medir distancia entre 2 pontos no mapa 

@@ -36,6 +36,10 @@ const useStyles = makeStyles({
   },
 });
 
+
+
+
+
 function ViewCliente(props) {
   
   const { viewClient } = props.redux.all;

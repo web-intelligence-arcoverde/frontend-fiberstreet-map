@@ -1,49 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
+
+//UI-Components
+import { Modal, Card, ListGroup, Button } from "react-bootstrap";
+import Account from "@material-ui/icons/AccountCircle";
+
+//Reecriação de componentes
+import { Field } from "./Components/InputBase";
+import { InputField } from "./Components/InputFieldComponent";
+// import { InputField } from "./Components/Input";
 
 //Redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-//API
-import api, { API } from "../../../services/api";
-
 //Creators
 import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
 import { Creators as MapActions } from "../../../redux/store/ducks/map";
 import { Creators as CaboActions } from "../../../redux/store/ducks/cabo";
+import { Creators as DropActions } from "../../../redux/store/ducks/drop";
 
-//EditComponents
-import InputField from "./Components/InputFieldComponent";
-import CommentDialog from "./Components/DialogComment";
+function formatDate(data) {
+  const date = moment(data).format("YYYY-MM-DD");
+  return date;
+}
 
-//UI-Components
-import { Modal, Card, ListGroup, Button } from "react-bootstrap";
-import { makeStyles } from "@material-ui/core/styles";
-import Account from "@material-ui/icons/AccountCircle";
-
-const useStyles = makeStyles(theme => ({
-  button: {
-    margin: theme.spacing(1)
-  },
-  input: {
-    display: "none"
-  }
-}));
-
-function ViewCliente(props) {
-  const classes = useStyles();
-
+function ViewClient(props) {
   const { viewClient } = props.redux.client;
 
   const { data } = viewClient; //Informações do usuario.
 
-  const [splitterId, setSplitterId] = useState("");
+  const [id, setId] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [name, setName] = useState("");
+  const [speed, setSpeed] = useState("");
+  const [pppoe, setPppoe] = useState("");
+  const [address, setAddress] = useState("");
+  const [installation, setInstallation] = useState("");
+  const [obs, setObs] = useState("");
+  const [teste, setTeste] = useState(true);
 
   function handleHideModal() {
     const { hideClientViewModal } = props;
     hideClientViewModal();
+    setId("");
+    setCpf("");
+    setName("");
+    setSpeed("");
+    setPppoe("");
+    setAddress("");
+    setInstallation("");
+    setObs("");
   }
+
 
   function addCabo() {
     let latitude = JSON.parse(data.coordinates).latitude;
@@ -53,52 +62,61 @@ function ViewCliente(props) {
     const {
       addCoordCabo, // setPolyline
       setDelemitationMap,
-      addCableClientId
+      addCableClientId,
+      addDropClientId
     } = props;
 
     setDelemitationMap("cabo"); // map - map.delimitacao
     let arrayDeArray = new Array(coord);
     addCoordCabo(arrayDeArray); // map - map.polyline
     addCableClientId(data.id); // cabo - cabo.id
+    addDropClientId(data.id);
     handleHideModal();
   }
 
-  function handleCoordCabo() {
-    api
-      .get(`${API.GET_SAIDA_SP_BY_CLIENTE}/${data.id}`)
-      .then(result => {
-        const { data } = result;
-        console.log(data);
-        const { id, splitter_cod } = data;
-        setSplitterId(splitter_cod);
+  useEffect(() => {
+    firstLoad();
+  }, [viewClient.visible]);
 
-        if (splitter_cod) {
-          alert("Este cliente já possui um drop em sua residência");
-        } else {
-          addCabo();
-        }
-      })
-      .catch(err => {
-        console.warn(err);
-      });
+
+  function click(e) {
+    setTeste(!teste);
   }
 
-  function deleteClient() {
-    const { id } = data;
-    const { deleteClientRequest } = props;
-    deleteClientRequest(id);
+  function firstLoad() {
+    setAddress(data.address);
+    setId(data.id);
+    setCpf(data.cpf);
+    setName(data.name);
+    setSpeed(data.speed);
+    setPppoe(data.pppoe);
+    setInstallation(formatDate(data.installation_date));
+    setTeste(data.status);
+    setObs(data.obs);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const { coordinates } = data.coordinates;
+
+    const { updateClientRequest } = props;
+    const updateClient = {
+      id: data.id,
+      address: address,
+      cpf: cpf,
+      name: name,
+      coordinates: coordinates,
+      speed: speed,
+      pppoe: pppoe,
+      obs: obs,
+      installation_date: formatDate(installation)
+    };
+    updateClientRequest(updateClient, data.id);
     handleHideModal();
-  }
-
-  function formatDate(data) {
-    const date = moment(data).format("DD/MM/YYYY");
-    return date;
   }
 
   return (
     <>
-      <CommentDialog />
-
       <Modal size="lg" show={viewClient.visible} onHide={handleHideModal}>
         <Modal.Header
           style={{
@@ -120,63 +138,100 @@ function ViewCliente(props) {
           />
           <Modal.Title style={{ color: "#585858" }}>{data.name}</Modal.Title>
         </Modal.Header>
+        <form onSubmit={handleSubmit}>
+          <Modal.Body style={{ backgroundColor: "#FFFFFF" }}>
+            <Card style={{ width: "100%" }}>
+              <Card.Header
+                style={{ backgroundColor: "#D8D8D8", textAlign: "center" }}
+              >
+                Informações do cliente
+              </Card.Header>
+              <ListGroup variant="flush">
+                <ListGroup.Item>
+                  <Field
+                    component={InputField}
+                    name={"CPF:"}
+                    type={"text"}
+                    value={cpf}
+                    onChange={e => setCpf(e.target.value)}
+                  />
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Field
+                    component={InputField}
+                    name={"Nome:"}
+                    type={"text"}
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                  />
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Field
+                    component={InputField}
+                    name={"Plano:"}
+                    type={"text"}
+                    value={speed}
+                    onChange={e => setSpeed(e.target.value)}
+                  />
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Field
+                    component={InputField}
+                    name={"PPPOE:"}
+                    type={"text"}
+                    value={pppoe}
+                    onChange={e => setPppoe(e.target.value)}
+                  />
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Field
+                    component={InputField}
+                    name={"Endereço:"}
+                    type={"text"}
+                    value={address}
+                    onChange={e => setAddress(e.target.value)}
+                  />
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Field
+                    component={InputField}
+                    name={"Data de instalação:"}
+                    type={"date"}
+                    value={installation}
+                    onChange={e => setInstallation(e.target.value)}
+                  />
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Field
+                    component={InputField}
+                    name={"Observação:"}
+                    type={"text"}
+                    value={obs}
+                    onChange={e => setObs(e.target.value)}
+                  />
+                </ListGroup.Item>
+              </ListGroup>
+            </Card>
+          </Modal.Body>
 
-        <Modal.Body style={{ backgroundColor: "#FFFFFF" }}>
-          <Card style={{ width: "100%" }}>
-            <Card.Header
-              style={{ backgroundColor: "#D8D8D8", textAlign: "center" }}
-            >
-              Informações do cliente
-            </Card.Header>
-            <ListGroup variant="flush">
-              <ListGroup.Item>
-                <InputField name="Nome:" atributo={data.name} tipo="text" />
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <InputField name="CPF:" atributo={data.cpf} tipe="text" />
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <InputField name="Plano:" atributo={data.speed} tipo="text" />
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <InputField name="PPPOE:" atributo={data.pppoe} tipo="text" />
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <InputField
-                  name="Data da instalação:"
-                  atributo={data.installation_date}
-                  tipo="date"
-                />
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <InputField
-                  name="Comentario:"
-                  atributo={data.obs}
-                  tipo="text"
-                />
-              </ListGroup.Item>
-            </ListGroup>
-          </Card>
-        </Modal.Body>
-
-        <Modal.Footer>
-          {data.status === null ? (
-            <Button variant="primary" onClick={deleteClient}>
-              Ativar cliente
+          <Modal.Footer>
+            <Button variant="info" type="submit">
+              Salvar Alterações
             </Button>
-          ) : (
-            <Button variant="danger" onClick={deleteClient}>
-              Desativar
-            </Button>
-          )}
-          <Button variant="danger" onClick={deleteClient}>
-            Excluir
-          </Button>
-          <Button variant="secondary" onClick={addCabo}>
-            Adicionar Cabo
-          </Button>
-          <Button variant="secondary">Fechar</Button>
-        </Modal.Footer>
+            {teste === null ? (
+              <Button variant="primary" onClick={click}>
+                Ativar cliente
+              </Button>
+            ) : (
+              <Button variant="danger" onClick={click}>
+                Desativar
+              </Button>
+            )}
+            <Button variant="danger">Excluir</Button>
+            <Button variant="secondary">Adicionar Cabo</Button>
+            <Button variant="secondary">Fechar</Button>
+          </Modal.Footer>
+        </form>
       </Modal>
     </>
   );
@@ -189,11 +244,11 @@ const mapStateToProps = state => ({
 //Ações
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { ...ClientActions, ...MapActions, ...CaboActions },
+    { ...ClientActions, ...MapActions, ...CaboActions, ...DropActions },
     dispatch
   );
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ViewCliente);
+)(ViewClient);

@@ -1,7 +1,7 @@
 import axios from "axios";
 import store from "../redux/store";
 
-const local = "http://192.168.0.143:3333";
+const local = "http://192.168.0.100:3333";
 const server = "https://45.224.40.252";
 
 /** This API will connect to NodeJS Server */
@@ -30,6 +30,7 @@ export const API = {
   GET_CABO_GEOJSON: "/gj/cables",
   GET_CTO_GEOJSON: "/gj/ctos",
   GET_CLIENTE_GEOJSON: "/gj/clients",
+  GET_CEO_GEOJSON: "/gj/ceos",
 
   CREATE_CTO: "/ctos",
   GET_CTO: "/ctos",

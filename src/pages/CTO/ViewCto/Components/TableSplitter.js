@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 //UI-Components
 import { Table, Button } from "react-bootstrap";
@@ -8,31 +8,41 @@ import { Container } from "@material-ui/core";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
+import api from "../../../../services/api";
+
 //Creators
-import { Creators as splitterCreators } from "../../../../redux/store/ducks/splitter";
-import { Creators as ctosCreators } from "../../../../redux/store/ducks/ctos";
+import { Creators as SplitterActions } from "../../../../redux/store/ducks/splitter";
+import { Creators as CtoActions } from "../../../../redux/store/ducks/ctos";
 
 function TableSplitter(props) {
   const { modalNewSplitter } = props.redux.splitter;
 
-  const { data } = props.redux.ctos.viewCto;
+  const { data, visible } = props.redux.ctos.viewCto;
+
+  const [splitters, setSplitters] = useState([]);
 
   console.log("informações da cto {splitter(id)}");
   console.log(data.id); //pegando o id da cto selecionada.
 
-  //   function getSplitters(id) {
-  //     api
-  //       .get(`/get/splitter/cto/${id}`)
-  //       .then(response => {
-  //         const sp = response.data;
-  //         setSplitters(sp);
-  //         getClientes(sp[0].id);
-  //         getCabosCto(id);
-  //       })
-  //       .catch(e => console.warn(e));
-  //   }
-  //   getSplitters(all.viewCto.data.id);
-  // }, [all.viewCto.data.id]);
+  useEffect(() => {
+    function getSplitters(id) {
+      api
+        .get(`/splittercto/${id}`)
+        .then(response => {
+          const sp = response.data;
+          setSplitters(sp);
+          // getClientes(sp[0].id);
+          // getCabosCto(id);
+        })
+        .catch(e => console.warn(e));
+    }
+    if (visible) getSplitters(data.id);
+  }, [data.id, visible]);
+
+  function handleAddSplitter() {
+    const { showSplitterAddModal } = props;
+    showSplitterAddModal(data.id);
+  }
 
   return (
     <Container>
@@ -51,6 +61,15 @@ function TableSplitter(props) {
         </thead>
 
         <tbody>
+          {splitters.map(splitter => (
+            <tr>
+              <td>{splitter.name}</td>
+              <td>{splitter.model}</td>
+              <td>{splitter.balancing}</td>
+              <td>Not have yet</td>
+            </tr>
+          ))}
+
           {/* {props.data.map((splitter, index) => (
             <tr>
               <td>{splitter.nome}</td>
@@ -67,6 +86,7 @@ function TableSplitter(props) {
         variant="warning"
         size="lg"
         block
+        onClick={handleAddSplitter}
       >
         Adicionar splitter
       </Button>
@@ -78,7 +98,14 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      ...SplitterActions,
+      ...CtoActions
+    },
+    dispatch
+  );
 
 export default connect(
   mapStateToProps,

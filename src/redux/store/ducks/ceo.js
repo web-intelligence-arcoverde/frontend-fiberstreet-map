@@ -7,13 +7,20 @@ export const Types = {
 
   // Creation { saving data }
   CREATE_CEO_REQUEST: "@ceo/CREATE_REQUEST",
-  CREATE_CEO_SUCCESS: "@ceo/CREATE_SUCCESS"
+  CREATE_CEO_SUCCESS: "@ceo/CREATE_SUCCESS",
+
+  LOAD_CEO_GEOJSON_REQUEST: "@ceo/LOAD_GJ_REQUEST",
+  LOAD_CEO_GEOJSON_SUCCESS: "@ceo/LOAD_GJ_SUCCESS"
 };
 
 const INITIAL_STATE = {
   viewNewCeo: {
     visible: false,
     coordinates: []
+  },
+
+  geojson: {
+    ceos: []
   }
 };
 
@@ -40,6 +47,11 @@ export default function(state = INITIAL_STATE, action) {
           coordinates: []
         }
       };
+
+    case Types.LOAD_CEO_GEOJSON_SUCCESS:
+      return { ...state, geojson: { ceos: action.payload.ceos } };
+    case Types.LOAD_CEO_GEOJSON_REQUEST:
+      return { ...state, geojson: { ceos: action.payload.ceos } };
     default:
       return state;
   }
@@ -56,6 +68,7 @@ export const Creators = {
       coordinates
     }
   }),
+
   HideNewViewModalCeo: () => ({
     type: Types.HIDENEWMODALCEO,
     payload: {
@@ -72,5 +85,14 @@ export const Creators = {
   createCeoSuccess: ceo => ({
     type: Types.CREATE_CEO_SUCCESS,
     payload: { ceo }
+  }),
+
+  loadCeoGeoJsonRequest: () => ({
+    type: Types.LOAD_CEO_GEOJSON_REQUEST
+  }),
+
+  loadCeoGeoJsonSuccess: ceos => ({
+    type: Types.LOAD_CEO_GEOJSON_SUCCESS,
+    payload: { ceos }
   })
 };

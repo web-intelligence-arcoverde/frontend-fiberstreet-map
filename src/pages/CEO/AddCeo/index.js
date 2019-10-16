@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 //Components
 import { Modal, Form, Button } from "react-bootstrap";
@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
 
 function AddCeo(props) {
-  const { HideNewViewModalCeo } = props;
+  const { HideNewViewModalCeo, createCeoRequest } = props;
   const { viewNewCeo } = props.redux.ceo;
 
   const [name, setName] = useState("");
@@ -21,25 +21,35 @@ function AddCeo(props) {
   const [observacao, setObservacao] = useState("");
   const [type, setType] = useState("");
   const [address, setAddress] = useState("");
+  const [clickable, setClickable] = useState(true);
+
+  useEffect(() => {
+    if (viewNewCeo.visible) {
+      setClickable(true);
+    }
+  }, [viewNewCeo.visible]);
 
   async function handleCeo(e) {
-    e.preventDefault();
+    // e.preventDefault();
+    if (clickable) {
+      await setClickable(false);
+      const newCeo = await {
+        name,
+        type,
+        coordinates: await viewNewCeo.coordinates,
+        model,
+        address,
+        obs: observacao
+      };
+      await setName("");
+      await setModel("");
+      await setType("");
+      await setAddress("");
+      await setObservacao("");
+      await HideNewViewModalCeo();
 
-    const newCeo = {
-      type: type,
-      coordinates: viewNewCeo.coordinates,
-      model: model,
-      address: address,
-      obs: observacao
-    };
-
-    HideNewViewModalCeo();
-
-    setName("");
-    setModel("");
-    setType("");
-    setAddress("");
-    setObservacao("");
+      await createCeoRequest(newCeo);
+    }
   }
 
   return (
@@ -48,7 +58,7 @@ function AddCeo(props) {
       onHide={HideNewViewModalCeo}
       style={{ overflow: "scroll" }}
     >
-      <Form onSubmit={handleCeo}>
+      <Form>
         <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
           <Modal.Title>Cadastrar da CEO</Modal.Title>
         </Modal.Header>
@@ -105,7 +115,7 @@ function AddCeo(props) {
             Fechar
           </Button>
 
-          <Button variant="secondary" type="submit">
+          <Button variant="secondary" onClick={handleCeo}>
             Salvar
           </Button>
         </Modal.Footer>

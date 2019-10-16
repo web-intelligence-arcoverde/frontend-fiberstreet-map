@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 
 //API
-import { Creators as AllCreators } from "../../../redux/store/ducks/all";
-import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
+// import { Creators as AllCreators } from "../../../redux/store/ducks/all";
 import api from "../../../services/api";
+import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
+import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
+import { Creators as MapCreators } from "../../../redux/store/ducks/map";
+
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as Actions from "../../../redux/store/actions/all";
+// import * as Actions from "../../../redux/store/actions/all";
 
 //Components
 import { Modal, Button, Container, Form } from "react-bootstrap/";
 
 function CaboAdd(props) {
-  const { modalCabo } = props.redux.all;
+  const { newCabo } = props.redux.cabo;
 
   const [nome, setNome] = useState("");
   const [modelo, setModelo] = useState("");
@@ -21,13 +24,13 @@ function CaboAdd(props) {
   const TMODEL = "modelo";
 
   function handleHideModal() {
-    const { hideAddCaboModal } = props;
-    hideAddCaboModal();
+    const { hideAddCableCto } = props;
+    hideAddCableCto();
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    let coordinates = props.redux.all.mapa.polyline.map(linha => {
+    let coordinates = props.redux.map.polyline.map(linha => {
       return {
         longitude: linha[0],
         latitude: linha[1]
@@ -36,12 +39,12 @@ function CaboAdd(props) {
     let coordinatesStrinfigied = JSON.stringify(coordinates);
 
     const cabo = {
-      nome: nome,
-      tipo: modelo,
-      quantidade_fibras: fibra,
-      coordenadas: coordinatesStrinfigied
+      name: nome,
+      type: modelo,
+      fiberAmount: fibra,
+      coordinates //: coordinatesStrinfigied
     };
-    const { addCoordCabo, hideAddCaboModal } = props;
+    const { addCoordCabo } = props;
     // addCoordCabo(null);
     // Irá para próxima etapa
     // await api
@@ -58,12 +61,13 @@ function CaboAdd(props) {
     setNome("");
     setModelo("");
     addCoordCabo([]);
-    hideAddCaboModal();
+    handleHideModal();
     const { showDropAddModalRequest } = props;
     const dropNdCtoId = {
       drop: cabo,
-      cto_id: modalCabo.cto_id
+      cto_id: newCabo.ctoId
     };
+    console.log(props);
     showDropAddModalRequest(dropNdCtoId);
   }
 
@@ -90,7 +94,7 @@ function CaboAdd(props) {
 
   return (
     <Container>
-      <Modal show={modalCabo.visible} onHide={handleHideModal}>
+      <Modal show={newCabo.isVisible} onHide={handleHideModal}>
         <Form onSubmit={handleSubmit}>
           <Modal.Header>
             <Modal.Title>Cabo</Modal.Title>
@@ -143,9 +147,11 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-// const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...AllCreators, ...DropCreators }, dispatch);
+  bindActionCreators(
+    { ...CaboCreators, ...DropCreators, ...MapCreators },
+    dispatch
+  );
 
 export default connect(
   mapStateToProps,

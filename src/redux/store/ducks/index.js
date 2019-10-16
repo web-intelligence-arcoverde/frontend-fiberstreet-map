@@ -15,6 +15,8 @@ import provider from "./provider";
 import client from "./cliente";
 import ceo from "./ceo";
 import splitter from "./splitter";
+import cabo from "./cabo";
+import drop from './drop'
 
 import { reducer as auth } from "./auth";
 import { reducer as toastr } from "react-redux-toastr";
@@ -29,5 +31,7 @@ export default combineReducers({
   user,
   map,
   ctos,
+  cabo,
+  drop,
   router: connectRouter(history)
 });
