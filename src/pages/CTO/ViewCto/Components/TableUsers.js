@@ -266,9 +266,6 @@ function TableClients(props) {
   const clients = props.redux.client.geojson.clients;
   const { data } = props.redux.ctos.viewCto;
 
-  console.log("informações da cto {Clientes(id)}");
-  console.log(data.id); //pegando o id da cto selecionada.
-
   useEffect(() => {
     const { loadClientRequest } = props;
     loadClientRequest();

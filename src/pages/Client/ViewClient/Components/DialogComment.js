@@ -19,10 +19,6 @@ function AlertDialog(props) {
 
   const { hideClientModal } = props;
 
-  console.log("desgraça");
-  console.log(props);
-  console.log(hideClientComment);
-
   const handleClickOpen = () => {
     hideClientModal();
   };
