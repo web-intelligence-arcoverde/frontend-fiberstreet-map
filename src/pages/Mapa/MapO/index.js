@@ -461,7 +461,7 @@ class Map extends Component {
         });
 
         data.forEach(client => {
-          if (client.properties.data.status !== "active") {
+          if (client.properties.data.status === "null") {
             clientsInactive.push(client);
           }
         });

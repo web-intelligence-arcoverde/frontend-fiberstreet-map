@@ -12,6 +12,7 @@ import Box from "@material-ui/core/Box";
 import TableUsers from "./TableUsers";
 import TableSplitter from "./TableSplitter";
 import TableCable from "./TableCable";
+import CtoInformation from "./CtoInformation";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -25,7 +26,17 @@ function TabPanel(props) {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      <Box p={3}>{children}</Box>
+      <Box
+        style={{
+          paddingLeft: "0px",
+          paddingTop: "0px",
+          paddingRight: "0px",
+          paddingBottom: "0px"
+        }}
+        p={3}
+      >
+        {children}
+      </Box>
     </Typography>
   );
 }
@@ -75,10 +86,12 @@ export default function FullWidthTabs() {
           onChange={handleChange}
           variant="fullWidth"
           classes={{ indicator: classes.bigIndicator }}
+          style={{ backgroundColor: "#E6E6E6" }}
         >
-          <Tab label="Usuarios" {...a11yProps(0)} />
-          <Tab label="Splitter" {...a11yProps(1)} />
-          <Tab label="Cabos" {...a11yProps(2)} />
+          <Tab label="Caixa terminal optica" {...a11yProps(0)} />
+          <Tab label="Usuarios" {...a11yProps(1)} />
+          <Tab label="Splitter" {...a11yProps(2)} />
+          <Tab label="Cabos" {...a11yProps(3)} />
         </Tabs>
       </AppBar>
       <SwipeableViews
@@ -87,12 +100,15 @@ export default function FullWidthTabs() {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <TableUsers />
+          <CtoInformation />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          <TableSplitter />
+          <TableUsers />
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
+          <TableSplitter />
+        </TabPanel>
+        <TabPanel value={value} index={3} dir={theme.direction}>
           <TableCable />
         </TabPanel>
       </SwipeableViews>

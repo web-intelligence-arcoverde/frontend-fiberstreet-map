@@ -9,9 +9,6 @@ import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
 
 //UI-Components
 import { Modal, Button, Form } from "react-bootstrap";
-import "./styles.css";
-
-// Vamos fazer aqui uma renderização condicional para ADIÇÃO/AMOSTRAGEM de imagens
 
 function ClienteAddModal(props) {
   const { viewNewClient } = props.redux.client;
@@ -23,22 +20,24 @@ function ClienteAddModal(props) {
   const [address, setAddress] = useState("");
   const [PPPOE, setPPPOE] = useState("");
   const [obs, setObs] = useState("");
+  const [validated, setValidated] = useState(false);
 
-  function handleHideModal() {
-    const { hideNewModalClient } = props;
-    hideNewModalClient();
-    setName("");
-    setCpf("");
-    setPlano("");
-    setAddress("");
-    setPPPOE("");
-    setObs("");
+  function validateForm(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    setValidated(true);
+    if (validated === true) {
+      handleSubmit(event);
+    }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
     const { coordinates } = props.redux.client.viewNewClient;
-
     const { createClientRequest } = props;
     const newClient = {
       name: name,
@@ -53,8 +52,16 @@ function ClienteAddModal(props) {
     handleHideModal();
   }
 
-  function handleFormReset() {
-    this.setState(() => this.initialState);
+  function handleHideModal() {
+    const { hideNewModalClient } = props;
+    hideNewModalClient();
+
+    setName("");
+    setCpf("");
+    setPlano("");
+    setAddress("");
+    setPPPOE("");
+    setObs("");
   }
 
   function cpfCnpj(v) {
@@ -62,22 +69,14 @@ function ClienteAddModal(props) {
     v = v.replace(/\D/g, "");
     if (v.length <= 11) {
       //CPF
-      //Coloca um ponto entre o terceiro e o quarto dígitos
       v = v.replace(/(\d{3})(\d)/, "$1.$2");
-      //Coloca um ponto entre o terceiro e o quarto dígitos
-      //de novo (para o segundo bloco de números)
       v = v.replace(/(\d{3})(\d)/, "$1.$2");
-      //Coloca um hífen entre o terceiro e o quarto dígitos
       v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     } else if (v.length <= 14) {
       //CNPJ
-      //Coloca ponto entre o segundo e o terceiro dígitos
       v = v.replace(/^(\d{2})(\d)/, "$1.$2");
-      //Coloca ponto entre o quinto e o sexto dígitos
       v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
-      //Coloca uma barra entre o oitavo e o nono dígitos
       v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
-      //Coloca um hífen depois do bloco de quatro dígitos
       v = v.replace(/(\d{4})(\d)/, "$1-$2");
     }
     return v;
@@ -90,16 +89,24 @@ function ClienteAddModal(props) {
         onHide={handleHideModal}
         animation={false}
       >
-        <Form onSubmit={handleSubmit}>
-          <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
-            <Modal.Title>Cadastro de Cliente</Modal.Title>
+        <Form noValidate validated={validated} onSubmit={validateForm}>
+          <Modal.Header
+            style={{
+              justifyContent: "center",
+              backgroundColor: "#F7D358",
+              color: "#585858"
+            }}
+          >
+            <Modal.Title>Cadastrar Cliente</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
             <Form.Group>
               <Form.Label>Nome:</Form.Label>
               <Form.Control
+                required
                 type="text"
+                maxLength="255"
                 value={name}
                 onChange={e => setName(e.target.value)}
               />
@@ -108,8 +115,10 @@ function ClienteAddModal(props) {
             <Form.Group>
               <Form.Label>CPF:</Form.Label>
               <Form.Control
+                required
                 type="text"
-                maxlength="18"
+                maxLength="18"
+                minLength="14"
                 value={cpf}
                 onChange={e => {
                   setCpfUnmasked(e.target.value);
@@ -121,7 +130,9 @@ function ClienteAddModal(props) {
             <Form.Group>
               <Form.Label>Endereço:</Form.Label>
               <Form.Control
+                required
                 type="text"
+                maxLength="255"
                 value={address}
                 onChange={e => setAddress(e.target.value)}
               />
@@ -130,23 +141,29 @@ function ClienteAddModal(props) {
             <Form.Group>
               <Form.Label>Planos:</Form.Label>
               <Form.Control
+                required
                 type="text"
                 as="select"
                 value={plano}
                 onChange={e => setPlano(e.target.value)}
               >
-                <option>10</option>
-                <option>20</option>
+                <option></option>
+                <option>60</option>
                 <option>100</option>
                 <option>250</option>
+                <option>300</option>
+                <option>400</option>
                 <option>500</option>
+                <option>1</option>
               </Form.Control>
             </Form.Group>
 
             <Form.Group>
               <Form.Label>PPPOE:</Form.Label>
               <Form.Control
+                required
                 type="text"
+                maxLength="150"
                 value={PPPOE}
                 onChange={e => setPPPOE(e.target.value)}
               />
@@ -155,8 +172,10 @@ function ClienteAddModal(props) {
             <Form.Group controlId="exampleForm.ControlTextarea1">
               <Form.Label>Observações:</Form.Label>
               <Form.Control
+                required
                 as="textarea"
                 rows="3"
+                maxLength="300"
                 value={obs}
                 onChange={e => setObs(e.target.value)}
               />
@@ -164,22 +183,14 @@ function ClienteAddModal(props) {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button
-              style={{ backgroundColor: "#0174DF" }}
-              onClick={handleHideModal}
-            >
+            <Button variant="secondary" onClick={handleHideModal}>
               Fechar
             </Button>
 
-            <Button style={{ backgroundColor: "#0174DF" }} type="submit">
+            <Button variant="secondary" type="submit">
               Salvar
             </Button>
           </Modal.Footer>
-          {/* <input
-            hidden
-            value={props.redux.viewNewClient.coordinates}
-            required
-          /> */}
         </Form>
       </Modal>
     </>
