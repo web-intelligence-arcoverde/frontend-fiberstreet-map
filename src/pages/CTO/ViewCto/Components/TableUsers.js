@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import api from "../../../../services/api";
 
 import {
   Table,
@@ -263,13 +264,31 @@ function TableClients(props) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const clients = props.redux.client.geojson.clients;
-  const { data } = props.redux.ctos.viewCto;
 
+  const [clients, setClients] = useState([]);
+  const { viewCto } = props.redux.ctos;
+  const { data } = viewCto;
+
+  /**
+   * Load clients and set data to table
+   */
   useEffect(() => {
-    const { loadClientRequest } = props;
-    loadClientRequest();
-  });
+    if (viewCto.visible) {
+      api
+        .get(`splittercto/${data.id}`)
+        .then(response => {
+          api.get(`clients/splitter/${response.data[0].id}`).then(response => {
+            const clients = response.data.map(client => client.client);
+            if (clients) 
+              setClients(clients)
+            else
+              setClients([])
+          })
+          .catch(err => {});
+        })
+        .catch(err => {});
+    }
+  }, [data.id, viewCto.visible]);
 
   function handleRequestSort(event, property) {
     const isDesc = orderBy === property && order === "desc";
@@ -279,7 +298,7 @@ function TableClients(props) {
 
   function handleSelectAllClick(event) {
     if (event.target.checked) {
-      const newSelecteds = clients.map(row => row.properties.data.cpf);
+      const newSelecteds = clients.map(row => row.cpf);
       setSelected(newSelecteds);
       return;
     }
@@ -387,19 +406,17 @@ function TableClients(props) {
                 stableSort(clients, getSorting(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.properties.data.cpf);
+                    const isItemSelected = isSelected(row.cpf);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
                       <TableRow
                         hover
-                        onClick={event =>
-                          handleClick(event, row.properties.data.cpf)
-                        }
+                        onClick={event => handleClick(event, row.cpf)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.properties.data.cpf}
+                        key={row.cpf}
                         selected={isItemSelected}
                       >
                         <TableCell padding="checkbox">
@@ -417,25 +434,25 @@ function TableClients(props) {
                           scope="row"
                           padding="none"
                         >
-                          {formatCpfCnpj(row.properties.data.cpf)}
+                          {formatCpfCnpj(row.cpf)}
                         </TableCell>
                         <TableCell align="center" style={{ color: "#BDBDBD" }}>
-                          {row.properties.data.name}
+                          {row.name}
                         </TableCell>
                         <TableCell align="center" style={{ color: "#BDBDBD" }}>
-                          {row.properties.data.pppoe}
+                          {row.pppoe}
                         </TableCell>
                         <TableCell align="center" style={{ color: "#BDBDBD" }}>
-                          {row.properties.data.speed}
+                          {row.speed}
                         </TableCell>
                         <TableCell align="center" style={{ color: "#BDBDBD" }}>
-                          {formatDate(row.properties.data.created_at)}
+                          {formatDate(row.created_at)}
                         </TableCell>
                         <TableCell align="center" style={{ color: "#BDBDBD" }}>
-                          {formatDate(row.properties.data.installation_date)}
+                          {formatDate(row.installation_date)}
                         </TableCell>
                         <TableCell align="center" style={{ color: "#BDBDBD" }}>
-                          {row.properties.data.obs}
+                          {row.obs}
                         </TableCell>
                       </TableRow>
                     );

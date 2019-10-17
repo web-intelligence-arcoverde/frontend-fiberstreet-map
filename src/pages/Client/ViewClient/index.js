@@ -13,6 +13,8 @@ import { InputField } from "./Components/InputFieldComponent";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import { toastr } from "react-redux-toastr";
+
 //Creators
 import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
 import { Creators as MapActions } from "../../../redux/store/ducks/map";
@@ -95,8 +97,16 @@ function ViewClient(props) {
   }
 
   function addCabo() {
-    let latitude = data.coordinates.latitude;
-    let longitude = data.coordinates.longitude;
+    let latitude;
+    let longitude;
+    try {
+      latitude = JSON.parse(data.coordinates).latitude;
+      longitude = JSON.parse(data.coordinates).longitude;
+    } catch (err) {
+      latitude = data.coordinates.latitude;
+      longitude = data.coordinates.longitude;
+    }
+
     let coord = [longitude, latitude];
 
     const {
@@ -108,6 +118,8 @@ function ViewClient(props) {
 
     setDelemitationMap("cabo"); // map - map.delimitacao
     let arrayDeArray = new Array(coord);
+    // toastr.success(`array`, `${arrayDeArray}`);
+    // console.log(arrayDeArray);
     addCoordCabo(arrayDeArray); // map - map.polyline
     addCableClientId(data.id); // cabo - cabo.id
     addDropClientId(data.id);

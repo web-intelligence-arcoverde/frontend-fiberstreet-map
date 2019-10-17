@@ -28,7 +28,9 @@ const INITIAL_STATE = {
   //Estado inicial do modal {Mostrar Informações do CTO}
   viewCto: {
     visible: false,
-    data: ""
+    data: "",
+    clients: [],
+    splitter: {}
   },
   ctos: [],
   geojson: {
@@ -88,6 +90,16 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         ctos: action.payload.ctos
+      };
+
+    case Types.LOAD_SPLITTER_CLIENT_BY_CTO_SUCCESS:
+      return {
+        ...state,
+        viewCto: {
+          ...state.viewCto,
+          splitter: action.payload.splitter,
+          clients: action.payload.clients
+        }
       };
     default:
       return state;
@@ -149,9 +161,9 @@ export const Creators = {
     payload: { ctos }
   }),
 
-  loadSplitterAndClientByCtoRequest: ctoId => ({
+  loadSplitterAndClientByCtoRequest: cto => ({
     type: Types.LOAD_SPLITTER_CLIENT_BY_CTO_REQUEST,
-    payload: { ctoId }
+    payload: { cto }
   }),
 
   loadSplitterAndClientByCtoSuccess: (splitter, clients) => ({

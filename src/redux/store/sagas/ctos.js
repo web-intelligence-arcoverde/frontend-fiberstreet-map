@@ -1,6 +1,8 @@
 import { call, put } from "redux-saga/effects";
 import api, { API } from "../../../services/api";
+
 import { Creators as CtoActions } from "../ducks/ctos";
+import { toastr } from "react-redux-toastr";
 
 export function* loadCto(action) {
   try {
@@ -49,4 +51,27 @@ export function* store(action) {
   try {
     const cto = yield call([api, "post"], "/ctos", action.payload.cto);
   } catch (err) {}
+}
+
+export function* loadSplitterAndClient({ payload }) {
+  try {
+    const { id } = yield payload.cto;
+    const response = yield call([api, "get"], `splittercto/${id}`);
+    const { data: splitter } = response;
+
+    const responseTwo = yield call(
+      [api, "get"],
+      `clients/splitter/${splitter[0].id}`
+    );
+    const { data: clients } = responseTwo;
+
+    yield put(
+      CtoActions.loadSplitterAndClientByCtoSuccess(splitter[0], clients)
+    );
+
+    // yield put(CtoActions.showViewModalCto(payload.cto));
+    yield toastr.success("Sucesso", "Sucesso a carregar");
+  } catch (err) {
+    yield toastr.error("Erro", "Falha ao carregar clientes e splitter da cto");
+  }
 }

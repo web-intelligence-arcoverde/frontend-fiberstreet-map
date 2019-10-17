@@ -22,6 +22,7 @@ import { Creators as providerCreators } from "../../../redux/store/ducks/provide
 import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
 import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
+import { toastr } from "react-redux-toastr";
 import store from "../../../redux/store";
 
 //API
@@ -268,8 +269,11 @@ class Map extends Component {
       setDelemitationMap("default");
     } else {
       const { showViewModalCto } = this.props;
+      
       // const { getSplitterByCto } = this.props;
       // Inserir o método do redux-sagas para obter o splitter e os clientes desta cto
+      const { loadSplitterAndClientByCtoRequest } = this.props;
+      loadSplitterAndClientByCtoRequest(cto);
       showViewModalCto(cto);
     }
   }
