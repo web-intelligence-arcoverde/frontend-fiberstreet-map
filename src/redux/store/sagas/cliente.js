@@ -40,11 +40,7 @@ export function* updateClient({ payload }) {
     yield put(ClientCreators.updateClientSuccess(response.data));
     yield toastr.success("Sucesso", "Sucesso ao atualizar cliente");
   } catch (err) {
-    toastrActions.add({
-      type: "error",
-      title: "Erro",
-      message: "Falha ao atualizar cliente"
-    });
+    yield toastr.error("Erro", "Falha ao atualizar cliente");
   }
 }
 

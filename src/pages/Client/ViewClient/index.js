@@ -13,20 +13,16 @@ import { InputField } from "./Components/InputFieldComponent";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import { toastr } from "react-redux-toastr";
+
 //Creators
 import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
 import { Creators as MapActions } from "../../../redux/store/ducks/map";
 import { Creators as CaboActions } from "../../../redux/store/ducks/cabo";
 import { Creators as DropActions } from "../../../redux/store/ducks/drop";
 
-function formatDate(data) {
-  const date = moment(data).format("YYYY-MM-DD");
-  return date;
-}
-
 function ViewClient(props) {
   const { viewClient } = props.redux.client;
-
   const { data } = viewClient; //Informações do usuario.
 
   const [id, setId] = useState("");
@@ -37,7 +33,54 @@ function ViewClient(props) {
   const [address, setAddress] = useState("");
   const [installation, setInstallation] = useState("");
   const [obs, setObs] = useState("");
-  const [teste, setTeste] = useState("");
+  const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    firstLoad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewClient.visible]);
+
+  function firstLoad() {
+    setAddress(data.address);
+    setId(data.id);
+    setCpf(data.cpf);
+    setName(data.name);
+    setSpeed(data.speed);
+    setPppoe(data.pppoe);
+
+    setStatus(data.status);
+    setObs(data.obs);
+    if (data.installation_date === null) {
+      setInstallation(moment().format("YYYY-MM-DD"));
+    } else {
+      setInstallation(formatDate(data.installation_date));
+    }
+  }
+
+  function formatDate(data) {
+    const date = moment(data).format("YYYY-MM-DD");
+    return date;
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const { coordinates } = data.coordinates;
+    const { updateClientRequest } = props;
+    const updateClient = {
+      id: id,
+      address: address,
+      cpf: cpf,
+      name: name,
+      coordinates: coordinates,
+      speed: speed,
+      pppoe: pppoe,
+      obs: obs,
+      status: status,
+      installation_date: installation
+    };
+    updateClientRequest(updateClient, id);
+    handleHideModal();
+  }
 
   function handleHideModal() {
     const { hideClientViewModal } = props;
@@ -49,12 +92,21 @@ function ViewClient(props) {
     setPppoe("");
     setAddress("");
     setInstallation("");
+    setStatus("");
     setObs("");
   }
 
   function addCabo() {
-    let latitude = JSON.parse(data.coordinates).latitude;
-    let longitude = JSON.parse(data.coordinates).longitude;
+    let latitude;
+    let longitude;
+    try {
+      latitude = JSON.parse(data.coordinates).latitude;
+      longitude = JSON.parse(data.coordinates).longitude;
+    } catch (err) {
+      latitude = data.coordinates.latitude;
+      longitude = data.coordinates.longitude;
+    }
+
     let coord = [longitude, latitude];
 
     const {
@@ -66,62 +118,32 @@ function ViewClient(props) {
 
     setDelemitationMap("cabo"); // map - map.delimitacao
     let arrayDeArray = new Array(coord);
+    // toastr.success(`array`, `${arrayDeArray}`);
+    // console.log(arrayDeArray);
     addCoordCabo(arrayDeArray); // map - map.polyline
     addCableClientId(data.id); // cabo - cabo.id
     addDropClientId(data.id);
     handleHideModal();
   }
 
-  useEffect(() => {
-    firstLoad();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewClient.visible]);
-
-  function click(e) {
-    if (e && teste === "active") {
-      setTeste(null);
-    } else {
-      setTeste("active");
+  //Mudar status
+  function changeStatus(e) {
+    if (e) {
+      if (status === null) {
+        setStatus("active");
+        console.log("Estava Null");
+      } else if (status === "active") {
+        console.log("Estava active");
+        setStatus(null);
+        console.log(moment().format("YYYY-MM-DD"));
+      }
     }
   }
 
-  function firstLoad() {
-    setAddress(data.address);
-    setId(data.id);
-    setCpf(data.cpf);
-    setName(data.name);
-    setSpeed(data.speed);
-    setPppoe(data.pppoe);
-    setInstallation(formatDate(data.installation_date));
-    setTeste(data.status);
-    setObs(data.obs);
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    const { coordinates } = data.coordinates;
-
-    const { updateClientRequest } = props;
-    const updateClient = {
-      id: id,
-      address: address,
-      cpf: cpf,
-      name: name,
-      coordinates: coordinates,
-      speed: speed,
-      pppoe: pppoe,
-      obs: obs,
-      status: teste,
-      installation_date: formatDate(installation)
-    };
-    updateClientRequest(updateClient, id);
-    handleHideModal();
-  }
-
+  //Excluir cliente
   function deleteClient() {
-    const { id } = data;
     const { deleteClientRequest } = props;
-    deleteClientRequest(id);
+    deleteClientRequest(data.id);
     handleHideModal();
   }
 
@@ -232,12 +254,12 @@ function ViewClient(props) {
             <Button variant="info" type="submit">
               Salvar Alterações
             </Button>
-            {teste === null ? (
-              <Button variant="primary" onClick={click}>
+            {status === null ? (
+              <Button variant="primary" onClick={changeStatus}>
                 Ativar cliente
               </Button>
             ) : (
-              <Button variant="danger" onClick={click}>
+              <Button variant="danger" onClick={changeStatus}>
                 Desativar
               </Button>
             )}

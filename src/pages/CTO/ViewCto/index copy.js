@@ -12,8 +12,8 @@ import { Creators as ctosActions } from "../../../redux/store/ducks/ctos";
 import Tabs from "./Components/Tabs";
 
 //Componentes importados
-import { makeStyles, Typography, Box } from "@material-ui/core/";
-import { Card, Modal, ListGroup, Accordion } from "react-bootstrap";
+import { makeStyles, Typography, Box, Container } from "@material-ui/core/";
+import { Table, Modal } from "react-bootstrap";
 
 //Tamanho das box
 function TabPanel(props) {
@@ -67,7 +67,7 @@ const useStyles = makeStyles(theme => ({
   },
   bigIndicator: {
     height: 5,
-    backgroundColor: "#000"
+    backgroundColor: "#F2F2F2"
   },
   buttonsActions: {
     paddingTop: "0px",
@@ -105,17 +105,35 @@ function ViewCto(props) {
         <Modal.Title>Informações da caixa terminal optica</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body
-        style={{
-          paddingLeft: "0px",
-          paddingTop: "0px",
-          paddingRight: "0px",
-          paddingBottom: "0px"
-        }}
-      >
+      <Modal.Body>
+        <Container>
+          <h2 style={{ color: "#F5DA81", textAlign: "center" }}>
+            Informações dos cabos
+          </h2>
+
+          <Table responsive>
+            <thead>
+              <tr style={{ backgroundColor: "#fff", color: "#6E6E6E" }}>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Modelo</th>
+                <th>Endereço</th>
+                <th>Observação</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <td>{data.id}</td>
+              <td>{data.name}</td>
+              <td>{data.model}</td>
+              <td>{data.address}</td>
+              <td>{data.obs}</td>
+            </tbody>
+          </Table>
+        </Container>
+
         <Tabs />
       </Modal.Body>
-      <Modal.Footer></Modal.Footer>
     </Modal>
   );
 }

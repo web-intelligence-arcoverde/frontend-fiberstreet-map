@@ -48,25 +48,15 @@ export function* loadSplitters(action) {
 export function* addDrop(action) {
   const { cabo: drop, saida, client_id, cto_id } = yield action.payload.data;
 
-  // yield console.tron.log({
-  //   drop,
-  //   cto_id,
-  //   client_id,
-  //   saida
-  // });
   const spAndCli = yield {
     splitter_cod: saida.splitter_id,
     cliente_cod_cli: client_id
   };
 
-  // const provider = yield select(state => )
-
   // Saida Do Splitter
   const novaSaida = {
     ...saida,
-    // splitter_cod: saida.splitter_id,
-    // cliente_cod_cli: client_id,
-    // splitter_id: null
+
     splitter_id: saida.splitter_id,
     client_id,
     isActive: null,
@@ -85,11 +75,9 @@ export function* addDrop(action) {
     name: drop.name
   };
 
-  //console.tron.log({ SAIDA_AFTER_SEQUELIZE: novaSaida });
-
   try {
     // const cabo = yield call(api.post, API.CREATE_CABO, drop);
-
+    const cabo = { ...drop, coordinates: JSON.stringify(drop.coordinates) };
     // 1 - Criando o cabo
     // 1 - Adicionar o cabo
     // 2 - Adicionar a fibra pertencente ao cabo dentro do cabo
@@ -97,11 +85,12 @@ export function* addDrop(action) {
     // 4 - Relacionar o cabo com a cto
     // 'cable', 'fiber', 'output'
     const response = yield call(api.post, "drops", {
-      cable: drop,
+      cable: cabo,
       output: saidaResponsaFilhoDaputa,
       fiber: fibra
     });
 
+    yield put(DropCreators.hideDropAddModal());
     yield toastr.success("Sucesso", "Sucesso ao adicionar drop");
 
     // const response = yield call(api.post, "cables", drop);
