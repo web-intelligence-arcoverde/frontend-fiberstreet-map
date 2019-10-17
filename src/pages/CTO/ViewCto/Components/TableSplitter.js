@@ -20,6 +20,7 @@ function TableSplitter(props) {
   const { data, visible } = props.redux.ctos.viewCto;
 
   const [splitters, setSplitters] = useState([]);
+  const { hideViewModalCto } = props;
 
   console.log("informações da cto {splitter(id)}");
   console.log(data.id); //pegando o id da cto selecionada.
@@ -81,15 +82,20 @@ function TableSplitter(props) {
         </tbody>
       </Table>
 
-      <Button
-        style={{ color: "#fff", marginTop: "20px" }}
-        variant="warning"
-        size="lg"
-        block
-        onClick={handleAddSplitter}
-      >
-        Adicionar splitter
-      </Button>
+      {splitters < 1 && (
+        <Button
+          style={{ color: "#fff", marginTop: "20px" }}
+          variant="warning"
+          size="lg"
+          block
+          onClick={() => {
+            handleAddSplitter();
+            hideViewModalCto();
+          }}
+        >
+          Adicionar splitter
+        </Button>
+      )}
     </Container>
   );
 }
