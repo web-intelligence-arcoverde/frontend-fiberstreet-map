@@ -21,6 +21,8 @@ import {
   Tooltip
 } from "@material-ui/core/";
 
+import { Modal } from "react-bootstrap/";
+
 // redux
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -277,14 +279,14 @@ function TableClients(props) {
       api
         .get(`splittercto/${data.id}`)
         .then(response => {
-          api.get(`clients/splitter/${response.data[0].id}`).then(response => {
-            const clients = response.data.map(client => client.client);
-            if (clients) 
-              setClients(clients)
-            else
-              setClients([])
-          })
-          .catch(err => {});
+          api
+            .get(`clients/splitter/${response.data[0].id}`)
+            .then(response => {
+              const clients = response.data.map(client => client.client);
+              if (clients) setClients(clients);
+              else setClients([]);
+            })
+            .catch(err => {});
         })
         .catch(err => {});
     }
@@ -380,108 +382,128 @@ function TableClients(props) {
     rowsPerPage - Math.min(rowsPerPage, clients.length - page * rowsPerPage);
 
   return (
-    <div className={classes.root2}>
-      <Paper className={classes.paper}>
-        <EnhancedTableToolbar
-          style={{ marginTop: "0px" }}
-          numSelected={selected.length}
-        />
-        <div className={classes.tableWrapper}>
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size={"medium"}
-          >
-            <EnhancedTableHead
-              classes={classes}
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={clients.length}
-            />
-            <TableBody>
-              {clients &&
-                stableSort(clients, getSorting(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
-                    const isItemSelected = isSelected(row.cpf);
-                    const labelId = `enhanced-table-checkbox-${index}`;
+    <Modal show={props.open}>
+      <div className={classes.root2}>
+        <Paper className={classes.paper}>
+          <EnhancedTableToolbar
+            style={{ marginTop: "0px" }}
+            numSelected={selected.length}
+          />
+          <div className={classes.tableWrapper}>
+            <Table
+              className={classes.table}
+              aria-labelledby="tableTitle"
+              size={"medium"}
+            >
+              <EnhancedTableHead
+                classes={classes}
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={clients.length}
+              />
+              <TableBody>
+                {clients &&
+                  stableSort(clients, getSorting(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                      const isItemSelected = isSelected(row.cpf);
+                      const labelId = `enhanced-table-checkbox-${index}`;
 
-                    return (
-                      <TableRow
-                        hover
-                        onClick={event => handleClick(event, row.cpf)}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={row.cpf}
-                        selected={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={isItemSelected}
-                            inputProps={{ "aria-labelledby": labelId }}
-                            style={{ color: "#FFBF00" }}
-                          />
-                        </TableCell>
-
-                        <TableCell
-                          component="th"
-                          style={{ color: "#BDBDBD" }}
-                          id={labelId}
-                          scope="row"
-                          padding="none"
+                      return (
+                        <TableRow
+                          hover
+                          onClick={event => handleClick(event, row.cpf)}
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={row.cpf}
+                          selected={isItemSelected}
                         >
-                          {formatCpfCnpj(row.cpf)}
-                        </TableCell>
-                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
-                          {row.pppoe}
-                        </TableCell>
-                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
-                          {row.speed}
-                        </TableCell>
-                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
-                          {formatDate(row.created_at)}
-                        </TableCell>
-                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
-                          {formatDate(row.installation_date)}
-                        </TableCell>
-                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
-                          {row.obs}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={10} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <TablePagination
-          rowsPerPageOptions={[5, clients.length]}
-          component="div"
-          count={clients.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          backIconButtonProps={{
-            "aria-label": "previous page"
-          }}
-          nextIconButtonProps={{
-            "aria-label": "next page"
-          }}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </div>
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              inputProps={{ "aria-labelledby": labelId }}
+                              style={{ color: "#FFBF00" }}
+                            />
+                          </TableCell>
+
+                          <TableCell
+                            component="th"
+                            style={{ color: "#BDBDBD" }}
+                            id={labelId}
+                            scope="row"
+                            padding="none"
+                          >
+                            {formatCpfCnpj(row.cpf)}
+                          </TableCell>
+                          <TableCell
+                            align="center"
+                            style={{ color: "#BDBDBD" }}
+                          >
+                            {row.name}
+                          </TableCell>
+                          <TableCell
+                            align="center"
+                            style={{ color: "#BDBDBD" }}
+                          >
+                            {row.pppoe}
+                          </TableCell>
+                          <TableCell
+                            align="center"
+                            style={{ color: "#BDBDBD" }}
+                          >
+                            {row.speed}
+                          </TableCell>
+                          <TableCell
+                            align="center"
+                            style={{ color: "#BDBDBD" }}
+                          >
+                            {formatDate(row.created_at)}
+                          </TableCell>
+                          <TableCell
+                            align="center"
+                            style={{ color: "#BDBDBD" }}
+                          >
+                            {formatDate(row.installation_date)}
+                          </TableCell>
+                          <TableCell
+                            align="center"
+                            style={{ color: "#BDBDBD" }}
+                          >
+                            {row.obs}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 49 * emptyRows }}>
+                    <TableCell colSpan={10} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <TablePagination
+            rowsPerPageOptions={[5, clients.length]}
+            component="div"
+            count={clients.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            backIconButtonProps={{
+              "aria-label": "previous page"
+            }}
+            nextIconButtonProps={{
+              "aria-label": "next page"
+            }}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </div>
+    </Modal>
   );
 }
 

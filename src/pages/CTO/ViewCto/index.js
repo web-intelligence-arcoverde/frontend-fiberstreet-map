@@ -1,5 +1,4 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
 
 //Redux
 import { connect } from "react-redux";
@@ -9,76 +8,83 @@ import { bindActionCreators } from "redux";
 import { Creators as ctosActions } from "../../../redux/store/ducks/ctos";
 
 //Componentes "criados"
-import Tabs from "./Components/Tabs";
+import CtoInformation from "./Components/CtoInformation";
+import TableClients from "./Components/TableUsers";
+import TableSplitter from "./Components/TableSplitter";
+import TableCable from "./Components/TableCable";
 
 //Componentes importados
-import { Typography, Box } from "@material-ui/core/";
-import { Modal } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
+import { makeStyles } from "@material-ui/core/styles";
+import PeopleIcon from "@material-ui/icons/People";
+import StorageIcon from "@material-ui/icons/Storage";
+import Cable from "@material-ui/icons/SettingsInputComponent";
+import Tooltip from "@material-ui/core/Tooltip";
+
+const useStyles = makeStyles(theme => ({
+  fab: {
+    margin: theme.spacing(1)
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1)
+  }
+}));
 
 //Tamanho das box
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <Typography
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`scrollable-force-tabpanel-${index}`}
-      aria-labelledby={`scrollable-force-tab-${index}`}
-      {...other}
-    >
-      <Box
-        style={{
-          paddingTop: "0px",
-          paddingRight: "0px",
-          paddingBottom: "10px",
-          paddingLeft: "0px"
-        }}
-        p={3}
-      >
-        {children}
-      </Box>
-    </Typography>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
-};
-
 function ViewCto(props) {
+  const classes = useStyles();
   const { ctos } = props.redux;
   const { hideViewModalCto } = props;
 
   const { viewCto } = ctos; //Recuperando o estado inicial da CTO
-  // eslint-disable-next-line no-unused-vars
-  const { data } = viewCto; //Recuperando os dados da CTO
+  const [open, setOpen] = useState(false);
+
+  function openModalClients() {
+    hideViewModalCto();
+    setOpen(!open);
+  }
 
   return (
     <Modal size="lg" show={viewCto.visible} onHide={hideViewModalCto}>
-      <Modal.Header
+      <Modal.Title
         style={{
           justifyContent: "center",
-          backgroundColor: "#F7D358"
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          backgroundColor: "#F7D358",
+          paddingTop: "15px",
+          paddingBottom: "10px"
         }}
       >
-        <Modal.Title>Informações da caixa terminal optica</Modal.Title>
-      </Modal.Header>
+        <h3>Caixa terminal optico</h3>
+        <div>
+          <Tooltip title="Clientes">
+            <Button
+              variant="secondary"
+              className={classes.fab}
+              onClick={openModalClients}
+            >
+              <PeopleIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Splitter">
+            <Button variant="secondary" className={classes.fab}>
+              <StorageIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Cabos">
+            <Button variant="secondary" className={classes.fab}>
+              <Cable />
+            </Button>
+          </Tooltip>
+        </div>
+      </Modal.Title>
+      <Modal.Body>
+        <CtoInformation info={props} />
 
-      <Modal.Body
-        style={{
-          paddingLeft: "0px",
-          paddingTop: "0px",
-          paddingRight: "0px",
-          paddingBottom: "0px"
-        }}
-      >
-        <Tabs />
+        <TableClients open={open} />
       </Modal.Body>
-      <Modal.Footer></Modal.Footer>
     </Modal>
   );
 }
