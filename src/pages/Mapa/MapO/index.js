@@ -269,7 +269,7 @@ class Map extends Component {
       setDelemitationMap("default");
     } else {
       const { showViewModalCto } = this.props;
-      
+
       // const { getSplitterByCto } = this.props;
       // Inserir o método do redux-sagas para obter o splitter e os clientes desta cto
       const { loadSplitterAndClientByCtoRequest } = this.props;
@@ -465,7 +465,7 @@ class Map extends Component {
         });
 
         data.forEach(client => {
-          if (client.properties.data.status === "null") {
+          if (client.properties.data.status !== "active") {
             clientsInactive.push(client);
           }
         });
@@ -491,38 +491,65 @@ class Map extends Component {
         }
       });
 
-      clients.on("updatedClient", async clientUpdated => {
-        const data = await store.getState().client.geojson.clients;
+      clients.on("updatedClient", clientUp => {
+        const data = store.getState().client.geojson.clients;
+
+        let clientUpdated = clientUp;
+        const longitude = JSON.parse(clientUp.properties.data.coordinates).longitude
+        const latitude = JSON.parse(clientUp.properties.data.coordinates).latitude
+        clientUpdated.geometry.coordinates = [longitude, latitude]
+
+        let clientes = data;
+        clientes.push(clientUpdated);
 
         const clientsActive = [];
         const clientsInactive = [];
 
         data.forEach(client => {
-          // verify if the client update is !== of the actual client in the forEach
-          if (client.properties.data.id !== clientUpdated.id) {
-            if (client.properties.data.active === "active")
+          if (client.properties.data.status === "active") {
+            if (client.properties.data.id != clientUpdated.properties.data.id)
               clientsActive.push(client);
-            else clientsInactive.push(client);
-          } else {
-            if (client.properties.data.active === "active")
-              clientsActive.push(clientUpdated);
-            // Insert the updated client
-            else clientsInactive.push(clientUpdated); // Insert the updated client
           }
         });
-
-        const dataClientsActive = {
+        map.getSource("cliente").setData({
           type: "FeatureCollection",
           features: clientsActive
-        };
+        });
 
-        const dataClientsInactive = {
+        data.forEach(client => {
+          if (client.properties.data.status !== "active") {
+            if (client.properties.data.id != clientUpdated.properties.data.id)
+              clientsInactive.push(client);
+          }
+        });
+        map.getSource("cliente_inativo").setData({
           type: "FeatureCollection",
           features: clientsInactive
-        };
+        });
 
-        await map.getSource("cliente").setData(dataClientsActive);
-        await map.getSource("cliente_inativo").setData(dataClientsInactive);
+        console.log([...clientsActive, ...clientsInactive, clientUpdated]);
+        store.dispatch({
+          type: "@cliente/LOAD_GJ_SUCCESS",
+          payload: {
+            clients: [...clientsActive, ...clientsInactive, clientUpdated]
+          }
+        });
+        console.log(clientUpdated)
+        if (clientUpdated.properties.data.status === "active") {
+          const activeClients = {
+            type: "FeatureCollection",
+            features: [...clientsActive, clientUpdated]
+          };
+
+          map.getSource("cliente").setData(activeClients);
+        } else {
+          const inactiveClients = {
+            type: "FeatureCollection",
+            features: [...clientsInactive, clientUpdated]
+          };
+
+          map.getSource("cliente_inativo").setData(inactiveClients);
+        }
       });
 
       clients.on("deletedClient", async clientDeleted => {
