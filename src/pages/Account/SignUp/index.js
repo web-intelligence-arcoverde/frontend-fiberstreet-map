@@ -1,9 +1,5 @@
 import React from "react";
 
-// import Logo from "../../assets/airbnb-logo.svg";
-import api from "../../../services/api";
-import axios from "axios";
-
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,15 +10,10 @@ import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
 
-import InputBase from "@material-ui/core/InputBase";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import CachedIcon from "@material-ui/icons/Cached";
-import AlarmIcon from "@material-ui/icons/Alarm";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import { makeStyles } from "@material-ui/core/styles";
 
+/*
 const BootstrapInput = withStyles(theme => ({
   root: {
     "label + &": {
@@ -57,6 +48,7 @@ const BootstrapInput = withStyles(theme => ({
     }
   }
 }))(InputBase);
+*/
 
 function Copyright() {
   return (
@@ -100,11 +92,6 @@ export default function SignUp() {
   const classes = useStyles();
 
   const [cep, setCep] = React.useState("");
-
-  const [age, setAge] = React.useState("");
-  const handleChange = event => {
-    setAge(event.target.value);
-  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -282,8 +269,4 @@ export default function SignUp() {
       </Box>
     </Container>
   );
-}
-
-function serviceCep(cep) {
-  return "https://viacep.com.br/ws/" + cep + "/json/?callback=meu_callback";
 }

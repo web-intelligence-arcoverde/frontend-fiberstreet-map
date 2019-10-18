@@ -13,8 +13,6 @@ import { InputField } from "./Components/InputFieldComponent";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { toastr } from "react-redux-toastr";
-
 //Creators
 import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
 import { Creators as MapActions } from "../../../redux/store/ducks/map";
