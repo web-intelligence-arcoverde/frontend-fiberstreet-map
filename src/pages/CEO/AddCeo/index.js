@@ -60,13 +60,16 @@ function AddCeo(props) {
     >
       <Form>
         <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
-          <Modal.Title>Cadastrar da CEO</Modal.Title>
+          <Modal.Title>Cadastrar CEO</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <Form.Group>
             <Form.Label>Nome:</Form.Label>
             <Form.Control
+              required
+              minLength="15"
+              maxLength="150"
               type="text"
               value={name}
               onChange={e => setName(e.target.value)}
@@ -75,6 +78,9 @@ function AddCeo(props) {
           <Form.Group>
             <Form.Label>Modelo:</Form.Label>
             <Form.Control
+              required
+              minLength="15"
+              maxLength="100"
               type="text"
               value={model}
               onChange={e => setModel(e.target.value)}
@@ -84,6 +90,9 @@ function AddCeo(props) {
           <Form.Group>
             <Form.Label>Tipo:</Form.Label>
             <Form.Control
+              required
+              minLength="10"
+              maxLength="100"
               type="text"
               value={type}
               onChange={e => setType(e.target.value)}
@@ -93,6 +102,9 @@ function AddCeo(props) {
           <Form.Group>
             <Form.Label>Endereço:</Form.Label>
             <Form.Control
+              required
+              minLength="20"
+              maxLength="200"
               type="text"
               value={address}
               onChange={e => setAddress(e.target.value)}
@@ -102,6 +114,9 @@ function AddCeo(props) {
           <Form.Group controlId="exampleForm.ControlTextarea1">
             <Form.Label>Observações:</Form.Label>
             <Form.Control
+              required
+              minLength="20"
+              maxLength="200"
               as="textarea"
               rows="3"
               value={observacao}

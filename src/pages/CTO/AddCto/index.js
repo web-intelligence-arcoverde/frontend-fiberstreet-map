@@ -52,13 +52,16 @@ function AddNewCto(props) {
     >
       <Form onSubmit={handleSubmit}>
         <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
-          <Modal.Title>Cadastrar do CTO</Modal.Title>
+          <Modal.Title>Cadastrar CTO</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <Form.Group>
-            <Form.Label>Nome da CTO:</Form.Label>
+            <Form.Label>Nome:</Form.Label>
             <Form.Control
+              required
+              minLength="15"
+              maxLength="255"
               type="text"
               value={name}
               onChange={e => setName(e.target.value)}
@@ -68,6 +71,9 @@ function AddNewCto(props) {
           <Form.Group>
             <Form.Label>Endereço:</Form.Label>
             <Form.Control
+              required
+              minLength="15"
+              maxLength="255"
               type="text"
               value={address}
               onChange={e => setAddress(e.target.value)}
@@ -77,6 +83,9 @@ function AddNewCto(props) {
           <Form.Group>
             <Form.Label>Modelo:</Form.Label>
             <Form.Control
+              required
+              minLength="10"
+              maxLength="100"
               type="text"
               value={model}
               onChange={e => setModel(e.target.value)}
@@ -86,6 +95,9 @@ function AddNewCto(props) {
           <Form.Group controlId="exampleForm.ControlTextarea1">
             <Form.Label>Observações:</Form.Label>
             <Form.Control
+              required
+              minLength="30"
+              maxLength="255"
               as="textarea"
               rows="3"
               value={observacao}
