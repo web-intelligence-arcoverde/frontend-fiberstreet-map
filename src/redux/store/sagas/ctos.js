@@ -9,6 +9,7 @@ export function* loadCto(action) {
     const { data } = yield call(api.get, API.GET_CTO_GEOJSON);
 
     let ctoFeatures = [];
+    // eslint-disable-next-line array-callback-return
     yield data.map((cto, index) => {
       let latitude = JSON.parse(cto.coordenadas).latitude;
       let longitude = JSON.parse(cto.coordenadas).longitude;
@@ -49,7 +50,7 @@ export function* viewCto(action) {
  */
 export function* store(action) {
   try {
-    const cto = yield call([api, "post"], "/ctos", action.payload.cto);
+    yield call([api, "post"], "/ctos", action.payload.cto);
   } catch (err) {}
 }
 

@@ -932,8 +932,8 @@ class Map extends Component {
       <>
         <div id={container} className={classNameStyle}></div>
 
-        <div id="geocoder" class="geocoder"></div>
-        <div id="distance" class="distance-container"></div>
+        <div id="geocoder" className="geocoder"></div>
+        <div id="distance" className="distance-container"></div>
 
         <LeftSelector />
       </>

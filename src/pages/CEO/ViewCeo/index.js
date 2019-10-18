@@ -12,16 +12,6 @@ import InputField from "./Components/InputFieldComponent";
 
 //UI-Components
 import { Modal, Card, ListGroup, Button } from "react-bootstrap";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles(theme => ({
-  button: {
-    margin: theme.spacing(1)
-  },
-  input: {
-    display: "none"
-  }
-}));
 
 function ViewCeo(props) {
   return (

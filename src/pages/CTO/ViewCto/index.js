@@ -12,8 +12,8 @@ import { Creators as ctosActions } from "../../../redux/store/ducks/ctos";
 import Tabs from "./Components/Tabs";
 
 //Componentes importados
-import { makeStyles, Typography, Box } from "@material-ui/core/";
-import { Card, Modal, ListGroup, Accordion } from "react-bootstrap";
+import { Typography, Box } from "@material-ui/core/";
+import { Modal } from "react-bootstrap";
 
 //Tamanho das box
 function TabPanel(props) {
@@ -49,49 +49,12 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 };
 
-function a11yProps(index) {
-  return {
-    id: `scrollable-force-tab-${index}`,
-    "aria-controls": `scrollable-force-tabpanel-${index}`
-  };
-}
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-    width: "100%",
-    backgroundColor: theme.palette.background.paper
-  },
-  pallet: {
-    backgroundColor: "#FFBF00"
-  },
-  bigIndicator: {
-    height: 5,
-    backgroundColor: "#000"
-  },
-  buttonsActions: {
-    paddingTop: "0px",
-    paddingRight: "0px",
-    paddingLeft: "0px",
-    borderBottomWidth: "0px",
-    paddingBottom: "0px",
-    borderTopWidth: "0px",
-    marginBottom: "15px",
-    color: "#D8D8D8"
-  },
-  modalBody: {
-    paddingLeft: "0px",
-    paddingRight: "0px",
-    paddingBottom: "0px",
-    paddingTop: "10px"
-  }
-}));
-
 function ViewCto(props) {
   const { ctos } = props.redux;
   const { hideViewModalCto } = props;
 
   const { viewCto } = ctos; //Recuperando o estado inicial da CTO
+  // eslint-disable-next-line no-unused-vars
   const { data } = viewCto; //Recuperando os dados da CTO
 
   return (

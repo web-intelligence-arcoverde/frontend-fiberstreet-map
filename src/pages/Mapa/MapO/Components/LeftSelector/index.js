@@ -77,7 +77,7 @@ function LeftSelector(props) {
                   >
                     <Button variant="warning" style={{ width: "100%" }}>
                       <i
-                        class="fa fa-exclamation-circle"
+                        className="fa fa-exclamation-circle"
                         style={{ color: "white" }}
                       ></i>
                     </Button>
@@ -90,7 +90,10 @@ function LeftSelector(props) {
                   overlay={<Tooltip id="tooltip-disabled">Mensagens</Tooltip>}
                 >
                   <Button variant="warning" className={classes.button}>
-                    <i class="fa fa-envelope" style={{ color: "white" }}></i>
+                    <i
+                      className="fa fa-envelope"
+                      style={{ color: "white" }}
+                    ></i>
                   </Button>
                 </OverlayTrigger>
                 <Dropdown.Toggle
@@ -115,7 +118,10 @@ function LeftSelector(props) {
                   }
                 >
                   <Button variant="warning" className={classes.button}>
-                    <i class="fa fa-user-circle" style={{ color: "white" }}></i>
+                    <i
+                      className="fa fa-user-circle"
+                      style={{ color: "white" }}
+                    ></i>
                   </Button>
                 </OverlayTrigger>
                 <Dropdown.Toggle
@@ -144,7 +150,7 @@ function LeftSelector(props) {
 
               <Dropdown as={ButtonGroup}>
                 <Button variant="warning" className={classes.button}>
-                  <i class="fa fa-plus" style={{ color: "white" }}></i>
+                  <i className="fa fa-plus" style={{ color: "white" }}></i>
                 </Button>
 
                 <Dropdown.Toggle
@@ -199,7 +205,7 @@ function LeftSelector(props) {
 
               <Dropdown as={ButtonGroup}>
                 <Button variant="warning" className={classes.button}>
-                  <i class="fa fa-list-alt" style={{ color: "white" }}></i>
+                  <i className="fa fa-list-alt" style={{ color: "white" }}></i>
                 </Button>
 
                 <Dropdown.Toggle
