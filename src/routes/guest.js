@@ -17,8 +17,10 @@ const GuestRoute = ({ component: Component, ...rest }) => (
   />
 );
 
+/*
 GuestRoute.propTypes = {
   component: PropTypes.func.isRequired
 };
+*/
 
 export default GuestRoute;

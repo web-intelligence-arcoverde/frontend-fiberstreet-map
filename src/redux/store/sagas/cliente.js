@@ -7,7 +7,7 @@ import { actions as toastrActions, toastr } from "react-redux-toastr";
 
 export function* createClient({ payload }) {
   try {
-    const response = yield call([api, "post"], "/clients", payload.client);
+    yield call([api, "post"], "/clients", payload.client);
     // yield put(ClientCreators.createClientSuccess(cliente));
     yield toastr.success(
       "Sucesso",
