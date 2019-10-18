@@ -26,7 +26,7 @@ function ClienteAddModal(props) {
     event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
+      // event.preventDefault();
       event.stopPropagation();
     }
     setValidated(true);
@@ -55,7 +55,6 @@ function ClienteAddModal(props) {
   function handleHideModal() {
     const { hideNewModalClient } = props;
     hideNewModalClient();
-
     setName("");
     setCpf("");
     setPlano("");
@@ -89,7 +88,7 @@ function ClienteAddModal(props) {
         onHide={handleHideModal}
         animation={false}
       >
-        <Form noValidate validated={validated} onSubmit={validateForm}>
+        <Form onSubmit={handleSubmit}>
           <Modal.Header
             style={{
               justifyContent: "center",
@@ -105,8 +104,9 @@ function ClienteAddModal(props) {
               <Form.Label>Nome:</Form.Label>
               <Form.Control
                 required
-                type="text"
+                minLength="30"
                 maxLength="255"
+                type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
               />
@@ -131,8 +131,9 @@ function ClienteAddModal(props) {
               <Form.Label>Endereço:</Form.Label>
               <Form.Control
                 required
+                minLength="30"
+                maxLength="150"
                 type="text"
-                maxLength="255"
                 value={address}
                 onChange={e => setAddress(e.target.value)}
               />
@@ -163,6 +164,7 @@ function ClienteAddModal(props) {
               <Form.Control
                 required
                 type="text"
+                minLength="15"
                 maxLength="150"
                 value={PPPOE}
                 onChange={e => setPPPOE(e.target.value)}
@@ -175,7 +177,8 @@ function ClienteAddModal(props) {
                 required
                 as="textarea"
                 rows="3"
-                maxLength="300"
+                minLength="50"
+                maxLength="255"
                 value={obs}
                 onChange={e => setObs(e.target.value)}
               />

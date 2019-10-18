@@ -21,6 +21,33 @@ function AddProvider(props) {
   const [cnpj, setCnpj] = useState("");
   const [cnpjUnmasked, setCnpjUnmasked] = useState("");
   const [address, setAddress] = useState("");
+  const [validated, setValidated] = useState(false);
+
+  function validateForm(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+    }
+    setValidated(true);
+    if (validated === true) {
+      handleCeo(event);
+    }
+  }
+
+  function handleCeo(e) {
+    e.preventDefault();
+    const newProvider = {
+      name: name,
+      cnpj: cnpjUnmasked,
+      address: address
+    };
+
+    hideModalNewProvider();
+    setName("");
+    setCnpj("");
+    setAddress("");
+  }
 
   function cpfCnpj(v) {
     //Remove tudo o que não é dígito
@@ -37,21 +64,6 @@ function AddProvider(props) {
     return v;
   }
 
-  async function handleCeo(e) {
-    e.preventDefault();
-
-    const newProvider = {
-      name: name,
-      cnpj: cnpjUnmasked,
-      address: address
-    };
-
-    hideModalNewProvider();
-    setName("");
-    setCnpj("");
-    setAddress("");
-  }
-
   return (
     <Modal show={viewNewProvider.visible} onHide={hideModalNewProvider}>
       <Form onSubmit={handleCeo}>
@@ -63,6 +75,9 @@ function AddProvider(props) {
           <Form.Group>
             <Form.Label>Nome</Form.Label>
             <Form.Control
+              required
+              minLength="15"
+              maxLength="255"
               type="text"
               value={name}
               onChange={e => setName(e.target.value)}
@@ -71,8 +86,10 @@ function AddProvider(props) {
           <Form.Group>
             <Form.Label>CNPJ</Form.Label>
             <Form.Control
+              required
               type="text"
               maxlength="18"
+              minLength="18"
               value={cnpj}
               onChange={e => {
                 setCnpjUnmasked(e.target.value);
@@ -83,6 +100,9 @@ function AddProvider(props) {
           <Form.Group>
             <Form.Label>Endereco</Form.Label>
             <Form.Control
+              required
+              minLength="20"
+              maxLength="255"
               type="text"
               onChange={e => {
                 setAddress(e.target.value);
