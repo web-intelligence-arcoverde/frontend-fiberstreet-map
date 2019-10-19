@@ -61,7 +61,7 @@ export default function Components(props) {
         </Form.Group>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <Button variant="secondary" style={{ marginRight: "10px" }}>
-            Salvar
+            Atualizar
             <SaveIcon style={{ marginLeft: "5px" }} />
           </Button>
 

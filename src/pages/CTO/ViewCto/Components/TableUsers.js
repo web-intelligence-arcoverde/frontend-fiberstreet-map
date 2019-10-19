@@ -378,11 +378,22 @@ function TableClients(props) {
 
   const isSelected = name => selected.indexOf(name) !== -1;
 
+  const { viewClients } = props.redux.ctos;
+  const { hideModalClients } = props;
+
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, clients.length - page * rowsPerPage);
 
   return (
-    <Modal show={props.open}>
+    <Modal size="lg" show={viewClients.visible} onHide={hideModalClients}>
+      <Modal.Header
+        style={{
+          justifyContent: "center",
+          backgroundColor: "#F7D358"
+        }}
+      >
+        <Modal.Title>Clientes</Modal.Title>
+      </Modal.Header>
       <div className={classes.root2}>
         <Paper className={classes.paper}>
           <EnhancedTableToolbar
@@ -512,7 +523,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators(clienteCreators, dispatch);
+  bindActionCreators((clienteCreators, ctosCreators), dispatch);
 
 export default connect(
   mapStateToProps,

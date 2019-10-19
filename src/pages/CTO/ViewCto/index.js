@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 //Redux
 import { connect } from "react-redux";
@@ -36,12 +36,22 @@ function ViewCto(props) {
   const { ctos } = props.redux;
   const { hideViewModalCto } = props;
 
+  const { showModalClients } = props;
+  const { showModalSplitter } = props;
+  const { showModalCable } = props;
+
   const { viewCto } = ctos; //Recuperando o estado inicial da CTO
-  const [open, setOpen] = useState(false);
 
   function openModalClients() {
-    hideViewModalCto();
-    setOpen(!open);
+    showModalClients();
+  }
+
+  function openModalSplitter() {
+    showModalSplitter();
+  }
+
+  function openModalCable() {
+    showModalCable();
   }
 
   return (
@@ -69,12 +79,20 @@ function ViewCto(props) {
             </Button>
           </Tooltip>
           <Tooltip title="Splitter">
-            <Button variant="secondary" className={classes.fab}>
+            <Button
+              variant="secondary"
+              className={classes.fab}
+              onClick={openModalSplitter}
+            >
               <StorageIcon />
             </Button>
           </Tooltip>
           <Tooltip title="Cabos">
-            <Button variant="secondary" className={classes.fab}>
+            <Button
+              variant="secondary"
+              className={classes.fab}
+              onClick={openModalCable}
+            >
               <Cable />
             </Button>
           </Tooltip>
@@ -82,8 +100,9 @@ function ViewCto(props) {
       </Modal.Title>
       <Modal.Body>
         <CtoInformation info={props} />
-
-        <TableClients open={open} />
+        <TableSplitter />
+        <TableCable />
+        <TableClients />
       </Modal.Body>
     </Modal>
   );

@@ -14,7 +14,6 @@ import { Creators as SplitterActions } from "../../../../redux/store/ducks/split
 import { Creators as CtoActions } from "../../../../redux/store/ducks/ctos";
 
 import StorageIcon from "@material-ui/icons/Storage";
-import { Container } from "@material-ui/core";
 
 function TableSplitter(props) {
   const { modalNewSplitter } = props.redux.splitter;
@@ -50,11 +49,6 @@ function TableSplitter(props) {
   const { viewSplitter } = props.redux.ctos;
   const { hideModalSplitter } = props;
 
-  const [name, setName] = useState("");
-  const [model, setModel] = useState("");
-  const [balancing, setBalancing] = useState("");
-  const [fib, setFib] = useState("");
-
   return (
     <Modal show={viewSplitter.visible} onHide={hideModalSplitter} size="lg">
       <Modal.Title
@@ -71,55 +65,43 @@ function TableSplitter(props) {
         <h2>Informações do Splitter</h2>
         <StorageIcon fontSize="large" />
       </Modal.Title>
-      <Modal.Body style={{ marginBottom: "20px" }}>
-        <Container>
-          <Form>
-            <Form.Row>
-              <Form.Group as={Col} controlId="formGridEmail">
-                <Form.Label>Nome do splitter:</Form.Label>
-                <Form.Control type="text" />
-              </Form.Group>
-            </Form.Row>
-            <Form.Row>
-              <Form.Group as={Col} controlId="formGridPassword">
-                <Form.Label>Modelo do Splitter</Form.Label>
-                <Form.Control type="text" />
-              </Form.Group>
-            </Form.Row>
+      <Modal.Body>
+        <Table responsive>
+          <thead>
+            <tr style={{ backgroundColor: "#fff", color: "#6E6E6E" }}>
+              <th>Nome</th>
+              <th>Modelo</th>
+              <th>Balanc.</th>
+              <th>Fibra Aliment.</th>
+            </tr>
+          </thead>
 
-            <Form.Row>
-              <Form.Group as={Col} controlId="formGridEmail">
-                <Form.Label>Balanceamento:</Form.Label>
-                <Form.Control type="number" />
-              </Form.Group>
+          <tbody>
+            {splitters.map(splitter => (
+              <tr>
+                <td>{splitter.name}</td>
+                <td>{splitter.model}</td>
+                <td>{splitter.balancing}</td>
+                <td>Not have yet</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
 
-              <Form.Group as={Col} controlId="formGridPassword">
-                <Form.Label>Fibra de alimentação:</Form.Label>
-                <Form.Control type="text" />
-              </Form.Group>
-            </Form.Row>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                paddingTop: "40px"
-              }}
-            >
-              <Button
-                variant="secondary"
-                type="submit"
-                style={{ marginRight: "10px" }}
-              >
-                Submit
-              </Button>
-              <Button variant="secondary" style={{ marginRight: "10px" }}>
-                Edit
-              </Button>
-              <Button variant="secondary">Remove</Button>
-            </div>
-          </Form>
-        </Container>
+        {splitters < 1 && (
+          <Button
+            style={{ color: "#fff", marginTop: "20px" }}
+            variant="warning"
+            size="lg"
+            block
+            onClick={() => {
+              handleAddSplitter();
+              hideViewModalCto();
+            }}
+          >
+            Adicionar splitter
+          </Button>
+        )}
       </Modal.Body>
     </Modal>
   );
