@@ -60,17 +60,12 @@ export default function Components(props) {
           />
         </Form.Group>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button variant="secondary" style={{ marginRight: "10px" }}>
-            Atualizar
+          <Button variant="info" style={{ marginRight: "10px" }}>
+            Atualizar informações
             <SaveIcon style={{ marginLeft: "5px" }} />
           </Button>
 
-          <Button variant="secondary" style={{ marginRight: "10px" }}>
-            Editar
-            <EditIcon style={{ marginLeft: "5px" }} />
-          </Button>
-
-          <Button variant="secondary">
+          <Button variant="danger">
             Excluir
             <DeleteIcon style={{ marginLeft: "5px" }} />
           </Button>

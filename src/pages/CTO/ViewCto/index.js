@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 //Redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+//API
+import api from "../../../services/api";
+
 //Creators do redux
 import { Creators as ctosActions } from "../../../redux/store/ducks/ctos";
+import { Creators as SplitterActions } from "../../../redux/store/ducks/splitter";
 
 //Componentes "criados"
 import CtoInformation from "./Components/CtoInformation";
@@ -41,13 +45,38 @@ function ViewCto(props) {
   const { showModalCable } = props;
 
   const { viewCto } = ctos; //Recuperando o estado inicial da CTO
+  const { data } = viewCto;
+
+  const [splitters, setSplitters] = useState([]);
+
+  useEffect(() => {
+    function getSplitters(id) {
+      api
+        .get(`/splittercto/${id}`)
+        .then(response => {
+          const sp = response.data;
+          setSplitters(sp);
+        })
+        .catch(e => console.warn(e));
+    }
+    if (viewCto.visible) getSplitters(data.id);
+  }, [data.id, viewCto.visible]);
+
+  function handleAddSplitter() {
+    const { showSplitterAddModal } = props;
+    showSplitterAddModal(data.id);
+  }
 
   function openModalClients() {
     showModalClients();
   }
 
   function openModalSplitter() {
-    showModalSplitter();
+    if (splitters < 1) {
+      handleAddSplitter();
+    } else {
+      showModalSplitter();
+    }
   }
 
   function openModalCable() {
@@ -113,7 +142,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators(ctosActions, dispatch);
+  bindActionCreators({ ...ctosActions, ...SplitterActions }, dispatch);
 
 export default connect(
   mapStateToProps,

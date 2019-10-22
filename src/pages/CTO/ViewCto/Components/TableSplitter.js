@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 //UI-Components
-import { Form, Button, Modal, Table, Col } from "react-bootstrap";
+import { Form, Button, Modal, Col } from "react-bootstrap";
 
 //Conectores
 import { bindActionCreators } from "redux";
@@ -24,8 +24,10 @@ function TableSplitter(props) {
   const [splitters, setSplitters] = useState([]);
   const { hideViewModalCto } = props;
 
-  console.log("informações da cto {splitter(id)}");
-  console.log(data.id); //pegando o id da cto selecionada.
+  const [name, setName] = useState("");
+  const [modal, setModal] = useState("");
+  const [balancing, setBalancing] = useState("");
+  const [fib, setFib] = useState("");
 
   useEffect(() => {
     function getSplitters(id) {
@@ -33,9 +35,15 @@ function TableSplitter(props) {
         .get(`/splittercto/${id}`)
         .then(response => {
           const sp = response.data;
+          sp.map(
+            splitter => (
+              setName(splitter.name),
+              setModal(splitter.model),
+              setBalancing(splitter.balancing),
+              setFib(splitter.fiber_in_id)
+            )
+          );
           setSplitters(sp);
-          // getClientes(sp[0].id);
-          // getCabosCto(id);
         })
         .catch(e => console.warn(e));
     }
@@ -49,11 +57,6 @@ function TableSplitter(props) {
 
   const { viewSplitter } = props.redux.ctos;
   const { hideModalSplitter } = props;
-
-  const [name, setName] = useState("");
-  const [model, setModel] = useState("");
-  const [balancing, setBalancing] = useState("");
-  const [fib, setFib] = useState("");
 
   return (
     <Modal show={viewSplitter.visible} onHide={hideModalSplitter} size="lg">
@@ -69,7 +72,9 @@ function TableSplitter(props) {
         }}
       >
         <h2>Informações do Splitter</h2>
-        <StorageIcon fontSize="large" />
+        <Button variant="secondary">
+          <StorageIcon fontSize="large" />
+        </Button>
       </Modal.Title>
       <Modal.Body style={{ marginBottom: "20px" }}>
         <Container>
@@ -77,25 +82,47 @@ function TableSplitter(props) {
             <Form.Row>
               <Form.Group as={Col} controlId="formGridEmail">
                 <Form.Label>Nome do splitter:</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control
+                  required
+                  minLength="5"
+                  value={name}
+                  type="text"
+                  onChange={e => setName(e.target.value)}
+                />
               </Form.Group>
             </Form.Row>
             <Form.Row>
               <Form.Group as={Col} controlId="formGridPassword">
                 <Form.Label>Modelo do Splitter</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control
+                  required
+                  minLength="5"
+                  type="text"
+                  value={modal}
+                  onChange={e => setModal(e.target.value)}
+                />
               </Form.Group>
             </Form.Row>
 
             <Form.Row>
               <Form.Group as={Col} controlId="formGridEmail">
                 <Form.Label>Balanceamento:</Form.Label>
-                <Form.Control type="number" />
+                <Form.Control
+                  required
+                  type="number"
+                  value={balancing}
+                  onChange={e => setBalancing(e.target.value)}
+                />
               </Form.Group>
 
               <Form.Group as={Col} controlId="formGridPassword">
                 <Form.Label>Fibra de alimentação:</Form.Label>
-                <Form.Control type="text" />
+                <Form.Control
+                  required
+                  type="text"
+                  value={fib}
+                  onChange={e => setFib(e.target.value)}
+                />
               </Form.Group>
             </Form.Row>
 
@@ -107,16 +134,15 @@ function TableSplitter(props) {
               }}
             >
               <Button
-                variant="secondary"
+                variant="info"
                 type="submit"
                 style={{ marginRight: "10px" }}
               >
-                Submit
+                Atualizar informações
               </Button>
-              <Button variant="secondary" style={{ marginRight: "10px" }}>
-                Edit
+              <Button variant="danger" style={{ marginRight: "10px" }}>
+                Excluir
               </Button>
-              <Button variant="secondary">Remove</Button>
             </div>
           </Form>
         </Container>
@@ -142,41 +168,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(TableSplitter);
-
-function teste() {
-  return (
-    <Form>
-      <Form.Row>
-        <Form.Group as={Col} controlId="formGridEmail">
-          <Form.Label>Nome do splitter:</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-
-        <Form.Group as={Col} controlId="formGridPassword">
-          <Form.Label>Modelo do Splitter</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-      </Form.Row>
-
-      <Form.Row>
-        <Form.Group as={Col} controlId="formGridEmail">
-          <Form.Label>Balanceamento:</Form.Label>
-          <Form.Control type="number" />
-        </Form.Group>
-
-        <Form.Group as={Col} controlId="formGridPassword">
-          <Form.Label>Fibra de alimentação:</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-      </Form.Row>
-
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button variant="secondary" type="submit">
-          Submit
-        </Button>
-        <Button variant="secondary">Edit</Button>
-        <Button variant="secondary">Remove</Button>
-      </div>
-    </Form>
-  );
-}
