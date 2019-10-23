@@ -30,7 +30,8 @@ export default function Components(props) {
               onChange={e => setName(e.target.value)}
             />
           </Form.Group>
-
+        </Form.Row>
+        <Form.Row>
           <Form.Group as={Col} controlId="formGridPassword">
             <Form.Label>Modelo:</Form.Label>
             <Form.Control
@@ -41,25 +42,35 @@ export default function Components(props) {
           </Form.Group>
         </Form.Row>
 
-        <Form.Group controlId="formGridAddress1">
-          <Form.Label>Endereço:</Form.Label>
-          <Form.Control
-            type="text"
-            value={address}
-            onChange={e => setAddress(e.target.value)}
-          />
-        </Form.Group>
+        <Form.Row>
+          <Form.Group as={Col} controlId="formGridAddress1">
+            <Form.Label>Endereço:</Form.Label>
+            <Form.Control
+              type="text"
+              value={address}
+              onChange={e => setAddress(e.target.value)}
+            />
+          </Form.Group>
+        </Form.Row>
 
-        <Form.Group controlId="formGridAddress2">
-          <Form.Label>Observação:</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows="3"
-            value={obs}
-            onChange={e => setObs(e.target.value)}
-          />
-        </Form.Group>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <Form.Row>
+          <Form.Group as={Col} controlId="formGridAddress2">
+            <Form.Label>Observação:</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows="3"
+              value={obs}
+              onChange={e => setObs(e.target.value)}
+            />
+          </Form.Group>
+        </Form.Row>
+      </Form>
+    </Container>
+  );
+}
+
+/**
+ *  <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <Button variant="info" style={{ marginRight: "10px" }}>
             Atualizar informações
             <SaveIcon style={{ marginLeft: "5px" }} />
@@ -70,7 +81,4 @@ export default function Components(props) {
             <DeleteIcon style={{ marginLeft: "5px" }} />
           </Button>
         </div>
-      </Form>
-    </Container>
-  );
-}
+ */

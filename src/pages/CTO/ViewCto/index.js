@@ -18,7 +18,7 @@ import TableSplitter from "./Components/TableSplitter";
 import TableCable from "./Components/TableCable";
 
 //Componentes importados
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Accordion, Card, ListGroup } from "react-bootstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import PeopleIcon from "@material-ui/icons/People";
 import StorageIcon from "@material-ui/icons/Storage";
@@ -85,54 +85,63 @@ function ViewCto(props) {
 
   return (
     <Modal size="lg" show={viewCto.visible} onHide={hideViewModalCto}>
-      <Modal.Title
-        style={{
-          justifyContent: "center",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          backgroundColor: "#F7D358",
-          paddingTop: "15px",
-          paddingBottom: "10px"
-        }}
-      >
-        <h3>Caixa terminal optico</h3>
-        <div>
-          <Tooltip title="Clientes">
-            <Button
-              variant="secondary"
-              className={classes.fab}
-              onClick={openModalClients}
-            >
-              <PeopleIcon />
-            </Button>
-          </Tooltip>
-          <Tooltip title="Splitter">
-            <Button
-              variant="secondary"
-              className={classes.fab}
-              onClick={openModalSplitter}
-            >
-              <StorageIcon />
-            </Button>
-          </Tooltip>
-          <Tooltip title="Cabos">
-            <Button
-              variant="secondary"
-              className={classes.fab}
-              onClick={openModalCable}
-            >
-              <Cable />
-            </Button>
-          </Tooltip>
-        </div>
-      </Modal.Title>
-      <Modal.Body>
-        <CtoInformation info={props} />
-        <TableSplitter />
-        <TableCable />
-        <TableClients />
-      </Modal.Body>
+      <Card>
+        <Card.Header
+          style={{
+            fontSize: "40px",
+            backgroundColor: "#F7D358",
+            textAlign: "center"
+          }}
+        >
+          Caixa Terminal Optica
+        </Card.Header>
+        <ListGroup variant="flush">
+          <ListGroup.Item>
+            <Accordion>
+              <Card>
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey="0"
+                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                >
+                  <h5>Informações do terminal optico</h5>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body
+                    style={{
+                      paddingTop: "10px",
+                      paddingLeft: "5px",
+                      paddingBottom: "0px"
+                    }}
+                  >
+                    <CtoInformation info={props} />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+              <Card>
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey="1"
+                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                >
+                  <h5> Splitters</h5>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body
+                    style={{
+                      paddingTop: "10px",
+                      paddingLeft: "5px",
+                      paddingBottom: "0px"
+                    }}
+                  >
+                    <TableSplitter />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+          </ListGroup.Item>
+        </ListGroup>
+      </Card>
     </Modal>
   );
 }
@@ -148,3 +157,21 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(ViewCto);
+
+/**
+ * <Modal.Header
+        style={{ backgroundColor: "#F7D358", justifyContent: "center" }}
+      >
+        <Modal.Title>
+          <h3>Caixa Terminal Optico</h3>
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body
+              style={{
+                paddingLeft: "10px",
+                paddingRight: "10px",
+                paddingTop: "10px",
+                paddingBottom: "10px"
+              }}
+            >
+ */
