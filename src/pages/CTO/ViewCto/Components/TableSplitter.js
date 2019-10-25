@@ -16,6 +16,8 @@ import { Creators as CtoActions } from "../../../../redux/store/ducks/ctos";
 import StorageIcon from "@material-ui/icons/Storage";
 import { Container } from "@material-ui/core";
 import Cable from "@material-ui/icons/SettingsInputHdmi";
+import { wrap } from "module";
+import { width } from "@material-ui/system";
 
 function TableSplitter(props) {
   const { modalNewSplitter } = props.redux.splitter;
@@ -30,6 +32,25 @@ function TableSplitter(props) {
   const [balancing, setBalancing] = useState("");
   const [fib, setFib] = useState("");
 
+  var cores = [
+    "#58D3F7",
+    "#6E6E6E",
+    "#FF00BF",
+    "#0101DF",
+    "#04B4AE",
+    "#F7FE2E",
+    "#000000",
+    "#01A9DB",
+    "#FF0000",
+    "#01DF74",
+    "#F781F3",
+    "#A9A9F5",
+    "#0B4C5F",
+    "#D8D8D8",
+    "#A901DB",
+    "#81F7BE"
+  ];
+
   useEffect(() => {
     function getSplitters(id) {
       api
@@ -40,8 +61,7 @@ function TableSplitter(props) {
             splitter => (
               setName(splitter.name),
               setModal(splitter.model),
-              setBalancing(splitter.balancing),
-              setFib(splitter.fiber_in_id)
+              setBalancing(splitter.balancing)
             )
           );
           setSplitters(sp);
@@ -83,48 +103,65 @@ function TableSplitter(props) {
               onChange={e => setModal(e.target.value)}
             />
           </Form.Group>
-          <Form.Group as={Col} controlId="formGridPassword">
-            <Form.Label>Fibra de alimentação:</Form.Label>
+          <Form.Group as={Col}>
+            <Form.Label>Balanceamento:</Form.Label>
             <Form.Control
               required
-              type="text"
-              value={fib}
-              onChange={e => setFib(e.target.value)}
+              type="number"
+              value={balancing}
+              onChange={e => setBalancing(e.target.value)}
             />
           </Form.Group>
         </Form.Row>
-        <div style={{ border: "1px solid #6c757d", display: "flex" }}>
-          <Button
-            variant="secondary"
-            style={{ marginLeft: "20px", marginRight: "20px" }}
-          >
-            <Cable />
-          </Button>
-          <Button
-            variant="success"
-            style={{ marginLeft: "20px", marginRight: "20px" }}
-          >
-            <Cable />
-          </Button>
-          <Button
-            variant="info"
-            style={{ marginLeft: "20px", marginRight: "20px" }}
-          >
-            <Cable />
-          </Button>
-          <Button
-            variant="danger"
-            style={{ marginLeft: "20px", marginRight: "20px" }}
-          >
-            <Cable />
-          </Button>
-          <Button
-            variant="primary"
-            style={{ marginLeft: "20px", marginRight: "20px" }}
-          >
-            <Cable />
-          </Button>
-        </div>
+        <Container
+          style={{
+            border: "1px solid #6c757d",
+            display: "flex",
+            flexWrap: wrap,
+            paddingLeft: "0px",
+            paddingRight: "0px",
+            marginBottom: "10px"
+          }}
+        >
+          <div>
+            {cores.map((cor, index) =>
+              balancing == 8
+                ? index < 9 && (
+                    <Button
+                      key={index}
+                      variant="secondary"
+                      style={{
+                        flex: 1,
+                        marginLeft: "10px",
+                        marginRight: "10px",
+                        marginTop: "10px",
+                        marginBottom: "10px",
+                        backgroundColor: cores[index]
+                      }}
+                    >
+                      <Cable />
+                    </Button>
+                  )
+                : balancing == 16 &&
+                  index < 17 && (
+                    <Button
+                      key={index}
+                      variant="secondary"
+                      style={{
+                        flex: 1,
+                        marginLeft: "10px",
+                        marginRight: "10px",
+                        marginTop: "10px",
+                        marginBottom: "10px",
+                        backgroundColor: cores[index]
+                      }}
+                    >
+                      <Cable />
+                    </Button>
+                  )
+            )}
+          </div>
+        </Container>
       </Form>
     </Container>
   );
@@ -186,3 +223,61 @@ export default connect(
           </Form.Group>
         </Form.Row>
  */
+
+/**
+  * <Button
+              variant="secondary"
+              style={{
+                marginLeft: "10px",
+                marginRight: "10px",
+                marginTop: "10px",
+                marginBottom: "10px"
+              }}
+            >
+              <Cable />
+            </Button>
+            <Button
+              variant="success"
+              style={{
+                marginLeft: "10px",
+                marginRight: "10px",
+                marginTop: "10px",
+                marginBottom: "10px"
+              }}
+            >
+              <Cable />
+            </Button>
+            <Button
+              variant="info"
+              style={{
+                marginLeft: "10px",
+                marginRight: "10px",
+                marginTop: "10px",
+                marginBottom: "10px"
+              }}
+            >
+              <Cable />
+            </Button>
+            <Button
+              variant="danger"
+              style={{
+                marginLeft: "10px",
+                marginRight: "10px",
+                marginTop: "10px",
+                marginBottom: "10px"
+              }}
+            >
+              <Cable />
+            </Button>
+            <Button
+              variant="primary"
+              style={{
+                marginLeft: "10px",
+                marginRight: "10px",
+                marginTop: "10px",
+                marginBottom: "10px"
+              }}
+            >
+              <Cable />
+            </Button>
+  */

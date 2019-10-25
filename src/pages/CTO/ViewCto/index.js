@@ -124,7 +124,7 @@ function ViewCto(props) {
                   eventKey="1"
                   style={{ backgroundColor: "#6c757d", color: "#FFF" }}
                 >
-                  <h5> Splitters</h5>
+                  <h5>Splitter</h5>
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="1">
                   <Card.Body
@@ -135,6 +135,26 @@ function ViewCto(props) {
                     }}
                   >
                     <TableSplitter />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+              <Card>
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey="1"
+                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                >
+                  <h5>Cabos</h5>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body
+                    style={{
+                      paddingTop: "10px",
+                      paddingLeft: "5px",
+                      paddingBottom: "0px"
+                    }}
+                  >
+                    <TableCable />
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>
