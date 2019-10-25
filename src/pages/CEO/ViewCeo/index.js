@@ -4,66 +4,95 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-//Creators que era para ser usado.
-// import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
-
-//EditComponents
-import InputField from "./Components/InputFieldComponent";
+//import components
+import TableCeo from "./Components/TableCeo";
+import TableSplitter from "./Components/TableSplitter";
+import TableCable from "./Components/TableCable";
 
 //UI-Components
-import { Modal, Card, ListGroup, Button } from "react-bootstrap";
+import { Modal, Accordion, Card, ListGroup } from "react-bootstrap";
 
 function ViewCeo(props) {
   return (
-    <>
-      <Modal size="lg">
-        <Modal.Header
+    <Modal size="lg" show={true}>
+      <Card>
+        <Card.Header
           style={{
-            justifyContent: "center",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            backgroundColor: "#F7D358"
+            fontSize: "30px",
+            backgroundColor: "#F7D358",
+            textAlign: "center"
           }}
         >
-          <Modal.Title style={{ color: "#585858" }}>
-            Caixa de emenda optica
-          </Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body style={{ backgroundColor: "#FFFFFF" }}>
-          <Card style={{ width: "100%" }}>
-            <Card.Header
-              style={{ backgroundColor: "#D8D8D8", textAlign: "center" }}
-            >
-              Informações
-            </Card.Header>
-            <ListGroup variant="flush">
-              <ListGroup.Item>
-                <InputField name="Tipo:" atributo="sdf" tipo="text" />
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <InputField
-                  name="Modelo:"
-                  atributo="111.111.111-11"
-                  tipe="text"
-                />
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <InputField name="Endereço:" atributo="1gb" tipo="text" />
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <InputField name="Observação:" atributo="1gb" tipo="text" />
-              </ListGroup.Item>
-            </ListGroup>
-          </Card>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary">Fechar</Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+          Caixa de Emenda Optica
+        </Card.Header>
+        <ListGroup variant="flush">
+          <ListGroup.Item>
+            <Accordion>
+              <Card>
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey="0"
+                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                >
+                  <h5>Informações da caixa de emenda</h5>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body
+                    style={{
+                      paddingTop: "10px",
+                      paddingLeft: "5px",
+                      paddingBottom: "0px"
+                    }}
+                  >
+                    <TableCeo />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+              <Card>
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey="1"
+                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                >
+                  <h5>Splitter</h5>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body
+                    style={{
+                      paddingTop: "10px",
+                      paddingLeft: "5px",
+                      paddingBottom: "0px"
+                    }}
+                  >
+                    <TableSplitter />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+              <Card>
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey="1"
+                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                >
+                  <h5>Cabos</h5>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body
+                    style={{
+                      paddingTop: "10px",
+                      paddingLeft: "5px",
+                      paddingBottom: "0px"
+                    }}
+                  >
+                    <TableCable />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+          </ListGroup.Item>
+        </ListGroup>
+      </Card>
+    </Modal>
   );
 }
 
