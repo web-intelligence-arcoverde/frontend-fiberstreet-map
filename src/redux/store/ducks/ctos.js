@@ -10,6 +10,18 @@ export const Types = {
   SHOWVIEWMODALCTO: "cto/SHOW_VIEW_MODAL",
   HIDEVIEWMODALCTO: "cto/HIDE_VIEW_MODAL",
 
+  //Modal {Clients da cto}
+  SHOW_VIEW_MODAL_CLIENTS: "cto/SHOW_VIEW_MODAL_CLIENTS",
+  HIDE_VIEW_MODAL_CLIENTS: "cto/HIDE_VIEW_MODAL_CLIENTS",
+
+  //Modal Splitter
+  SHOW_VIEW_MODAL_SPLITTER: "cto/SHOW_VIEW_MODAL_SPLITTER",
+  HIDE_VIEW_MODAL_SPLITTER: "cto/HIDE_VIEW_MODAL_SPLITTER",
+
+  //Modal Cable
+  SHOW_VIEW_MODAL_CABLE: "cto/SHOW_VIEW_MODAL_CABLE",
+  HIDE_VIEW_MODAL_CABLE: "cto/HIDE_VIEW_MODAL_CABLE",
+
   // Creation { saving data }
   CREATE_CTO_REQUEST: "@cto/CREATE_REQUEST",
   CREATE_CTO_SUCCESS: "@cto/CREATE_SUCCESS",
@@ -39,6 +51,15 @@ const INITIAL_STATE = {
   viewNewCto: {
     visible: false,
     coordinates: []
+  },
+  viewClients: {
+    visible: false
+  },
+  viewSplitter: {
+    visible: false
+  },
+  viewCable: {
+    visible: false
   }
 };
 
@@ -49,6 +70,48 @@ const INITIAL_STATE = {
  */
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case Types.SHOW_VIEW_MODAL_CLIENTS:
+      return {
+        ...state,
+        viewClients: {
+          visible: true
+        }
+      };
+    case Types.HIDE_VIEW_MODAL_CLIENTS:
+      return {
+        ...state,
+        viewClients: {
+          visible: false
+        }
+      };
+    case Types.SHOW_VIEW_MODAL_SPLITTER:
+      return {
+        ...state,
+        viewSplitter: {
+          visible: true
+        }
+      };
+    case Types.HIDE_VIEW_MODAL_SPLITTER:
+      return {
+        ...state,
+        viewSplitter: {
+          visible: false
+        }
+      };
+    case Types.SHOW_VIEW_MODAL_CABLE:
+      return {
+        ...state,
+        viewCable: {
+          visible: true
+        }
+      };
+    case Types.HIDE_VIEW_MODAL_CABLE:
+      return {
+        ...state,
+        viewCable: {
+          visible: false
+        }
+      };
     case Types.SHOWVIEWMODALCTO:
       return {
         ...state,
@@ -110,6 +173,42 @@ export default function(state = INITIAL_STATE, action) {
  * Actions
  */
 export const Creators = {
+  showModalClients: () => ({
+    type: Types.SHOW_VIEW_MODAL_CLIENTS,
+    payload: {
+      visible: true
+    }
+  }),
+  hideModalClients: () => ({
+    type: Types.HIDE_VIEW_MODAL_CLIENTS,
+    payload: {
+      visible: false
+    }
+  }),
+  showModalSplitter: () => ({
+    type: Types.SHOW_VIEW_MODAL_SPLITTER,
+    payload: {
+      visible: true
+    }
+  }),
+  hideModalSplitter: () => ({
+    type: Types.HIDE_VIEW_MODAL_SPLITTER,
+    payload: {
+      visible: false
+    }
+  }),
+  showModalCable: () => ({
+    type: Types.SHOW_VIEW_MODAL_CABLE,
+    payload: {
+      visible: true
+    }
+  }),
+  hideModalCable: () => ({
+    type: Types.HIDE_VIEW_MODAL_CABLE,
+    payload: {
+      visible: false
+    }
+  }),
   showNewViewModalCto: coordinates => ({
     type: Types.SHOWNEWMODALCTO,
     payload: {
