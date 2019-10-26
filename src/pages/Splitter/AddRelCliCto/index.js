@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
+import { toastr } from 'react-redux-toastr';
 
 import api, { API } from "../../../services/api";
 import axios from "axios";
@@ -242,7 +243,7 @@ function AddRelCliCto(props) {
         );
       }
     } else {
-      alert("Marque uma saída");
+      toastr.warning('Inválido', 'Por favor, selecione uma saída')
     }
 
     //console.tron.log(findedSelected);
