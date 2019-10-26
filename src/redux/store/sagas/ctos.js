@@ -69,10 +69,32 @@ export function* loadSplitterAndClient({ payload }) {
     yield put(
       CtoActions.loadSplitterAndClientByCtoSuccess(splitter[0], clients)
     );
-
-    // yield put(CtoActions.showViewModalCto(payload.cto));
     yield toastr.success("Sucesso", "Sucesso a carregar");
   } catch (err) {
     yield toastr.error("Erro", "Falha ao carregar clientes e splitter da cto");
+  }
+}
+
+export function* updateCto({ payload }) {
+  try {
+    const response = yield call(
+      [api, "put"],
+      `ctos/${payload.id}`,
+      payload.cto
+    );
+
+    yield toastr.success("Sucesso", "Sucesso ao atualizar a cto");
+  } catch (err) {
+    yield toastr.error("Erro", "Falha ao atualizar a cto");
+  }
+}
+
+export function* deleteCto({ payload }) {
+  try {
+    yield call([api, "delete"], `ctos/${payload.id}`);
+
+    yield toastr.success("Delete", "Sucesso ao apagar a cto");
+  } catch (err) {
+    yield toastr.error("Erro", "Falha ao exluir a cto");
   }
 }

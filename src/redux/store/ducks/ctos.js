@@ -29,6 +29,12 @@ export const Types = {
   LOAD_CTO_GEOJSON_REQUEST: "@cto/LOAD_GJ_REQUEST",
   LOAD_CTO_GEOJSON_SUCCESS: "@cto/LOAD_GJ_SUCCESS",
 
+  UPDATE_CTO_REQUEST: "@cto/UPDATE_REQUEST",
+  UPDATE_CTO_SUCCESS: "@cto/UPDATE_SUCCESS",
+
+  DELETE_CTO_REQUEST: "@cto/DELETE_REQUEST",
+  DELETE_CTO_SUCCESS: "@cto/DELETE_SUCCESS",
+
   // Loading
   LOAD_SUCCESS: "@cto/LOAD_SUCCESS",
 
@@ -268,5 +274,24 @@ export const Creators = {
   loadSplitterAndClientByCtoSuccess: (splitter, clients) => ({
     type: Types.LOAD_SPLITTER_CLIENT_BY_CTO_SUCCESS,
     payload: { splitter, clients }
+  }),
+  deleteCtoRequest: id => ({
+    type: Types.DELETE_CTO_REQUEST,
+    payload: { id }
+  }),
+
+  deleteCtoSuccess: cto => ({
+    type: Types.DELETE_CTO_SUCCESS,
+    payload: { cto }
+  }),
+
+  updateCtoRequest: (cto, id) => ({
+    type: Types.UPDATE_CTO_REQUEST,
+    payload: { cto, id }
+  }),
+
+  updateClientSuccess: cto => ({
+    type: Types.UPDATE_CTO_SUCCESS,
+    payload: { cto }
   })
 };
