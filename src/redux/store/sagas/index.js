@@ -13,7 +13,12 @@ import {
 } from "./cliente";
 
 import { Types as CtoTypes } from "../ducks/ctos";
-import { store as storeCto, loadSplitterAndClient } from "./ctos";
+import {
+  store as storeCto,
+  loadSplitterAndClient,
+  updateCto,
+  deleteCto
+} from "./ctos";
 
 import { Types as CeoTypes } from "../ducks/ceo";
 import { store as storeCeo } from "./ceo";
@@ -48,7 +53,7 @@ export default function* rootSaga() {
 
     // Adding data on server
     takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient),
-    takeLatest(CtoTypes.CREATE_CTO_REQUEST, storeCto),
+
     takeLatest(CeoTypes.CREATE_CEO_REQUEST, storeCeo),
 
     // Clientes
@@ -64,6 +69,11 @@ export default function* rootSaga() {
     takeLatest(DropTypes.ADD_DROP_REQUEST, addDrop),
 
     takeLatest(SplitterTypes.CREATE_SP_REQUEST, createSplitter),
+
+    //CTO
+    takeLatest(CtoTypes.CREATE_CTO_REQUEST, storeCto),
+    takeLatest(CtoTypes.UPDATE_CTO_REQUEST, updateCto),
+    takeLatest(CtoTypes.DELETE_CTO_REQUEST, deleteCto),
 
     takeLatest(
       CtoTypes.LOAD_SPLITTER_CLIENT_BY_CTO_REQUEST,

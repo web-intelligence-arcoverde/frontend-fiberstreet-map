@@ -391,25 +391,8 @@ function TableClients(props) {
     rowsPerPage - Math.min(rowsPerPage, clients.length - page * rowsPerPage);
 
   return (
-    <Modal size="lg" show={viewClients.visible} onHide={hideModalClients}>
-      <Modal.Title
-        style={{
-          justifyContent: "center",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          backgroundColor: "#F7D358",
-          paddingTop: "15px",
-          paddingBottom: "10px"
-        }}
-      >
-        <h2 style={{ marginTop: "10px", marginBottom: "15px" }}>Clientes</h2>
-        <Button variant="secondary" style={{ marginBottom: "15px" }}>
-          <People />
-        </Button>
-      </Modal.Title>
-
-      <Modal.Body>
+    
+     
         <div className={classes.root2}>
           <Paper className={classes.paper}>
             <EnhancedTableToolbar
@@ -533,8 +516,7 @@ function TableClients(props) {
             />
           </Paper>
         </div>
-      </Modal.Body>
-    </Modal>
+      
   );
 }
 

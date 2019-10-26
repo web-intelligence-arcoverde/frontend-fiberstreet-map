@@ -114,7 +114,27 @@ function ViewCto(props) {
                       paddingBottom: "0px"
                     }}
                   >
-                    <CtoInformation info={props} />
+                    <CtoInformation />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+              <Card>
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey="2"
+                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                >
+                  <h5>Clientes no terminal</h5>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="2">
+                  <Card.Body
+                    style={{
+                      paddingTop: "10px",
+                      paddingLeft: "5px",
+                      paddingBottom: "0px"
+                    }}
+                  >
+                    <TableClients />
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>

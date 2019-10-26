@@ -3,13 +3,15 @@ import React, { useState } from "react";
 //Components Importados
 import { Container, Col, Button, Form } from "react-bootstrap/";
 
-//Icons
-import EditIcon from "@material-ui/icons/Edit";
-import SaveIcon from "@material-ui/icons/Save";
-import DeleteIcon from "@material-ui/icons/Delete";
+//Creators do redux
+import { Creators as ctosActions } from "../../../../redux/store/ducks/ctos";
 
-export default function Components(props) {
-  const { ctos } = props.info.redux;
+//Redux
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
+function Components(props) {
+  const { ctos } = props.redux;
   const { viewCto } = ctos;
   const { data } = viewCto;
 
@@ -18,9 +20,31 @@ export default function Components(props) {
   const [address, setAddress] = useState(data.address);
   const [obs, setObs] = useState(data.obs);
 
+  console.log("Informações da cto");
+  console.log(props);
+
+  //Atualizar CTO
+  function handleSubmit(e) {
+    e.preventDefault();
+    const { updateCtoRequest } = props;
+    const updateCto = {
+      name: name,
+      model: model,
+      address: address,
+      obs: obs
+    };
+    updateCtoRequest(updateCto, data.id);
+  }
+
+  //Deletar CTO
+  function deleteCto() {
+    const { deleteCtoRequest } = props;
+    deleteCtoRequest(data.id);
+  }
+
   return (
     <Container>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Row>
           <Form.Group as={Col} controlId="formGridEmail">
             <Form.Label>Nome:</Form.Label>
@@ -64,21 +88,33 @@ export default function Components(props) {
             />
           </Form.Group>
         </Form.Row>
+        <div
+          style={{
+            marginBottom: "10px",
+            display: "flex",
+            justifyContent: "flex-end"
+          }}
+        >
+          <Button variant="info" style={{ marginRight: "10px" }} type="submit">
+            Atualizar dados
+          </Button>
+          <Button variant="danger" onClick={deleteCto}>
+            Excluir
+          </Button>
+        </div>
       </Form>
     </Container>
   );
 }
 
-/**
- *  <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button variant="info" style={{ marginRight: "10px" }}>
-            Atualizar informações
-            <SaveIcon style={{ marginLeft: "5px" }} />
-          </Button>
+const mapStateToProps = state => ({
+  redux: state
+});
 
-          <Button variant="danger">
-            Excluir
-            <DeleteIcon style={{ marginLeft: "5px" }} />
-          </Button>
-        </div>
- */
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ ...ctosActions }, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Components);

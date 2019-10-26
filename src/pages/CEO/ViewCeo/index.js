@@ -14,7 +14,7 @@ import { Modal, Accordion, Card, ListGroup } from "react-bootstrap";
 
 function ViewCeo(props) {
   return (
-    <Modal size="lg" show={true}>
+    <Modal size="lg" show={false}>
       <Card>
         <Card.Header
           style={{
@@ -48,6 +48,7 @@ function ViewCeo(props) {
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>
+
               <Card>
                 <Accordion.Toggle
                   as={Card.Header}
