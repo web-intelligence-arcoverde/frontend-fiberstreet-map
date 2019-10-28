@@ -1,8 +1,11 @@
 import React from "react";
 
-//Redux
-import { connect } from "react-redux";
+// redux
 import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
+//Creators redux
+import { Creators as ceoCreators } from "../../../../redux/store/ducks/ceo";
 
 //UI-Components
 import { Button, Container, Table } from "react-bootstrap";
@@ -74,7 +77,8 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ ...ceoCreators }, dispatch);
 
 export default connect(
   mapStateToProps,
