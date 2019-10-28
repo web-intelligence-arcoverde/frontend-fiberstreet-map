@@ -7,7 +7,7 @@ const local01 = "http://127.0.0.1:3333/";
 
 /** This API will connect to NodeJS Server */
 const api = axios.create({
-  baseURL: local
+  baseURL: local01
 });
 
 api.interceptors.request.use(config => {

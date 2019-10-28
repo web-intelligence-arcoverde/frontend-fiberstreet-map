@@ -4,6 +4,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
+
 //import components
 import TableCeo from "./Components/TableCeo";
 import TableSplitter from "./Components/TableSplitter";
@@ -12,9 +14,16 @@ import TableCable from "./Components/TableCable";
 //UI-Components
 import { Modal, Accordion, Card, ListGroup } from "react-bootstrap";
 
-function ViewCeo(props) {
+const ViewCeo = props => {
+  console.log("Informações do CEO");
+  console.log(props);
+
   return (
-    <Modal size="lg" show={false}>
+    <Modal
+      size="lg"
+      show={props.redux.ceo.viewCeo.visible}
+      onHide={props.hideViewModalCeo}
+    >
       <Card>
         <Card.Header
           style={{
@@ -55,27 +64,7 @@ function ViewCeo(props) {
                   eventKey="1"
                   style={{ backgroundColor: "#6c757d", color: "#FFF" }}
                 >
-                  <h5>Splitter</h5>
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body
-                    style={{
-                      paddingTop: "10px",
-                      paddingLeft: "5px",
-                      paddingBottom: "0px"
-                    }}
-                  >
-                    <TableSplitter />
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-              <Card>
-                <Accordion.Toggle
-                  as={Card.Header}
-                  eventKey="1"
-                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
-                >
-                  <h5>Cabos</h5>
+                  <h5>Lista de fusões</h5>
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="1">
                   <Card.Body
@@ -95,14 +84,15 @@ function ViewCeo(props) {
       </Card>
     </Modal>
   );
-}
+};
 
 const mapStateToProps = state => ({
   redux: state
 });
 
 //Ações
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ ...ceoCreators }, dispatch);
 
 export default connect(
   mapStateToProps,

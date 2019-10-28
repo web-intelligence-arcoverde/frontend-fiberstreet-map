@@ -246,6 +246,33 @@ class Map extends Component {
     // Evento de clique nos Clientes
     map.on("click", "cliente", e => this.handleCtoCaboClick(e));
     map.on("click", "cliente_inativo", e => this.handleCtoCaboClick(e));
+    map.on("click", "ceo", e => this.handleCeoClick(e));
+  }
+
+  handleCeoClick = features => {
+    const { properties } = features.features[0];
+    let longitude = features.features[0].geometry.coordinates[0];
+    let latitude = features.features[0].geometry.coordinates[1];
+
+    const data = JSON.parse(properties.data);
+
+    this.handleCeoClickTwoFactor(data, longitude, latitude);
+  };
+
+  handleCeoClickTwoFactor(ceo, longitude, latitude) {
+    if (this.props.redux.map.delimitacao === "cabo") {
+      const { addCoordCabo, setDelemitationMap, showAddCableCeo } = this.props;
+      const { polyline } = this.props.redux.map;
+      let newPolyline = [...polyline, [longitude, latitude]];
+
+      addCoordCabo(newPolyline);
+      showAddCableCeo(ceo.id);
+      setDelemitationMap("default");
+    } else {
+      const { showViewModalCeo } = this.props;
+
+      showViewModalCeo(ceo);
+    }
   }
 
   handleCtoClick = features => {
@@ -495,9 +522,11 @@ class Map extends Component {
         const data = store.getState().client.geojson.clients;
 
         let clientUpdated = clientUp;
-        const longitude = JSON.parse(clientUp.properties.data.coordinates).longitude
-        const latitude = JSON.parse(clientUp.properties.data.coordinates).latitude
-        clientUpdated.geometry.coordinates = [longitude, latitude]
+        const longitude = JSON.parse(clientUp.properties.data.coordinates)
+          .longitude;
+        const latitude = JSON.parse(clientUp.properties.data.coordinates)
+          .latitude;
+        clientUpdated.geometry.coordinates = [longitude, latitude];
 
         let clientes = data;
         clientes.push(clientUpdated);
@@ -534,7 +563,7 @@ class Map extends Component {
             clients: [...clientsActive, ...clientsInactive, clientUpdated]
           }
         });
-        console.log(clientUpdated)
+        console.log(clientUpdated);
         if (clientUpdated.properties.data.status === "active") {
           const activeClients = {
             type: "FeatureCollection",
@@ -734,10 +763,7 @@ class Map extends Component {
             clientsInactive.push(client);
           }
         });
-        console.log("Clientes ativos");
-        console.log(clientsActive);
-        console.log("Inativos");
-        console.log(clientsInactive);
+
         const dados = {
           type: "FeatureCollection",
           features: data

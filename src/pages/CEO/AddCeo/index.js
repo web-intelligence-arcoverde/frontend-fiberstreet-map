@@ -68,7 +68,7 @@ function AddCeo(props) {
             <Form.Label>Nome:</Form.Label>
             <Form.Control
               required
-              minLength="15"
+              minLength="5"
               maxLength="150"
               type="text"
               value={name}
@@ -79,7 +79,7 @@ function AddCeo(props) {
             <Form.Label>Modelo:</Form.Label>
             <Form.Control
               required
-              minLength="15"
+              minLength="5"
               maxLength="100"
               type="text"
               value={model}
@@ -91,7 +91,7 @@ function AddCeo(props) {
             <Form.Label>Tipo:</Form.Label>
             <Form.Control
               required
-              minLength="10"
+              minLength="5"
               maxLength="100"
               type="text"
               value={type}
@@ -103,7 +103,7 @@ function AddCeo(props) {
             <Form.Label>Endereço:</Form.Label>
             <Form.Control
               required
-              minLength="20"
+              minLength="5"
               maxLength="200"
               type="text"
               value={address}
@@ -115,7 +115,7 @@ function AddCeo(props) {
             <Form.Label>Observações:</Form.Label>
             <Form.Control
               required
-              minLength="20"
+              minLength="5"
               maxLength="200"
               as="textarea"
               rows="3"
