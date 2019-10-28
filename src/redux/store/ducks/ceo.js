@@ -2,8 +2,13 @@
  * Types
  */
 export const Types = {
+  //Adicionar novo CEO
   SHOWNEWMODALCEO: "ceo/SHOW_NEW_MODAL",
   HIDENEWMODALCEO: "ceo/HIDE_NEW_MODAL",
+
+  //Recuperar
+  SHOW_MODAL_CEO: "ceo/SHOW_MODAL_CEO",
+  HIDE_MODAL_CEO: "ceo/HIDE_MODAL_CEO",
 
   // Creation { saving data }
   CREATE_CEO_REQUEST: "@ceo/CREATE_REQUEST",

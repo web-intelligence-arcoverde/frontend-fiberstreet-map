@@ -1,109 +1,120 @@
 import React, { useState } from "react";
 
-//Components
-import { Field } from "../../../components/Inputs/InputBase";
-import { InputField } from "../../../components/Inputs/InputFieldComponent";
-
 //Components Importados
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  ButtonGroup,
-  Button,
-  Form
-} from "react-bootstrap/";
+import { Container, Col, Button, Form } from "react-bootstrap/";
 
-//Icons
-import EditIcon from "@material-ui/icons/Edit";
-import SaveIcon from "@material-ui/icons/Save";
+//Creators do redux
+import { Creators as ctosActions } from "../../../../redux/store/ducks/ctos";
 
-export default function Components(props) {
-  const [name, setName] = useState("");
-  const [model, setModel] = useState("");
-  const [address, setAddress] = useState("");
-  const [obs, setObs] = useState("");
+//Redux
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
+function Components(props) {
+  const { ctos } = props.redux;
+  const { viewCto } = ctos;
+  const { data } = viewCto;
+
+  const [name, setName] = useState(data.name);
+  const [model, setModel] = useState(data.model);
+  const [address, setAddress] = useState(data.address);
+  const [obs, setObs] = useState(data.obs);
+
+  console.log("Informações da cto");
+  console.log(props);
+
+  //Atualizar CTO
+  function handleSubmit(e) {
+    e.preventDefault();
+    const { updateCtoRequest } = props;
+    const updateCto = {
+      name: name,
+      model: model,
+      address: address,
+      obs: obs
+    };
+    updateCtoRequest(updateCto, data.id);
+  }
+
+  //Deletar CTO
+  function deleteCto() {
+    const { deleteCtoRequest } = props;
+    deleteCtoRequest(data.id);
+  }
+
   return (
     <Container>
-      <Card style={{ marginTop: "10px" }}>
-        <Card.Body>
-          <Row style={{ marginTop: "10px" }}>
-            <Col sm={6}>
-              <Form.Group>
-                <Form.Label>Nome:</Form.Label>
-                <Form.Control type="text" />
-              </Form.Group>
-            </Col>
-            <Col sm={6}>
-              <Form.Group>
-                <Form.Label>Modelo:</Form.Label>
-                <Form.Control type="text" />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row style={{ marginTop: "10px" }}>
-            <Col sm={12}>
-              <Form.Group>
-                <Form.Label>Endereço:</Form.Label>
-                <Form.Control type="text" />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row
-            style={{
-              marginTop: "10px"
-            }}
-          >
-            <Col sm={8}>
-              <Form.Group>
-                <Form.Label>Observação:</Form.Label>
-                <Form.Control as="textarea" rows="3" />
-              </Form.Group>
-            </Col>
-            <Col sm={4}></Col>
-          </Row>
-          <Row
-            style={{
-              marginTop: "20px",
-              marginBottom: "5px"
-            }}
-          >
-            <Col sm={10}></Col>
-            <Col sm={1}>
-              <Button variant="secondary">
-                <EditIcon />
-              </Button>
-            </Col>
-            <Col sm={1}>
-              <Button variant="secondary">
-                <SaveIcon />
-              </Button>
-            </Col>
-          </Row>
-        </Card.Body>
-      </Card>
+      <Form onSubmit={handleSubmit}>
+        <Form.Row>
+          <Form.Group as={Col} controlId="formGridEmail">
+            <Form.Label>Nome:</Form.Label>
+            <Form.Control
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+            />
+          </Form.Group>
+        </Form.Row>
+        <Form.Row>
+          <Form.Group as={Col} controlId="formGridPassword">
+            <Form.Label>Modelo:</Form.Label>
+            <Form.Control
+              type="text"
+              value={model}
+              onChange={e => setModel(e.target.value)}
+            />
+          </Form.Group>
+        </Form.Row>
+
+        <Form.Row>
+          <Form.Group as={Col} controlId="formGridAddress1">
+            <Form.Label>Endereço:</Form.Label>
+            <Form.Control
+              type="text"
+              value={address}
+              onChange={e => setAddress(e.target.value)}
+            />
+          </Form.Group>
+        </Form.Row>
+
+        <Form.Row>
+          <Form.Group as={Col} controlId="formGridAddress2">
+            <Form.Label>Observação:</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows="3"
+              value={obs}
+              onChange={e => setObs(e.target.value)}
+            />
+          </Form.Group>
+        </Form.Row>
+        <div
+          style={{
+            marginBottom: "10px",
+            display: "flex",
+            justifyContent: "flex-end"
+          }}
+        >
+          <Button variant="info" style={{ marginRight: "10px" }} type="submit">
+            Atualizar dados
+          </Button>
+          <Button variant="danger" onClick={deleteCto}>
+            Excluir
+          </Button>
+        </div>
+      </Form>
     </Container>
   );
 }
 
-/*
-* <ButtonGroup aria-label="Basic example">
-  <Button variant="secondary">Left</Button>
-  <Button variant="secondary">Middle</Button>
-  <Button variant="secondary">Right</Button>
-</ButtonGroup> */
+const mapStateToProps = state => ({
+  redux: state
+});
 
-/*
-<Col sm={1}>
-                <Button variant="secondary">
-                  <EditIcon />
-                </Button>
-              </Col>
-              <Col sm={1}>
-                <Button variant="secondary">
-                  <SaveIcon />
-                </Button>
-              </Col>
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ ...ctosActions }, dispatch);
 
-*/
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Components);

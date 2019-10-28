@@ -1,15 +1,11 @@
 import React from "react";
 
-import { Creators as ctosActions } from "../../../../redux/store/ducks/ctos";
-
 //Redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 //UI-Components
-import { Button, Modal, Container, Table } from "react-bootstrap";
-import Cable from "@material-ui/icons/SettingsInputComponent";
-import { Edit } from "@material-ui/icons";
+import { Button, Container, Table } from "react-bootstrap";
 import Delete from "@material-ui/icons/HighlightOff";
 
 function viewCable(props) {
@@ -78,29 +74,9 @@ const mapStateToProps = state => ({
   redux: state
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...ctosActions }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(viewCable);
-
-/**
- * 
- * <Button
-                variant="link"
-                style={{
-                  borderTopWidth: "0px",
-                  paddingTop: "0px",
-                  borderLeftWidth: "0px",
-                  paddingLeft: "0px",
-                  paddingBottom: "0px",
-                  paddingRight: "0px",
-                  borderRightWidth: "0px",
-                  borderBottomWidth: "0px"
-                }}
-              >
-                <Edit style={{ color: "#6c757d" }} />
-              </Button>
- */
