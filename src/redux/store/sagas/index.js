@@ -13,15 +13,10 @@ import {
 } from "./cliente";
 
 import { Types as CtoTypes } from "../ducks/ctos";
-import {
-  store as storeCto,
-  loadSplitterAndClient,
-  updateCto,
-  deleteCto
-} from "./ctos";
+import { createCto, loadSplitterAndClient, updateCto, deleteCto } from "./ctos";
 
 import { Types as CeoTypes } from "../ducks/ceo";
-import { store as storeCeo } from "./ceo";
+import { createCeo, updateCeo, deleteCeo } from "./ceo";
 
 import { Types as ProvidersTypes } from "../ducks/provider";
 import { getProviders, init } from "./provider";
@@ -44,45 +39,40 @@ import { createSplitter } from "./splitter";
 export default function* rootSaga() {
   yield all([
     init(),
-    takeLatest(AuthTypes.SIGN_IN_REQUEST, signIn),
-    takeLatest(AuthTypes.SIGN_OUT, signOut),
-    takeLatest(AuthTypes.SIGN_UP_REQUEST, signUp),
 
     // ProvidersTypes
     takeLatest(ProvidersTypes.GET_PROVIDERS_REQUEST, getProviders),
 
-    // Adding data on server
-    takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient),
-
-    takeLatest(CeoTypes.CREATE_CEO_REQUEST, storeCeo),
+    //Account
+    takeLatest(AuthTypes.SIGN_IN_REQUEST, signIn),
+    takeLatest(AuthTypes.SIGN_OUT, signOut),
+    takeLatest(AuthTypes.SIGN_UP_REQUEST, signUp),
 
     // Clientes
+    takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient),
+    takeLatest(ClientTypes.UPDATE_CLIENT_REQUEST, updateClient),
     takeLatest(ClientTypes.DELETE_CLIENT_REQUEST, deleteClient),
 
-    takeLatest(ClientTypes.UPDATE_CLIENT_REQUEST, updateClient),
-
-    //takeLatest(ClientTypes.LOAD_CLIENT_REQUEST, loadClient)
     // Ceo
-    takeLatest(CeoTypes.CREATE_CEO_REQUEST, storeCeo),
+    takeLatest(CeoTypes.CREATE_CEO_REQUEST, createCeo),
+    takeLatest(CeoTypes.UPDATE_CEO_REQUEST, updateCeo),
+    takeLatest(CeoTypes.DELETE_CEO_REQUEST, deleteCeo),
+
+    //CTO
+    takeLatest(CtoTypes.CREATE_CTO_REQUEST, createCto),
+    takeLatest(CtoTypes.UPDATE_CTO_REQUEST, updateCto),
+    takeLatest(CtoTypes.DELETE_CTO_REQUEST, deleteCto),
+
     // Drop
     takeLatest(DropTypes.SHOW_DROP_MODAL_REQUEST, loadSplitters),
     takeLatest(DropTypes.ADD_DROP_REQUEST, addDrop),
 
     takeLatest(SplitterTypes.CREATE_SP_REQUEST, createSplitter),
 
-    //CTO
-    takeLatest(CtoTypes.CREATE_CTO_REQUEST, storeCto),
-    takeLatest(CtoTypes.UPDATE_CTO_REQUEST, updateCto),
-    takeLatest(CtoTypes.DELETE_CTO_REQUEST, deleteCto),
-
     takeLatest(
       CtoTypes.LOAD_SPLITTER_CLIENT_BY_CTO_REQUEST,
       loadSplitterAndClient
     )
-
-    // takeLatest(CaboTypes.CREATE_CABO_REQUEST, createCabo)
-    //takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient)
-    //takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient)
   ]);
 }
 
@@ -96,3 +86,7 @@ export default function* rootSaga() {
 // import { Types as MapTypes } from "../ducks/map";
 // import { loadSplitters, addDrop } from "./drop";
 // import { Types as DropTypes } from "../ducks/drop";
+
+// takeLatest(CaboTypes.CREATE_CABO_REQUEST, createCabo)
+//takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient)
+//takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient)

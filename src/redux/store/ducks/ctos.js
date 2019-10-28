@@ -3,12 +3,12 @@
  */
 export const Types = {
   //Modal {Recuperando dados}
-  SHOWNEWMODALCTO: "cto/SHOW_NEW_MODAL",
-  HIDENEWMODALCTO: "cto/HIDE_NEW_MODAL",
+  SHOW_NEW_MODAL_CTO: "cto/SHOW_NEW_MODAL",
+  HIDE_NEW_MODAL_CTO: "cto/HIDE_NEW_MODAL",
 
   //Modal {Novo}
-  SHOWVIEWMODALCTO: "cto/SHOW_VIEW_MODAL",
-  HIDEVIEWMODALCTO: "cto/HIDE_VIEW_MODAL",
+  SHOW_VIEW_MODAL_CTO: "cto/SHOW_VIEW_MODAL",
+  HIDE_VIEW_MODAL_CTO: "cto/HIDE_VIEW_MODAL",
 
   //Modal {Clients da cto}
   SHOW_VIEW_MODAL_CLIENTS: "cto/SHOW_VIEW_MODAL_CLIENTS",
@@ -22,12 +22,12 @@ export const Types = {
   SHOW_VIEW_MODAL_CABLE: "cto/SHOW_VIEW_MODAL_CABLE",
   HIDE_VIEW_MODAL_CABLE: "cto/HIDE_VIEW_MODAL_CABLE",
 
+  LOAD_CTO_GEOJSON_REQUEST: "@cto/LOAD_GJ_REQUEST",
+  LOAD_CTO_GEOJSON_SUCCESS: "@cto/LOAD_GJ_SUCCESS",
+
   // Creation { saving data }
   CREATE_CTO_REQUEST: "@cto/CREATE_REQUEST",
   CREATE_CTO_SUCCESS: "@cto/CREATE_SUCCESS",
-
-  LOAD_CTO_GEOJSON_REQUEST: "@cto/LOAD_GJ_REQUEST",
-  LOAD_CTO_GEOJSON_SUCCESS: "@cto/LOAD_GJ_SUCCESS",
 
   UPDATE_CTO_REQUEST: "@cto/UPDATE_REQUEST",
   UPDATE_CTO_SUCCESS: "@cto/UPDATE_SUCCESS",
@@ -42,8 +42,8 @@ export const Types = {
   LOAD_SPLITTER_CLIENT_BY_CTO_SUCCESS: "cto/LOAD_SP_CL_CTO_SUCCESS"
 };
 
+//Estado inicial
 const INITIAL_STATE = {
-  //Estado inicial do modal {Mostrar Informações do CTO}
   viewCto: {
     visible: false,
     data: "",
@@ -118,7 +118,7 @@ export default function(state = INITIAL_STATE, action) {
           visible: false
         }
       };
-    case Types.SHOWVIEWMODALCTO:
+    case Types.SHOW_VIEW_MODAL_CTO:
       return {
         ...state,
         viewCto: {
@@ -126,7 +126,7 @@ export default function(state = INITIAL_STATE, action) {
           data: action.payload.data
         }
       };
-    case Types.HIDEVIEWMODALCTO:
+    case Types.HIDE_VIEW_MODAL_CTO:
       return {
         ...state,
         viewCto: {
@@ -138,7 +138,7 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, geojson: { ctos: action.payload.ctos } };
     case Types.LOAD_CTO_GEOJSON_REQUEST:
       return { ...state, geojson: { ctos: action.payload.ctos } };
-    case Types.SHOWNEWMODALCTO:
+    case Types.SHOW_NEW_MODAL_CTO:
       return {
         ...state,
         viewNewCto: {
@@ -146,7 +146,7 @@ export default function(state = INITIAL_STATE, action) {
           visible: true
         }
       };
-    case Types.HIDENEWMODALCTO:
+    case Types.HIDE_NEW_MODAL_CTO:
       return {
         ...state,
         viewNewCto: {
@@ -216,14 +216,14 @@ export const Creators = {
     }
   }),
   showNewViewModalCto: coordinates => ({
-    type: Types.SHOWNEWMODALCTO,
+    type: Types.SHOW_NEW_MODAL_CTO,
     payload: {
       visible: true,
       coordinates
     }
   }),
   HideNewViewModalCto: () => ({
-    type: Types.HIDENEWMODALCTO,
+    type: Types.HIDE_NEW_MODAL_CTO,
     payload: {
       visible: false,
       coordinates: []
@@ -246,7 +246,7 @@ export const Creators = {
   }),
 
   showViewModalCto: data => ({
-    type: Types.SHOWVIEWMODALCTO,
+    type: Types.SHOW_VIEW_MODAL_CTO,
     payload: {
       visible: true,
       data: data
@@ -254,7 +254,7 @@ export const Creators = {
   }),
 
   hideViewModalCto: () => ({
-    type: Types.HIDEVIEWMODALCTO,
+    type: Types.HIDE_VIEW_MODAL_CTO,
     payload: { visible: false }
   }),
   loadCtoGeoJsonRequest: () => ({
@@ -290,7 +290,7 @@ export const Creators = {
     payload: { cto, id }
   }),
 
-  updateClientSuccess: cto => ({
+  updateCtoSuccess: cto => ({
     type: Types.UPDATE_CTO_SUCCESS,
     payload: { cto }
   })

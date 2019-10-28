@@ -284,7 +284,9 @@ function ViewClient(props) {
             <Button hidden={unvisibleAddCable} variant="secondary" onClick={addCabo}>
               Adicionar Cabo
             </Button>
-            <Button variant="secondary">Fechar</Button>
+            <Button variant="secondary" onClick={handleHideModal}>
+              Fechar
+            </Button>
           </Modal.Footer>
         </form>
       </Modal>

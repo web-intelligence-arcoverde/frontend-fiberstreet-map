@@ -4,7 +4,7 @@ import { Creators as CeoCreators } from "../ducks/ceo";
 import { actions as ToastrActions, toastr } from "react-redux-toastr";
 import api from "../../../services/api";
 
-export function* store(action) {
+export function* createCeo(action) {
   try {
     const response = yield call([api, "post"], "ceos", action.payload.ceo);
     yield toastr.success(
@@ -18,5 +18,29 @@ export function* store(action) {
       title: "Falha - CEO",
       message: "Erro ao criar ceo"
     });
+  }
+}
+
+export function* updateCeo({ payload }) {
+  try {
+    const response = yield call(
+      [api, "put"],
+      `ceos/${payload.id}`,
+      payload.ceo
+    );
+
+    yield toastr.success("Sucesso", "Sucesso ao atualizar a ceo");
+  } catch (err) {
+    yield toastr.error("Erro", "Falha ao atualizar a ceo");
+  }
+}
+
+export function* deleteCeo({ payload }) {
+  try {
+    yield call([api, "delete"], `ceos/${payload.id}`);
+
+    yield toastr.success("Delete", "Sucesso ao apagar a ceo");
+  } catch (err) {
+    yield toastr.error("Erro", "Falha ao exluir a ceo");
   }
 }
