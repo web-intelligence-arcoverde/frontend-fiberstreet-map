@@ -18,6 +18,8 @@ import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
 import { Creators as MapActions } from "../../../redux/store/ducks/map";
 import { Creators as CaboActions } from "../../../redux/store/ducks/cabo";
 import { Creators as DropActions } from "../../../redux/store/ducks/drop";
+import { toastr } from "react-redux-toastr";
+import api from "../../../services/api";
 
 function ViewClient(props) {
   const { viewClient } = props.redux.client;
@@ -32,9 +34,24 @@ function ViewClient(props) {
   const [installation, setInstallation] = useState("");
   const [obs, setObs] = useState("");
   const [status, setStatus] = useState("");
+  const [unvisibleAddCable, setUnvisibleAddCable] = useState(false);
 
   useEffect(() => {
     firstLoad();
+    if (viewClient.visible) {
+      api
+        .get(`drops/${data.id}`)
+        .then(response => {
+          const { data } = response;
+          if (data.id) {
+            setUnvisibleAddCable(true);
+          } else {
+            setUnvisibleAddCable(false);
+          }
+        })
+        .catch(err => {});
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewClient.visible]);
 
@@ -264,7 +281,7 @@ function ViewClient(props) {
             <Button variant="danger" onClick={deleteClient}>
               Excluir
             </Button>
-            <Button variant="secondary" onClick={addCabo}>
+            <Button hidden={unvisibleAddCable} variant="secondary" onClick={addCabo}>
               Adicionar Cabo
             </Button>
             <Button variant="secondary">Fechar</Button>

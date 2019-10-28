@@ -1,7 +1,7 @@
 import axios from "axios";
 import store from "../redux/store";
 
-const local = "http://192.168.0.100:3333";
+const local = "http://192.168.0.105:3333";
 const server = "https://45.224.40.252";
 const local01 = "http://127.0.0.1:3333/";
 
