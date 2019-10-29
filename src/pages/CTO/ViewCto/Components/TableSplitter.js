@@ -17,7 +17,9 @@ import StorageIcon from "@material-ui/icons/Storage";
 import { Container } from "@material-ui/core";
 import Cable from "@material-ui/icons/SettingsInputHdmi";
 import { wrap } from "module";
-import { width } from "@material-ui/system";
+
+//Components
+import AddSplitter from "../../../Splitter/AddSplitter/index";
 
 function TableSplitter(props) {
   const { modalNewSplitter } = props.redux.splitter;
@@ -75,9 +77,6 @@ function TableSplitter(props) {
     const { showSplitterAddModal } = props;
     showSplitterAddModal(data.id);
   }
-
-  const { viewSplitter } = props.redux.ctos;
-  const { hideModalSplitter } = props;
 
   return (
     <Container>
@@ -162,7 +161,20 @@ function TableSplitter(props) {
             )}
           </div>
         </Container>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginTop: "10px",
+            marginBottom: "10px"
+          }}
+        >
+          <Button variant="secondary" onClick={handleAddSplitter}>
+            Adicionar um splitter
+          </Button>
+        </div>
       </Form>
+      <AddSplitter />
     </Container>
   );
 }

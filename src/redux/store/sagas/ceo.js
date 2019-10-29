@@ -23,11 +23,7 @@ export function* createCeo(action) {
 
 export function* updateCeo({ payload }) {
   try {
-    const response = yield call(
-      [api, "put"],
-      `ceos/${payload.id}`,
-      payload.ceo
-    );
+    yield call([api, "put"], `ceos/${payload.id}`, payload.ceo);
 
     yield toastr.success("Sucesso", "Sucesso ao atualizar a ceo");
   } catch (err) {
