@@ -71,7 +71,7 @@ function ViewFusoes(props) {
         }}
       >
         <Button variant="secondary" type="submit" style={{ width: "100%" }}>
-          Adicionar um novo cabo
+          Adicionar uma nova fusão
         </Button>
       </div>
     </Container>

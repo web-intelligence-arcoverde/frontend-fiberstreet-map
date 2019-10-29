@@ -20,20 +20,6 @@ function ClienteAddModal(props) {
   const [address, setAddress] = useState("");
   const [PPPOE, setPPPOE] = useState("");
   const [obs, setObs] = useState("");
-  const [validated, setValidated] = useState(false);
-
-  function validateForm(event) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      // event.preventDefault();
-      event.stopPropagation();
-    }
-    setValidated(true);
-    if (validated === true) {
-      handleSubmit(event);
-    }
-  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -46,7 +32,8 @@ function ClienteAddModal(props) {
       speed: plano,
       pppoe: PPPOE,
       address: address,
-      obs: obs
+      obs: obs,
+      status: null
     };
     createClientRequest(newClient);
     handleHideModal();
@@ -104,8 +91,8 @@ function ClienteAddModal(props) {
               <Form.Label>Nome:</Form.Label>
               <Form.Control
                 required
-                minLength="30"
-                maxLength="255"
+                minLength="8"
+                maxLength="150"
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
@@ -131,7 +118,7 @@ function ClienteAddModal(props) {
               <Form.Label>Endereço:</Form.Label>
               <Form.Control
                 required
-                minLength="30"
+                minLength="8"
                 maxLength="150"
                 type="text"
                 value={address}
@@ -164,8 +151,8 @@ function ClienteAddModal(props) {
               <Form.Control
                 required
                 type="text"
-                minLength="15"
-                maxLength="150"
+                minLength="5"
+                maxLength="100"
                 value={PPPOE}
                 onChange={e => setPPPOE(e.target.value)}
               />
@@ -177,7 +164,7 @@ function ClienteAddModal(props) {
                 required
                 as="textarea"
                 rows="3"
-                minLength="50"
+                minLength="10"
                 maxLength="255"
                 value={obs}
                 onChange={e => setObs(e.target.value)}

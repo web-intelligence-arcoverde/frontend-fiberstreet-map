@@ -8,7 +8,7 @@ import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
 
 //import components
 import TableCeo from "./Components/TableCeo";
-import TableSplitter from "./Components/TableSplitter";
+import TableFusoes from "./Components/TableFusoes";
 import TableCable from "./Components/TableCable";
 
 //UI-Components
@@ -67,6 +67,26 @@ const ViewCeo = props => {
                   <h5>Lista de fusões</h5>
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="1">
+                  <Card.Body
+                    style={{
+                      paddingTop: "10px",
+                      paddingLeft: "5px",
+                      paddingBottom: "0px"
+                    }}
+                  >
+                    <TableFusoes />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+              <Card>
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey="2"
+                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                >
+                  <h5>Lista de cabos</h5>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="2">
                   <Card.Body
                     style={{
                       paddingTop: "10px",

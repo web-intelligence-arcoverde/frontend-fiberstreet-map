@@ -18,70 +18,15 @@ import TableSplitter from "./Components/TableSplitter";
 import TableCable from "./Components/TableCable";
 
 //Componentes importados
-import { Modal, Button, Accordion, Card, ListGroup } from "react-bootstrap";
-import { makeStyles } from "@material-ui/core/styles";
-import PeopleIcon from "@material-ui/icons/People";
-import StorageIcon from "@material-ui/icons/Storage";
-import Cable from "@material-ui/icons/SettingsInputComponent";
-import Tooltip from "@material-ui/core/Tooltip";
-
-const useStyles = makeStyles(theme => ({
-  fab: {
-    margin: theme.spacing(1)
-  },
-  extendedIcon: {
-    marginRight: theme.spacing(1)
-  }
-}));
+import { Modal, Accordion, Card, ListGroup } from "react-bootstrap";
 
 //Tamanho das box
 function ViewCto(props) {
-  const classes = useStyles();
   const { ctos } = props.redux;
   const { hideViewModalCto } = props;
 
-  const { showModalClients } = props;
-  const { showModalSplitter } = props;
-  const { showModalCable } = props;
-
   const { viewCto } = ctos; //Recuperando o estado inicial da CTO
   const { data } = viewCto;
-
-  const [splitters, setSplitters] = useState([]);
-
-  useEffect(() => {
-    function getSplitters(id) {
-      api
-        .get(`/splittercto/${id}`)
-        .then(response => {
-          const sp = response.data;
-          setSplitters(sp);
-        })
-        .catch(e => console.warn(e));
-    }
-    if (viewCto.visible) getSplitters(data.id);
-  }, [data.id, viewCto.visible]);
-
-  function handleAddSplitter() {
-    const { showSplitterAddModal } = props;
-    showSplitterAddModal(data.id);
-  }
-
-  function openModalClients() {
-    showModalClients();
-  }
-
-  function openModalSplitter() {
-    if (splitters < 1) {
-      handleAddSplitter();
-    } else {
-      showModalSplitter();
-    }
-  }
-
-  function openModalCable() {
-    showModalCable();
-  }
 
   return (
     <Modal size="lg" show={viewCto.visible} onHide={hideViewModalCto}>
@@ -121,12 +66,12 @@ function ViewCto(props) {
               <Card>
                 <Accordion.Toggle
                   as={Card.Header}
-                  eventKey="2"
+                  eventKey="1"
                   style={{ backgroundColor: "#6c757d", color: "#FFF" }}
                 >
                   <h5>Clientes no terminal</h5>
                 </Accordion.Toggle>
-                <Accordion.Collapse eventKey="2">
+                <Accordion.Collapse eventKey="1">
                   <Card.Body
                     style={{
                       paddingTop: "10px",
@@ -141,12 +86,12 @@ function ViewCto(props) {
               <Card>
                 <Accordion.Toggle
                   as={Card.Header}
-                  eventKey="1"
+                  eventKey="2"
                   style={{ backgroundColor: "#6c757d", color: "#FFF" }}
                 >
-                  <h5>Splitter</h5>
+                  <h5>Splitters</h5>
                 </Accordion.Toggle>
-                <Accordion.Collapse eventKey="1">
+                <Accordion.Collapse eventKey="2">
                   <Card.Body
                     style={{
                       paddingTop: "10px",
@@ -161,12 +106,12 @@ function ViewCto(props) {
               <Card>
                 <Accordion.Toggle
                   as={Card.Header}
-                  eventKey="1"
+                  eventKey="3"
                   style={{ backgroundColor: "#6c757d", color: "#FFF" }}
                 >
                   <h5>Cabos</h5>
                 </Accordion.Toggle>
-                <Accordion.Collapse eventKey="1">
+                <Accordion.Collapse eventKey="3">
                   <Card.Body
                     style={{
                       paddingTop: "10px",

@@ -21,22 +21,10 @@ function AddProvider(props) {
   const [cnpj, setCnpj] = useState("");
   const [cnpjUnmasked, setCnpjUnmasked] = useState("");
   const [address, setAddress] = useState("");
-  const [validated, setValidated] = useState(false);
-
-  function validateForm(event) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-    }
-    setValidated(true);
-    if (validated === true) {
-      handleCeo(event);
-    }
-  }
 
   function handleCeo(e) {
     e.preventDefault();
+    // eslint-disable-next-line no-unused-vars
     const newProvider = {
       name: name,
       cnpj: cnpjUnmasked,
