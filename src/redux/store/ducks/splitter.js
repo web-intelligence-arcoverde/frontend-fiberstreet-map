@@ -2,7 +2,13 @@ export const Types = {
   SHOW_NEW_MODAL_SPLITTER: "@splitter/MODAL_SHOW",
   HIDE_NEW_MODAL_SPLITTER: "@splitter/MODAL_HIDE",
   CREATE_SP_REQUEST: "@splitter/CREATE_REQUEST",
-  CREATE_SP_SUCCESS: "@splitter/CREATE_SUCCESS"
+  CREATE_SP_SUCCESS: "@splitter/CREATE_SUCCESS",
+
+  DELETE_SP_REQUEST: "@splitter/DELETE_REQUEST",
+  DELETE_SP_SUCCESS: "@splitter/DELETE_SUCCESS",
+
+  UPDATE_SP_REQUEST: "@splitter/UPDATE_REQUEST",
+  UPDATE_SP_SUCCESS: "@splitter/UPDATE_SUCCESS"
 };
 
 const INITIAL_STATE = {
@@ -47,13 +53,23 @@ export const Creators = {
     type: Types.HIDE_NEW_MODAL_SPLITTER
   }),
 
-  createSplitterRequest: (splitter) => ({
+  createSplitterRequest: splitter => ({
     type: Types.CREATE_SP_REQUEST,
     payload: { splitter }
   }),
 
   createSplitterSuccess: splitter => ({
     type: Types.CREATE_SP_SUCCESS,
+    payload: { splitter }
+  }),
+
+  updateSplitterRequest: splitter => ({
+    type: Types.UPDATE_SP_REQUEST,
+    payload: { splitter }
+  }),
+
+  updateSplitterSuccess: splitter => ({
+    type: Types.UPDATE_SP_SUCCESS,
     payload: { splitter }
   })
 };

@@ -476,7 +476,7 @@ class Map extends Component {
     socket.connect(token);
     const clients = socket.subscribe(`clients:${provider.id}`);
     const ctos = socket.subscribe(`ctos:${provider.id}`);
-    const ceos = socket.subscribe(`ceos:$${provider.id}`);
+    const ceos = socket.subscribe(`ceos:${provider.id}`);
     // const ceos = socket.subscribe(`ceos:${provider.id}`);
 
     map.on("load", function() {
@@ -641,6 +641,7 @@ class Map extends Component {
         let ctos = data;
         ctos.push(cto);
 
+
         await store.dispatch({
           type: "@cto/LOAD_GJ_SUCCESS",
           payload: { ctos }
@@ -648,8 +649,9 @@ class Map extends Component {
 
         const dados = await {
           type: "FeatureCollection",
-          features: [...data, cto]
+          features: ctos//[...data, cto]
         };
+      
         await map.getSource("cto").setData(dados);
       });
 
@@ -683,14 +685,25 @@ class Map extends Component {
 
         let ctos = [];
 
-        // Se o id
-        // for diferente da cto atualizada
-        // adiciona no array, se for igual
-        // ao invés de adicionar a do forEach, adiciona
-        // a que vem do banco de dados
-        data.forEach(cto => {
-          if (cto.properties.data.id !== ctoUpdated.properties.data.id) ctos.push(cto);
-          else ctos.push(ctoUpdated);
+        await data.forEach(cto => {
+          if (cto.properties.data.id !== ctoUpdated.properties.data.id) {
+            ctos.push(cto);
+          } else {
+            let ctoUp = ctoUpdated;
+            const longitude = JSON.parse(ctoUpdated.properties.data.coordinates)
+              .longitude;
+            const latitude = JSON.parse(ctoUpdated.properties.data.coordinates)
+              .latitude;
+            ctoUp.geometry.coordinates = [longitude, latitude];
+           
+            ctos.push(ctoUp)
+          }
+        });
+        
+
+        await store.dispatch({
+          type: "@cto/LOAD_GJ_SUCCESS",
+          payload: { ctos }
         });
 
         const dados = {
@@ -698,18 +711,39 @@ class Map extends Component {
           features: ctos
         };
 
-        await store.dispatch({
-          type: "@cto/LOAD_GJ_SUCCESS",
-          payload: { ctos }
-        });
-
         await map.getSource("cto").setData(dados);
+        // const data = await store.getState().ctos.geojson.ctos;
+
+        // let ctos = [];
+
+        // // Se o id
+        // // for diferente da cto atualizada
+        // // adiciona no array, se for igual
+        // // ao invés de adicionar a do forEach, adiciona
+        // // a que vem do banco de dados
+        // data.forEach(cto => {
+        //   if (cto.properties.data.id !== ctoUpdated.properties.data.id) ctos.push(cto);
+        //   else ctos.push(ctoUpdated);
+        // });
+
+        // const dados = {
+        //   type: "FeatureCollection",
+        //   features: ctos
+        // };
+
+        // await store.dispatch({
+        //   type: "@cto/LOAD_GJ_SUCCESS",
+        //   payload: { ctos }
+        // });
+
+        // await map.getSource("cto").setData(dados);
       });
 
       // Probably ok
+      
       ceos.on("newCeo", async newCeo => {
         const data = await store.getState().ceo.geojson.ceos;
-
+        toastr.light('nova ceo', newCeo)
         let ceos = data;
         await ceos.push(newCeo);
 
@@ -720,8 +754,9 @@ class Map extends Component {
 
         const dados = await {
           type: "FeatureCollection",
-          features: [...data, newCeo]
+          features: ceos//[...data, newCeo]
         };
+        
         await map.getSource("ceo").setData(dados);
       })
 
@@ -731,10 +766,18 @@ class Map extends Component {
         const ceos = [];
 
         await data.forEach(ceo => {
-          if (ceo.properties.data.id !== ceoUpdated.propertieis.data.id) {
+          if (ceo.properties.data.id !== ceoUpdated.properties.data.id) {
             ceos.push(ceo)
           } else {
-            ceos.push(ceoUpdated)
+            
+            let ceoUp = ceoUpdated;
+            const longitude = JSON.parse(ceoUpdated.properties.data.coordinates)
+              .longitude;
+            const latitude = JSON.parse(ceoUpdated.properties.data.coordinates)
+              .latitude;
+            ceoUp.geometry.coordinates = [longitude, latitude];
+
+            ceos.push(ceoUp)
           }
         })
 
@@ -748,7 +791,7 @@ class Map extends Component {
           features: ceos
         }
 
-        map.getSource('ceo').setData(dados)
+        await map.getSource('ceo').setData(dados)
       })
 
       ceos.on('deletedCeo', async ceoDeleted => {
