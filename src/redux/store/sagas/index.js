@@ -25,7 +25,7 @@ import { Types as DropTypes } from "../ducks/drop";
 import { loadSplitters, addDrop } from "./drop";
 
 import { Types as SplitterTypes } from "../ducks/splitter";
-import { createSplitter } from "./splitter";
+import { createSplitter, updateSplitter, deleteSplitter } from "./splitter";
 
 // import { Types as CaboTypes } from '../ducks/cabo'
 // import { createCabo } from './cabo'
@@ -67,6 +67,9 @@ export default function* rootSaga() {
     takeLatest(DropTypes.SHOW_DROP_MODAL_REQUEST, loadSplitters),
     takeLatest(DropTypes.ADD_DROP_REQUEST, addDrop),
 
+    // Splitter
+    takeLatest(SplitterTypes.UPDATE_SP_REQUEST, updateSplitter),
+    takeLatest(SplitterTypes.DELETE_SP_REQUEST, deleteSplitter),
     takeLatest(SplitterTypes.CREATE_SP_REQUEST, createSplitter),
 
     takeLatest(
