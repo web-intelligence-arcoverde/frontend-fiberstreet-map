@@ -647,7 +647,6 @@ class Map extends Component {
         let ctos = data;
         ctos.push(cto);
 
-
         await store.dispatch({
           type: "@cto/LOAD_GJ_SUCCESS",
           payload: { ctos }
@@ -655,9 +654,9 @@ class Map extends Component {
 
         const dados = await {
           type: "FeatureCollection",
-          features: ctos//[...data, cto]
+          features: ctos //[...data, cto]
         };
-      
+
         await map.getSource("cto").setData(dados);
       });
 
@@ -701,11 +700,10 @@ class Map extends Component {
             const latitude = JSON.parse(ctoUpdated.properties.data.coordinates)
               .latitude;
             ctoUp.geometry.coordinates = [longitude, latitude];
-           
-            ctos.push(ctoUp)
+
+            ctos.push(ctoUp);
           }
         });
-        
 
         await store.dispatch({
           type: "@cto/LOAD_GJ_SUCCESS",
@@ -746,10 +744,10 @@ class Map extends Component {
       });
 
       // Probably ok
-      
+
       ceos.on("newCeo", async newCeo => {
         const data = await store.getState().ceo.geojson.ceos;
-        toastr.light('nova ceo', newCeo)
+
         let ceos = data;
         await ceos.push(newCeo);
 
@@ -760,9 +758,9 @@ class Map extends Component {
 
         const dados = await {
           type: "FeatureCollection",
-          features: ceos//[...data, newCeo]
+          features: ceos //[...data, newCeo]
         };
-        
+
         await map.getSource("ceo").setData(dados);
       });
 
@@ -773,9 +771,8 @@ class Map extends Component {
 
         await data.forEach(ceo => {
           if (ceo.properties.data.id !== ceoUpdated.properties.data.id) {
-            ceos.push(ceo)
+            ceos.push(ceo);
           } else {
-            
             let ceoUp = ceoUpdated;
             const longitude = JSON.parse(ceoUpdated.properties.data.coordinates)
               .longitude;
@@ -783,7 +780,7 @@ class Map extends Component {
               .latitude;
             ceoUp.geometry.coordinates = [longitude, latitude];
 
-            ceos.push(ceoUp)
+            ceos.push(ceoUp);
           }
         });
 
@@ -797,8 +794,8 @@ class Map extends Component {
           features: ceos
         };
 
-        await map.getSource('ceo').setData(dados)
-      })
+        await map.getSource("ceo").setData(dados);
+      });
 
       ceos.on("deletedCeo", async ceoDeleted => {
         const data = await store.getState().ceo.geojson.ceos;

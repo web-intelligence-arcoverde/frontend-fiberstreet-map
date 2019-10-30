@@ -11,6 +11,7 @@ node_modules
 
 # production
 /build
+/services/api.js
 
 # misc
 .DS_Store
