@@ -6,6 +6,10 @@ export const Types = {
   SHOW_NEW_MODAL_CEO: "ceo/SHOW_NEW_MODAL",
   HIDE_NEW_MODAL_CEO: "ceo/HIDE_NEW_MODAL",
 
+  //Fusao
+  SHOW_NEW_MODAL_FUSAO: "ceo/SHOW_NEW_MODAL_FUSAO",
+  HIDE_NEW_MODAL_FUSAO: "ceo/HIDE_NEW_MODAL_FUSAO",
+
   //Recuperar
   SHOW_MODAL_CEO: "ceo/SHOW_MODAL_CEO",
   HIDE_MODAL_CEO: "ceo/HIDE_MODAL_CEO",
@@ -37,6 +41,9 @@ const INITIAL_STATE = {
   ceos: [],
   geojson: {
     ceos: []
+  },
+  viewNewFusao: {
+    visible: false
   }
 };
 
@@ -47,6 +54,20 @@ const INITIAL_STATE = {
  */
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case Types.SHOW_NEW_MODAL_FUSAO:
+      return {
+        ...state,
+        viewNewFusao: {
+          visible: true
+        }
+      };
+    case Types.HIDE_NEW_MODAL_FUSAO:
+      return {
+        ...state,
+        viewNewFusao: {
+          visible: false
+        }
+      };
     case Types.SHOW_NEW_MODAL_CEO:
       return {
         ...state,
@@ -93,6 +114,19 @@ export default function(state = INITIAL_STATE, action) {
  * Actions
  */
 export const Creators = {
+  showNewViewModalFusao: () => ({
+    type: Types.SHOW_NEW_MODAL_FUSAO,
+    payload: {
+      visible: true
+    }
+  }),
+
+  hideNewViewModalFusao: () => ({
+    type: Types.HIDE_NEW_MODAL_FUSAO,
+    payload: {
+      visible: false
+    }
+  }),
   showNewViewModalCeo: coordinates => ({
     type: Types.SHOW_NEW_MODAL_CEO,
     payload: {

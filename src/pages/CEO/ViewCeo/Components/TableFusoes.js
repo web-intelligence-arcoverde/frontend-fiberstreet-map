@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // redux
 import { bindActionCreators } from "redux";
@@ -8,15 +8,37 @@ import { connect } from "react-redux";
 import { Creators as ceoCreators } from "../../../../redux/store/ducks/ceo";
 
 //UI-Components
-import { Button, Container, Table } from "react-bootstrap";
+import { Button, Container, Table, Form } from "react-bootstrap";
 import Delete from "@material-ui/icons/HighlightOff";
+import Load from "@material-ui/icons/RotateLeft";
+import ModalFusao from "./ModalFusao";
 
 function ViewFusoes(props) {
   console.log("Informações cable");
   console.log(props);
 
+  const [open, setOpen] = useState(false);
+  const [openFiber, setOpenFiber] = useState(false);
+  const [cable, setCable] = useState("");
+  const [fib, setFib] = useState("");
+
+  const { showNewViewModalFusao } = props;
+  const { hideViewModalCeo } = props;
+
+  function openChange() {
+    //hideViewModalCeo();
+    showNewViewModalFusao();
+  }
+
+  useEffect(() => {
+    if (open === true) {
+      console.log("fudeu");
+    }
+  }, [open]);
+
   return (
     <Container>
+      <ModalFusao />
       <Table striped bordered hover responsive="lg">
         <thead>
           <tr>
@@ -62,6 +84,7 @@ function ViewFusoes(props) {
           </tr>
         </tbody>
       </Table>
+
       <div
         style={{
           display: "flex",
@@ -70,10 +93,16 @@ function ViewFusoes(props) {
           marginBottom: "10px"
         }}
       >
-        <Button variant="secondary" type="submit" style={{ width: "100%" }}>
+        <Button
+          variant="secondary"
+          type="submit"
+          style={{ width: "100%" }}
+          onClick={openChange}
+        >
           Adicionar uma nova fusão
         </Button>
       </div>
+      <ModalFusao />
     </Container>
   );
 }
