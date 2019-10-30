@@ -16,7 +16,8 @@ import client from "./cliente";
 import ceo from "./ceo";
 import splitter from "./splitter";
 import cabo from "./cabo";
-import drop from './drop'
+import drop from "./drop";
+import fiberfusion from "./fiberfusion";
 
 import { reducer as auth } from "./auth";
 import { reducer as toastr } from "react-redux-toastr";
@@ -33,5 +34,6 @@ export default combineReducers({
   ctos,
   cabo,
   drop,
+  fiberfusion,
   router: connectRouter(history)
 });

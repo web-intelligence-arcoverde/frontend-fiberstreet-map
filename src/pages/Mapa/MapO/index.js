@@ -22,6 +22,7 @@ import { Creators as providerCreators } from "../../../redux/store/ducks/provide
 import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
 import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
+import { toastr } from 'react-redux-toastr'
 
 import store from "../../../redux/store";
 
