@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 //API
-// import { Creators as AllCreators } from "../../../redux/store/ducks/all";
 import api from "../../../services/api";
 import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
 import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
@@ -9,7 +8,6 @@ import { Creators as MapCreators } from "../../../redux/store/ducks/map";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-// import * as Actions from "../../../redux/store/actions/all";
 
 //Components
 import { Modal, Button, Container, Form } from "react-bootstrap/";

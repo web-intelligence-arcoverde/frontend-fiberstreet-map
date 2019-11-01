@@ -21,11 +21,14 @@ import ModalSplitter from "../../Splitter/AddSplitter/index";
 import CaboAdd from "../../Cable/CaboAdd";
 import AddRelCliCto from "../../Splitter/AddRelCliCto";
 
+import AddNewCableCtoToCto from "../../Cable/AddCableCtoToCto/index";
+
 const TOKEN =
   "pk.eyJ1IjoidWxpbmt1eCIsImEiOiJjanczamF5cG8wNWt0NDltcnkydXQybGdjIn0.F1PkG0rCiHhf-jhnRMMdTg";
 
 const MainMap = props => (
   <div>
+    <AddNewCableCtoToCto />
     <ViewClient />
     <ViewCeo />
     <ViewCto />

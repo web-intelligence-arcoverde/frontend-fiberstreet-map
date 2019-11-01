@@ -22,7 +22,7 @@ import { Creators as providerCreators } from "../../../redux/store/ducks/provide
 import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
 import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
-import { toastr } from 'react-redux-toastr'
+import { toastr } from "react-redux-toastr";
 
 import store from "../../../redux/store";
 
@@ -298,13 +298,27 @@ class Map extends Component {
 
   handleCtoClickTwoFactor(cto, longitude, latitude) {
     if (this.props.redux.map.delimitacao === "cabo") {
-      const { addCoordCabo, setDelemitationMap, showAddCableCto } = this.props;
+      const {
+        addCoordCabo,
+        setDelemitationMap,
+        showModalCtoToCto,
+        showAddCtoCable,
+        setSubDelemitation,
+        setIdTo
+      } = this.props;
       const { polyline } = this.props.redux.map;
       let newPolyline = [...polyline, [longitude, latitude]];
 
-      addCoordCabo(newPolyline);
-      showAddCableCto(cto.id);
-      setDelemitationMap("default");
+      if (this.props.redux.map.subDelimitacao === "cto") {
+        addCoordCabo(newPolyline);
+        setIdTo(cto.id);
+        showModalCtoToCto();
+        setSubDelemitation("default");
+      } else {
+        addCoordCabo(newPolyline);
+        showAddCtoCable(cto.id);
+        setDelemitationMap("default");
+      }
     } else {
       const { showViewModalCto } = this.props;
 
