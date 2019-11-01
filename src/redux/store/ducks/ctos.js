@@ -22,6 +22,9 @@ export const Types = {
   SHOW_VIEW_MODAL_CABLE: "cto/SHOW_VIEW_MODAL_CABLE",
   HIDE_VIEW_MODAL_CABLE: "cto/HIDE_VIEW_MODAL_CABLE",
 
+  SHOW_VIEW_MODAL_OUTPUT_CABLES: "cto/SHOW_VIEW_MODAL_OUTPUT_CABLE",
+  HIDE_VIEW_MODAL_OUTPUT_CABLES: "cto/SHOW_VIEW_MODAL_OUTPUT_CABLE",
+
   LOAD_CTO_GEOJSON_REQUEST: "@cto/LOAD_GJ_REQUEST",
   LOAD_CTO_GEOJSON_SUCCESS: "@cto/LOAD_GJ_SUCCESS",
 
@@ -66,6 +69,9 @@ const INITIAL_STATE = {
   },
   viewCable: {
     visible: false
+  },
+  viewOutputCables: {
+    visible: false
   }
 };
 
@@ -87,6 +93,20 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         viewClients: {
+          visible: false
+        }
+      };
+    case Types.SHOW_VIEW_MODAL_OUTPUT_CABLES:
+      return {
+        ...state,
+        viewOutputCables: {
+          visible: true
+        }
+      };
+    case Types.HIDE_VIEW_MODAL_OUTPUT_CABLES:
+      return {
+        ...state,
+        viewOutputCables: {
           visible: false
         }
       };
@@ -179,6 +199,18 @@ export default function(state = INITIAL_STATE, action) {
  * Actions
  */
 export const Creators = {
+  showModalOutputCables: () => ({
+    type: Types.SHOW_VIEW_MODAL_OUTPUT_CABLES,
+    payload: {
+      visible: true
+    }
+  }),
+  hideModalOutputCables: () => ({
+    type: Types.HIDE_VIEW_MODAL_OUTPUT_CABLES,
+    payload: {
+      visible: false
+    }
+  }),
   showModalClients: () => ({
     type: Types.SHOW_VIEW_MODAL_CLIENTS,
     payload: {

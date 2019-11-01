@@ -2,11 +2,13 @@
  * Types, Reducers e Actions no mesmo .js
  */
 export const Types = {
-  SETMAPDELEMITATION: "map/DELEMITATION_MAP",
+  SET_MAP_DELEMITATION: "map/SET_MAP_DELEMITATIO",
 
-  addCoordenadas: "ADD_COORDENADAS",
+  SET_SUB_DELEMITATION: "map/SET_SUB_DELEMITATION",
 
-  canAddCoordenadas: "CAN_ADD_COORD",
+  ADD_COORDENADAS: "map/ADD_COORDENADAS",
+
+  CAN_ADD_COORD: "map/CAN_ADD_COORD",
 
   ADD_COORD_CABO: "@map/ADD_COORD_CABO"
 };
@@ -16,19 +18,25 @@ export const Types = {
  */
 let INITIAL_STATE = {
   delimitacao: "default",
-  polyline: []
+  polyline: [],
+  subDelimitacao: "default"
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case Types.SETMAPDELEMITATION:
+    case Types.SET_MAP_DELEMITATION:
       return {
         ...state,
         delimitacao: action.payload.delimitacao
       };
-    case Types.addCoordenadas:
+    case Types.SET_SUB_DELEMITATION:
+      return {
+        ...state,
+        subDelimitacao: action.payload.subDelimitacao
+      };
+    case Types.ADD_COORDENADAS:
       return { ...state, coordenadas: action.payload.coordenadas };
-    case Types.canAddCoordenadas:
+    case Types.CAN_ADD_COORD:
       return { ...state, canAddCoordenadas: action.payload.canAddCoordenadas };
 
     // correto
@@ -44,21 +52,27 @@ export default function(state = INITIAL_STATE, action) {
  *
  */
 export const Creators = {
+  setSubDelemitation: delemitacao => ({
+    type: Types.SET_SUB_DELEMITATION,
+    payload: {
+      subDelimitacao: delemitacao
+    }
+  }),
   setDelemitationMap: delimitation => ({
-    type: Types.SETMAPDELEMITATION,
+    type: Types.SET_MAP_DELEMITATION,
     payload: {
       delimitacao: delimitation
     }
   }),
 
   canAddCoordenadas: boolean => ({
-    type: Types.canAddCoordenadas,
+    type: Types.CAN_ADD_COORD,
     payload: {
       canAddCoordenadas: boolean
     }
   }),
   addCoordenadas: coord => ({
-    type: Types.addCoordenadas,
+    type: Types.ADD_COORDENADAS,
     payload: {
       coordenadas: coord
     }

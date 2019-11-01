@@ -134,8 +134,6 @@ function ViewClient(props) {
 
     setDelemitationMap("cabo"); // map - map.delimitacao
     let arrayDeArray = new Array(coord);
-    // toastr.success(`array`, `${arrayDeArray}`);
-    // console.log(arrayDeArray);
     addCoordCabo(arrayDeArray); // map - map.polyline
     addCableClientId(data.id); // cabo - cabo.id
     addDropClientId(data.id);
