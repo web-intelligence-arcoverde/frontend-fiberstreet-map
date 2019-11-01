@@ -6,14 +6,20 @@ import { connect } from "react-redux";
 
 //Creators redux
 import { Creators as ceoCreators } from "../../../../redux/store/ducks/ceo";
+import { Creators as FiberFusionActions } from "../../../../redux/store/ducks/fiberfusion";
+
+// Api
+import api from '../../../../services/api'
 
 //Ui
 import { Modal, Form, Button, Col } from "react-bootstrap/";
 import CloseIcon from "@material-ui/icons/Close";
+import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem";
 
 function ModalFusao(props) {
-  var cables = [];
-  var fibers = [];
+  const [cables, setCables] = useState([{ value: "", label: "" }]);
+  const [fibers, setFibers] = useState([]);
 
   const [bandeja, setBandeja] = useState("");
   const [cableTo, setCableTo] = useState("");
@@ -21,12 +27,100 @@ function ModalFusao(props) {
   const [fiberTo, setFiberTo] = useState("");
   const [fiberFrom, setFiberFrom] = useState("");
   const [obs, setObs] = useState("");
+  const [fiberFusion, setFiberFusion] = useState({
+    from: {
+      cableId: null,
+      fiberId: null
+    },
+    to: {
+      cableId: null,
+      fiberId: null
+    }
+  });
+
+  const { visible } = props.redux.ceo.viewNewFusao;
+
+  useEffect(() => {
+    if (visible) {
+      setFiberFusion({
+        from: {
+          cableId: null,
+          fiberId: null
+        },
+        to: {
+          cableId: null,
+          fiberId: null
+        }
+      });
+    }
+  }, [visible]);
+  // useEffect(() => {
+  //   const { showCablesCeoRequest } = props;
+  //   const { data } = props.redux.ceo.viewCeo;
+  //   if (props.redux.ceo.viewNewFusao.visible) {
+  //     showCablesCeoRequest(data.id);
+  //   }
+  // }, [props, visible]);
+
+  useEffect(() => {
+    if (visible) {
+      const { cables } = props.fiberfusion;
+      let allOptions = cables.map(({ cable }) => {
+        return {
+          value: cable.id,
+          label: `${cable.name} ${cable.fiberAmount} FO`
+        };
+      });
+      console.log(allOptions);
+      setCables(allOptions);
+    }
+  }, [props.fiberfusion, visible]);
+
+  useEffect(() => {
+    if (typeof fiberFusion.from.cableId === "number") {
+      // const { showFibersCableRequest } = props;
+      // showFibersCableRequest(Number(fiberFusion.from.cableId));
+      api.get(`fibers/cable/${fiberFusion.to.cableId}`)
+        .then(response => {
+          const { data } = response;
+          setFiberFusion({
+            ...fiberFusion,
+            to: {
+              ...fiberFusion.to,
+              fibers: data
+            }
+          })
+        }).catch(err => {
+          ///
+        })
+    }
+
+  }, [fiberFusion.from.cableId]);
+
+  useEffect(() => {
+    if (typeof fiberFusion.to.cableId === 'number') {
+      api.get(`fibers/cable/${fiberFusion.to.cableId}`)
+        .then(response => {
+          const { data } = response;
+          setFiberFusion({
+            ...fiberFusion,
+            to: {
+              ...fiberFusion.to,
+              fibers: data
+            }
+          })
+        }).catch(err => {
+          ///
+        })
+    }
+  }, [fiberFusion.to.cableId])
 
   const { hideNewViewModalFusao } = props;
 
   return (
     <Modal
-      show={props.redux.ceo.viewNewFusao.visible}
+      sh
+      ow={props.redux.ceo.viewNewFusao.visible}
       onHide={hideNewViewModalFusao}
       size="lg"
     >
@@ -68,15 +162,58 @@ function ModalFusao(props) {
             >
               <Form.Group as={Col}>
                 <Form.Label>Cabo</Form.Label>
-                <Form.Control
+                <TextField
+                  id="standard-select-currency"
+                  select
+                  label="Cabo"
+                  name="asd"
+                  // className={classes.textField}
+                  // value={tipo}
+                  value={fiberFusion.from.cableId || ""}
+                  // defaultValue={select[0].value}
+                  onChange={e =>
+                    setFiberFusion({
+                      ...fiberFusion,
+                      from: {
+                        ...fiberFusion.from,
+                        cableId: e.target.value
+                      }
+                    })
+                  }
+                  SelectProps={
+                    {
+                      // MenuProps: {
+                      //   className: classes.menu
+                      // }
+                    }
+                  }
+                  helperText="Selecione o cabo 1 da fusão"
+                  margin="normal"
+                  required
+                >
+                  {cables.map(option => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                {/* <Form.Control
                   as="select"
                   value={cableTo}
                   onChange={e => setCableTo(e.target.value)}
-                >
-                  {cables.map(cable => (
+                > */}
+                {/* {cables.map(cable => (
                     <option>{cable}</option>
-                  ))}
-                </Form.Control>
+                  ))} */}
+                {/* {props.fiberfusion.cables.map(cable => (
+                    <option>
+                      {cable.cable.name} {cable.cable.id}
+                    </option>
+                  ))} */}
+                {/* {
+                    () => console.log(props)
+                  } */}
+                {/* </Form.Control> */}
               </Form.Group>
               <Form.Group as={Col}>
                 <Form.Label>Fibra</Form.Label>
@@ -85,9 +222,9 @@ function ModalFusao(props) {
                   value={fiberTo}
                   onChange={e => setFiberTo(e.target.value)}
                 >
-                  {fibers.map(fiber => (
+                  {/* {fibers.map(fiber => (
                     <option>{fiber}</option>
-                  ))}
+                  ))} */}
                 </Form.Control>
               </Form.Group>
             </Form.Row>
@@ -120,9 +257,9 @@ function ModalFusao(props) {
                   value={cableFrom}
                   onChange={e => setCableFrom(e.target.value)}
                 >
-                  {cables.map(cable => (
+                  {/* {cables.map(cable => (
                     <option>{cable}</option>
-                  ))}
+                  ))} */}
                 </Form.Control>
               </Form.Group>
               <Form.Group as={Col}>
@@ -132,9 +269,9 @@ function ModalFusao(props) {
                   value={fiberFrom}
                   onChange={e => setFiberFrom(e.target.value)}
                 >
-                  {fibers.map(fiber => (
+                  {/* {fibers.map(fiber => (
                     <option>{fiber}</option>
-                  ))}
+                  ))} */}
                 </Form.Control>
               </Form.Group>
             </Form.Row>
@@ -159,11 +296,12 @@ function ModalFusao(props) {
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
+  fiberfusion: state.fiberfusion
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...ceoCreators }, dispatch);
+  bindActionCreators({ ...ceoCreators, ...FiberFusionActions }, dispatch);
 
 export default connect(
   mapStateToProps,

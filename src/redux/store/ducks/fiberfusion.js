@@ -20,7 +20,10 @@ export const Types = {
 /**
  * Reducer
  */
-let INITIAL_STATE = {};
+let INITIAL_STATE = {
+  cables: [],
+  fibers: []
+};
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -29,6 +32,18 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         lastCreated: action.payload.fusion
       };
+
+    case Types.SHOW_CABLES_CEO_SUCCESS:
+      return {
+        ...state,
+        cables: action.payload.cables
+      };
+    
+    // case Types.SHOW_FIBERS_CABLE_SUCCESS:
+    //   return {
+    //     ...state,
+    //     fibers
+    //   }
     default:
       return state;
   }

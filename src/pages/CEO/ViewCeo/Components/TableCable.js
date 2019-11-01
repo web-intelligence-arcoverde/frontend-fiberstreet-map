@@ -15,51 +15,51 @@ function ViewFusoes(props) {
   console.log("Informações cable");
   console.log(props);
 
+  const { cables } = props.fiberfusion;
+
   return (
     <Container>
       <Table striped bordered hover responsive="lg">
         <thead>
           <tr>
-            <th>Bandeja</th>
+            {/* <th>Bandeja</th> */}
             <th>Cabo</th>
-            <th>Fibra</th>
-            <th style={{ textAlign: "center" }}>x</th>
-            <th>Fibra</th>
-            <th>Cabo</th>
+            {/* <th>Fibra</th> */}
+            {/* <th style={{ textAlign: "center" }}>x</th> */}
+            <th>Quantidade de Fibras</th>
+            {/* <th>Cabo</th> */}
             <th>Observação</th>
-            <th>Ações</th>
+            {/* <th>Ações</th> */}
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>b01</td>
-            <td>40gf</td>
-            <td>1</td>
-            <td>8</td>
-            <td>dfv</td>
-            <td>33sd</td>
+          {cables.map((cable, index) => (
+            <tr>
+              <td>{cable.cable.name}</td>
+              <td>{cable.cable.fiberAmount}</td>
+              <td>{cable.cable.obs}</td>
 
-            <td>
-              <Button
-                variant="link"
-                style={{
-                  borderTopWidth: "0px",
-                  paddingTop: "0px",
-                  borderLeftWidth: "0px",
-                  paddingLeft: "0px",
-                  paddingBottom: "0px",
-                  paddingRight: "0px",
-                  borderRightWidth: "0px",
-                  borderBottomWidth: "0px",
-                  marginLeft: "5px",
-                  marginRight: "5px"
-                }}
-              >
-                <Delete style={{ color: "#6c757d" }} />
-              </Button>
-            </td>
-          </tr>
+              <td>
+                <Button
+                  variant="link"
+                  style={{
+                    borderTopWidth: "0px",
+                    paddingTop: "0px",
+                    borderLeftWidth: "0px",
+                    paddingLeft: "0px",
+                    paddingBottom: "0px",
+                    paddingRight: "0px",
+                    borderRightWidth: "0px",
+                    borderBottomWidth: "0px",
+                    marginLeft: "5px",
+                    marginRight: "5px"
+                  }}
+                >
+                  <Delete style={{ color: "#6c757d" }} />
+                </Button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
       <div
@@ -79,7 +79,8 @@ function ViewFusoes(props) {
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
+  fiberfusion: state.fiberfusion
 });
 
 const mapDispatchToProps = dispatch =>

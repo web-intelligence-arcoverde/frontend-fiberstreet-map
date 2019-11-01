@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 //Redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
+import { Creators as FiberFusionActions } from "../../../redux/store/ducks/fiberfusion";
 
 //import components
 import TableCeo from "./Components/TableCeo";
@@ -17,6 +18,15 @@ import { Modal, Accordion, Card, ListGroup } from "react-bootstrap";
 const ViewCeo = props => {
   console.log("Informações do CEO");
   console.log(props);
+  const { visible } = props.redux.ceo.viewCeo;
+
+  useEffect(() => {
+    const { data } = props.redux.ceo.viewCeo;
+    if (visible) {
+      const { showCablesCeoRequest } = props;
+      showCablesCeoRequest(data.id);
+    }
+  }, [ props.redux.ceo.viewCeo, visible]);
 
   return (
     <Modal
@@ -112,7 +122,7 @@ const mapStateToProps = state => ({
 
 //Ações
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...ceoCreators }, dispatch);
+  bindActionCreators({ ...ceoCreators, ...FiberFusionActions }, dispatch);
 
 export default connect(
   mapStateToProps,
