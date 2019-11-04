@@ -164,6 +164,17 @@ class Map extends Component {
         data: url
       });
 
+      map.addSource("cto_lotada", {
+        type: 'geojson',
+        data: url
+      });
+
+      
+      map.addSource("cto_cliente_cancelado", {
+        type: 'geojson',
+        data: url
+      })
+
       map.addSource("ceo", {
         type: "geojson",
         data: url
@@ -1026,7 +1037,42 @@ class Map extends Component {
           type: "@cto/LOAD_GJ_SUCCESS",
           payload: { ctos: data }
         });
-        map.getSource("cto").setData(dados);
+
+        // cto_lotada cto_cliente_cancelado
+        let ctos_ativas = [];
+        let ctos_lotadas = [];
+        let ctos_clientes_cancelados = [];
+
+        data.forEach(cto => {
+          if (cto.properties.data.status === 'full') {
+            ctos_lotadas.push(cto)
+          } else if (cto.properties.data.status === 'cli_cancel') {
+            ctos_clientes_cancelados.push(cto)
+          } else if (!cto.properties.data.status || cto.properties.data.status === 'active'){
+            ctos_ativas.push(cto);
+          }
+        })
+
+        const ctos_at = {
+          type: "FeatureCollection",
+          features: ctos_ativas
+        };
+
+        const ctos_cli_can = {
+          type: "FeatureCollection",
+          features: ctos_clientes_cancelados
+        };
+
+        const ctos_lot = {
+          type: 'FeatureCollection',
+          features: ctos_lotadas
+        }
+        map.getSource("cto").setData(ctos_at)
+        map.getSource("cto_lotada").setData(ctos_lot)
+        map.getSource("cto_cliente_cancelado").setData(ctos_cli_can)
+        // end
+
+        // map.getSource("cto").setData(dados);
       });
 
       //Carregar imagens ctos images/CTO_24x24.png
@@ -1045,6 +1091,33 @@ class Map extends Component {
           }
         });
       });
+
+      // cto_lotada cto_cliente_cancelado
+      map.loadImage(require('../../../assets/images/cto_lotada.png'), function (error, image) {
+        if (error) throw error;
+        map.addImage('custom_cto_full', image);
+        map.addLayer({
+          id: 'cto_lotada',
+          type: 'symbol',
+          source: 'cto_lotada',
+          layout: {
+            'icon-image': 'custom_cto_full'
+          }
+        })
+      })
+
+      map.loadImage(require('../../../assets/images/cto_verde.png'), function (error, image) {
+        if (error) throw error;
+        map.addImage('custom_cto_can', image);
+        map.addLayer({
+          id: 'cto_cliente_cancelado',
+          type: 'symbol',
+          source: 'cto_cliente_cancelado',
+          layout: {
+            'icon-image': 'custom_cto_can'
+          }
+        })
+      })
     });
   }
 
