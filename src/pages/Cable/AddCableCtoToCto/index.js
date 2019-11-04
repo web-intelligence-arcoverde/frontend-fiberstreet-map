@@ -4,21 +4,23 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
+import { Creators as MapCreators } from "../../../redux/store/ducks/cabo";
 
 //Components
 import { Modal, Form, Col, Button } from "react-bootstrap/";
 import CloseIcon from "@material-ui/icons/Close";
 
-function ViewCableCtoToCto(props) {
-  const { hideModalCtoToCto } = props;
+function ViewAddCable(props) {
+  const { hideModalAddCable } = props;
 
-  const { visible } = props.redux.cabo.idCtos;
+  const { visible } = props.redux.cabo.idFromTo;
 
-  console.log("Informações");
-  console.log(props.redux);
+  const { idFrom, idTo } = props.redux.cabo.idFromTo;
+
+  const { subDelimitation, delimitation } = props.redux.map;
 
   return (
-    <Modal size="lg" onHide={hideModalCtoToCto} show={visible}>
+    <Modal size="lg" onHide={hideModalAddCable} show={visible}>
       <Modal.Header
         style={{
           justifyContent: "center",
@@ -28,14 +30,14 @@ function ViewCableCtoToCto(props) {
           paddinBottom: "15px"
         }}
       >
-        <Modal.Title>Adicionar fusão</Modal.Title>
+        <Modal.Title>Adicionar Cabo</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         <Form>
           <Form.Row>
             <Form.Group as={Col}>
-              <Form.Label>Bandeja</Form.Label>
+              <Form.Label>Observação</Form.Label>
               <Form.Control type="text" />
             </Form.Group>
           </Form.Row>
@@ -53,12 +55,6 @@ function ViewCableCtoToCto(props) {
             >
               <Form.Group as={Col}>
                 <Form.Label>Cabo</Form.Label>
-                <Form.Control as="select">
-                  <option></option>
-                </Form.Control>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Fibra</Form.Label>
                 <Form.Control as="select">
                   <option></option>
                 </Form.Control>
@@ -92,12 +88,6 @@ function ViewCableCtoToCto(props) {
                   <option></option>
                 </Form.Control>
               </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Fibra</Form.Label>
-                <Form.Control as="select">
-                  <option></option>
-                </Form.Control>
-              </Form.Group>
             </Form.Row>
           </div>
 
@@ -124,9 +114,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...CaboCreators }, dispatch);
+  bindActionCreators({ ...CaboCreators, ...MapCreators }, dispatch);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ViewCableCtoToCto);
+)(ViewAddCable);

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 //Components Importados
 import { Container, Col, Button, Form } from "react-bootstrap/";
+import ViewPhoto from "./PhotoCto";
 
 //Creators do redux
 import { Creators as ctosActions } from "../../../../redux/store/ducks/ctos";
@@ -11,6 +12,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 function Components(props) {
+  const { showModalPhoto } = props;
   const { ctos } = props.redux;
   const { viewCto } = ctos;
   const { data } = viewCto;
@@ -19,6 +21,8 @@ function Components(props) {
   const [model, setModel] = useState(data.model);
   const [address, setAddress] = useState(data.address);
   const [obs, setObs] = useState(data.obs);
+
+  const [status, setStatus] = useState(null);
 
   console.log("Informações da cto");
   console.log(props);
@@ -42,9 +46,23 @@ function Components(props) {
     deleteCtoRequest(data.id);
   }
 
+  function openPhoto() {
+    showModalPhoto();
+  }
+
   return (
     <Container>
       <Form onSubmit={handleSubmit}>
+        <Form.Row>
+          <Form.Group controlId="exampleForm.ControlSelect1">
+            <Form.Label>Status</Form.Label>
+            <Form.Control as="select">
+              <option>Ativa</option>
+              <option>Lotada</option>
+              <option>Cliente cancelado</option>
+            </Form.Control>
+          </Form.Group>
+        </Form.Row>
         <Form.Row>
           <Form.Group as={Col} controlId="formGridEmail">
             <Form.Label>Nome:</Form.Label>
@@ -95,6 +113,22 @@ function Components(props) {
             justifyContent: "flex-end"
           }}
         >
+          <>
+            {status !== null ? (
+              <Button variant="primary" style={{ marginRight: "10px" }}>
+                Mostrar Foto
+              </Button>
+            ) : (
+              <Button
+                variant="primary"
+                style={{ marginRight: "10px" }}
+                onClick={showModalPhoto}
+              >
+                Adicionar Foto
+              </Button>
+            )}
+          </>
+
           <Button variant="info" style={{ marginRight: "10px" }} type="submit">
             Atualizar dados
           </Button>
@@ -103,6 +137,7 @@ function Components(props) {
           </Button>
         </div>
       </Form>
+      <ViewPhoto />
     </Container>
   );
 }

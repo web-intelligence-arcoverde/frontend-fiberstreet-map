@@ -26,7 +26,7 @@ const ViewCeo = props => {
       const { showCablesCeoRequest } = props;
       showCablesCeoRequest(data.id);
     }
-  }, [ props.redux.ceo.viewCeo, visible]);
+  }, [props.redux.ceo.viewCeo, visible]);
 
   return (
     <Modal
@@ -68,26 +68,6 @@ const ViewCeo = props => {
                 </Accordion.Collapse>
               </Card>
 
-              <Card>
-                <Accordion.Toggle
-                  as={Card.Header}
-                  eventKey="1"
-                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
-                >
-                  <h5>Lista de fusões</h5>
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body
-                    style={{
-                      paddingTop: "10px",
-                      paddingLeft: "5px",
-                      paddingBottom: "0px"
-                    }}
-                  >
-                    <TableFusoes />
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
               <Card>
                 <Accordion.Toggle
                   as={Card.Header}

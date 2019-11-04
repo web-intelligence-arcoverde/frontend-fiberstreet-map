@@ -41,7 +41,7 @@ function LeftSelector(props) {
 
   const [dropDownOne, setDropDownOne] = useState(false);
 
-  const { setDelemitationMap } = props;
+  const { setDelimitation } = props;
 
   //Fechar um quando abrir o outro.
   const handleClick = number => {
@@ -133,7 +133,7 @@ function LeftSelector(props) {
                 <Dropdown.Menu>
                   <Dropdown.Item
                     onClick={() => {
-                      setDelemitationMap("perfil");
+                      setDelimitation("perfil");
                     }}
                   >
                     perfil
@@ -163,7 +163,7 @@ function LeftSelector(props) {
                   <Dropdown.Item
                     onClick={() => {
                       //Abre o modal para adicionar um novo cliente
-                      setDelemitationMap("cliente");
+                      setDelimitation("cliente");
                     }}
                   >
                     cliente
@@ -171,7 +171,7 @@ function LeftSelector(props) {
                   <Dropdown.Item
                     onClick={() => {
                       // Aqui selecionaremos o tipo de delimitação do clique no mapa
-                      setDelemitationMap("funcionario");
+                      setDelimitation("funcionario");
                     }}
                   >
                     funcionario
@@ -179,7 +179,7 @@ function LeftSelector(props) {
                   <Dropdown.Item
                     onClick={() => {
                       // Aqui selecionaremos o tipo de delimitação do clique no mapa
-                      setDelemitationMap("provider");
+                      setDelimitation("provider");
                     }}
                   >
                     provedor
@@ -187,7 +187,7 @@ function LeftSelector(props) {
                   <Dropdown.Item
                     onClick={() => {
                       // Aqui selecionaremos o tipo de delimitação do clique no mapa
-                      setDelemitationMap("cto");
+                      setDelimitation("cto");
                     }}
                   >
                     cto
@@ -195,7 +195,7 @@ function LeftSelector(props) {
 
                   <Dropdown.Item
                     onClick={() => {
-                      setDelemitationMap("ceo");
+                      setDelimitation("ceo");
                     }}
                   >
                     ceo

@@ -1,85 +1,82 @@
-/**
- * Types, Reducers e Actions no mesmo .js
- */
 export const Types = {
-  SET_MAP_DELEMITATION: "map/SET_MAP_DELEMITATIO",
+  SET_MAP_DELEMITATION: "map/SET_MAP_DELEMITATION",
 
   SET_SUB_DELEMITATION: "map/SET_SUB_DELEMITATION",
 
-  ADD_COORDENADAS: "map/ADD_COORDENADAS",
+  ADD_COORDINATES: "map/ADD_COORDINATES",
 
-  CAN_ADD_COORD: "map/CAN_ADD_COORD",
+  CAN_ADD_COORDINATES: "map/CAN_ADD_COORDINATES",
 
-  ADD_COORD_CABO: "@map/ADD_COORD_CABO"
+  ADD_COORD_CABLE: "@map/ADD_COORD_CABLE"
 };
 
-/**
- * Reducer
- */
 let INITIAL_STATE = {
-  delimitacao: "default",
-  polyline: [],
-  subDelimitacao: "default"
+  delimitation: "default",
+  subDelimitation: "default",
+  polyline: []
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    /** Delimitações do mapa **/
     case Types.SET_MAP_DELEMITATION:
       return {
         ...state,
-        delimitacao: action.payload.delimitacao
+        delimitation: action.payload.delimitation
       };
     case Types.SET_SUB_DELEMITATION:
       return {
         ...state,
-        subDelimitacao: action.payload.subDelimitacao
+        subDelimitation: action.payload.subDelimitation
       };
-    case Types.ADD_COORDENADAS:
+    /** Delimitações do mapa **/
+
+    case Types.ADD_COORDINATES:
       return { ...state, coordenadas: action.payload.coordenadas };
-    case Types.CAN_ADD_COORD:
+
+    case Types.CAN_ADD_COORDINATES:
       return { ...state, canAddCoordenadas: action.payload.canAddCoordenadas };
 
     // correto
-    case Types.ADD_COORD_CABO:
+    case Types.ADD_COORD_CABLE:
       return { ...state, polyline: action.payload.polyline };
     default:
       return state;
   }
 }
 
-/**
- * Actions
- *
- */
+/** Metodos **/
 export const Creators = {
-  setSubDelemitation: delemitacao => ({
-    type: Types.SET_SUB_DELEMITATION,
-    payload: {
-      subDelimitacao: delemitacao
-    }
-  }),
-  setDelemitationMap: delimitation => ({
+  /** Delimitação{metodos para mudar o nome da delitação}**/
+  setDelimitation: delimitation => ({
     type: Types.SET_MAP_DELEMITATION,
     payload: {
-      delimitacao: delimitation
+      delimitation: delimitation
+    }
+  }),
+
+  setSubDelemitation: delimitation => ({
+    type: Types.SET_SUB_DELEMITATION,
+    payload: {
+      subDelimitation: delimitation
     }
   }),
 
   canAddCoordenadas: boolean => ({
-    type: Types.CAN_ADD_COORD,
+    type: Types.CAN_ADD_COORDINATES,
     payload: {
       canAddCoordenadas: boolean
     }
   }),
   addCoordenadas: coord => ({
-    type: Types.ADD_COORDENADAS,
+    type: Types.ADD_COORDINATES,
     payload: {
       coordenadas: coord
     }
   }),
 
   addCoordCabo: polyline => ({
-    type: Types.ADD_COORD_CABO,
+    type: Types.ADD_COORD_CABLE,
     payload: { polyline }
   })
 };
