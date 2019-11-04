@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 
 //Creators redux
 import { Creators as ceoCreators } from "../../../../redux/store/ducks/ceo";
+import { Creators as mapCreators } from "../../../../redux/store/ducks/map";
+import { Creators as cableCreators } from "../../../../redux/store/ducks/cabo";
 
 //UI-Components
 import { Button, Container, Table } from "react-bootstrap";
@@ -13,9 +15,40 @@ import Delete from "@material-ui/icons/HighlightOff";
 
 function ViewFusoes(props) {
   console.log("Informações cable");
-  console.log(props);
+
+  const { data } = props.redux.ceo.viewCeo;
+
+  const { hideViewModalCeo } = props;
 
   const { cables } = props.fiberfusion;
+
+  function addCabo() {
+    let latitude;
+    let longitude;
+    try {
+      latitude = JSON.parse(data.coordinates).latitude;
+      longitude = JSON.parse(data.coordinates).longitude;
+    } catch (err) {
+      latitude = data.coordinates.latitude;
+      longitude = data.coordinates.longitude;
+    }
+
+    let coord = [longitude, latitude];
+
+    const {
+      addCoordCabo, // setPolyline
+      setSubDelemitation,
+      setIdFrom,
+      setDelimitation
+    } = props;
+
+    setDelimitation("cabo");
+    setSubDelemitation("ceo"); // map - map.delimitacao
+    let arrayDeArray = new Array(coord);
+    addCoordCabo(arrayDeArray); // map - map.polyline
+    setIdFrom(data.id); // cabo - cabo.id
+    hideViewModalCeo();
+  }
 
   return (
     <Container>
@@ -70,7 +103,7 @@ function ViewFusoes(props) {
           marginBottom: "10px"
         }}
       >
-        <Button variant="secondary" type="submit" style={{ width: "100%" }}>
+        <Button variant="secondary" style={{ width: "100%" }} onClick={addCabo}>
           Adicionar um novo cabo
         </Button>
       </div>
@@ -84,7 +117,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...ceoCreators }, dispatch);
+  bindActionCreators(
+    { ...ceoCreators, ...mapCreators, ...cableCreators },
+    dispatch
+  );
 
 export default connect(
   mapStateToProps,

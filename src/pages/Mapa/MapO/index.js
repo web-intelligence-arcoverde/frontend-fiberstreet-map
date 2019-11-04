@@ -282,17 +282,28 @@ class Map extends Component {
   };
 
   handleCeoClickTwoFactor(ceo, longitude, latitude) {
-    if (this.props.redux.map.delimitacao === "cabo") {
-      const { addCoordCabo, setDelemitationMap, showAddCableCeo } = this.props;
-      const { polyline } = this.props.redux.map;
-      let newPolyline = [...polyline, [longitude, latitude]];
+    const { delimitation, subDelimitation } = this.props.redux.map;
+    if (delimitation === "cabo") {
+      const { addCoordCabo, showModalAddCable, setIdTo } = this.props;
 
+      const { setDelimitation, setSubDelemitation } = this.props;
+
+      const { polyline } = this.props.redux.map;
+
+      let newPolyline = [...polyline, [longitude, latitude]];
       addCoordCabo(newPolyline);
-      showAddCableCeo(ceo.id);
-      setDelemitationMap("default");
+
+      if (subDelimitation === "cto") {
+        setIdTo(ceo.id);
+        showModalAddCable();
+      } else if (subDelimitation === "ceo") {
+        setIdTo(ceo.id);
+        showModalAddCable();
+      }
+      setDelimitation("default");
+      setSubDelemitation("default");
     } else {
       const { showViewModalCeo } = this.props;
-
       showViewModalCeo(ceo);
     }
   }
@@ -308,34 +319,39 @@ class Map extends Component {
   };
 
   handleCtoClickTwoFactor(cto, longitude, latitude) {
-    if (this.props.redux.map.delimitacao === "cabo") {
-      const {
-        addCoordCabo,
-        setDelemitationMap,
-        showModalCtoToCto,
-        showAddCtoCable,
-        setSubDelemitation,
-        setIdTo
-      } = this.props;
-      const { polyline } = this.props.redux.map;
+    const { delimitation, polyline, subDelimitation } = this.props.redux.map;
+
+    if (delimitation === "cabo") {
+      const { setDelimitation, setSubDelemitation } = this.props;
+      const { addCoordCabo, setIdTo, showModalAddCable } = this.props;
+      const { showAddCtoCable } = this.props;
+
       let newPolyline = [...polyline, [longitude, latitude]];
 
-      if (this.props.redux.map.subDelimitacao === "cto") {
-        addCoordCabo(newPolyline);
-        setIdTo(cto.id);
-        showModalCtoToCto();
-        setSubDelemitation("default");
-      } else {
-        addCoordCabo(newPolyline);
-        showAddCtoCable(cto.id);
-        setDelemitationMap("default");
-      }
-    } else {
-      const { showViewModalCto } = this.props;
+      addCoordCabo(newPolyline);
 
-      // const { getSplitterByCto } = this.props;
-      // Inserir o método do redux-sagas para obter o splitter e os clientes desta cto
-      const { loadSplitterAndClientByCtoRequest } = this.props;
+      // CTO para CTO
+      if (subDelimitation === "cto") {
+        setIdTo(cto.id);
+        showModalAddCable();
+      }
+      //CEO para CTO
+      else if (subDelimitation === "ceo") {
+        setIdTo(cto.id);
+        showModalAddCable();
+      }
+      //Cliente para CTO
+      else {
+        showAddCtoCable(cto.id);
+      }
+      setDelimitation("default");
+      setSubDelemitation("default");
+    } else {
+      //Abrir modal com as informações da cto {informações, clientes e splitters}
+      const {
+        showViewModalCto,
+        loadSplitterAndClientByCtoRequest
+      } = this.props;
       loadSplitterAndClientByCtoRequest(cto);
       showViewModalCto(cto);
     }
@@ -362,7 +378,7 @@ class Map extends Component {
   checkDelemitation(coordinates) {
     const { map } = this.props.redux;
 
-    switch (map.delimitacao) {
+    switch (map.delimitation) {
       case "perfil":
         break;
       case "cliente":
@@ -389,33 +405,33 @@ class Map extends Component {
   }
 
   async openNewModalCtos(coordinates) {
-    const { showNewViewModalCto, setDelemitationMap } = this.props;
+    const { showNewViewModalCto, setDelimitation } = this.props;
     await showNewViewModalCto(coordinates);
-    setDelemitationMap("default");
+    setDelimitation("default");
   }
 
   openNewModalCeo(coordinates) {
-    const { showNewViewModalCeo, setDelemitationMap } = this.props;
+    const { showNewViewModalCeo, setDelimitation } = this.props;
     showNewViewModalCeo(coordinates);
-    setDelemitationMap("default");
+    setDelimitation("default");
   }
 
   async openNewModalClient(coordinates) {
-    const { setDelemitationMap, showNewModalClient } = this.props;
+    const { setDelimitation, showNewModalClient } = this.props;
     await showNewModalClient(coordinates);
-    setDelemitationMap("default");
+    setDelimitation("default");
   }
 
   openNewModalFuncionario() {
-    const { showModalNewUser, setDelemitationMap } = this.props;
+    const { showModalNewUser, setDelimitation } = this.props;
     showModalNewUser();
-    setDelemitationMap("default");
+    setDelimitation("default");
   }
 
   openNewModalProvider() {
-    const { showModalNewProvider, setDelemitationMap } = this.props;
+    const { showModalNewProvider, setDelimitation } = this.props;
     showModalNewProvider();
-    setDelemitationMap("default");
+    setDelimitation("default");
   }
 
   /** Adiciona coordenadas ao JSON de coordenadas de polyline contido no redux store

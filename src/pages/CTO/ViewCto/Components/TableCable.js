@@ -47,11 +47,12 @@ function viewCable(props) {
       addCoordCabo, // setPolyline
       setSubDelemitation,
       setIdFrom,
-      setDelemitationMap
+      setDelimitation
     } = props;
 
-    setDelemitationMap("cabo");
+    setDelimitation("cabo");
     setSubDelemitation("cto"); // map - map.delimitacao
+    setIdFrom(data.id);
     let arrayDeArray = new Array(coord);
     addCoordCabo(arrayDeArray); // map - map.polyline
     setIdFrom(data.id); // cabo - cabo.id

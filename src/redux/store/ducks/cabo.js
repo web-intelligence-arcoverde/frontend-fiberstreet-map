@@ -4,21 +4,6 @@ export const Types = {
 
   SHOW_MODAL_NEW_CABO_RESERVA: "cabo/SHOW_MODAL_NEW_CABO_RESERVA",
   HIDE_MODAL_NEW_CABO_RESERVA: "cabo/HIDE_MODAL_NEW_CABO_RESERVA",
-
-  /** adicionar cabo de uma cto para outra [inicio] **/
-
-  // ID da cto [Lado que vai receber { FROM=PARA }]
-  CABLE_CTO_FROM_ID: "cabo/CABLE_CTO_FROM_ID",
-
-  // ID da cto [ Lado que vai sair { TO=DE } ]
-  CABLE_CTO_TO_ID: "cabo/CABLE_CTO_TO_ID",
-
-  /** manipulação da modal **/
-  SHOW_MODAL_NEW_CABO_CTO_TO_OTHER: "cabo/SHOW_MODAL_NEW_CABO_CTO_TO_OTHER",
-  HIDE_MODAL_NEW_CABO_CTO_TO_OTHER: "cabo/HIDE_MODAL_NEW_CTO_TO_OTHER",
-
-  /** adicionar cabo de uma cto para outra [fim] **/
-
   // Creating
 
   ADD_CLIENTE_ID: "ADD_ID/cliente",
@@ -26,7 +11,21 @@ export const Types = {
   ADD_NEW_CABLE_TO_CTO_ID: "cable/ADD_NEW_CABLE_TO_CTO_ID",
 
   CREATE_CABLE_REQUEST: "@cable/CREATE_CABLE_REQUEST",
-  CREATE_CABLE_SUCCESS: "@cable/CREATE_CABLE_SUCCESS"
+  CREATE_CABLE_SUCCESS: "@cable/CREATE_CABLE_SUCCESS",
+
+  /** adicionar cabo de uma cto para [cto ou ceo] **/
+
+  // ID da cto [Lado que vai receber { FROM=DE }]
+  CABLE_CTO_ID_FROM: "cabo/CABLE_CTO_ID_FROM",
+
+  // ID da {ceo ou cto} [ Lado que vai sair { TO=PARA } ]
+  CABLE_OTHER_ID_TO: "cabo/CABLE_OTHER_ID_TO",
+
+  /** manipulação da modal **/
+  SHOW_MODAL_NEW_CABO_CTO_CEO: "cabo/SHOW_MODAL_NEW_CABO_CTO_CEO",
+  HIDE_MODAL_NEW_CABO_CTO_CEO: "cabo/HIDE_MODAL_NEW_CABO_CTO_CEO"
+
+  /** adicionar cabo de uma cto para outra [fim] **/
 };
 
 const INITIAL = {
@@ -47,8 +46,8 @@ const INITIAL = {
     visible: false
   },
 
-  //ID's da ctos [Adicionar cabo de uma cto para outra]
-  idCtos: {
+  //Obter o cabo da {cto ou ceo} para=from {ceo ou cto}
+  idFromTo: {
     visible: false,
     idFrom: null,
     idTo: null
@@ -74,33 +73,33 @@ export default function(state = INITIAL, action) {
     case Types.ADD_CLIENTE_ID:
       return { ...state, newCto: { ...state.newCto, id: action.payload.id } };
 
-    // ID da cto [ Lado que vai sair { TO=DE } ]
-    case Types.CABLE_CTO_TO_ID:
+    // ID da cto [ Lado que vai sair { FROM=DE } ]
+    case Types.CABLE_CTO_ID_FROM:
       return {
         ...state,
-        idCtos: {
-          ...state.idCtos,
-          idTo: action.payload.id
-        }
-      };
-    // ID da cto [Lado que vai receber { FROM=PARA }]
-    case Types.CABLE_CTO_FROM_ID:
-      return {
-        ...state,
-        idCtos: {
-          ...state.idCtos,
+        idFromTo: {
+          ...state.idFromTo,
           idFrom: action.payload.id
         }
       };
-    /** Abrir Modal [cto] to [cto] **/
-    case Types.SHOW_MODAL_NEW_CABO_CTO_TO_OTHER:
+    // ID da {cto ou ceo} [Lado que vai receber { TO=PARA }]
+    case Types.CABLE_OTHER_ID_TO:
       return {
         ...state,
-        idCtos: { ...state.idCtos, visible: true }
+        idFromTo: {
+          ...state.idFromTo,
+          idTo: action.payload.id
+        }
+      };
+    /** Abrir Modal [cto] to [cto] **/
+    case Types.SHOW_MODAL_NEW_CABO_CTO_CEO:
+      return {
+        ...state,
+        idFromTo: { ...state.idFromTo, visible: true }
       };
     /** Fechar Modal [cto] to [cto] **/
-    case Types.HIDE_MODAL_NEW_CABO_CTO_TO_OTHER:
-      return { ...state, idCtos: { visible: false } };
+    case Types.HIDE_MODAL_NEW_CABO_CTO_CEO:
+      return { ...state, idFromTo: { visible: false } };
 
     default:
       return state;
@@ -116,24 +115,24 @@ export default function(state = INITIAL, action) {
 export const Creators = {
   //Id da cto que vai sair o cabo [FROM]
   setIdFrom: id => ({
-    type: Types.CABLE_CTO_FROM_ID,
+    type: Types.CABLE_CTO_ID_FROM,
     payload: { id }
   }),
 
   // Id da cto que vai receber o cabo [TO]
   setIdTo: id => ({
-    type: Types.CABLE_CTO_TO_ID,
+    type: Types.CABLE_OTHER_ID_TO,
     payload: { id }
   }),
 
   /** Abrir Modal [cto] to [cto] **/
-  showModalCtoToCto: () => ({
-    type: Types.SHOW_MODAL_NEW_CABO_CTO_TO_OTHER
+  showModalAddCable: () => ({
+    type: Types.SHOW_MODAL_NEW_CABO_CTO_CEO
   }),
 
   /** Fechar Modal [cto] to [cto] **/
-  hideModalCtoToCto: () => ({
-    type: Types.HIDE_MODAL_NEW_CABO_CTO_TO_OTHER
+  hideModalAddCable: () => ({
+    type: Types.HIDE_MODAL_NEW_CABO_CTO_CEO
   }),
 
   addNewCableCtoId: id => ({
