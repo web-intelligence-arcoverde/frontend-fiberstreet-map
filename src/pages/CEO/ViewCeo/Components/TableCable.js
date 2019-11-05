@@ -50,6 +50,10 @@ function ViewFusoes(props) {
     hideViewModalCeo();
   }
 
+  function deleteCable(index) {
+    console.log(index);
+  }
+
   return (
     <Container>
       <Table striped bordered hover responsive="lg">
@@ -88,7 +92,10 @@ function ViewFusoes(props) {
                     marginRight: "5px"
                   }}
                 >
-                  <Delete style={{ color: "#6c757d" }} />
+                  <Delete
+                    style={{ color: "#6c757d" }}
+                    onClick={deleteCable(index)}
+                  />
                 </Button>
               </td>
             </tr>

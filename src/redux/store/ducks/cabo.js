@@ -13,6 +13,9 @@ export const Types = {
   CREATE_CABLE_REQUEST: "@cable/CREATE_CABLE_REQUEST",
   CREATE_CABLE_SUCCESS: "@cable/CREATE_CABLE_SUCCESS",
 
+  DELETE_CABLE_REQUEST: "@cable/DELETE_CABLE_REQUEST",
+  DELETE_CABLE_SUCCESS: "@cable/DELETE_CABLE_SUCCESS",
+
   /** adicionar cabo de uma cto para [cto ou ceo] **/
 
   // ID da cto [Lado que vai receber { FROM=DE }]
@@ -51,7 +54,8 @@ const INITIAL = {
     visible: false,
     idFrom: null,
     idTo: null
-  }
+  },
+  objectTo: {}
 };
 
 export default function(state = INITIAL, action) {
@@ -95,6 +99,7 @@ export default function(state = INITIAL, action) {
     case Types.SHOW_MODAL_NEW_CABO_CTO_CEO:
       return {
         ...state,
+        objectTo: action.payload,
         idFromTo: { ...state.idFromTo, visible: true }
       };
     /** Fechar Modal [cto] to [cto] **/
@@ -119,6 +124,11 @@ export const Creators = {
     payload: { id }
   }),
 
+  setObject: name => ({
+    type: Types.OBJECT_TO,
+    payload: { name }
+  }),
+
   // Id da cto que vai receber o cabo [TO]
   setIdTo: id => ({
     type: Types.CABLE_OTHER_ID_TO,
@@ -126,8 +136,9 @@ export const Creators = {
   }),
 
   /** Abrir Modal [cto] to [cto] **/
-  showModalAddCable: () => ({
-    type: Types.SHOW_MODAL_NEW_CABO_CTO_CEO
+  showModalAddCable: type => ({
+    type: Types.SHOW_MODAL_NEW_CABO_CTO_CEO,
+    payload: { type }
   }),
 
   /** Fechar Modal [cto] to [cto] **/
@@ -167,6 +178,16 @@ export const Creators = {
 
   createCableSuccess: cable => ({
     type: Types.CREATE_CABLE_SUCCESS,
+    payload: { cable }
+  }),
+
+  deleteCableRequest: cable => ({
+    type: Types.DELETE_CABLE_REQUEST,
+    payload: { cable }
+  }),
+
+  deleteCableSuccess: cable => ({
+    type: Types.DELETE_CABLE_SUCCESS,
     payload: { cable }
   }),
 

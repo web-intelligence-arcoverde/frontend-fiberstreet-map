@@ -13,9 +13,7 @@ import CloseIcon from "@material-ui/icons/Close";
 function ViewAddCable(props) {
   const { hideModalAddCable } = props;
 
-  const { visible } = props.redux.cabo.idFromTo;
-
-  const { idFrom, idTo } = props.redux.cabo.idFromTo;
+  const { visible, idFrom, idTo } = props.redux.cabo.idFromTo;
 
   const { subDelimitation, delimitation } = props.redux.map;
 

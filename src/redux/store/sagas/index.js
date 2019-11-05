@@ -28,7 +28,16 @@ import { Types as SplitterTypes } from "../ducks/splitter";
 import { createSplitter, updateSplitter, deleteSplitter } from "./splitter";
 
 import { Types as FiberFusionTypes } from "../ducks/fiberfusion";
-import { createFusion, deleteFusion, updateFusion, showFibersCable, showCablesCeo } from "./fiberfusion";
+import {
+  createFusion,
+  deleteFusion,
+  updateFusion,
+  showFibersCable,
+  showCablesCeo
+} from "./fiberfusion";
+
+import { Types as CablesTypes } from "../ducks/cabo";
+import { createCable, deleteCable } from "./cabo";
 
 /**  O * diz que estamos criando uma função generator
  * O generator é a maneira de lidarmos com assincronismo
@@ -76,6 +85,10 @@ export default function* rootSaga() {
       CtoTypes.LOAD_SPLITTER_CLIENT_BY_CTO_REQUEST,
       loadSplitterAndClient
     ),
+
+    //Cable
+    takeLatest(CablesTypes.CREATE_CABLE_REQUEST, createCable),
+    takeLatest(CablesTypes.DELETE_CABLE_REQUEST, deleteCable),
 
     // FiberFusions
     takeLatest(FiberFusionTypes.CREATE_REQUEST, createFusion),

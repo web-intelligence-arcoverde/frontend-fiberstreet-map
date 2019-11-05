@@ -52,7 +52,7 @@ function viewCable(props) {
 
     setDelimitation("cabo");
     setSubDelemitation("cto"); // map - map.delimitacao
-    setIdFrom(data.id);
+
     let arrayDeArray = new Array(coord);
     addCoordCabo(arrayDeArray); // map - map.polyline
     setIdFrom(data.id); // cabo - cabo.id
