@@ -26,9 +26,11 @@ export const Types = {
 
   /** manipulação da modal **/
   SHOW_MODAL_NEW_CABO_CTO_CEO: "cabo/SHOW_MODAL_NEW_CABO_CTO_CEO",
-  HIDE_MODAL_NEW_CABO_CTO_CEO: "cabo/HIDE_MODAL_NEW_CABO_CTO_CEO"
+  HIDE_MODAL_NEW_CABO_CTO_CEO: "cabo/HIDE_MODAL_NEW_CABO_CTO_CEO",
 
   /** adicionar cabo de uma cto para outra [fim] **/
+
+  ADD_REL_CABLE: '@cable/ADD_REL'
 };
 
 const INITIAL = {
@@ -195,5 +197,10 @@ export const Creators = {
   addCableClientId: id => ({
     type: Types.ADD_CLIENTE_ID,
     payload: { id }
+  }),
+
+  saveRel: (typeOne, typeTwo, relOne, relTwo) => ({
+    type: Types.ADD_REL_CABLE,
+    payload: { typeOne, typeTwo, relOne, relTwo }
   })
 };

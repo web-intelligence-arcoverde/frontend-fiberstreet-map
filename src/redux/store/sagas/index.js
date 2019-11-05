@@ -27,6 +27,9 @@ import { loadSplitters, addDrop } from "./drop";
 import { Types as SplitterTypes } from "../ducks/splitter";
 import { createSplitter, updateSplitter, deleteSplitter } from "./splitter";
 
+import { Types as CableTypes } from '../ducks/cabo';
+import { addRelCable } from './cabo';
+
 import { Types as FiberFusionTypes } from "../ducks/fiberfusion";
 import {
   createFusion,
@@ -95,7 +98,9 @@ export default function* rootSaga() {
     takeLatest(FiberFusionTypes.DELETE_REQUEST, deleteFusion),
     takeLatest(FiberFusionTypes.UPDATE_REQUEST, updateFusion),
     takeLatest(FiberFusionTypes.SHOW_FIBERS_CABLE_REQUEST, showFibersCable),
-    takeLatest(FiberFusionTypes.SHOW_CABLES_CEO_REQUEST, showCablesCeo)
+    takeLatest(FiberFusionTypes.SHOW_CABLES_CEO_REQUEST, showCablesCeo),
+
+    takeLatest(CableTypes.ADD_REL_CABLE, addRelCable)
   ]);
 }
 
