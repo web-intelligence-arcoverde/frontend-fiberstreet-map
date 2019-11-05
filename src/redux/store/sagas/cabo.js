@@ -2,9 +2,9 @@ import { call, put } from "redux-saga/effects";
 
 import api from "../../../services/api";
 
-import { actions as ToastrActions } from "react-redux-toastr";
+import { actions as ToastrActions, toastr } from "react-redux-toastr";
 
-export function* store({ payload }) {
+export function* createCable({ payload }) {
   //alert(JSON.stringify(payload)) //-- Teste por favor antes de enviar a requisição para o servidor
   try {
     yield call([api, "post"], "cables", payload);
@@ -26,5 +26,15 @@ export function* index(action) {
       title: "Erro ao obter cabos",
       message: "Por favor, tente novamente"
     });
+  }
+}
+
+export function* deleteCable({ payload }) {
+  try {
+    yield call([api, "delete"], `cables/${payload.id}`);
+
+    yield toastr.success("Delete", "Sucesso ao apagar o cabo");
+  } catch (err) {
+    yield toastr.error("Erro", "Falha ao exluir o cabo");
   }
 }
