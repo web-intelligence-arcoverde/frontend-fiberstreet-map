@@ -30,24 +30,21 @@ export function* index(action) {
 }
 
 export function* addRelCable({ payload }) {
-  const { typeOne, typeTwo, relOne, relTwo } = payload;
+  const { typeOne, typeTwo, relOne, relTwo, cable } = payload;
 
   try {
+    const response = yield call(api.post, "/cables/relationship", payload);
 
-    const response = yield call(api.post, '/cables/relationship', payload);
-    
     // typeOne, typeTwo, relOne, relTwo;
     // Verificar que tipo de relaçcao esta sendo criada e criar
-  } catch (err) {
-
+  } catch (err) {}
+}
 
 export function* deleteCable({ payload }) {
   try {
     yield call([api, "delete"], `cables/${payload.id}`);
-
     yield toastr.success("Delete", "Sucesso ao apagar o cabo");
   } catch (err) {
     yield toastr.error("Erro", "Falha ao exluir o cabo");
-
   }
 }

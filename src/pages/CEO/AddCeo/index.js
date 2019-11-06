@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 //Components
 import { Modal, Form, Button } from "react-bootstrap";
 
-// redux
+//Redux
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-//Creators redux
+//Creators
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
 
 function AddCeo(props) {
@@ -16,8 +16,6 @@ function AddCeo(props) {
 
   const [name, setName] = useState("");
   const [model, setModel] = useState("");
-  const [coordinates, setCoordinates] = useState("");
-
   const [observacao, setObservacao] = useState("");
   const [type, setType] = useState("");
   const [address, setAddress] = useState("");
@@ -53,14 +51,16 @@ function AddCeo(props) {
   }
 
   return (
-    <Modal
-      show={viewNewCeo.visible}
-      onHide={HideNewViewModalCeo}
-      style={{ overflow: "scroll" }}
-    >
+    <Modal show={viewNewCeo.visible} onHide={HideNewViewModalCeo}>
       <Form>
-        <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
-          <Modal.Title>Cadastrar CEO</Modal.Title>
+        <Modal.Header
+          style={{
+            justifyContent: "center",
+            backgroundColor: "#ffc107",
+            color: "#6c757d"
+          }}
+        >
+          <Modal.Title>Cadastrar Caixa de Emenda Óptica</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -126,7 +126,7 @@ function AddCeo(props) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={HideNewViewModalCeo}>
+          <Button variant="danger" onClick={HideNewViewModalCeo}>
             Fechar
           </Button>
 

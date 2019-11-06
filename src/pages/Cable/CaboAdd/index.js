@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 
-//API
-import api from "../../../services/api";
 import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
 import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
 import { Creators as MapCreators } from "../../../redux/store/ducks/map";
@@ -43,19 +41,6 @@ function CaboAdd(props) {
       coordinates //: coordinatesStrinfigied
     };
     const { addCoordCabo } = props;
-    // addCoordCabo(null);
-    // Irá para próxima etapa
-    // await api
-    //   .post("/cabo/add", cabo)
-    //   .then(response => {
-    //     console.tron.log(`API => Cabo/ADD: ${JSON.stringify(response)}`);
-    //     alert("Cabo armazenado com suceso");
-    //     setNome("");
-    //     setModelo("");
-    //     addCoordCabo([]);
-    //     hideAddCaboModal();
-    //   })
-    //   .catch(err => console.tron.warn(`err -> API => Cabo/ADD: ${err}`));
     setNome("");
     setModelo("");
     addCoordCabo([]);
@@ -65,7 +50,6 @@ function CaboAdd(props) {
       drop: cabo,
       cto_id: newCabo.ctoId
     };
-    console.log(props);
     showDropAddModalRequest(dropNdCtoId);
   }
 
@@ -94,14 +78,21 @@ function CaboAdd(props) {
     <Container>
       <Modal show={newCabo.isVisible} onHide={handleHideModal}>
         <Form onSubmit={handleSubmit}>
-          <Modal.Header>
-            <Modal.Title>Cabo</Modal.Title>
+          <Modal.Header
+            style={{
+              justifyContent: "center",
+              backgroundColor: "#F7D358",
+              color: "#6c757d"
+            }}
+          >
+            <Modal.Title>Adicionar cabo</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
             <Form.Group>
               <Form.Label>Nome do cabo:</Form.Label>
               <Form.Control
+                required
                 value={nome}
                 onChange={e => setNome(e.target.value)}
                 type="text"
@@ -111,6 +102,7 @@ function CaboAdd(props) {
             <Form.Group>
               <Form.Label>Modelo do cabo:</Form.Label>
               <Form.Control
+                required
                 value={modelo}
                 onChange={e => setModelo(e.target.value)}
                 type="text"
@@ -120,6 +112,7 @@ function CaboAdd(props) {
             <Form.Group>
               <Form.Label>Quantidade de fibras:</Form.Label>
               <Form.Control
+                required
                 value={fibra}
                 onChange={e => setFibra(e.target.value)}
                 type="number"
@@ -128,10 +121,10 @@ function CaboAdd(props) {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="warning" onClick={handleClose}>
+            <Button variant="danger" onClick={handleClose}>
               Sair
             </Button>
-            <Button variant="warning" type="submit" onClick={handleClose}>
+            <Button variant="secondary" type="submit" onClick={handleClose}>
               Salvar
             </Button>
           </Modal.Footer>

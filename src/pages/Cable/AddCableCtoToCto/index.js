@@ -1,30 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
-import { Creators as MapCreators } from "../../../redux/store/ducks/cabo";
+import { Creators as MapCreators } from "../../../redux/store/ducks/map";
 
 //Components
 import { Modal, Form, Col, Button } from "react-bootstrap/";
 import CloseIcon from "@material-ui/icons/Close";
 
 function ViewAddCable(props) {
-  const { hideModalAddCable } = props;
-
-  const { visible } = props.redux.cabo.idFromTo;
-
   const [cableName, setCableName] = useState("");
   const [fiberAmount, setFiberAmount] = useState("");
   const [cableType, setCableType] = useState("");
   const [obs, setObs] = useState("");
 
   const { objectTo } = props.redux.cabo;
-
   const { idFrom, idTo } = props.redux.cabo.idFromTo;
+  const { subDelimitation } = props.redux.map;
+  const { setDelimitation, setSubDelemitation } = props;
+  const { hideModalAddCable } = props;
+  const { visible } = props.redux.cabo.idFromTo;
 
-  const { subDelimitation, delimitation } = props.redux.map;
+  function hideModal() {
+    hideModalAddCable();
+    setDelimitation("default");
+    setSubDelemitation("default");
+  }
+
+  console.log("Informações cabos");
+  console.log(props);
+
   /**
    * ceo e cto
    * delimitation ceo
@@ -33,11 +40,14 @@ function ViewAddCable(props) {
   function handleSubmit(e) {
     e.preventDefault();
 
+    const { polyline } = props.redux.map;
+
     const cable = {
       fiberAmount,
       name: cableName,
       type: cableType,
-      obs: obs
+      obs: obs,
+      coordinates: JSON.stringify(polyline)
     };
 
     // subDelimitation, delimitation
@@ -54,7 +64,7 @@ function ViewAddCable(props) {
           cto_id: idTo,
           obs
         };
-        saveRel("cto", "cto", rel_cto, rel_cto2);
+        saveRel("cto", "cto", rel_cto, rel_cto2, cable);
         // CTO P CEO
       } else {
         const rel_cto = {
@@ -65,7 +75,7 @@ function ViewAddCable(props) {
           ceo_id: idTo,
           obs
         };
-        saveRel("cto", "ceo", rel_cto, rel_ceo);
+        saveRel("cto", "ceo", rel_cto, rel_ceo, cable);
         // save
       }
     } else {
@@ -79,7 +89,7 @@ function ViewAddCable(props) {
           ceo_id: idTo,
           obs
         };
-        saveRel("ceo", "ceo", rel_ceo, rel_ceo_2);
+        saveRel("ceo", "ceo", rel_ceo, rel_ceo_2, cable);
         // save
       } else {
         // CEO p CTO
@@ -91,14 +101,16 @@ function ViewAddCable(props) {
           cto_id: idTo,
           obs
         };
-        saveRel("ceo", "cto", rel_ceo, rel_cto);
+
+        saveRel("ceo", "cto", rel_ceo, rel_cto, cable);
         // Save
       }
     }
+    hideModal();
   }
 
   return (
-    <Modal size="lg" onHide={hideModalAddCable} show={visible}>
+    <Modal size="lg" onHide={hideModal} show={visible}>
       <Modal.Header
         style={{
           justifyContent: "center",

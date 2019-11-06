@@ -213,8 +213,8 @@ function ViewClient(props) {
                 <ListGroup.Item>
                   <Field
                     required
-                    minLength="5"
-                    maxLength="100"
+                    maxLength="18"
+                    minLength="14"
                     component={InputField}
                     name={"CPF:"}
                     type={"text"}

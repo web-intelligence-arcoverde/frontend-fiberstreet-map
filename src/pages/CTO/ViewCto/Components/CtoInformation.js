@@ -24,9 +24,6 @@ function Components(props) {
 
   const [status, setStatus] = useState(null);
 
-  console.log("Informações da cto");
-  console.log(props);
-
   //Atualizar CTO
   function handleSubmit(e) {
     e.preventDefault();
@@ -35,7 +32,8 @@ function Components(props) {
       name: name,
       model: model,
       address: address,
-      obs: obs
+      obs: obs,
+      status: status
     };
     updateCtoRequest(updateCto, data.id);
   }
@@ -56,7 +54,11 @@ function Components(props) {
         <Form.Row>
           <Form.Group controlId="exampleForm.ControlSelect1">
             <Form.Label>Status</Form.Label>
-            <Form.Control as="select">
+            <Form.Control
+              as="select"
+              value={status}
+              onChange={e => setStatus(e.target.value)}
+            >
               <option>Ativa</option>
               <option>Lotada</option>
               <option>Cliente cancelado</option>

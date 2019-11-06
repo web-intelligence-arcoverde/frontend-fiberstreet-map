@@ -1,26 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-import "./styles.css";
-
-// redux
+//Redux connect Actions
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-//Creators redux
+//Creators
 import { Creators as ctoCreators } from "../../../redux/store/ducks/ctos";
 
 //UI-Components
 import { Modal, Button, Form } from "react-bootstrap";
-
-//  Vamos fazer aqui uma renderização condicional
-//  para ADIÇÃO/AMOSTRAGEM de imagens
 
 function AddNewCto(props) {
   const { HideNewViewModalCto } = props;
   const { viewNewCto } = props.redux.ctos;
 
   const [name, setName] = useState("");
-  const [coordinates, setCoordinates] = useState("");
   const [observacao, setObservacao] = useState("");
   const [model, setModel] = useState("");
   const [address, setAddress] = useState("");
@@ -45,14 +39,16 @@ function AddNewCto(props) {
   }
 
   return (
-    <Modal
-      show={viewNewCto.visible}
-      onHide={HideNewViewModalCto}
-      style={{ overflow: "scroll" }}
-    >
+    <Modal show={viewNewCto.visible} onHide={HideNewViewModalCto}>
       <Form onSubmit={handleSubmit}>
-        <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
-          <Modal.Title>Cadastrar CTO</Modal.Title>
+        <Modal.Header
+          style={{
+            justifyContent: "center",
+            backgroundColor: "#ffc107",
+            color: "#6c757d"
+          }}
+        >
+          <Modal.Title>Caixa Terminal Óptica</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -60,8 +56,8 @@ function AddNewCto(props) {
             <Form.Label>Nome:</Form.Label>
             <Form.Control
               required
-              minLength="15"
-              maxLength="255"
+              minLength="5"
+              maxLength="150"
               type="text"
               value={name}
               onChange={e => setName(e.target.value)}
@@ -72,8 +68,8 @@ function AddNewCto(props) {
             <Form.Label>Endereço:</Form.Label>
             <Form.Control
               required
-              minLength="15"
-              maxLength="255"
+              minLength="5"
+              maxLength="150"
               type="text"
               value={address}
               onChange={e => setAddress(e.target.value)}
@@ -84,19 +80,19 @@ function AddNewCto(props) {
             <Form.Label>Modelo:</Form.Label>
             <Form.Control
               required
-              minLength="10"
-              maxLength="100"
+              minLength="5"
+              maxLength="50"
               type="text"
               value={model}
               onChange={e => setModel(e.target.value)}
             />
           </Form.Group>
 
-          <Form.Group controlId="exampleForm.ControlTextarea1">
+          <Form.Group>
             <Form.Label>Observações:</Form.Label>
             <Form.Control
               required
-              minLength="30"
+              minLength="5"
               maxLength="255"
               as="textarea"
               rows="3"
@@ -107,7 +103,7 @@ function AddNewCto(props) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={HideNewViewModalCto}>
+          <Button variant="danger" onClick={HideNewViewModalCto}>
             Fechar
           </Button>
 
