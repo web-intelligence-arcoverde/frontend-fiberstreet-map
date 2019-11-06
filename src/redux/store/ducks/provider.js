@@ -2,8 +2,8 @@
  * TIPOS
  */
 export const Types = {
-  SHOWMODALNEWPROVIDER: "provider/SHOW_MODAL_NEW_PROVIDER",
-  HIDEMODALNEWPROVIDER: "provider/HIDE_MODAL_NEW_PROVIDER",
+  SHOW_MODAL_NEW_PROVIDER: "provider/SHOW_MODAL_NEW_PROVIDER",
+  HIDE_MODAL_NEW_PROVIDER: "provider/HIDE_MODAL_NEW_PROVIDER",
 
   GET_PROVIDERS_REQUEST: "@provider/GET_PROVIDERS_REQ",
   GET_PROVIDERS_SUCCESS: "@provider/GET_PROVIDERS_SUC",
@@ -30,14 +30,14 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case Types.SHOWMODALNEWPROVIDER:
+    case Types.SHOW_MODAL_NEW_PROVIDER:
       return {
         ...state,
         viewNewProvider: {
           visible: true
         }
       };
-    case Types.HIDEMODALNEWPROVIDER:
+    case Types.HIDE_MODAL_NEW_PROVIDER:
       return {
         ...state,
         viewNewProvider: {
@@ -64,16 +64,10 @@ export default function(state = initialState, action) {
  */
 export const Creators = {
   showModalNewProvider: () => ({
-    type: Types.SHOWMODALNEWPROVIDER,
-    payload: {
-      visible: true
-    }
+    type: Types.SHOW_MODAL_NEW_PROVIDER
   }),
   hideModalNewProvider: () => ({
-    type: Types.HIDEMODALNEWPROVIDER,
-    payload: {
-      visible: false
-    }
+    type: Types.HIDE_MODAL_NEW_PROVIDER
   }),
 
   getProvidersRequest: () => ({

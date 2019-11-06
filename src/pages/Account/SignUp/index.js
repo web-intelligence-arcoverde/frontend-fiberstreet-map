@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -12,43 +12,6 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
 import { makeStyles } from "@material-ui/core/styles";
-
-/*
-const BootstrapInput = withStyles(theme => ({
-  root: {
-    "label + &": {
-      marginTop: theme.spacing(3)
-    }
-  },
-  input: {
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: theme.palette.background.paper,
-    border: "1px solid #ced4da",
-    fontSize: 16,
-    padding: "10px 26px 10px 12px",
-    transition: theme.transitions.create(["border-color", "box-shadow"]),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(","),
-    "&:focus": {
-      borderRadius: 4,
-      borderColor: "#80bdff",
-      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)"
-    }
-  }
-}))(InputBase);
-*/
 
 function Copyright() {
   return (
@@ -91,7 +54,31 @@ const useStyles = makeStyles(theme => ({
 export default function SignUp() {
   const classes = useStyles();
 
-  const [cep, setCep] = React.useState("");
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [nameProvider, setNameProvider] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [address, setAddress] = useState("");
+
+  const [key, setKey] = useState("");
+
+  function newFunction() {
+    var user = {
+      name: name,
+      lastName: lastName,
+      email: email,
+      password: password
+    };
+
+    var provider = {
+      name: nameProvider,
+      cnpj: cpf,
+      address: address
+    };
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -106,11 +93,12 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Criar conta
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={newFunction}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="fname"
+                value={name}
+                onChange={e => setName(e.target.value)}
                 name="firstName"
                 variant="outlined"
                 required
@@ -122,6 +110,8 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                value={lastName}
+                onChange={e => setLastName(e.target.value)}
                 variant="outlined"
                 required
                 fullWidth
@@ -133,6 +123,8 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 variant="outlined"
                 required
                 fullWidth
@@ -144,6 +136,8 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                value={password}
+                onChange={e => setPassword(e.target.value)}
                 variant="outlined"
                 required
                 fullWidth
@@ -156,6 +150,8 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                value={nameProvider}
+                onChange={e => setNameProvider(e.target.value)}
                 autoComplete="nomeProvedor"
                 name="nomeprovedor"
                 variant="outlined"
@@ -167,6 +163,8 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                value={cpf}
+                onChange={e => setCpf(e.target.value)}
                 autoComplete="cnpj"
                 name="cnpj"
                 variant="outlined"
@@ -178,71 +176,28 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                value={address}
+                onChange={e => setAddress(e.target.value)}
                 autoComplete="cep"
                 name="cep"
                 variant="outlined"
                 required
                 fullWidth
                 id="cep"
-                value={cep}
                 label="CEP"
-                onChange={event => setCep(event.target.value)}
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={12}>
               <TextField
-                autoComplete="cidade"
-                name="cidade"
+                value={key}
+                onChange={e => setKey(e.target.value)}
+                name="secret"
                 variant="outlined"
                 required
                 fullWidth
-                id="cidade"
-                label="Cidade"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="bairro"
-                name="bairro"
-                variant="outlined"
-                required
-                fullWidth
-                id="bairro"
-                label="Bairro"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="rua"
-                name="rua"
-                variant="outlined"
-                required
-                fullWidth
-                id="rua"
-                label="Rua"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="numero"
-                name="numero"
-                variant="outlined"
-                required
-                fullWidth
-                id="numero"
-                label="Numero"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="pontoRef"
-                name="pontoRef"
-                variant="outlined"
-                required
-                fullWidth
-                id="pontoRef"
-                label="Ponto de Ref"
+                id="secret"
+                label="Secret key"
               />
             </Grid>
           </Grid>

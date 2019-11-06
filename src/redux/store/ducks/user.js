@@ -9,7 +9,7 @@ export const Types = {
   SHOW_MODAL_ADD_USER: "user/SHOW_MODAL_NEW_USER",
   HIDE_MODAL_ADD_USER: "user/HIDE_MODAL_NEW_USER",
 
-  SET_EMAIL_NEW_USER: "user/SET_EMAIL_NEW_USER"
+  INVITE_NEW_USER_PROVIDER_REQUEST: "user/INVITE_NEW_USER_PROVIDER_REQUEST"
 };
 /**
  * VALOR INICIAL DO STATE
@@ -62,8 +62,8 @@ export const Creators = {
   hideModalNewUser: () => ({
     type: Types.HIDE_MODAL_ADD_USER
   }),
-  setEmailNewUser: email => ({
-    type: Types.SET_EMAIL_NEW_USER,
+  inviteNewUserProvider: email => ({
+    type: Types.INVITE_NEW_USER_PROVIDER_REQUEST,
     payload: {
       email
     }

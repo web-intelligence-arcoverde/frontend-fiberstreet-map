@@ -20,15 +20,10 @@ function AddUser(props) {
 
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = event => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    setValidated(true);
-  };
+  function handleSubmit() {
+    const { inviteNewUserProvider } = props;
+    inviteNewUserProvider(email);
+  }
 
   return (
     <Modal
@@ -39,11 +34,12 @@ function AddUser(props) {
       <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
         <Modal.Title>Cadastrar Funcionario</Modal.Title>
       </Modal.Header>
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Modal.Body>
           <Form.Group>
             <Form.Label>Insira o e-mail do funcionario:</Form.Label>
             <Form.Control
+              required
               type="email"
               placeholder="Email"
               value={email}

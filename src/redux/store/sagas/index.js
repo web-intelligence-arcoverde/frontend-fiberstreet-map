@@ -27,8 +27,11 @@ import { loadSplitters, addDrop } from "./drop";
 import { Types as SplitterTypes } from "../ducks/splitter";
 import { createSplitter, updateSplitter, deleteSplitter } from "./splitter";
 
-import { Types as CableTypes } from '../ducks/cabo';
-import { addRelCable } from './cabo';
+import { Types as CableTypes } from "../ducks/cabo";
+import { addRelCable } from "./cabo";
+
+import { Types as UserTypes } from "../ducks/user";
+import { inviteNewUser } from "./user";
 
 import { Types as FiberFusionTypes } from "../ducks/fiberfusion";
 import {
@@ -64,6 +67,9 @@ export default function* rootSaga() {
     takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient),
     takeLatest(ClientTypes.UPDATE_CLIENT_REQUEST, updateClient),
     takeLatest(ClientTypes.DELETE_CLIENT_REQUEST, deleteClient),
+
+    //Funcionarios
+    takeLatest(UserTypes.INVITE_NEW_USER_PROVIDER_REQUEST, inviteNewUser),
 
     // Ceo
     takeLatest(CeoTypes.CREATE_CEO_REQUEST, createCeo),

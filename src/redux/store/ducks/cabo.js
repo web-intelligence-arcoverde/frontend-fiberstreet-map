@@ -32,10 +32,8 @@ export const Types = {
 
   ADD_REL_CABLE: "@cable/ADD_REL",
 
-
   LOAD_SUCCESS: "@cable/LOAD_SUCCESS",
   SET_OBJECT_TO: "cable/SET_OBJECT_TO"
-
 };
 
 const INITIAL = {
