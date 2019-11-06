@@ -964,7 +964,8 @@ class Map extends Component {
 
         const cables = data;
         await cables.push(newCable);
-
+        // console.log(store.getState().cabo)
+        // console.warn(data)
         await store.dispatch({
           type: '@cable/LOAD_SUCCESS',
           payload: { cables }
@@ -1385,8 +1386,9 @@ class Map extends Component {
 
           store.dispatch({
             type: '@cable/LOAD_SUCCESS',
-            payload: { data }
+            payload: { cables: data }
           })
+          
 
           map.getSource("wires").setData(dat);
         })
