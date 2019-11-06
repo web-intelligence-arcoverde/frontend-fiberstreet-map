@@ -66,7 +66,7 @@ function ViewFusoes(props) {
             <th>Quantidade de Fibras</th>
             {/* <th>Cabo</th> */}
             <th>Observação</th>
-            {/* <th>Ações</th> */}
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
