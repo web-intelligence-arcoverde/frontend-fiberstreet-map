@@ -6,8 +6,10 @@
  * TIPOS
  */
 export const Types = {
-  SHOWMODALNEWUSER: "user/SHOW_MODAL_NEW_USER",
-  HIDEMODALNEWUSER: "user/HIDE_MODAL_NEW_USER"
+  SHOW_MODAL_ADD_USER: "user/SHOW_MODAL_NEW_USER",
+  HIDE_MODAL_ADD_USER: "user/HIDE_MODAL_NEW_USER",
+
+  SET_EMAIL_NEW_USER: "user/SET_EMAIL_NEW_USER"
 };
 /**
  * VALOR INICIAL DO STATE
@@ -15,31 +17,37 @@ export const Types = {
 const initialState = {
   viewNewUser: {
     visible: false,
-    data: ""
+    email: ""
   }
 };
 
-/**
+/*
+ *
  * Reducer
- * @param {*} state
- * @param {*} action
+ *
  */
 
 export default function(state = initialState, action) {
-  console.log(action);
   switch (action.type) {
-    case Types.SHOWMODALNEWUSER:
+    case Types.SHOW_MODAL_ADD_USER:
       return {
         ...state,
         viewNewUser: {
           visible: true
         }
       };
-    case Types.HIDEMODALNEWUSER:
+    case Types.HIDE_MODAL_ADD_USER:
       return {
         ...state,
         viewNewUser: {
           visible: false
+        }
+      };
+    case Types.SET_EMAIL_NEW_USER:
+      return {
+        ...state,
+        viewNewUser: {
+          email: action.payload.email
         }
       };
     default:
@@ -47,20 +55,17 @@ export default function(state = initialState, action) {
   }
 }
 
-/**
- * Ações
- */
 export const Creators = {
   showModalNewUser: () => ({
-    type: Types.SHOWMODALNEWUSER,
-    payload: {
-      visible: true
-    }
+    type: Types.SHOW_MODAL_ADD_USER
   }),
   hideModalNewUser: () => ({
-    type: Types.HIDEMODALNEWUSER,
+    type: Types.HIDE_MODAL_ADD_USER
+  }),
+  setEmailNewUser: email => ({
+    type: Types.SET_EMAIL_NEW_USER,
     payload: {
-      visible: false
+      email
     }
   })
 };

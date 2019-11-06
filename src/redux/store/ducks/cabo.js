@@ -30,7 +30,9 @@ export const Types = {
 
   /** adicionar cabo de uma cto para outra [fim] **/
 
-  ADD_REL_CABLE: '@cable/ADD_REL'
+  ADD_REL_CABLE: "@cable/ADD_REL",
+
+  SET_OBJECT_TO: "cable/SET_OBJECT_TO"
 };
 
 const INITIAL = {
@@ -101,7 +103,7 @@ export default function(state = INITIAL, action) {
     case Types.SHOW_MODAL_NEW_CABO_CTO_CEO:
       return {
         ...state,
-        objectTo: action.payload,
+        objectTo: action.payload.type,
         idFromTo: { ...state.idFromTo, visible: true }
       };
     /** Fechar Modal [cto] to [cto] **/
@@ -199,8 +201,8 @@ export const Creators = {
     payload: { id }
   }),
 
-  saveRel: (typeOne, typeTwo, relOne, relTwo) => ({
+  saveRel: (typeOne, typeTwo, relationOne, relationTwo, cable) => ({
     type: Types.ADD_REL_CABLE,
-    payload: { typeOne, typeTwo, relOne, relTwo }
+    payload: { typeOne, typeTwo, relationOne, relationTwo, cable }
   })
 };

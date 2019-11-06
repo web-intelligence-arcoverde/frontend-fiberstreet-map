@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 //Creators {reducers}
 import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
 
-//UI-Components
+//Components;
 import { Modal, Button, Form } from "react-bootstrap";
 
 function ClienteAddModal(props) {
@@ -36,6 +36,7 @@ function ClienteAddModal(props) {
       status: null
     };
     createClientRequest(newClient);
+    console.log(newClient);
     handleHideModal();
   }
 
@@ -70,11 +71,7 @@ function ClienteAddModal(props) {
 
   return (
     <>
-      <Modal
-        show={viewNewClient.visible}
-        onHide={handleHideModal}
-        animation={false}
-      >
+      <Modal show={viewNewClient.visible} onHide={handleHideModal}>
         <Form onSubmit={handleSubmit}>
           <Modal.Header
             style={{
@@ -91,7 +88,7 @@ function ClienteAddModal(props) {
               <Form.Label>Nome:</Form.Label>
               <Form.Control
                 required
-                minLength="8"
+                minLength="5"
                 maxLength="150"
                 type="text"
                 value={name}
@@ -118,7 +115,7 @@ function ClienteAddModal(props) {
               <Form.Label>Endereço:</Form.Label>
               <Form.Control
                 required
-                minLength="8"
+                minLength="5"
                 maxLength="150"
                 type="text"
                 value={address}
@@ -173,7 +170,7 @@ function ClienteAddModal(props) {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleHideModal}>
+            <Button variant="danger" onClick={handleHideModal}>
               Fechar
             </Button>
 
