@@ -4,10 +4,10 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
-import { toastr } from 'react-redux-toastr';
+import { Creators as MapCreators } from "../../../redux/store/ducks/map";
+import { toastr } from "react-redux-toastr";
 
-import api, { API } from "../../../services/api";
-import axios from "axios";
+import api from "../../../services/api";
 
 //Components
 import { Modal, Container, Button } from "react-bootstrap";
@@ -42,6 +42,7 @@ function AddRelCliCto(props) {
 
   function handleHideModal() {
     const { hideDropAddModal } = props;
+    setDelimitation("default");
     hideDropAddModal();
   }
 
@@ -110,13 +111,7 @@ function AddRelCliCto(props) {
           // Teste para adicionar saída caso não seja um número a mais do que a posição no array
 
           let posicaoDaSaidaNoArray = saidas[count].number /*numero*/ - 1;
-          // console.tron.log({ POSICAO: posicaoDaSaidaNoArray });
-          // console.tron.log({
-          //   ...saidas[count],
-          //   isActive: true,
-          //   selected: false,
-          //   obter: true
-          // });
+
           newArray[posicaoDaSaidaNoArray] = {
             ...saidas[count],
             isActive: true,
@@ -154,8 +149,6 @@ function AddRelCliCto(props) {
         }
       }
     }
-    console.log("newArray");
-    console.error(newArray);
 
     setSaidas(newArray);
   }
@@ -164,21 +157,6 @@ function AddRelCliCto(props) {
     await setSplitters(drop.data.splitters);
 
     await getSaidasDoSplitter();
-    // drop.data.splitters.forEach(element => { // BRANCH FEATURE
-    // alert(JSON.stringify(element));
-    // getSaidasDoSplitter(element);
-    // });
-    // splitters.map((sp, index) => {
-    //   alert(JSON.stringify(sp));
-    // });
-    // api
-    //   .get(`saidasplitter/splitter/${1}`)
-    //   .then(response => {
-    //     const { data } = response;
-    //     setSaidas([...saidas, JSON.parse(data)]);
-    //     console.tron.log(data);
-    //   })
-    //   .catch(err => console.tron.log(err));
   }
 
   function selectOutToAddCliente(number, isUsing) {
@@ -193,15 +171,6 @@ function AddRelCliCto(props) {
       alert("Splitter selecionado");
     }
   }
-
-  // useEffect(() => {
-  //   function* carregarSaidasSplitter() {
-  //     const { splitters, cto_id, drop } = props.drop.data;
-  //     alert(JSON.stringify({ splitters, cto_id, drop }));
-  //   }
-
-  //   carregarSaidasSplitter();
-  // });
 
   useEffect(() => {
     // obterSaidasDoSplitter();
@@ -231,27 +200,24 @@ function AddRelCliCto(props) {
         const { cto_id, client_id } = drop.data;
 
         addDropRequest({ cabo, client_id, cto_id, saida: findedSelected });
-        // api.post(`saidasplitter/cliente/create`, );
       } else {
-        // console.tron.log(
-        //   `A saída de número ${
-        //     findedSelected.numero
-        //   }, pois ela encontra-se ocupada`
-        // );
         alert(
           `A saída ${findedSelected.numero}, encontra-se ocupada, escolha outra por favor!`
         );
       }
     } else {
-      toastr.warning('Inválido', 'Por favor, selecione uma saída')
+      toastr.warning("Inválido", "Por favor, selecione uma saída");
     }
 
+    setDelimitation("default");
     //console.tron.log(findedSelected);
     // Add fibra drop cliente no cabo
   }
 
   const classes = useStyles();
   const [checked, setChecked] = React.useState([1]);
+
+  const { setDelimitation } = props;
 
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
@@ -324,10 +290,10 @@ function AddRelCliCto(props) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="warning" onClick={handleHideModal}>
+          <Button variant="danger" onClick={handleHideModal}>
             Fechar
           </Button>
-          <Button variant="warning" onClick={salvarDrop}>
+          <Button variant="secondary" onClick={salvarDrop}>
             Salvar
           </Button>
         </Modal.Footer>
@@ -342,7 +308,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators(DropCreators, dispatch);
+  bindActionCreators({ ...DropCreators, ...MapCreators }, dispatch);
 
 export default connect(
   mapStateToProps,

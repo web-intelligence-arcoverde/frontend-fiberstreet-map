@@ -23,7 +23,6 @@ import { Creators as clientCreators } from "../../../redux/store/ducks/cliente";
 import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
 import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
 
-
 import store from "../../../redux/store";
 
 //API
@@ -165,15 +164,14 @@ class Map extends Component {
       });
 
       map.addSource("cto_lotada", {
-        type: 'geojson',
+        type: "geojson",
         data: url
       });
 
-      
       map.addSource("cto_cliente_cancelado", {
-        type: 'geojson',
+        type: "geojson",
         data: url
-      })
+      });
 
       map.addSource("ceo", {
         type: "geojson",
@@ -288,22 +286,18 @@ class Map extends Component {
     if (delimitation === "cabo") {
       const { addCoordCabo, showModalAddCable, setIdTo } = this.props;
 
-      const { setDelimitation, setSubDelemitation } = this.props;
-
       const { polyline } = this.props.redux.map;
 
       let newPolyline = [...polyline, [longitude, latitude]];
       addCoordCabo(newPolyline);
 
       if (subDelimitation === "cto") {
-        setIdTo(ceo.id);     
-        showModalAddCable();
+        setIdTo(ceo.id);
+        showModalAddCable("ceo");
       } else if (subDelimitation === "ceo") {
         setIdTo(ceo.id);
-        showModalAddCable();
+        showModalAddCable("ceo");
       }
-      setDelimitation("default");
-      setSubDelemitation("default");
     } else {
       const { showViewModalCeo } = this.props;
       showViewModalCeo(ceo);
@@ -324,9 +318,8 @@ class Map extends Component {
     const { delimitation, polyline, subDelimitation } = this.props.redux.map;
 
     if (delimitation === "cabo") {
-      const { setDelimitation, setSubDelemitation } = this.props;
       const { addCoordCabo, setIdTo, showModalAddCable } = this.props;
-      const { showAddCtoCable } = this.props;
+      const { showAddCableCto } = this.props;
 
       let newPolyline = [...polyline, [longitude, latitude]];
 
@@ -335,19 +328,17 @@ class Map extends Component {
       // CTO para CTO
       if (subDelimitation === "cto") {
         setIdTo(cto.id);
-        showModalAddCable();
+        showModalAddCable("cto");
       }
       //CEO para CTO
       else if (subDelimitation === "ceo") {
         setIdTo(cto.id);
-        showModalAddCable();
+        showModalAddCable("cto");
       }
       //Cliente para CTO
       else {
-        showAddCtoCable(cto.id);
+        showAddCableCto(cto.id);
       }
-      setDelimitation("default");
-      setSubDelemitation("default");
     } else {
       //Abrir modal com as informações da cto {informações, clientes e splitters}
       const {
@@ -1211,14 +1202,17 @@ class Map extends Component {
         let ctos_clientes_cancelados = [];
 
         data.forEach(cto => {
-          if (cto.properties.data.status === 'full') {
-            ctos_lotadas.push(cto)
-          } else if (cto.properties.data.status === 'cli_cancel') {
-            ctos_clientes_cancelados.push(cto)
-          } else if (!cto.properties.data.status || cto.properties.data.status === 'active'){
+          if (cto.properties.data.status === "full") {
+            ctos_lotadas.push(cto);
+          } else if (cto.properties.data.status === "cli_cancel") {
+            ctos_clientes_cancelados.push(cto);
+          } else if (
+            !cto.properties.data.status ||
+            cto.properties.data.status === "active"
+          ) {
             ctos_ativas.push(cto);
           }
-        })
+        });
 
         const ctos_at = {
           type: "FeatureCollection",
@@ -1231,12 +1225,12 @@ class Map extends Component {
         };
 
         const ctos_lot = {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           features: ctos_lotadas
-        }
-        map.getSource("cto").setData(ctos_at)
-        map.getSource("cto_lotada").setData(ctos_lot)
-        map.getSource("cto_cliente_cancelado").setData(ctos_cli_can)
+        };
+        map.getSource("cto").setData(ctos_at);
+        map.getSource("cto_lotada").setData(ctos_lot);
+        map.getSource("cto_cliente_cancelado").setData(ctos_cli_can);
         // end
 
         // map.getSource("cto").setData(dados);
@@ -1260,31 +1254,37 @@ class Map extends Component {
       });
 
       // cto_lotada cto_cliente_cancelado
-      map.loadImage(require('../../../assets/images/cto_lotada.png'), function (error, image) {
+      map.loadImage(require("../../../assets/images/cto_lotada.png"), function(
+        error,
+        image
+      ) {
         if (error) throw error;
-        map.addImage('custom_cto_full', image);
+        map.addImage("custom_cto_full", image);
         map.addLayer({
-          id: 'cto_lotada',
-          type: 'symbol',
-          source: 'cto_lotada',
+          id: "cto_lotada",
+          type: "symbol",
+          source: "cto_lotada",
           layout: {
-            'icon-image': 'custom_cto_full'
+            "icon-image": "custom_cto_full"
           }
-        })
-      })
+        });
+      });
 
-      map.loadImage(require('../../../assets/images/cto_verde.png'), function (error, image) {
+      map.loadImage(require("../../../assets/images/cto_verde.png"), function(
+        error,
+        image
+      ) {
         if (error) throw error;
-        map.addImage('custom_cto_can', image);
+        map.addImage("custom_cto_can", image);
         map.addLayer({
-          id: 'cto_cliente_cancelado',
-          type: 'symbol',
-          source: 'cto_cliente_cancelado',
+          id: "cto_cliente_cancelado",
+          type: "symbol",
+          source: "cto_cliente_cancelado",
           layout: {
-            'icon-image': 'custom_cto_can'
+            "icon-image": "custom_cto_can"
           }
-        })
-      })
+        });
+      });
     });
   }
 
