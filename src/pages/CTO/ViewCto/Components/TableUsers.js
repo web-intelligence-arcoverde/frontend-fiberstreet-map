@@ -318,41 +318,6 @@ function TableClients(props) {
     return date;
   }
 
-  function formatCpfCnpj(v) {
-    //Remove tudo o que não é dígito
-    v = v.replace(/\D/g, "");
-
-    if (v.length <= 14) {
-      //CPF
-
-      //Coloca um ponto entre o terceiro e o quarto dígitos
-      v = v.replace(/(\d{3})(\d)/, "$1.$2");
-
-      //Coloca um ponto entre o terceiro e o quarto dígitos
-      //de novo (para o segundo bloco de números)
-      v = v.replace(/(\d{3})(\d)/, "$1.$2");
-
-      //Coloca um hífen entre o terceiro e o quarto dígitos
-      v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-    } else {
-      //CNPJ
-
-      //Coloca ponto entre o segundo e o terceiro dígitos
-      v = v.replace(/^(\d{2})(\d)/, "$1.$2");
-
-      //Coloca ponto entre o quinto e o sexto dígitos
-      v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
-
-      //Coloca uma barra entre o oitavo e o nono dígitos
-      v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
-
-      //Coloca um hífen depois do bloco de quatro dígitos
-      v = v.replace(/(\d{4})(\d)/, "$1-$2");
-    }
-
-    return v;
-  }
-
   function handleClick(event, name) {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -391,132 +356,108 @@ function TableClients(props) {
     rowsPerPage - Math.min(rowsPerPage, clients.length - page * rowsPerPage);
 
   return (
-    
-     
-        <div className={classes.root2}>
-          <Paper className={classes.paper}>
-            <EnhancedTableToolbar
-              style={{ marginTop: "0px" }}
+    <div className={classes.root2}>
+      <Paper className={classes.paper}>
+        <EnhancedTableToolbar
+          style={{ marginTop: "0px" }}
+          numSelected={selected.length}
+        />
+        <div className={classes.tableWrapper}>
+          <Table
+            className={classes.table}
+            aria-labelledby="tableTitle"
+            size={"medium"}
+          >
+            <EnhancedTableHead
+              classes={classes}
               numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={clients.length}
             />
-            <div className={classes.tableWrapper}>
-              <Table
-                className={classes.table}
-                aria-labelledby="tableTitle"
-                size={"medium"}
-              >
-                <EnhancedTableHead
-                  classes={classes}
-                  numSelected={selected.length}
-                  order={order}
-                  orderBy={orderBy}
-                  onSelectAllClick={handleSelectAllClick}
-                  onRequestSort={handleRequestSort}
-                  rowCount={clients.length}
-                />
-                <TableBody>
-                  {clients &&
-                    stableSort(clients, getSorting(order, orderBy))
-                      .slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                      .map((row, index) => {
-                        const isItemSelected = isSelected(row.cpf);
-                        const labelId = `enhanced-table-checkbox-${index}`;
+            <TableBody>
+              {clients &&
+                stableSort(clients, getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.cpf);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                        return (
-                          <TableRow
-                            hover
-                            onClick={event => handleClick(event, row.cpf)}
-                            role="checkbox"
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={row.cpf}
-                            selected={isItemSelected}
-                          >
-                            <TableCell padding="checkbox">
-                              <Checkbox
-                                checked={isItemSelected}
-                                inputProps={{ "aria-labelledby": labelId }}
-                                style={{ color: "#FFBF00" }}
-                              />
-                            </TableCell>
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event => handleClick(event, row.cpf)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.cpf}
+                        selected={isItemSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isItemSelected}
+                            inputProps={{ "aria-labelledby": labelId }}
+                            style={{ color: "#FFBF00" }}
+                          />
+                        </TableCell>
 
-                            <TableCell
-                              component="th"
-                              style={{ color: "#BDBDBD" }}
-                              id={labelId}
-                              scope="row"
-                              padding="none"
-                            >
-                              {formatCpfCnpj(row.cpf)}
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              style={{ color: "#BDBDBD" }}
-                            >
-                              {row.name}
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              style={{ color: "#BDBDBD" }}
-                            >
-                              {row.pppoe}
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              style={{ color: "#BDBDBD" }}
-                            >
-                              {row.speed}
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              style={{ color: "#BDBDBD" }}
-                            >
-                              {formatDate(row.created_at)}
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              style={{ color: "#BDBDBD" }}
-                            >
-                              {formatDate(row.installation_date)}
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              style={{ color: "#BDBDBD" }}
-                            >
-                              {row.obs}
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 49 * emptyRows }}>
-                      <TableCell colSpan={10} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-            <TablePagination
-              rowsPerPageOptions={[5, clients.length]}
-              component="div"
-              count={clients.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              backIconButtonProps={{
-                "aria-label": "previous page"
-              }}
-              nextIconButtonProps={{
-                "aria-label": "next page"
-              }}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-          </Paper>
+                        <TableCell
+                          component="th"
+                          style={{ color: "#BDBDBD" }}
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                        >
+                          {row.cpf}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {row.name}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {row.pppoe}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {row.speed}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {formatDate(row.created_at)}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {formatDate(row.installation_date)}
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                          {row.obs}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 49 * emptyRows }}>
+                  <TableCell colSpan={10} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </div>
-      
+        <TablePagination
+          rowsPerPageOptions={[5, clients.length]}
+          component="div"
+          count={clients.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          backIconButtonProps={{
+            "aria-label": "previous page"
+          }}
+          nextIconButtonProps={{
+            "aria-label": "next page"
+          }}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </div>
   );
 }
 

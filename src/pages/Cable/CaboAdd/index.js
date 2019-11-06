@@ -20,8 +20,9 @@ function CaboAdd(props) {
   const TMODEL = "modelo";
 
   function handleHideModal() {
-    const { hideAddCableCto } = props;
+    const { hideAddCableCto, setDelimitation } = props;
     hideAddCableCto();
+    setDelimitation("default");
   }
 
   async function handleSubmit(e) {

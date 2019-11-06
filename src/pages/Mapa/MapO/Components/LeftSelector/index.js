@@ -63,7 +63,9 @@ function LeftSelector(props) {
         <div className={classes.root}>
           <div style={{ display: "flex", flexDirection: "column" }}>
             {/* Menssagens */}
+            {/* Next Realese
             <ButtonGroup vertical>
+              
               <Dropdown as={ButtonGroup}>
                 <Badge
                   badgeContent={4}
@@ -84,6 +86,8 @@ function LeftSelector(props) {
                   </OverlayTrigger>
                 </Badge>
               </Dropdown>
+
+              
 
               <Dropdown as={ButtonGroup} style={{ marginTop: "10px" }}>
                 <OverlayTrigger
@@ -108,6 +112,7 @@ function LeftSelector(props) {
                 </Dropdown.Menu>
               </Dropdown>
             </ButtonGroup>
+            */}
 
             {/* Adicão/Listar */}
             <ButtonGroup vertical style={{ marginTop: "20px" }}>
@@ -131,6 +136,7 @@ function LeftSelector(props) {
                 />
 
                 <Dropdown.Menu>
+                  {/** 
                   <Dropdown.Item
                     onClick={() => {
                       setDelimitation("perfil");
@@ -138,6 +144,7 @@ function LeftSelector(props) {
                   >
                     perfil
                   </Dropdown.Item>
+                  */}
                   <Dropdown.Item
                     onClick={() => {
                       props.signOut();
@@ -203,6 +210,7 @@ function LeftSelector(props) {
                 </Dropdown.Menu>
               </Dropdown>
 
+              {/** 
               <Dropdown as={ButtonGroup}>
                 <Button variant="warning" className={classes.button}>
                   <i className="fa fa-list-alt" style={{ color: "white" }}></i>
@@ -218,6 +226,7 @@ function LeftSelector(props) {
                   <Dropdown.Item href="#"> List</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
+              */}
             </ButtonGroup>
           </div>
         </div>
