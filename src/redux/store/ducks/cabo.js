@@ -30,7 +30,9 @@ export const Types = {
 
   /** adicionar cabo de uma cto para outra [fim] **/
 
-  ADD_REL_CABLE: '@cable/ADD_REL'
+  ADD_REL_CABLE: "@cable/ADD_REL",
+
+  LOAD_SUCCESS: "@cable/LOAD_SUCCESS"
 };
 
 const INITIAL = {
@@ -57,7 +59,10 @@ const INITIAL = {
     idFrom: null,
     idTo: null
   },
-  objectTo: {}
+  objectTo: {},
+  geojson: {
+    cables: []
+  }
 };
 
 export default function(state = INITIAL, action) {
@@ -107,6 +112,14 @@ export default function(state = INITIAL, action) {
     /** Fechar Modal [cto] to [cto] **/
     case Types.HIDE_MODAL_NEW_CABO_CTO_CEO:
       return { ...state, idFromTo: { visible: false } };
+
+    case Types.LOAD_SUCCESS:
+      return {
+        ...state,
+        geojson: {
+          cables: action.payload.cables
+        }
+      };
 
     default:
       return state;
@@ -191,6 +204,11 @@ export const Creators = {
   deleteCableSuccess: cable => ({
     type: Types.DELETE_CABLE_SUCCESS,
     payload: { cable }
+  }),
+
+  loadCableSuccess: cables => ({
+    type: Types.LOAD_SUCCESS,
+    payload: { cables }
   }),
 
   //Adicionar cabo aparti do cliente. *addClienteId*

@@ -265,6 +265,8 @@ class Map extends Component {
   handleClicks(map) {
     // Cliques na cto
     map.on("click", "cto", e => this.handleCtoClick(e.features[0]));
+    map.on("click", "cto_lotada", e => this.handleCtoClick(e.features[0]));
+    map.on("click", "cto_cliente_cancelado", e => this.handleCtoClick(e.features[0]));
     // Evento de clique nos Clientes
     map.on("click", "cliente", e => this.handleCtoCaboClick(e));
     map.on("click", "cliente_inativo", e => this.handleCtoCaboClick(e));
@@ -523,6 +525,7 @@ class Map extends Component {
     const clients = socket.subscribe(`clients:${provider.id}`);
     const ctos = socket.subscribe(`ctos:${provider.id}`);
     const ceos = socket.subscribe(`ceos:${provider.id}`);
+    const cables = socket.subscribe(`cables:${provider.id}`)
     // const ceos = socket.subscribe(`ceos:${provider.id}`);
 
     map.on("load", function() {
@@ -694,12 +697,46 @@ class Map extends Component {
           payload: { ctos }
         });
 
-        const dados = await {
+        let ctos_ativas = [];
+        let ctos_lotadas = [];
+        let ctos_clientes_cancelados = [];
+
+        data.forEach(cto => {
+          if (cto.properties.data.status === 'full') {
+            ctos_lotadas.push(cto)
+          } else if (cto.properties.data.status === 'cli_cancel') {
+            ctos_clientes_cancelados.push(cto)
+          } else if (!cto.properties.data.status || cto.properties.data.status === 'active'){
+            ctos_ativas.push(cto);
+          }
+        })
+
+        const ctos_at = {
           type: "FeatureCollection",
-          features: ctos //[...data, cto]
+          features: ctos_ativas
         };
 
-        await map.getSource("cto").setData(dados);
+        const ctos_cli_can = {
+          type: "FeatureCollection",
+          features: ctos_clientes_cancelados
+        };
+
+        const ctos_lot = {
+          type: 'FeatureCollection',
+          features: ctos_lotadas
+        }
+        map.getSource("cto").setData(ctos_at)
+        map.getSource("cto_lotada").setData(ctos_lot)
+        map.getSource("cto_cliente_cancelado").setData(ctos_cli_can)
+
+
+
+        // const dados = await {
+        //   type: "FeatureCollection",
+        //   features: ctos //[...data, cto]
+        // };
+
+        // await map.getSource("cto").setData(dados);
       });
 
       // Não testado @ probably ok
@@ -719,12 +756,45 @@ class Map extends Component {
           payload: { ctos }
         });
 
-        const dados = {
+        let ctos_ativas = [];
+        let ctos_lotadas = [];
+        let ctos_clientes_cancelados = [];
+
+        ctos.forEach(cto => {
+          if (cto.properties.data.status === 'full') {
+            ctos_lotadas.push(cto)
+          } else if (cto.properties.data.status === 'cli_cancel') {
+            ctos_clientes_cancelados.push(cto)
+          } else if (!cto.properties.data.status || cto.properties.data.status === 'active'){
+            ctos_ativas.push(cto);
+          }
+        })
+
+        const ctos_at = {
           type: "FeatureCollection",
-          features: ctos
+          features: ctos_ativas
         };
 
-        await map.getSource("cto").setData(dados);
+        const ctos_cli_can = {
+          type: "FeatureCollection",
+          features: ctos_clientes_cancelados
+        };
+
+        const ctos_lot = {
+          type: 'FeatureCollection',
+          features: ctos_lotadas
+        }
+        map.getSource("cto").setData(ctos_at)
+        map.getSource("cto_lotada").setData(ctos_lot)
+        map.getSource("cto_cliente_cancelado").setData(ctos_cli_can)
+
+
+        // const dados = {
+        //   type: "FeatureCollection",
+        //   features: ctos
+        // };
+
+        // await map.getSource("cto").setData(dados);
       });
       // Não testado @ probably ok
       ctos.on("updatedCto", async ctoUpdated => {
@@ -752,12 +822,48 @@ class Map extends Component {
           payload: { ctos }
         });
 
-        const dados = {
+        // NEW METHODS
+
+        let ctos_ativas = [];
+        let ctos_lotadas = [];
+        let ctos_clientes_cancelados = [];
+
+        ctos.forEach(cto => {
+          if (cto.properties.data.status === 'full') {
+            ctos_lotadas.push(cto)
+          } else if (cto.properties.data.status === 'cli_cancel') {
+            ctos_clientes_cancelados.push(cto)
+          } else if (!cto.properties.data.status || cto.properties.data.status === 'active'){
+            ctos_ativas.push(cto);
+          }
+        })
+
+        const ctos_at = {
           type: "FeatureCollection",
-          features: ctos
+          features: ctos_ativas
         };
 
-        await map.getSource("cto").setData(dados);
+        const ctos_cli_can = {
+          type: "FeatureCollection",
+          features: ctos_clientes_cancelados
+        };
+
+        const ctos_lot = {
+          type: 'FeatureCollection',
+          features: ctos_lotadas
+        }
+        map.getSource("cto").setData(ctos_at)
+        map.getSource("cto_lotada").setData(ctos_lot)
+        map.getSource("cto_cliente_cancelado").setData(ctos_cli_can)
+
+        // END METHODS
+
+        // const dados = {
+        //   type: "FeatureCollection",
+        //   features: ctos
+        // };
+
+        // await map.getSource("cto").setData(dados);
         // const data = await store.getState().ctos.geojson.ctos;
 
         // let ctos = [];
@@ -861,6 +967,51 @@ class Map extends Component {
         };
         await map.getSource("ceo").setData(dados);
       });
+
+      cables.on('newCable', async newCable => {
+        const data = await store.getState().cabo.geojson.cables;
+
+        const cables = data;
+        await cables.push(newCable);
+
+        await store.dispatch({
+          type: '@cable/LOAD_SUCCESS',
+          payload: { cables }
+        })
+
+        const dados = {
+          type: 'FeatureCollection',
+          features: cables
+        }
+
+        await map.getSource("wires").setData(dados)
+      })
+
+      cables.on('deletedCable', async deletedCable => {
+        const data = await store.getState().cabo.geojson.cables;
+
+        const cables = [];
+        
+        await data.forEach(cable => {
+          if (cable.properties.data.id !== deletedCable.id) {
+            cables.push(cable)
+          }
+        })
+
+        await store.dispatch({
+          type: '@cable/LOAD_SUCCESS',
+          payload: { cables }
+        })
+
+        const dados = {
+          type: 'FeatureCollection',
+          features: cables
+        }
+
+        await map.getSource("wires").setData(dados)
+
+      })
+      // cables.on('deletedCable',)
 
       // clients.on("deleteClient", async clientId => {
       //   const data = await store.getState().client.clients;
@@ -1231,6 +1382,11 @@ class Map extends Component {
             type: "FeatureCollection",
             features: data
           };
+
+          store.dispatch({
+            type: '@cable/LOAD_SUCCESS',
+            payload: { data }
+          })
 
           map.getSource("wires").setData(dat);
         })
