@@ -42,12 +42,20 @@ function ViewAddCable(props) {
 
     const { polyline } = props.redux.map;
 
+    let coordinates = props.redux.map.polyline.map(linha => {
+      return {
+        longitude: linha[0],
+        latitude: linha[1]
+      };
+    });
+    let coordinatesStrinfigied = JSON.stringify(coordinates);
+
     const cable = {
       fiberAmount,
       name: cableName,
       type: cableType,
       obs: obs,
-      coordinates: JSON.stringify(polyline)
+      coordinates: coordinatesStrinfigied
     };
 
     // subDelimitation, delimitation
