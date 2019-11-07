@@ -19,7 +19,7 @@ function CaboAdd(props) {
   const TNAME = "nome";
   const TMODEL = "modelo";
 
-  function handleHideModal() {
+  function hideModal() {
     const { hideAddCableCto, setDelimitation } = props;
     hideAddCableCto();
     setDelimitation("default");
@@ -45,7 +45,7 @@ function CaboAdd(props) {
     setNome("");
     setModelo("");
     addCoordCabo([]);
-    handleHideModal();
+    hideModal();
     const { showDropAddModalRequest } = props;
     const dropNdCtoId = {
       drop: cabo,
@@ -77,7 +77,7 @@ function CaboAdd(props) {
 
   return (
     <Container>
-      <Modal show={newCabo.isVisible} onHide={handleHideModal}>
+      <Modal show={newCabo.isVisible} onHide={hideModal}>
         <Form onSubmit={handleSubmit}>
           <Modal.Header
             style={{
@@ -122,10 +122,10 @@ function CaboAdd(props) {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="danger" onClick={handleClose}>
+            <Button variant="danger" onClick={hideModal}>
               Sair
             </Button>
-            <Button variant="secondary" type="submit" onClick={handleClose}>
+            <Button variant="secondary" type="submit">
               Salvar
             </Button>
           </Modal.Footer>

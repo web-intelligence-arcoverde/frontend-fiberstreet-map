@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 function Components(props) {
-  const { showModalPhoto } = props;
+  const { showModalPhoto, hideViewModalCto } = props;
   const { ctos } = props.redux;
   const { viewCto } = ctos;
   const { data } = viewCto;
@@ -22,20 +22,30 @@ function Components(props) {
   const [address, setAddress] = useState(data.address);
   const [obs, setObs] = useState(data.obs);
 
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState(data.status);
 
   //Atualizar CTO
   function handleSubmit(e) {
     e.preventDefault();
+    var mode;
+    if (status === "Ativa") {
+      mode = "active";
+    } else if (status === "Lotada") {
+      mode = "full";
+    } else {
+      mode = "cli_cancel";
+    }
     const { updateCtoRequest } = props;
     const updateCto = {
       name: name,
       model: model,
       address: address,
       obs: obs,
-      status: status
+      status: mode
     };
     updateCtoRequest(updateCto, data.id);
+    hideViewModalCto();
+    console.log("Desgraça " + mode);
   }
 
   //Deletar CTO
@@ -52,7 +62,7 @@ function Components(props) {
     <Container>
       <Form onSubmit={handleSubmit}>
         <Form.Row>
-          <Form.Group controlId="exampleForm.ControlSelect1">
+          <Form.Group>
             <Form.Label>Status</Form.Label>
             <Form.Control
               as="select"

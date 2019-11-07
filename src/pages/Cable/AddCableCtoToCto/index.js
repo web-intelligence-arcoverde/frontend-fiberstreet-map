@@ -197,7 +197,7 @@ function ViewAddCable(props) {
               <Form.Group as={Col}>
                 <Form.Label>Tipo</Form.Label>
                 <Form.Control
-                  type="number"
+                  type="text"
                   value={cableType}
                   onChange={e => setCableType(e.target.value)}
                 ></Form.Control>

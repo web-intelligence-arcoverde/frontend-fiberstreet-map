@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+//API
+import api from "../../../../services/api";
 
 // redux
 import { bindActionCreators } from "redux";
@@ -14,13 +17,11 @@ import { Button, Container, Table } from "react-bootstrap";
 import Delete from "@material-ui/icons/HighlightOff";
 
 function ViewFusoes(props) {
-  console.log("Informações cable");
-
-  const { data } = props.redux.ceo.viewCeo;
+  const { data, visible } = props.redux.ceo.viewCeo;
 
   const { hideViewModalCeo } = props;
 
-  const { cables } = props.fiberfusion;
+  const [cables, setCables] = useState([]);
 
   function addCabo() {
     let latitude;
@@ -50,6 +51,15 @@ function ViewFusoes(props) {
     hideViewModalCeo();
   }
 
+  useEffect(() => {
+    if (visible) {
+      api.get(`cables/ceo/${data.id}`).then(response => {
+        const { data } = response;
+        setCables(data);
+      });
+    }
+  }, [visible]);
+
   function deleteCable(index) {
     console.log(index);
   }
@@ -59,19 +69,15 @@ function ViewFusoes(props) {
       <Table striped bordered hover responsive="lg">
         <thead>
           <tr>
-            {/* <th>Bandeja</th> */}
             <th>Cabo</th>
-            {/* <th>Fibra</th> */}
-            {/* <th style={{ textAlign: "center" }}>x</th> */}
             <th>Quantidade de Fibras</th>
-            {/* <th>Cabo</th> */}
             <th>Observação</th>
             <th>Ações</th>
           </tr>
         </thead>
         <tbody>
           {cables.map((cable, index) => (
-            <tr>
+            <tr key={index}>
               <td>{cable.cable.name}</td>
               <td>{cable.cable.fiberAmount}</td>
               <td>{cable.cable.obs}</td>

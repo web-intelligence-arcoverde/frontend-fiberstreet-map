@@ -38,12 +38,7 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         cables: action.payload.cables
       };
-    
-    // case Types.SHOW_FIBERS_CABLE_SUCCESS:
-    //   return {
-    //     ...state,
-    //     fibers
-    //   }
+
     default:
       return state;
   }
