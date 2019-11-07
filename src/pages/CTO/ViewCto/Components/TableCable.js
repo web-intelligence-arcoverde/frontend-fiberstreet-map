@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+//API
+import api from "../../../../services/api";
 
 import { Creators as ctosActions } from "../../../../redux/store/ducks/ctos";
 import { Creators as MapActions } from "../../../../redux/store/ducks/map";
@@ -14,7 +17,7 @@ import Cable from "@material-ui/icons/SettingsInputComponent";
 import { Edit } from "@material-ui/icons";
 import Delete from "@material-ui/icons/HighlightOff";
 
-function viewCable(props) {
+function ViewCable(props) {
   console.log("Informações cable");
   console.log(props);
 
@@ -26,7 +29,7 @@ function viewCable(props) {
   const { viewCto } = ctos; //Recuperando o estado inicial da CTO
   const { data } = viewCto;
 
-  const { cables } = props.redux.fiberfusion;
+  const [cables, setCables] = useState([]);
 
   function open() {
     showModalOutputCables();
@@ -65,6 +68,15 @@ function viewCable(props) {
     console.log(index);
   }
 
+  useEffect(() => {
+    if (viewCto.visible) {
+      api.get(`cables/ctos/${data.id}`).then(response => {
+        const { data } = response;
+        setCables(data);
+      });
+    }
+  }, [viewCto.visible]);
+
   return (
     <Container>
       <Table striped bordered hover responsive="lg">
@@ -82,7 +94,7 @@ function viewCable(props) {
         </thead>
         <tbody>
           {cables.map((cable, index) => (
-            <tr>
+            <tr key={index}>
               <td>{cable.cable.name}</td>
               <td>{cable.cable.fiberAmount}</td>
               <td>{cable.cable.obs}</td>
@@ -105,7 +117,7 @@ function viewCable(props) {
                 >
                   <Delete
                     style={{ color: "#6c757d" }}
-                    onClick={deleteCable(index)}
+                    onClick={deleteCable(cable.id)}
                   />
                 </Button>
               </td>
@@ -142,23 +154,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(viewCable);
-
-/**
- * 
- * <Button
-                variant="link"
-                style={{
-                  borderTopWidth: "0px",
-                  paddingTop: "0px",
-                  borderLeftWidth: "0px",
-                  paddingLeft: "0px",
-                  paddingBottom: "0px",
-                  paddingRight: "0px",
-                  borderRightWidth: "0px",
-                  borderBottomWidth: "0px"
-                }}
-              >
-                <Edit style={{ color: "#6c757d" }} />
-              </Button>
- */
+)(ViewCable);
