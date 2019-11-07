@@ -3,6 +3,8 @@ import React, { useState } from "react";
 //Components Importados
 import { Container, Col, Button, Form } from "react-bootstrap/";
 import ViewPhoto from "./PhotoCto";
+import MenuItem from "@material-ui/core/MenuItem";
+import TextField from "@material-ui/core/TextField";
 
 //Creators do redux
 import { Creators as ctosActions } from "../../../../redux/store/ducks/ctos";
@@ -23,6 +25,20 @@ function Components(props) {
   const [obs, setObs] = useState(data.obs);
 
   const [status, setStatus] = useState(data.status);
+  const [statuses, setStatuses] = useState([
+    {
+      value: "active",
+      label: "Ativa"
+    },
+    {
+      value: "full",
+      label: "Lotada"
+    },
+    {
+      value: "cli_cancel",
+      label: "Cliente Cancelado"
+    }
+  ]);
 
   //Atualizar CTO
   function handleSubmit(e) {
@@ -41,7 +57,7 @@ function Components(props) {
       model: model,
       address: address,
       obs: obs,
-      status: mode
+      status //: mode
     };
     updateCtoRequest(updateCto, data.id);
     hideViewModalCto();
@@ -63,16 +79,32 @@ function Components(props) {
       <Form onSubmit={handleSubmit}>
         <Form.Row>
           <Form.Group>
-            <Form.Label>Status</Form.Label>
-            <Form.Control
-              as="select"
+            {/* <Form.Label>Status</Form.Label> */}
+            <TextField
+              id="standard-select-currency"
+              select
+              label="Status"
               value={status}
+              onChange={e => setStatus(e.target.value)}
+              helperText="Selecione o status da CTO"
+              margin="normal"
+              required
+            >
+              {statuses.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            {/* <Form.Control
+              as="select"
+              value="TEUCU" //{status}
               onChange={e => setStatus(e.target.value)}
             >
               <option>Ativa</option>
               <option>Lotada</option>
               <option>Cliente cancelado</option>
-            </Form.Control>
+            </Form.Control> */}
           </Form.Group>
         </Form.Row>
         <Form.Row>
@@ -88,6 +120,7 @@ function Components(props) {
         <Form.Row>
           <Form.Group as={Col} controlId="formGridPassword">
             <Form.Label>Modelo:</Form.Label>
+
             <Form.Control
               type="text"
               value={model}
