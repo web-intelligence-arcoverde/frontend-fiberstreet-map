@@ -65,17 +65,25 @@ function ViewCable(props) {
   }
 
   function deleteCable(index) {
-    console.log(index);
+    let response = window.prompt(
+      "Deseja mesmo deletar? Digite SIM para deletar"
+    );
+    const { deleteCableRequest } = props;
+
+    if (response === "SIM") {
+      deleteCableRequest(index);
+      hideViewModalCto();
+    }
   }
 
   useEffect(() => {
     if (viewCto.visible) {
-      api.get(`cables/ctos/${data.id}`).then(response => {
+      api.get(`cables/cto/${data.id}`).then(response => {
         const { data } = response;
         setCables(data);
       });
     }
-  }, [viewCto.visible]);
+  }, [data.id, viewCto.visible]);
 
   return (
     <Container>
@@ -117,7 +125,7 @@ function ViewCable(props) {
                 >
                   <Delete
                     style={{ color: "#6c757d" }}
-                    onClick={deleteCable(cable.id)}
+                    onClick={() => deleteCable(cable.cable.id)}
                   />
                 </Button>
               </td>

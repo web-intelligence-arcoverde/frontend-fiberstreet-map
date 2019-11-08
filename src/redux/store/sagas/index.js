@@ -2,7 +2,13 @@
 import { all, takeLatest } from "redux-saga/effects";
 
 import { AuthTypes } from "../ducks/auth";
-import { signIn, signOut, signUp, getPermissions } from "./auth";
+import {
+  signIn,
+  signOut,
+  signUp,
+  signUpWithProvider,
+  getPermissions
+} from "./auth";
 
 import { Types as ClientTypes } from "../ducks/cliente";
 import {
@@ -28,7 +34,7 @@ import { Types as SplitterTypes } from "../ducks/splitter";
 import { createSplitter, updateSplitter, deleteSplitter } from "./splitter";
 
 import { Types as CableTypes } from "../ducks/cabo";
-import { addRelCable } from "./cabo";
+import { addRelCable, deleteCable } from "./cabo";
 
 import { Types as UserTypes } from "../ducks/user";
 import { inviteNewUser } from "./user";
@@ -43,10 +49,10 @@ import {
 } from "./fiberfusion";
 
 import { Types as CablesTypes } from "../ducks/cabo";
-import { createCable, deleteCable } from "./cabo";
+import { createCable } from "./cabo";
 
-import { Types as InviteTypes } from '../ducks/invite';
-import { sendInvitationEmail } from './invite';
+import { Types as InviteTypes } from "../ducks/invite";
+import { sendInvitationEmail } from "./invite";
 
 /**  O * diz que estamos criando uma função generator
  * O generator é a maneira de lidarmos com assincronismo
@@ -65,6 +71,7 @@ export default function* rootSaga() {
     takeLatest(AuthTypes.SIGN_IN_REQUEST, signIn),
     takeLatest(AuthTypes.SIGN_OUT, signOut),
     takeLatest(AuthTypes.SIGN_UP_REQUEST, signUp),
+    takeLatest(AuthTypes.SIGN_UP_WITH_PROVIDER_REQUEST, signUpWithProvider),
 
     // Clientes
     takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient),

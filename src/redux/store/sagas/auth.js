@@ -30,6 +30,24 @@ export function* signIn({ email, password }) {
   }
 }
 
+export function* signUpWithProvider({ user, provider }) {
+  try {
+    const response = yield call(api.post, "users/provider", { user, provider });
+    localStorage.setItem("@Omni:token", response.data.token);
+
+    yield put(AuthActions.signInSuccess(response.data.token));
+    yield put(push("/"));
+  } catch (err) {
+    yield put(
+      toastrActions.add({
+        type: "error",
+        title: "Erro",
+        message: "Falha ao cadastrar usuário"
+      })
+    );
+  }
+}
+
 export function* signUp({ name, email, password }) {
   try {
     const response = yield call(api.post, "users", { name, email, password });
