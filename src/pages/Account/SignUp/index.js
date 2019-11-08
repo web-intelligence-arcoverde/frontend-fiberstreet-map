@@ -6,6 +6,15 @@ import TextField from "@material-ui/core/TextField";
 import { Form, Button } from "react-bootstrap/";
 import Typography from "@material-ui/core/Typography";
 
+import PropTypes from "prop-types";
+
+import { Redirect } from "react-router-dom";
+import { push } from "connected-react-router";
+
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import AuthActions from "../../../redux/store/ducks/auth";
+
 const useStyles = makeStyles(theme => ({
   "@global": {
     body: {
@@ -24,28 +33,48 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SignUp() {
+function SignUp(props) {
   const classes = useStyles();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("Admin");
+  const [redirect, setRedirect] = useState(false);
 
-  const [nameProvider, setNameProvider] = useState("");
-  const [cpf, setCpf] = useState("");
-  const [address, setAddress] = useState("");
-  const [key, setKey] = useState("");
+  console.log(props);
+
+  const { signUpRequest } = props;
 
   function createUser(e) {
     e.preventDefault();
-    console.log("Desgraça");
+
+    signUpRequest(name, email, password);
   }
 
   function createProvider(e) {
     e.preventDefault();
-    alert("Esfolar uma buceta, desgraaaaça");
+
+    var cliente = {
+      name: name,
+      email: email,
+      password: password
+    };
+
+    const { addUserProvider } = props;
+    addUserProvider(name, email, password);
+
+    //push("/provider");
+    setRedirect(true);
   }
+
+  function renderRedirect() {
+    if (redirect) {
+      return <Redirect to="/provider" />;
+    }
+  }
+
+  //{renderRedirect}
 
   return (
     <Container component="main" maxWidth="xs">
@@ -59,6 +88,7 @@ export default function SignUp() {
             // type === "Admin" ? createProvider() : createUser()
           }}
         >
+          {redirect && <Redirect to="/provider" />}
           <Typography
             component="h1"
             variant="h5"
@@ -124,3 +154,11 @@ export default function SignUp() {
     </Container>
   );
 }
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(AuthActions, dispatch);
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(SignUp);

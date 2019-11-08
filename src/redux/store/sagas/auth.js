@@ -31,8 +31,21 @@ export function* signIn({ email, password }) {
 }
 
 export function* signUpWithProvider({ user, provider }) {
+  const { username, email, password } = user;
+  const { name, address, cpf: cnpj, secret } = provider;
+
+  const body = {
+    username,
+    email,
+    password,
+    name,
+    address,
+    secret,
+    cnpj
+  };
+
   try {
-    const response = yield call(api.post, "users/provider", { user, provider });
+    const response = yield call(api.post, "users/provider", body);
     localStorage.setItem("@Omni:token", response.data.token);
 
     yield put(AuthActions.signInSuccess(response.data.token));
@@ -48,9 +61,13 @@ export function* signUpWithProvider({ user, provider }) {
   }
 }
 
-export function* signUp({ name, email, password }) {
+export function* signUp({ username, email, password }) {
   try {
-    const response = yield call(api.post, "users", { name, email, password });
+    const response = yield call(api.post, "users", {
+      username,
+      email,
+      password
+    });
 
     localStorage.setItem("@Omni:token", response.data.token);
 

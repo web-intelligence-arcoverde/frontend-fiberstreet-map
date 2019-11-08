@@ -7,8 +7,9 @@ const { Types, Creators } = createActions({
   signInRequest: ["email", "password"],
   signInSuccess: ["token"],
   signOut: null,
-  signUpRequest: ["name", "email", "password"],
-  signUpWithProviderRequest: ['user', 'provider'],  // signUpWithProviderSuccess:
+  signUpRequest: ["username", "email", "password"],
+  addUserProvider: ["username", "email", "password"],
+  signUpWithProviderRequest: ["user", "provider"], // signUpWithProviderSuccess:
   getPermissionsSuccess: ["roles", "permissions"]
 });
 
@@ -34,10 +35,21 @@ export const logout = state => state.merge({ signedIn: false, token: null });
 export const permissionsSuccess = (state, { roles, permissions }) =>
   state.merge({ roles, permissions });
 
+export const addUserProvider = (state, { username, email, password }) => {
+  return state.merge({
+    userProvider: {
+      username,
+      email,
+      password
+    }
+  });
+};
+
 /* Reducers to types */
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.SIGN_IN_SUCCESS]: success,
   [Types.SIGN_OUT]: logout,
-  [Types.GET_PERMISSIONS_SUCCESS]: permissionsSuccess
+  [Types.GET_PERMISSIONS_SUCCESS]: permissionsSuccess,
+  [Types.ADD_USER_PROVIDER]: addUserProvider
 });
