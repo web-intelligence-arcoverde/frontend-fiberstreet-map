@@ -1,11 +1,15 @@
-export const Types = {};
+export const Types = {
+  NEW_INVITE_REQUEST: "@invite/NEW_INVITE_REQUEST"
+};
 
-const INITIAL = {};
+const INITIAL = {
+  invitationEmail: ""
+};
 
 export default function(state = INITIAL, action) {
   switch (action.type) {
-    case Types.HIDE_MODAL_NEW_CABO_CTO_CEO:
-      return { ...state, idFromTo: { visible: false } };
+    case Types.NEW_INVITE_REQUEST:
+      return { ...state, invitationEmail: action.payload.email };
 
     default:
       return state;
@@ -17,4 +21,9 @@ export default function(state = INITIAL, action) {
  * Creators
  *
  */
-export const Creators = {};
+export const Creators = {
+  sendInviteRequest: email => ({
+    type: Types.NEW_INVITE_REQUEST,
+    payload: { email }
+  })
+};

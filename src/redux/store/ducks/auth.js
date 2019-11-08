@@ -8,6 +8,7 @@ const { Types, Creators } = createActions({
   signInSuccess: ["token"],
   signOut: null,
   signUpRequest: ["name", "email", "password"],
+  signUpWithProviderRequest: ['user', 'provider'],  // signUpWithProviderSuccess:
   getPermissionsSuccess: ["roles", "permissions"]
 });
 

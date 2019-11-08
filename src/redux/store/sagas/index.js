@@ -45,6 +45,9 @@ import {
 import { Types as CablesTypes } from "../ducks/cabo";
 import { createCable, deleteCable } from "./cabo";
 
+import { Types as InviteTypes } from '../ducks/invite';
+import { sendInvitationEmail } from './invite';
+
 /**  O * diz que estamos criando uma função generator
  * O generator é a maneira de lidarmos com assincronismo
  * da mesma forma que o async faz, porém o generator é melhor
@@ -106,7 +109,10 @@ export default function* rootSaga() {
     takeLatest(FiberFusionTypes.SHOW_FIBERS_CABLE_REQUEST, showFibersCable),
     takeLatest(FiberFusionTypes.SHOW_CABLES_CEO_REQUEST, showCablesCeo),
 
-    takeLatest(CableTypes.ADD_REL_CABLE, addRelCable)
+    takeLatest(CableTypes.ADD_REL_CABLE, addRelCable),
+
+    // invites
+    takeLatest(InviteTypes.NEW_INVITE_REQUEST, sendInvitationEmail)
   ]);
 }
 
