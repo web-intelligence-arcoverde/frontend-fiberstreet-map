@@ -17,11 +17,13 @@ import MainMap from "../pages/Mapa/MainMap";
 import SignUp from "../pages/Account/SignUp/index";
 import SignIn from "../pages/Account/SignIn/index";
 import Recover from "../pages/Account/Recorvery/index";
+import Provider from "../pages/Account/SignUp/Components/Provider";
 
 const Routes = () => (
   <ConnectedRouter history={history}>
     <Switch>
       <Guest exact path="/" component={SignIn} />
+      <Guest exact path="/provider" component={Provider} />
       <Guest path="/signup" component={SignUp} />
       <Guest exact path="/recover" component={Recover} />
       <Private path="/map" exact component={MainMap} />

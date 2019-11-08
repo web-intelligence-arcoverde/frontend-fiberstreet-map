@@ -19,7 +19,10 @@ const initialState = {
     data: ""
   },
   data: {}, // aqui tem os providers
-  active: JSON.parse(localStorage.getItem("@gz-net-fs:provider")) || null
+  active: JSON.parse(localStorage.getItem("@gz-net-fs:provider")) || null,
+
+  user: {},
+  admin: {}
 };
 
 /**
