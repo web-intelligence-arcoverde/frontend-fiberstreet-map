@@ -18,6 +18,7 @@ import splitter from "./splitter";
 import cabo from "./cabo";
 import drop from "./drop";
 import fiberfusion from "./fiberfusion";
+import invite from './invite';
 
 import { reducer as auth } from "./auth";
 import { reducer as toastr } from "react-redux-toastr";
@@ -35,5 +36,6 @@ export default combineReducers({
   cabo,
   drop,
   fiberfusion,
+  invite,
   router: connectRouter(history)
 });

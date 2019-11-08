@@ -33,7 +33,9 @@ export const Types = {
   ADD_REL_CABLE: "@cable/ADD_REL",
 
   LOAD_SUCCESS: "@cable/LOAD_SUCCESS",
-  SET_OBJECT_TO: "cable/SET_OBJECT_TO"
+  SET_OBJECT_TO: "cable/SET_OBJECT_TO",
+
+  DELETE_CABLE_BY_ID: "@cable/DELETE_CABLE_BY_ID"
 };
 
 const INITIAL = {
@@ -197,9 +199,9 @@ export const Creators = {
     payload: { cable }
   }),
 
-  deleteCableRequest: cable => ({
+  deleteCableRequest: id => ({
     type: Types.DELETE_CABLE_REQUEST,
-    payload: { cable }
+    payload: { id }
   }),
 
   deleteCableSuccess: cable => ({
@@ -221,5 +223,10 @@ export const Creators = {
   saveRel: (typeOne, typeTwo, relationOne, relationTwo, cable) => ({
     type: Types.ADD_REL_CABLE,
     payload: { typeOne, typeTwo, relationOne, relationTwo, cable }
+  }),
+
+  deleteCableByIdRequest: cableId => ({
+    type: Types.DELETE_CABLE_BY_ID,
+    payload: { cableId }
   })
 };
