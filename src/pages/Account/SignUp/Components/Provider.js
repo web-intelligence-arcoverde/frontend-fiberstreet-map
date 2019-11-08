@@ -24,27 +24,27 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SignUp() {
+export default function Provider() {
   const classes = useStyles();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [type, setType] = useState("Admin");
+  const [type, setType] = useState("");
 
   const [nameProvider, setNameProvider] = useState("");
   const [cpf, setCpf] = useState("");
   const [address, setAddress] = useState("");
   const [key, setKey] = useState("");
 
-  function createUser(e) {
-    e.preventDefault();
+  function createUser(event) {
+    event.preventDefault();
     console.log("Desgraça");
   }
 
-  function createProvider(e) {
-    e.preventDefault();
-    alert("Esfolar uma buceta, desgraaaaça");
+  function createProvider(event) {
+    event.preventDefault();
+    console.log("Desgraça 2");
   }
 
   return (
@@ -53,18 +53,14 @@ export default function SignUp() {
       <div className={classes.paper}>
         <form
           className={classes.form}
-          onSubmit={e => {
-            if (type === "Admin") createProvider(e);
-            else createUser(e);
-            // type === "Admin" ? createProvider() : createUser()
-          }}
+          onSubmit={e => (type === "Admin" ? createProvider(e) : createUser(e))}
         >
           <Typography
             component="h1"
             variant="h5"
             style={{ textAlign: "center" }}
           >
-            Cadastrar Usuario
+            Cadastrar
           </Typography>
           <TextField
             variant="outlined"
