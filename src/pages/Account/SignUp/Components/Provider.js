@@ -6,6 +6,11 @@ import TextField from "@material-ui/core/TextField";
 import { Form, Button } from "react-bootstrap/";
 import Typography from "@material-ui/core/Typography";
 
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
+import AuthActions from "../../../../redux/store/ducks/auth";
+
 const useStyles = makeStyles(theme => ({
   "@global": {
     body: {
@@ -24,13 +29,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Provider() {
+function Provider(props) {
   const classes = useStyles();
-
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [type, setType] = useState("");
 
   const [nameProvider, setNameProvider] = useState("");
   const [cpf, setCpf] = useState("");
@@ -44,17 +44,24 @@ export default function Provider() {
 
   function createProvider(event) {
     event.preventDefault();
-    console.log("Desgraça 2");
+    const { userProvider } = props.auth;
+
+    const provider = {
+      name: nameProvider,
+      cpf,
+      address,
+      secret: key
+    };
+
+    const { signUpWithProviderRequest } = props;
+    signUpWithProviderRequest(userProvider, provider);
   }
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <form
-          className={classes.form}
-          onSubmit={e => (type === "Admin" ? createProvider(e) : createUser(e))}
-        >
+        <form onSubmit={createProvider} className={classes.form}>
           <Typography
             component="h1"
             variant="h5"
@@ -67,10 +74,10 @@ export default function Provider() {
             margin="normal"
             required
             fullWidth
-            label="Nome"
+            label="Nome do provedor"
             name="Nome"
-            value={name}
-            onChange={e => setName(e.target.value)}
+            value={nameProvider}
+            onChange={e => setNameProvider(e.target.value)}
             autoFocus
           />
 
@@ -79,11 +86,11 @@ export default function Provider() {
             margin="normal"
             required
             fullWidth
-            label="Email"
-            name="email"
-            value={email}
-            type="email"
-            onChange={e => setEmail(e.target.value)}
+            label="CNPJ"
+            name="CNPJ"
+            value={cpf}
+            type="text"
+            onChange={e => setCpf(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -91,32 +98,42 @@ export default function Provider() {
             required
             fullWidth
             id="Password"
-            label="Password"
-            name="Password"
-            autoComplete="Password"
-            value={password}
-            type="password"
-            onChange={e => setPassword(e.target.value)}
+            label="Endereço"
+            name="Endereço"
+            autoComplete="Endereço"
+            value={address}
+            type="text"
+            onChange={e => setAddress(e.target.value)}
           />
-          <Form.Group>
-            <Form.Control
-              as="select"
-              value={type}
-              onChange={e => setType(e.target.value)}
-              style={{
-                height: "54px",
-                marginTop: "16px"
-              }}
-            >
-              <option>Admin</option>
-              <option>Funcionario</option>
-            </Form.Control>
-          </Form.Group>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="key"
+            label="Key"
+            name="key"
+            value={key}
+            type="text"
+            onChange={e => setKey(e.target.value)}
+          />
           <Button variant="secondary" style={{ width: "100%" }} type="submit">
-            Prosseguir
+            Concluir
           </Button>
         </form>
       </div>
     </Container>
   );
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(AuthActions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Provider);
