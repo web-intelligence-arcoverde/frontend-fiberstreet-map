@@ -13,6 +13,8 @@ import { InputField } from "./Components/InputFieldComponent";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import { cpfMask } from "../../util/format";
+
 //Creators
 import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
 import { Creators as MapActions } from "../../../redux/store/ducks/map";
@@ -21,6 +23,10 @@ import { Creators as DropActions } from "../../../redux/store/ducks/drop";
 import api from "../../../services/api";
 
 function ViewClient(props) {
+  function changeCpf(e) {
+    setCpf(cpfMask(e.target.value));
+  }
+
   const { viewClient } = props.redux.client;
   const { data } = viewClient; //Informações do usuario.
 
@@ -144,11 +150,9 @@ function ViewClient(props) {
     if (e) {
       if (status === null) {
         setStatus("active");
-        console.log("Estava Null");
       } else if (status === "active") {
-        console.log("Estava active");
         setStatus(null);
-        console.log(moment().format("YYYY-MM-DD"));
+        moment().format("YYYY-MM-DD");
       }
     }
   }
@@ -201,7 +205,7 @@ function ViewClient(props) {
                     name={"CPF:"}
                     type={"text"}
                     value={cpf}
-                    onChange={e => setCpf(e.target.value)}
+                    onChange={changeCpf}
                   />
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -320,7 +324,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewClient);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewClient);

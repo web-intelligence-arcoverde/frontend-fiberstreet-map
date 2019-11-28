@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 
 //Reducers
 import { Creators as actionsUser } from "../../../redux/store/ducks/user";
-import { Creators as InviteActions } from '../../../redux/store/ducks/invite';
+import { Creators as InviteActions } from "../../../redux/store/ducks/invite";
 
 //Components UI
 import Modal from "react-bootstrap/Modal";
@@ -22,8 +22,8 @@ function AddUser(props) {
   const [validated, setValidated] = useState(false);
 
   function handleSubmit(e) {
-    e.preventDefault()
-    const { sendInviteRequest} = props;
+    e.preventDefault();
+    const { sendInviteRequest } = props;
     sendInviteRequest(email);
     hideModalNewUser();
     // const { inviteNewUserProvider } = props;
@@ -63,7 +63,7 @@ function AddUser(props) {
               Enviar
             </Button>
           ) : (
-            console.log("teste")
+            console.log("")
           )}
         </Modal.Footer>
       </Form>
@@ -76,9 +76,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...actionsUser,...InviteActions }, dispatch);
+  bindActionCreators({ ...actionsUser, ...InviteActions }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddUser);
+export default connect(mapStateToProps, mapDispatchToProps)(AddUser);
