@@ -1,37 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 
-//Redux
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-
-import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
-import { Creators as FiberFusionActions } from "../../../redux/store/ducks/fiberfusion";
-
-//import components
-import TableCeo from "./Components/TableCeo";
-import TableFusoes from "./Components/TableFusoes";
-import TableCable from "./Components/TableCable";
+import { useDispatch, useSelector } from "react-redux";
+import { Creators as CableActions } from "../../../redux/store/ducks/cabo";
 
 //UI-Components
 import { Modal, Accordion, Card, ListGroup } from "react-bootstrap";
+import Information from "./components/Information";
 
-const ViewCeo = props => {
-  const { visible } = props.redux.ceo.viewCeo;
+export default function ViewCable(props) {
+  const view = useSelector(state => state.cabo.view);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const { data } = props.redux.ceo.viewCeo;
-    if (visible) {
-      const { showCablesCeoRequest } = props;
-      showCablesCeoRequest(data.id);
+    const data = view.data;
+    if (view.visible) {
     }
-  }, [props.redux.ceo.viewCeo, visible]);
+  }, [view.data, view.visible]);
+
+  const handleHideModal = useCallback(() => {
+    dispatch(CableActions.hideViewCableModal());
+  }, [dispatch]);
 
   return (
-    <Modal
-      size="lg"
-      show={props.redux.ceo.viewCeo.visible}
-      onHide={props.hideViewModalCeo}
-    >
+    <Modal size="lg" show={false} onHide={handleHideModal}>
       <Card>
         <Card.Header
           style={{
@@ -40,7 +32,7 @@ const ViewCeo = props => {
             textAlign: "center"
           }}
         >
-          Caixa de Emenda Optica
+          Cabo
         </Card.Header>
         <ListGroup variant="flush">
           <ListGroup.Item>
@@ -51,7 +43,7 @@ const ViewCeo = props => {
                   eventKey="0"
                   style={{ backgroundColor: "#6c757d", color: "#FFF" }}
                 >
-                  <h5>Informações da caixa de emenda</h5>
+                  <h5>Informações do cabo</h5>
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="0">
                   <Card.Body
@@ -61,7 +53,7 @@ const ViewCeo = props => {
                       paddingBottom: "0px"
                     }}
                   >
-                    <TableCeo />
+                    <Information />
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>
@@ -82,7 +74,7 @@ const ViewCeo = props => {
                       paddingBottom: "0px"
                     }}
                   >
-                    <TableCable />
+                    {/* <TableCable /> */}
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>
@@ -92,14 +84,4 @@ const ViewCeo = props => {
       </Card>
     </Modal>
   );
-};
-
-const mapStateToProps = state => ({
-  redux: state
-});
-
-//Ações
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...ceoCreators, ...FiberFusionActions }, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(ViewCeo);
+}

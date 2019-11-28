@@ -18,12 +18,14 @@ import splitter from "./splitter";
 import cabo from "./cabo";
 import drop from "./drop";
 import fiberfusion from "./fiberfusion";
-import invite from './invite';
+import invite from "./invite";
+import coordinates from "./coordinates";
 
 import { reducer as auth } from "./auth";
 import { reducer as toastr } from "react-redux-toastr";
 
 export default combineReducers({
+  coordinates,
   splitter,
   ceo,
   toastr,

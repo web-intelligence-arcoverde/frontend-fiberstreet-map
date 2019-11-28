@@ -7,12 +7,15 @@ export const Types = {
 
   CAN_ADD_COORDINATES: "map/CAN_ADD_COORDINATES",
 
-  ADD_COORD_CABLE: "@map/ADD_COORD_CABLE"
+  ADD_COORD_CABLE: "@map/ADD_COORD_CABLE",
+
+  SET_MAP_STYLE: "map/SET_MAP_STYLE"
 };
 
 let INITIAL_STATE = {
   delimitation: "default",
   subDelimitation: "default",
+  mapStyle: "streets-v11",
   polyline: []
 };
 
@@ -23,6 +26,11 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         delimitation: action.payload.delimitation
+      };
+    case Types.SET_MAP_STYLE:
+      return {
+        ...state,
+        mapStyle: action.payload.style
       };
     case Types.SET_SUB_DELEMITATION:
       return {

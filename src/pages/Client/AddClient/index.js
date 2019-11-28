@@ -10,7 +10,13 @@ import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
 //Components;
 import { Modal, Button, Form } from "react-bootstrap";
 
+import { cpfMask } from "../../util/format";
+
 function ClienteAddModal(props) {
+  function changeCpf(e) {
+    setCpf(cpfMask(e.target.value));
+  }
+
   const { viewNewClient } = props.redux.client;
 
   const [name, setName] = useState("");
@@ -36,7 +42,7 @@ function ClienteAddModal(props) {
       status: null
     };
     createClientRequest(newClient);
-    console.log(newClient);
+
     handleHideModal();
   }
 
@@ -86,7 +92,7 @@ function ClienteAddModal(props) {
                 maxLength="18"
                 minLength="14"
                 value={cpf}
-                onChange={e => setCpf(e.target.value)}
+                onChange={changeCpf}
               />
             </Form.Group>
 
@@ -170,7 +176,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(ClientActions, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ClienteAddModal);
+export default connect(mapStateToProps, mapDispatchToProps)(ClienteAddModal);
