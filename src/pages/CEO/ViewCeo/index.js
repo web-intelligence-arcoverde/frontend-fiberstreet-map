@@ -11,6 +11,7 @@ import { Creators as FiberFusionActions } from "../../../redux/store/ducks/fiber
 import TableCeo from "./Components/TableCeo";
 import TableFusoes from "./Components/TableFusoes";
 import TableCable from "./Components/TableCable";
+import Spreadsheet from "./Components/Spreadsheet";
 
 //UI-Components
 import { Modal, Accordion, Card, ListGroup } from "react-bootstrap";
@@ -83,6 +84,27 @@ const ViewCeo = props => {
                     }}
                   >
                     <TableCable />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+
+              <Card>
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey="3"
+                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                >
+                  <h5>Plano de Emenda</h5>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="3">
+                  <Card.Body
+                    style={{
+                      paddingTop: "10px",
+                      paddingLeft: "5px",
+                      paddingBottom: "0px"
+                    }}
+                  >
+                    <Spreadsheet />
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>

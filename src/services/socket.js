@@ -2,14 +2,13 @@ import Ws from "@adonisjs/websocket-client";
 
 export class SocketConnection {
   connect(jwt) {
-    this.ws = Ws("ws://127.0.0.1:3333");
+    this.ws = Ws("ws://192.168.11.105:3333");
     // this.ws = Ws("wss://45.224.40.252");
     this.ws.withJwtToken(jwt);
     this.ws.connect();
 
     this.ws.on("open", () => {
       // console.log("Connection initialized");
-      // alert("desgraça");
     });
 
     this.ws.on("close", () => {

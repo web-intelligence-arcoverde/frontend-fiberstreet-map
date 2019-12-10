@@ -19,6 +19,8 @@ import SignIn from "../pages/Account/SignIn/index";
 import Recover from "../pages/Account/Recorvery/index";
 import Provider from "../pages/Account/SignUp/Components/Provider";
 
+import Download from "../pages/Download";
+
 const Routes = () => (
   <ConnectedRouter history={history}>
     <Switch>
@@ -27,6 +29,7 @@ const Routes = () => (
       <Guest path="/signup" component={SignUp} />
       <Guest exact path="/recover" component={Recover} />
       <Private path="/map" exact component={MainMap} />
+      <Guest path="/download" exact component={Download} />
     </Switch>
   </ConnectedRouter>
 );
