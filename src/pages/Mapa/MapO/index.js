@@ -106,7 +106,7 @@ function Map(props) {
       <div id={container} className={classNameStyle} />
       <div id="geocoder" className="geocoder" />
       <div id="distance" className="distance-container" />
-      <LeftMenu />
+      <LeftMenu map={map} />
       {visible === true ? <IconsBottom map={map} /> : <></>}
 
       <LoadPages />

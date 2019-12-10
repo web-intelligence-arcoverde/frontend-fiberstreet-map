@@ -30,6 +30,8 @@ export const handleCtoClickTwoFactor = (cto, longitude, latitude) => {
     if ((subDelimitation === "cto") | (subDelimitation === "ceo")) {
       store.dispatch(CreatorsCable.setIdTo(cto.id));
       store.dispatch(CreatorsCable.showModalAddCable("cto"));
+    } else if (subDelimitation === "anywhere") {
+      store.dispatch();
     } else {
       /* Cabo do cliente para a Caixa Terminal */
       store.dispatch(CreatorsCable.showAddCableCto(cto.id));
