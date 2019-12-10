@@ -1,6 +1,7 @@
 import { handleClickCto } from "./cto";
 import { handleClickCeo } from "./ceo";
 import { handleClickClient } from "./client";
+import { handleClickCable } from "./cable";
 
 /*
  * Configuração de evento de clique nos objetos que estão no mapa
@@ -16,6 +17,9 @@ export const openObject = (map, store) => {
   map.on("click", "cto", e => handleClickCto(e.features[0]));
   map.on("click", "cto_lotada", e => handleClickCto(e.features[0]));
   map.on("click", "cto_cliente_cancelado", e => handleClickCto(e.features[0]));
+
+  //Cable
+  map.on("click", "wires", e => handleClickCable(e.features[0]));
 
   //Evento de clique na caixa de emenda
   map.on("click", "ceo", e => handleClickCeo(e));

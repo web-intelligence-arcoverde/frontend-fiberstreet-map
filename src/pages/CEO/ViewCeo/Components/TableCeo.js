@@ -7,7 +7,8 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 //Creators redux
-import { Creators as ceoCreators } from "../../../../redux/store/ducks/ceo";
+import { Creators as CeoCreators } from "../../../../redux/store/ducks/ceo";
+import { Creators as MapCreators } from "../../../../redux/store/ducks/map";
 
 const TableCeo = props => {
   const { data } = props.redux.ceo.viewCeo;
@@ -35,6 +36,13 @@ const TableCeo = props => {
       obs: obs
     };
     updateCeoRequest(updateCeo, data.id);
+  }
+
+  function move() {
+    const { hideViewModalCeo, setDelimitation, setType } = props;
+    hideViewModalCeo();
+    setType("ceo", data.id);
+    setDelimitation("mover");
   }
 
   return (
@@ -123,6 +131,9 @@ const TableCeo = props => {
           >
             Excluir
           </Button>
+          <Button variant="info" style={{ marginRight: "10px" }} onClick={move}>
+            Mover Caixa
+          </Button>
           <Button variant="info" style={{ marginRight: "10px" }} type="submit">
             Atualizar informações
           </Button>
@@ -137,9 +148,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...ceoCreators }, dispatch);
+  bindActionCreators({ ...CeoCreators, ...MapCreators }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TableCeo);
+export default connect(mapStateToProps, mapDispatchToProps)(TableCeo);

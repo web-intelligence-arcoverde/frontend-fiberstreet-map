@@ -14,6 +14,7 @@ export const get = (map, store, api, API) => {
         payload: { cables: data }
       });
 
+      console.log(map.getSource("wires"));
       map.getSource("wires").setData(dat);
     })
     .catch(error => {});

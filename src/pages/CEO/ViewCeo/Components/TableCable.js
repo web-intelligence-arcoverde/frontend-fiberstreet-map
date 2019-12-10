@@ -12,6 +12,8 @@ import { Creators as ceoCreators } from "../../../../redux/store/ducks/ceo";
 import { Creators as mapCreators } from "../../../../redux/store/ducks/map";
 import { Creators as cableCreators } from "../../../../redux/store/ducks/cabo";
 
+import { positionObject } from "../../../Functions/get-position-object/index";
+
 //UI-Components
 import { Button, Container, Table } from "react-bootstrap";
 import Delete from "@material-ui/icons/HighlightOff";
@@ -23,31 +25,20 @@ function ViewFusoes(props) {
 
   const [cables, setCables] = useState([]);
 
-  function addCabo() {
-    let latitude;
-    let longitude;
-    try {
-      latitude = JSON.parse(data.coordinates).latitude;
-      longitude = JSON.parse(data.coordinates).longitude;
-    } catch (err) {
-      latitude = data.coordinates.latitude;
-      longitude = data.coordinates.longitude;
-    }
-
-    let coord = [longitude, latitude];
-
+  function addCable() {
     const {
-      addCoordCabo, // setPolyline
+      showIcons,
+      addCoordCabo,
       setSubDelemitation,
       setIdFrom,
       setDelimitation
     } = props;
 
     setDelimitation("cabo");
-    setSubDelemitation("ceo"); // map - map.delimitacao
-    let arrayDeArray = new Array(coord);
-    addCoordCabo(arrayDeArray); // map - map.polyline
-    setIdFrom(data.id); // cabo - cabo.id
+    setSubDelemitation("ceo");
+    addCoordCabo(positionObject(data));
+    setIdFrom(data.id);
+    showIcons();
     hideViewModalCeo();
   }
 
@@ -58,6 +49,7 @@ function ViewFusoes(props) {
         setCables(data);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
   function deleteCable(index) {
@@ -116,7 +108,11 @@ function ViewFusoes(props) {
           marginBottom: "10px"
         }}
       >
-        <Button variant="secondary" style={{ width: "100%" }} onClick={addCabo}>
+        <Button
+          variant="secondary"
+          style={{ width: "100%" }}
+          onClick={addCable}
+        >
           Adicionar um novo cabo
         </Button>
       </div>
@@ -135,7 +131,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewFusoes);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewFusoes);

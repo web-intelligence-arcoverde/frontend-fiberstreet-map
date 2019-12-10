@@ -19,10 +19,10 @@ const handleCeoClickTwoFactor = (ceo, longitude, latitude) => {
     let newPolyline = [...polyline, [longitude, latitude]];
     store.dispatch(CreatorsMap.addCoordCabo(newPolyline));
 
-    if (subDelimitation === "cto") {
-      store.dispatch(CreatorsCable.setIdTo(ceo.id));
-      store.dispatch(CreatorsCable.showModalAddCable("ceo"));
-    } else if (subDelimitation === "ceo") {
+    /* 
+      Adicionar cabo de uma {cto,ceo} para os mesmo.
+    */
+    if ((subDelimitation === "cto") | (subDelimitation === "ceo")) {
       store.dispatch(CreatorsCable.setIdTo(ceo.id));
       store.dispatch(CreatorsCable.showModalAddCable("ceo"));
     }

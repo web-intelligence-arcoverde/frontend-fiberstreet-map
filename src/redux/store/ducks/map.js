@@ -9,18 +9,64 @@ export const Types = {
 
   ADD_COORD_CABLE: "@map/ADD_COORD_CABLE",
 
-  SET_MAP_STYLE: "map/SET_MAP_STYLE"
+  SET_MAP_STYLE: "map/SET_MAP_STYLE",
+
+  SET_MOVE_OBJECT_ON_MAP: "map/SET_MOVE_OBJECT_ON_MAP",
+
+  SET_TYPE_OBJECT: "map/SET_TYPE.OBJECT",
+
+  SHOW_ICONS_DRAWN: "map/SHOW_ICONS_DRAWN",
+  HIDE_ICONS_DRAWN: "map/HIDE_ICONS_DRAWN"
 };
 
 let INITIAL_STATE = {
   delimitation: "default",
   subDelimitation: "default",
   mapStyle: "streets-v11",
-  polyline: []
+  polyline: [],
+  showIconsDrawn: { visible: false },
+  moveObjectMap: { type: "", objectId: "" }
 };
+
+/*
+setType: type => ({
+    type: Types.SET_TYPE.OBJECT,
+    payload: type
+  }),
+  setObjetcMove: object => ({
+    type: Types.SET_MOVE_OBJECT_ON_MAP,
+    payload: { object }
+  })
+*/
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case Types.SHOW_ICONS_DRAWN:
+      return {
+        ...state,
+        showIconsDrawn: { visible: true }
+      };
+    case Types.HIDE_ICONS_DRAWN:
+      return {
+        ...state,
+        showIconsDrawn: { visible: false }
+      };
+    case Types.SET_TYPE_OBJECT:
+      return {
+        ...state,
+        moveObjectMap: {
+          type: action.payload.type,
+          objectId: action.payload.objectId
+        }
+      };
+    case Types.SET_MOVE_OBJECT_ON_MAP:
+      return {
+        ...state,
+        moveObjectMap: {
+          ...state.moveObjectMap,
+          objectId: action.payload.objectId
+        }
+      };
     /** Delimitações do mapa **/
     case Types.SET_MAP_DELEMITATION:
       return {
@@ -86,5 +132,19 @@ export const Creators = {
   addCoordCabo: polyline => ({
     type: Types.ADD_COORD_CABLE,
     payload: { polyline }
+  }),
+  setType: (type, objectId) => ({
+    type: Types.SET_TYPE_OBJECT,
+    payload: { type: type, objectId: objectId }
+  }),
+  setObjetcMove: id => ({
+    type: Types.SET_MOVE_OBJECT_ON_MAP,
+    payload: id
+  }),
+  showIcons: () => ({
+    type: Types.SHOW_ICONS_DRAWN
+  }),
+  hideIcons: () => ({
+    type: Types.HIDE_ICONS_DRAWN
   })
 };

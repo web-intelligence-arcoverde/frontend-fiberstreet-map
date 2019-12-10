@@ -6,6 +6,10 @@ export const source = (map, url) => {
   map.addLayer({
     id: "wires",
     source: "wires",
-    type: "line"
+    type: "line",
+    paint: {
+      "line-color": "#000",
+      "line-width": 5
+    }
   });
 };

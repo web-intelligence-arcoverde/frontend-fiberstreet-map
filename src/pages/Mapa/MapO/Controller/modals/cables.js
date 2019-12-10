@@ -7,6 +7,7 @@ export const addCoordinatesCables = (map, coordinates) => {
     ...polyline,
     [coordinates.longitude, coordinates.latitude]
   ];
+  console.log(newPolyline);
   store.dispatch(MapCreators.addCoordCabo(newPolyline));
   adicionarCoordenadasAoCabo(newPolyline, map);
 };

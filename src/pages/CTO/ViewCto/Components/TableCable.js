@@ -6,61 +6,39 @@ import api from "../../../../services/api";
 import { Creators as ctosActions } from "../../../../redux/store/ducks/ctos";
 import { Creators as MapActions } from "../../../../redux/store/ducks/map";
 import { Creators as CaboActions } from "../../../../redux/store/ducks/cabo";
+import { Creators as CoordinatesCreators } from "../../../../redux/store/ducks/coordinates";
 
 //Redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 //UI-Components
-import { Button, Modal, Container, Table } from "react-bootstrap";
-import Cable from "@material-ui/icons/SettingsInputComponent";
-import { Edit } from "@material-ui/icons";
+import { Button, Container, Table } from "react-bootstrap";
 import Delete from "@material-ui/icons/HighlightOff";
 
+//function
+import { positionObject } from "../../../Functions/get-position-object/index";
+
 function ViewCable(props) {
-  console.log("Informações cable");
-  console.log(props);
-
-  const { showModalOutputCables } = props;
-
-  const { ctos } = props.redux;
   const { hideViewModalCto } = props;
-
-  const { viewCto } = ctos; //Recuperando o estado inicial da CTO
+  const { ctos } = props.redux;
+  const { viewCto } = ctos;
   const { data } = viewCto;
-
   const [cables, setCables] = useState([]);
 
-  function open() {
-    showModalOutputCables();
-  }
-
-  function addCabo() {
-    let latitude;
-    let longitude;
-    try {
-      latitude = JSON.parse(data.coordinates).latitude;
-      longitude = JSON.parse(data.coordinates).longitude;
-    } catch (err) {
-      latitude = data.coordinates.latitude;
-      longitude = data.coordinates.longitude;
-    }
-
-    let coord = [longitude, latitude];
-
+  function addCable() {
     const {
-      addCoordCabo, // setPolyline
+      showIcons,
+      setDelimitation,
+      addCoordCabo,
       setSubDelemitation,
-      setIdFrom,
-      setDelimitation
+      setIdFrom
     } = props;
-
+    showIcons();
+    addCoordCabo(positionObject(data));
     setDelimitation("cabo");
-    setSubDelemitation("cto"); // map - map.delimitacao
-
-    let arrayDeArray = new Array(coord);
-    addCoordCabo(arrayDeArray); // map - map.polyline
-    setIdFrom(data.id); // cabo - cabo.id
+    setSubDelemitation("cto");
+    setIdFrom(data.id);
     hideViewModalCto();
   }
 
@@ -90,12 +68,8 @@ function ViewCable(props) {
       <Table striped bordered hover responsive="lg">
         <thead>
           <tr>
-            {/* <th>Bandeja</th> */}
             <th>Cabo</th>
-            {/* <th>Fibra</th> */}
-            {/* <th style={{ textAlign: "center" }}>x</th> */}
             <th>Quantidade de Fibras</th>
-            {/* <th>Cabo</th> */}
             <th>Observação</th>
             <th>Ações</th>
           </tr>
@@ -106,7 +80,6 @@ function ViewCable(props) {
               <td>{cable.cable.name}</td>
               <td>{cable.cable.fiberAmount}</td>
               <td>{cable.cable.obs}</td>
-
               <td>
                 <Button
                   variant="link"
@@ -141,7 +114,7 @@ function ViewCable(props) {
           marginBottom: "10px"
         }}
       >
-        <Button variant="secondary" onClick={addCabo}>
+        <Button variant="secondary" onClick={addCable}>
           Adicionar um novo cabo
         </Button>
       </div>
@@ -155,11 +128,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { ...MapActions, ...CaboActions, ...ctosActions },
+    { ...MapActions, ...CaboActions, ...ctosActions, ...CoordinatesCreators },
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewCable);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewCable);

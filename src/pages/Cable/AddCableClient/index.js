@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import Modal from "react-modal";
 import api from "../../../services/api";
-import { Form } from "./Components/modalStyles/styles";
 import "./Components/modalStyles/styles.css";
 
 import { connect } from "react-redux";
@@ -15,6 +14,7 @@ function AddNewCabo(props) {
   const [quantidade_fibras, setQuantidadeFibras] = useState(0);
 
   function handleSubmit(e) {
+    // a
     e.preventDefault();
     let coordinates = props.redux.all.mapa.polyline.map(linha => {
       return {

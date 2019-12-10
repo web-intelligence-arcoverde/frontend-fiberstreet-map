@@ -12,7 +12,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 
 function AddNewCto(props) {
   const { HideNewViewModalCto } = props;
-  const { viewNewCto } = props.redux.ctos;
+  const { visible } = props.redux.ctos.viewNewCto;
 
   const [name, setName] = useState("");
   const [observacao, setObservacao] = useState("");
@@ -29,8 +29,15 @@ function AddNewCto(props) {
       address: address,
       obs: observacao
     };
+
     const { createCtoRequest } = props;
+
     createCtoRequest(newCto);
+
+    hideModal();
+  }
+
+  function hideModal() {
     HideNewViewModalCto();
     setName("");
     setAddress("");
@@ -39,7 +46,7 @@ function AddNewCto(props) {
   }
 
   return (
-    <Modal show={viewNewCto.visible} onHide={HideNewViewModalCto}>
+    <Modal show={visible} onHide={hideModal}>
       <Form onSubmit={handleSubmit}>
         <Modal.Header
           style={{
@@ -103,7 +110,7 @@ function AddNewCto(props) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="danger" onClick={HideNewViewModalCto}>
+          <Button variant="danger" onClick={hideModal}>
             Fechar
           </Button>
 
@@ -123,7 +130,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...ctoCreators }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddNewCto);
+export default connect(mapStateToProps, mapDispatchToProps)(AddNewCto);
