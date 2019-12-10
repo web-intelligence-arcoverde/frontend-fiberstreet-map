@@ -22,7 +22,13 @@ import { Types as CtoTypes } from "../ducks/ctos";
 import { createCto, loadSplitterAndClient, updateCto, deleteCto } from "./ctos";
 
 import { Types as CeoTypes } from "../ducks/ceo";
-import { createCeo, updateCeo, deleteCeo } from "./ceo";
+import {
+  createCeo,
+  updateCeo,
+  deleteCeo,
+  createSpreadsheet,
+  deleteSpreadsheet
+} from "./ceo";
 
 import { Types as ProvidersTypes } from "../ducks/provider";
 import { getProviders, init } from "./provider";
@@ -85,6 +91,8 @@ export default function* rootSaga() {
     takeLatest(CeoTypes.CREATE_CEO_REQUEST, createCeo),
     takeLatest(CeoTypes.UPDATE_CEO_REQUEST, updateCeo),
     takeLatest(CeoTypes.DELETE_CEO_REQUEST, deleteCeo),
+    takeLatest(CeoTypes.CREATE_SPREADSHEET_REQUEST, createSpreadsheet),
+    takeLatest(CeoTypes.DELETE_SPREADSHEET_REQUEST, deleteSpreadsheet),
 
     //CTO
     takeLatest(CtoTypes.CREATE_CTO_REQUEST, createCto),

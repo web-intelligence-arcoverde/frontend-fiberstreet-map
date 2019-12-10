@@ -25,7 +25,12 @@ export const Types = {
   UPDATE_CEO_SUCCESS: "@ceo/UPDATE_SUCCESS",
 
   DELETE_CEO_REQUEST: "@ceo/DELETE_REQUEST",
-  DELETE_CEO_SUCCESS: "@ceo/DELETE_SUCCESS"
+  DELETE_CEO_SUCCESS: "@ceo/DELETE_SUCCESS",
+
+  CREATE_SPREADSHEET_REQUEST: "@ceo/CREATE_SPREADSHEET_REQUEST",
+  CREATE_SPREADSHEET_SUCCESS: "@ceo/CREATE_SPREADSHEET_SUCCESS",
+  DELETE_SPREADSHEET_REQUEST: "@ceo/DELETE_SPREADSHEET_REQUEST",
+  DELETE_SPREADSHEET_SUCCESS: "@ceo/DELETE_SPREADSHEET_SUCCESS"
 };
 
 const INITIAL_STATE = {
@@ -44,6 +49,12 @@ const INITIAL_STATE = {
   },
   viewNewFusao: {
     visible: false
+  },
+
+  spreadsheet: {
+    downloadURL: null,
+    toUpdate: null,
+    updated: null
   }
 };
 
@@ -195,5 +206,20 @@ export const Creators = {
   updateCeoSuccess: ceo => ({
     type: Types.UPDATE_CEO_SUCCESS,
     payload: { ceo }
+  }),
+
+  createSpreadsheetRequest: formData => ({
+    type: Types.CREATE_SPREADSHEET_REQUEST,
+    payload: { formData }
+  }),
+
+  createSpreadsheetSuccess: spreadsheetUrl => ({
+    type: Types.CREATE_SPREADSHEET_SUCCESS,
+    payload: { spreadsheetUrl }
+  }),
+
+  deleteSpreadsheetRequest: id => ({
+    type: Types.DELETE_SPREADSHEET_REQUEST,
+    payload: { id }
   })
 };

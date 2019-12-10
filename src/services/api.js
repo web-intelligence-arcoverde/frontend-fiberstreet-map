@@ -1,13 +1,13 @@
 import axios from "axios";
 import store from "../redux/store";
 
-const local = "http://192.168.0.100:3333";
-const server = "https://45.224.40.252";
+const local = "http://192.168.11.105:3333";
+const server = "https://fiberstreet.dktelecom.net.br";
 const local01 = "http://127.0.0.1:3333/";
 
 /** This API will connect to NodeJS Server */
 const api = axios.create({
-  baseURL: local01
+  baseURL: local
 });
 
 api.interceptors.request.use(config => {
