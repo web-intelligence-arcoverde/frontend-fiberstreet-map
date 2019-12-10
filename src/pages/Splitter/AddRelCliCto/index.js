@@ -41,8 +41,9 @@ function AddRelCliCto(props) {
   const { cto_id } = drop;
 
   function handleHideModal() {
-    const { hideDropAddModal } = props;
+    const { hideDropAddModal, hideIcons } = props;
     setDelimitation("default");
+    hideIcons();
     hideDropAddModal();
   }
 
@@ -178,15 +179,6 @@ function AddRelCliCto(props) {
   }, [props.redux.drop.isVisible]); //obterSaidasDoSplitter,
 
   function salvarDrop() {
-    //Adicionar o cliente na saída do splitter selecionada
-
-    // api.post()
-    // Procurando em um array
-    // console.tron.log(saidaSelecionada);
-    // let index = saidaSelecionada.indexOf(true);
-    // console.tron.log(index);
-    // let saida = index++;
-
     // Procurando em um array de objetos
     let findedSelected = saidaSelecionada.find(
       saida => saida.selected === true
@@ -210,8 +202,6 @@ function AddRelCliCto(props) {
     }
 
     setDelimitation("default");
-    //console.tron.log(findedSelected);
-    // Add fibra drop cliente no cabo
   }
 
   const classes = useStyles();
@@ -310,10 +300,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...DropCreators, ...MapCreators }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddRelCliCto);
+export default connect(mapStateToProps, mapDispatchToProps)(AddRelCliCto);
 
 /** Ações necessárias */
 // - Recuperar o id da Cto

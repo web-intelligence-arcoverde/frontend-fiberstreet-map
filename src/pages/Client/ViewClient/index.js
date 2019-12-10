@@ -13,7 +13,9 @@ import { InputField } from "./Components/InputFieldComponent";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+//Functions
 import { cpfMask } from "../../util/format";
+import { positionObject } from "../../Functions/get-position-object/index";
 
 //Creators
 import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
@@ -117,31 +119,21 @@ function ViewClient(props) {
     setObs("");
   }
 
-  function addCabo() {
-    let latitude;
-    let longitude;
-    try {
-      latitude = JSON.parse(data.coordinates).latitude;
-      longitude = JSON.parse(data.coordinates).longitude;
-    } catch (err) {
-      latitude = data.coordinates.latitude;
-      longitude = data.coordinates.longitude;
-    }
-
-    let coord = [longitude, latitude];
-
+  function addCable() {
     const {
       addCoordCabo, // setPolyline
       setDelimitation,
       addCableClientId,
-      addDropClientId
+      addDropClientId,
+      showIcons
     } = props;
 
     setDelimitation("cabo"); // map - map.delimitacao
-    let arrayDeArray = new Array(coord);
-    addCoordCabo(arrayDeArray); // map - map.polyline
+
+    addCoordCabo(positionObject(data)); // map - map.polyline
     addCableClientId(data.id); // cabo - cabo.id
     addDropClientId(data.id);
+    showIcons();
     handleHideModal();
   }
 
@@ -162,6 +154,13 @@ function ViewClient(props) {
     const { deleteClientRequest } = props;
     deleteClientRequest(data.id);
     handleHideModal();
+  }
+
+  function move() {
+    const { setDelimitation, setType } = props;
+    handleHideModal();
+    setType("client", data.id);
+    setDelimitation("mover");
   }
 
   return (
@@ -281,6 +280,9 @@ function ViewClient(props) {
           </Modal.Body>
 
           <Modal.Footer>
+            <Button variant="info" onClick={move}>
+              Mover Cliente
+            </Button>
             <Button variant="info" type="submit">
               Salvar Alterações
             </Button>
@@ -299,7 +301,7 @@ function ViewClient(props) {
             <Button
               hidden={unvisibleAddCable}
               variant="secondary"
-              onClick={addCabo}
+              onClick={addCable}
             >
               Adicionar Cabo
             </Button>

@@ -138,10 +138,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...ctosActions, ...SplitterActions }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewCto);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewCto);
 
 /**
  * <Modal.Header

@@ -20,17 +20,15 @@ function ViewAddCable(props) {
   const { idFrom, idTo } = props.redux.cabo.idFromTo;
   const { subDelimitation } = props.redux.map;
   const { setDelimitation, setSubDelemitation } = props;
-  const { hideModalAddCable } = props;
+  const { hideModalAddCable, hideIcons } = props;
   const { visible } = props.redux.cabo.idFromTo;
 
   function hideModal() {
     hideModalAddCable();
+    hideIcons();
     setDelimitation("default");
     setSubDelemitation("default");
   }
-
-  console.log("Informações cabos");
-  console.log(props);
 
   /**
    * ceo e cto
@@ -230,7 +228,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...CaboCreators, ...MapCreators }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewAddCable);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewAddCable);

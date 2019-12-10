@@ -84,6 +84,7 @@ export function* addDrop(action) {
     // 3 - Adicionar a saída do splitter que relacionará o cliente com o splitter
     // 4 - Relacionar o cabo com a cto
     // 'cable', 'fiber', 'output'
+
     const response = yield call(api.post, "drops", {
       cable: cabo,
       output: saidaResponsaFilhoDaputa,

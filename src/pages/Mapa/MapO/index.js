@@ -2,6 +2,13 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
+// Redux
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
+//Creators
+import { Creators as MapCreators } from "../../../redux/store/ducks/map";
+
 /* mapBox */
 import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
@@ -22,6 +29,7 @@ import { loadControllers } from "./Controller/index";
 //Componentes
 import LeftMenu from "./Components/left-menu/index";
 import LoadPages from "../../index";
+import IconsBottom from "./Components/icons-drawn-line/index";
 
 /* */
 import { addGeojson } from "./Controller/add-geojson/index";
@@ -48,12 +56,14 @@ var geojson = {
 };
 
 // Used to draw a line between points
-export default function Map(props) {
+function Map(props) {
   const [center, setCenter] = useState([-37.0601269, -8.424398]);
   const [map, setMap] = useState(null);
   const { container, zoom, accessToken, style } = props;
   const { classNameStyle } = props;
   const url = "https://wanderdrone.appspot.com";
+
+  const { visible } = props.redux.map.showIconsDrawn;
 
   useEffect(() => {
     handleMap(container, center, zoom, accessToken, style);
@@ -97,6 +107,8 @@ export default function Map(props) {
       <div id="geocoder" className="geocoder" />
       <div id="distance" className="distance-container" />
       <LeftMenu />
+      {visible === true ? <IconsBottom map={map} /> : <></>}
+
       <LoadPages />
     </>
   );
@@ -111,7 +123,11 @@ Map.propTypes = {
   accessToken: string.isRequired
 };
 
-/* 
-  const dispatch = useDispatch();
-  const redux = useSelector(state => state);
-*/
+const mapStateToProps = state => ({
+  redux: state
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ ...MapCreators }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map);

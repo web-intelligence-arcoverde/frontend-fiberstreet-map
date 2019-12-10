@@ -11,6 +11,8 @@ import ViewCeo from "./CEO/ViewCeo/index";
 
 import CableAdd from "./Cable/CaboAdd/index";
 import CableAddObToOb from "./Cable/AddCableCtoToCto/index";
+import ViewCable from "./Cable/viewCable/index";
+import AddCableLoose from "./Cable/AddCableLoose/index";
 
 import SplitterRelAdd from "./Splitter/AddRelCliCto/index";
 import SplitterAdd from "./Splitter/AddRelCliCto/index";
@@ -30,6 +32,8 @@ function LoadPages() {
 
       <CableAdd />
       <CableAddObToOb />
+      <ViewCable />
+      <AddCableLoose />
 
       <SplitterRelAdd />
       <SplitterAdd />

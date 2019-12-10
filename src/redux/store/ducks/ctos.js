@@ -45,7 +45,9 @@ export const Types = {
   LOAD_SUCCESS: "@cto/LOAD_SUCCESS",
 
   LOAD_SPLITTER_CLIENT_BY_CTO_REQUEST: "cto/LOAD_SP_CL_CTO_REQUEST",
-  LOAD_SPLITTER_CLIENT_BY_CTO_SUCCESS: "cto/LOAD_SP_CL_CTO_SUCCESS"
+  LOAD_SPLITTER_CLIENT_BY_CTO_SUCCESS: "cto/LOAD_SP_CL_CTO_SUCCESS",
+
+  MOVE_CTO_ON_MAP: "cto/MOVE_CTO_ON_MAP"
 };
 
 //Estado inicial
@@ -56,6 +58,7 @@ const INITIAL_STATE = {
     clients: [],
     splitter: {}
   },
+  cto: {},
   ctos: [],
   geojson: {
     ctos: []
@@ -94,6 +97,11 @@ export default function(state = INITIAL_STATE, action) {
         viewPhoto: {
           visible: true
         }
+      };
+    case Types.MOVE_CTO_ON_MAP:
+      return {
+        ...state,
+        cto: action.payload.cto
       };
     case Types.HIDE_VIEW_MODAL_PHOTO_CTO:
       return {
@@ -356,6 +364,10 @@ export const Creators = {
 
   updateCtoSuccess: cto => ({
     type: Types.UPDATE_CTO_SUCCESS,
+    payload: { cto }
+  }),
+  setCtoMove: cto => ({
+    type: Types.MOVE_CTO_ON_MAP,
     payload: { cto }
   })
 };

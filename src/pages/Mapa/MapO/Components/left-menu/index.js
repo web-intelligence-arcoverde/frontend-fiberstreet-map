@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 function LeftMenu(props) {
   const classes = useStyles();
 
-  const { setDelimitation } = props;
+  const { setDelimitation, showIcons } = props;
 
   return (
     <Container>
@@ -191,6 +191,14 @@ function LeftMenu(props) {
                   }}
                 >
                   ceo
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    setDelimitation("cabo");
+                    showIcons();
+                  }}
+                >
+                  cabo
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

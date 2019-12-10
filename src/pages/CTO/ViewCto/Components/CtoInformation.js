@@ -7,7 +7,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 
 //Creators do redux
-import { Creators as ctosActions } from "../../../../redux/store/ducks/ctos";
+import { Creators as CtoCreatos } from "../../../../redux/store/ducks/ctos";
+import { Creators as MapCreators } from "../../../../redux/store/ducks/map";
 
 //Redux
 import { connect } from "react-redux";
@@ -61,7 +62,6 @@ function Components(props) {
     };
     updateCtoRequest(updateCto, data.id);
     hideViewModalCto();
-    console.log("Desgraça " + mode);
   }
 
   //Deletar CTO
@@ -74,12 +74,19 @@ function Components(props) {
     showModalPhoto();
   }
 
+  function move() {
+    const { hideViewModalCto, setDelimitation, setType } = props;
+    hideViewModalCto();
+    setType("cto", data.id);
+    setDelimitation("mover");
+  }
+
   return (
     <Container>
       <Form onSubmit={handleSubmit}>
         <Form.Row>
           <Form.Group>
-            {/* <Form.Label>Status</Form.Label> */}
+            <Form.Label>Status</Form.Label>
             <TextField
               id="standard-select-currency"
               select
@@ -96,15 +103,6 @@ function Components(props) {
                 </MenuItem>
               ))}
             </TextField>
-            {/* <Form.Control
-              as="select"
-              value="TEUCU" //{status}
-              onChange={e => setStatus(e.target.value)}
-            >
-              <option>Ativa</option>
-              <option>Lotada</option>
-              <option>Cliente cancelado</option>
-            </Form.Control> */}
           </Form.Group>
         </Form.Row>
         <Form.Row>
@@ -151,6 +149,7 @@ function Components(props) {
             />
           </Form.Group>
         </Form.Row>
+
         <div
           style={{
             marginBottom: "10px",
@@ -173,6 +172,9 @@ function Components(props) {
               </Button>
             )}
           </>
+          <Button variant="info" style={{ marginRight: "10px" }} onClick={move}>
+            Mover Caixa
+          </Button>
 
           <Button variant="info" style={{ marginRight: "10px" }} type="submit">
             Atualizar dados
@@ -192,9 +194,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...ctosActions }, dispatch);
+  bindActionCreators({ ...CtoCreatos, ...MapCreators }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Components);
+export default connect(mapStateToProps, mapDispatchToProps)(Components);

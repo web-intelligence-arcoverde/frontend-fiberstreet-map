@@ -17,32 +17,26 @@ export const handleCtoClickTwoFactor = (cto, longitude, latitude) => {
   const { delimitation, polyline, subDelimitation } = store.getState().map;
 
   if (delimitation === "cabo") {
-    console.log("Primeiro IF");
     let newPolyline = [...polyline, [longitude, latitude]];
 
+    /*
+      Algumas das funções para desenhar o cabo (Depois descubro)
+    */
     store.dispatch(CreatorsMap.addCoordCabo(newPolyline));
 
-    console.log(subDelimitation);
-    // CTO para CTO
-    if (subDelimitation === "cto") {
+    /* 
+      Adicionar cabo de uma {cto,ceo} para os mesmo.
+    */
+    if ((subDelimitation === "cto") | (subDelimitation === "ceo")) {
       store.dispatch(CreatorsCable.setIdTo(cto.id));
       store.dispatch(CreatorsCable.showModalAddCable("cto"));
-      console.log("Pq");
-    }
-    //CEO para CTO
-    else if (subDelimitation === "ceo") {
-      store.dispatch(CreatorsCable.setIdTo(cto.id));
-      store.dispatch(CreatorsCable.showModalAddCable("cto"));
-    }
-    //Cliente para CTO
-    else {
-      console.log("Por que não?");
+    } else {
+      /* Cabo do cliente para a Caixa Terminal */
       store.dispatch(CreatorsCable.showAddCableCto(cto.id));
     }
   } else {
-    //Abrir modal com as informações da cto {informações, clientes e splitters}
+    /* Modal View Caixa Terminal */
     store.dispatch(CreatorsCto.loadSplitterAndClientByCtoRequest(cto));
     store.dispatch(CreatorsCto.showViewModalCto(cto));
-    console.log("Segundo IF");
   }
 };

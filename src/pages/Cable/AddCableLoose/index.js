@@ -10,23 +10,23 @@ import { bindActionCreators } from "redux";
 //Components
 import { Modal, Button, Container, Form } from "react-bootstrap/";
 
-function CaboAdd(props) {
-  const { newCabo } = props.redux.cabo;
+function AddCable(props) {
+  const { newCable } = props.redux.cabo;
 
   const [nome, setNome] = useState("");
   const [modelo, setModelo] = useState("");
   const [fibra, setFibra] = useState(0);
-  const TNAME = "nome";
-  const TMODEL = "modelo";
+  const [obs, setObs] = useState("");
 
   function hideModal() {
-    const { hideAddCableCto, setDelimitation } = props;
-    hideAddCableCto();
+    const { hideNewCable, setDelimitation } = props;
+    hideNewCable();
     setDelimitation("default");
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const { createCableRequest } = props;
     let coordinates = props.redux.map.polyline.map(linha => {
       return {
         longitude: linha[0],
@@ -38,37 +38,11 @@ function CaboAdd(props) {
     const cabo = {
       name: nome,
       type: modelo,
+      coordinates: coordinatesStrinfigied,
       fiberAmount: fibra,
-      coordinates //: coordinatesStrinfigied
+      obs: obs
     };
-    const { addCoordCabo, hideIcons } = props;
-    setNome("");
-    setModelo("");
-    addCoordCabo([]);
-    hideModal();
-    hideIcons();
-    const { showDropAddModalRequest } = props;
-    const dropNdCtoId = {
-      drop: cabo,
-      cto_id: newCabo.ctoId
-    };
-    showDropAddModalRequest(dropNdCtoId);
-  }
-
-  function handleChange(event, mode) {
-    const { value } = event.target;
-
-    switch (mode) {
-      case TNAME:
-        setNome(value);
-        break;
-      case TMODEL:
-        setModelo(value);
-        break;
-      case "QTFIBRA":
-        setFibra(value);
-        break;
-    }
+    createCableRequest(cabo);
   }
 
   const [show, setShow] = useState(false);
@@ -78,7 +52,7 @@ function CaboAdd(props) {
 
   return (
     <Container>
-      <Modal show={newCabo.isVisible} onHide={hideModal}>
+      <Modal show={newCable.visible} onHide={hideModal}>
         <Form onSubmit={handleSubmit}>
           <Modal.Header
             style={{
@@ -107,6 +81,16 @@ function CaboAdd(props) {
                 required
                 value={modelo}
                 onChange={e => setModelo(e.target.value)}
+                type="text"
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Observação:</Form.Label>
+              <Form.Control
+                required
+                value={obs}
+                onChange={e => setObs(e.target.value)}
                 type="text"
               />
             </Form.Group>
@@ -146,4 +130,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(CaboAdd);
+export default connect(mapStateToProps, mapDispatchToProps)(AddCable);

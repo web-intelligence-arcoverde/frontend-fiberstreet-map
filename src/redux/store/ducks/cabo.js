@@ -2,8 +2,15 @@ export const Types = {
   SHOW_MODAL_NEW_CABO: "cabo/SHOW_MODAL_NEW_CABO",
   HIDE_MODAL_NEW_CABO: "cabo/HIDE_MODAL_NEW_CABO",
 
+  /* ADICIONAR CABO SOLTO */
+  SHOW_MODAL_NEW_CABLE: "cabo/SHOW_MODAL_NEW_CABLE",
+  HIDE_MODAL_NEW_CABLE: "cabo/HIDE_MODAL_NEW_CABLE",
+
   SHOW_MODAL_NEW_CABO_RESERVA: "cabo/SHOW_MODAL_NEW_CABO_RESERVA",
   HIDE_MODAL_NEW_CABO_RESERVA: "cabo/HIDE_MODAL_NEW_CABO_RESERVA",
+
+  SHOW_MODAL_VIEW_CABLE: "cable/SHOW_MODAL_VIEW_CABLE",
+  HIDE_MODAL_VIEW_CABLE: "cable/HIDE_MODAL_VIEW_CABLE",
   // Creating
 
   ADD_CLIENTE_ID: "ADD_ID/cliente",
@@ -44,9 +51,14 @@ const INITIAL = {
     ctoId: null,
     data: {}
   },
+  newCable: { visible: false },
   newCaboReserva: {
     isVisible: false,
     clientId: null,
+    data: {}
+  },
+  viewCable: {
+    visible: false,
     data: {}
   },
   addNewCableToCto: {
@@ -75,15 +87,34 @@ export default function(state = INITIAL, action) {
         ...state,
         newCabo: { isVisible: true, ctoId: action.payload.id }
       };
+
     case Types.HIDE_MODAL_NEW_CABO:
       return { ...state, newCabo: { isVisible: false } };
+    case Types.SHOW_MODAL_NEW_CABLE:
+      return {
+        ...state,
+        newCable: { visible: true }
+      };
+    case Types.HIDE_MODAL_NEW_CABLE:
+      return {
+        ...state,
+        newCable: { visible: false }
+      };
     case Types.SHOW_MODAL_NEW_CABO_RESERVA:
       return {
         ...state,
         newCaboReserva: { isVisible: true, data: action.payload.data }
       };
+
     case Types.HIDE_MODAL_NEW_CABO_RESERVA:
       return { ...state, newCaboReserva: { isVisible: false } };
+    case Types.SHOW_MODAL_VIEW_CABLE:
+      return {
+        ...state,
+        viewCable: { visible: true, data: action.payload.data }
+      };
+    case Types.HIDE_MODAL_VIEW_CABLE:
+      return { ...state, viewCable: { visible: false } };
     case Types.ADD_CLIENTE_ID:
       return { ...state, newCto: { ...state.newCto, id: action.payload.id } };
 
@@ -188,6 +219,13 @@ export const Creators = {
   hideAddNewCaboModalReserva: () => ({
     type: Types.HIDE_MODAL_NEW_CABO_RESERVA
   }),
+  showViewCable: data => ({
+    type: Types.SHOW_MODAL_VIEW_CABLE,
+    payload: { data }
+  }),
+  hideViewCable: () => ({
+    type: Types.HIDE_MODAL_VIEW_CABLE
+  }),
 
   createCableRequest: cable => ({
     type: Types.CREATE_CABLE_REQUEST,
@@ -228,5 +266,12 @@ export const Creators = {
   deleteCableByIdRequest: cableId => ({
     type: Types.DELETE_CABLE_BY_ID,
     payload: { cableId }
+  }),
+
+  showNewCable: () => ({
+    type: Types.SHOW_MODAL_NEW_CABLE
+  }),
+  hideNewCable: () => ({
+    type: Types.HIDE_MODAL_NEW_CABLE
   })
 };
