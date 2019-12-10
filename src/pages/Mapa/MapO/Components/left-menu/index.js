@@ -1,5 +1,5 @@
 //React
-import React from "react";
+import React, { useState } from "react";
 
 // Redux
 import { connect } from "react-redux";
@@ -42,6 +42,19 @@ function LeftMenu(props) {
   const classes = useStyles();
 
   const { setDelimitation, showIcons } = props;
+
+  const [visible, setVisible] = useState(false);
+
+  function isVisible(type) {
+    if (visible === false) {
+      props.map.setLayoutProperty(type, "visibility", "none");
+      setVisible(true);
+    } else {
+      setVisible(false);
+      props.map.setLayoutProperty(type, "visibility", "visible");
+    }
+    console.log(visible);
+  }
 
   return (
     <Container>
@@ -223,11 +236,27 @@ function LeftMenu(props) {
                     label="ctos"
                     aria-label="option 1"
                     style={{ marginTop: "5px" }}
+                    onClick={() => isVisible("cto")}
                   />
 
-                  <Form.Check label="clientes" style={{ marginTop: "10px" }} />
+                  <Form.Check
+                    label="cabo"
+                    aria-label="option 1"
+                    style={{ marginTop: "5px" }}
+                    onClick={() => isVisible("wires")}
+                  />
 
-                  <Form.Check label="ceo" style={{ marginTop: "10px" }} />
+                  <Form.Check
+                    label="clientes"
+                    style={{ marginTop: "10px" }}
+                    onClick={() => isVisible("cliente")}
+                  />
+
+                  <Form.Check
+                    label="ceo"
+                    style={{ marginTop: "10px" }}
+                    onClick={() => isVisible("ceo")}
+                  />
                 </Form.Group>
               </Dropdown.Menu>
             </Dropdown>

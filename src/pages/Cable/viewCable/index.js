@@ -137,11 +137,28 @@ function ViewCable(props) {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="info">Adicionar a cto</Button>
-          <Button variant="info" onClick={addCable}>
-            Desenhar
+          <Button
+            variant="info"
+            onClick={() => {
+              drawnCable();
+              setSubDelemitation("anywhere");
+            }}
+          >
+            Adicionar a cto
+          </Button>
+          <Button
+            variant="info"
+            onClick={() => {
+              drawnCable();
+              setSubDelemitation("anywhere");
+            }}
+          >
+            Adicionar a ceo
           </Button>
           <Button variant="info" onClick={drawnCable}>
+            Desenhar
+          </Button>
+          <Button variant="info" onClick={addCable}>
             Re-desenhar
           </Button>
           <Button variant="danger" onClick={deleteCable}>
