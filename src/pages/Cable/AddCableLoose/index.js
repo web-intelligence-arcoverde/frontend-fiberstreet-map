@@ -42,7 +42,9 @@ function AddCable(props) {
       fiberAmount: fibra,
       obs: obs
     };
+    // alert(JSON.stringify(cabo));
     createCableRequest(cabo);
+    hideModal();
   }
 
   const [show, setShow] = useState(false);

@@ -15,30 +15,31 @@ export const handleClickCto = features => {
 
 export const handleCtoClickTwoFactor = (cto, longitude, latitude) => {
   const { delimitation, polyline, subDelimitation } = store.getState().map;
-
+  const disgraca = store.dispatch;
   if (delimitation === "cabo") {
     let newPolyline = [...polyline, [longitude, latitude]];
 
     /*
       Algumas das funções para desenhar o cabo (Depois descubro)
     */
-    store.dispatch(CreatorsMap.addCoordCabo(newPolyline));
+
+    disgraca(CreatorsMap.addCoordCabo(newPolyline));
 
     /* 
       Adicionar cabo de uma {cto,ceo} para os mesmo.
     */
     if ((subDelimitation === "cto") | (subDelimitation === "ceo")) {
-      store.dispatch(CreatorsCable.setIdTo(cto.id));
-      store.dispatch(CreatorsCable.showModalAddCable("cto"));
+      disgraca(CreatorsCable.setIdTo(cto.id));
+      disgraca(CreatorsCable.showModalAddCable("cto"));
     } else if (subDelimitation === "anywhere") {
-      store.dispatch();
+      disgraca(CreatorsCable.addExistentCableToObjectRequest(cto.id, "CTO"));
     } else {
       /* Cabo do cliente para a Caixa Terminal */
-      store.dispatch(CreatorsCable.showAddCableCto(cto.id));
+      disgraca(CreatorsCable.showAddCableCto(cto.id));
     }
   } else {
     /* Modal View Caixa Terminal */
-    store.dispatch(CreatorsCto.loadSplitterAndClientByCtoRequest(cto));
-    store.dispatch(CreatorsCto.showViewModalCto(cto));
+    disgraca(CreatorsCto.loadSplitterAndClientByCtoRequest(cto));
+    disgraca(CreatorsCto.showViewModalCto(cto));
   }
 };
