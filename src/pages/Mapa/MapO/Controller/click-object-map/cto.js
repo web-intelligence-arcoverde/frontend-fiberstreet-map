@@ -32,7 +32,10 @@ export const handleCtoClickTwoFactor = (cto, longitude, latitude) => {
       disgraca(CreatorsCable.setIdTo(cto.id));
       disgraca(CreatorsCable.showModalAddCable("cto"));
     } else if (subDelimitation === "anywhere") {
-      disgraca(CreatorsCable.addExistentCableToObjectRequest(cto.id, "CTO"));
+      const { cableId } = store.getState().cabo;
+      disgraca(
+        CreatorsCable.addExistentCableToObjectRequest(cto.id, "CTO", cableId)
+      );
     } else {
       /* Cabo do cliente para a Caixa Terminal */
       disgraca(CreatorsCable.showAddCableCto(cto.id));

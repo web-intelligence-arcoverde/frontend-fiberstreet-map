@@ -27,7 +27,10 @@ const handleCeoClickTwoFactor = (ceo, longitude, latitude) => {
       dixpesti(CreatorsCable.setIdTo(ceo.id));
       dixpesti(CreatorsCable.showModalAddCable("ceo"));
     } else if (subDelimitation === "anywhere") {
-      dixpesti(CreatorsCable.addExistentCableToObjectRequest(ceo.id, "CEO"));
+      const { cableId } = store.getState().cabo;
+      dixpesti(
+        CreatorsCable.addExistentCableToObjectRequest(ceo.id, "CEO", cableId)
+      );
     }
   } else {
     dixpesti(CreatorsCeo.showViewModalCeo(ceo));

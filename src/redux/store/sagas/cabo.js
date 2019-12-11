@@ -63,9 +63,6 @@ export function* deleteCable({ payload }) {
 export function* addExistentCableToObject({ payload }) {
   const { objectId, objectType, cableId } = payload;
   try {
-    const newPolyline = [];
-    yield store.dispatch(MapActions.addCoordCabo(newPolyline));
-
     const response = yield call(
       [api, "put"],
       `cables/relationship/${cableId}`,
@@ -80,6 +77,8 @@ export function* addExistentCableToObject({ payload }) {
       "Relacionamento",
       `Cabo adicionado a ${type} ${relation.id} com sucesso`
     );
+    const newPolyline = [];
+    yield store.dispatch(MapActions.addCoordCabo(newPolyline));
   } catch (error) {
     yield toastr.error("Relacionamento", "Falha ao adicionar o cabo à caixa");
   }

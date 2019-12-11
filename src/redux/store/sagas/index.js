@@ -40,7 +40,7 @@ import { Types as SplitterTypes } from "../ducks/splitter";
 import { createSplitter, updateSplitter, deleteSplitter } from "./splitter";
 
 import { Types as CableTypes } from "../ducks/cabo";
-import { addRelCable, deleteCable } from "./cabo";
+import { addRelCable, deleteCable, addExistentCableToObject } from "./cabo";
 
 import { Types as UserTypes } from "../ducks/user";
 import { inviteNewUser } from "./user";
@@ -116,6 +116,10 @@ export default function* rootSaga() {
     //Cable
     takeLatest(CablesTypes.CREATE_CABLE_REQUEST, createCable),
     takeLatest(CablesTypes.DELETE_CABLE_REQUEST, deleteCable),
+    takeLatest(
+      CablesTypes.ADD_EXISTENT_CABLE_TO_OBJECT_REQUEST,
+      addExistentCableToObject
+    ),
 
     // FiberFusions
     takeLatest(FiberFusionTypes.CREATE_REQUEST, createFusion),
