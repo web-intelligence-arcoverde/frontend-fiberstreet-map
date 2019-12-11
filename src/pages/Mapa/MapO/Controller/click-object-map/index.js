@@ -14,13 +14,15 @@ export const openObject = (map, store) => {
   map.on("click", "cliente_inativo", e => handleClickClient(e, store));
 
   // Cliques na caixa terminal optica
-  map.on("click", "cto", e => handleClickCto(e.features[0]));
-  map.on("click", "cto_lotada", e => handleClickCto(e.features[0]));
-  map.on("click", "cto_cliente_cancelado", e => handleClickCto(e.features[0]));
+  map.on("click", "cto", e => handleClickCto(e.features[0], map));
+  map.on("click", "cto_lotada", e => handleClickCto(e.features[0], map));
+  map.on("click", "cto_cliente_cancelado", e =>
+    handleClickCto(e.features[0], map)
+  );
 
   //Cable
   map.on("click", "wires", e => handleClickCable(e.features[0]));
 
   //Evento de clique na caixa de emenda
-  map.on("click", "ceo", e => handleClickCeo(e));
+  map.on("click", "ceo", e => handleClickCeo(e, map));
 };
