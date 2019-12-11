@@ -44,7 +44,8 @@ export const Types = {
 
   DELETE_CABLE_BY_ID: "@cable/DELETE_CABLE_BY_ID",
   ADD_EXISTENT_CABLE_TO_OBJECT_REQUEST: "@cable/ADD_TO_OBJ_REQUEST",
-  SAVE_CABLE_ID: "@cable/SAVE_CABLE_ID"
+  SAVE_CABLE_ID: "@cable/SAVE_CABLE_ID",
+  UPDATE_CABLE_REQUEST: "@cable/UPDATE_CABLE_REQUEST"
 };
 
 const INITIAL = {
@@ -252,6 +253,11 @@ export const Creators = {
   deleteCableSuccess: cable => ({
     type: Types.DELETE_CABLE_SUCCESS,
     payload: { cable }
+  }),
+
+  updateCableRequest: id => ({
+    type: Types.UPDATE_CABLE_REQUEST,
+    payload: { id }
   }),
 
   loadCableSuccess: cables => ({

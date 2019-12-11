@@ -3,17 +3,17 @@ import { Creators as CreatorsMap } from "../../../../../redux/store/ducks/map";
 import { Creators as CreatorsCable } from "../../../../../redux/store/ducks/cabo";
 import store from "../../../../../redux/store";
 
-export const handleClickCto = features => {
+export const handleClickCto = (features, map) => {
   const { properties } = features;
   let longitude = features.geometry.coordinates[0];
   let latitude = features.geometry.coordinates[1];
 
   const data = JSON.parse(properties.data);
 
-  handleCtoClickTwoFactor(data, longitude, latitude);
+  handleCtoClickTwoFactor(data, longitude, latitude, map);
 };
 
-export const handleCtoClickTwoFactor = (cto, longitude, latitude) => {
+export const handleCtoClickTwoFactor = (cto, longitude, latitude, map) => {
   const { delimitation, polyline, subDelimitation } = store.getState().map;
   const disgraca = store.dispatch;
   if (delimitation === "cabo") {
@@ -36,6 +36,12 @@ export const handleCtoClickTwoFactor = (cto, longitude, latitude) => {
       disgraca(
         CreatorsCable.addExistentCableToObjectRequest(cto.id, "CTO", cableId)
       );
+
+      disgraca(CreatorsMap.hideIcons());
+      disgraca(CreatorsMap.setDelimitation("default"));
+      var newpolyline = [];
+      disgraca(CreatorsMap.addCoordCabo(newpolyline));
+      updateDrawn(map, newpolyline);
     } else {
       /* Cabo do cliente para a Caixa Terminal */
       disgraca(CreatorsCable.showAddCableCto(cto.id));
@@ -46,3 +52,14 @@ export const handleCtoClickTwoFactor = (cto, longitude, latitude) => {
     disgraca(CreatorsCto.showViewModalCto(cto));
   }
 };
+
+function updateDrawn(map, polyline) {
+  map.getSource("linhas").setData({
+    type: "Feature",
+    properties: {},
+    geometry: {
+      type: "LineString",
+      coordinates: polyline
+    }
+  });
+}

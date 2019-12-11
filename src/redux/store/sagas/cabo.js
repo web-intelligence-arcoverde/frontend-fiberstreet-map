@@ -62,6 +62,7 @@ export function* deleteCable({ payload }) {
  */
 export function* addExistentCableToObject({ payload }) {
   const { objectId, objectType, cableId } = payload;
+  const { polyline } = store.getState().map;
   try {
     const response = yield call(
       [api, "put"],
@@ -69,7 +70,8 @@ export function* addExistentCableToObject({ payload }) {
       {
         objectId,
         objectType,
-        cableId
+        cableId,
+        coordinates: polyline
       }
     );
     const { relation, type } = response.data;
@@ -81,5 +83,14 @@ export function* addExistentCableToObject({ payload }) {
     yield store.dispatch(MapActions.addCoordCabo(newPolyline));
   } catch (error) {
     yield toastr.error("Relacionamento", "Falha ao adicionar o cabo à caixa");
+  }
+}
+
+export function* updateCable({ payload }) {
+  try {
+    yield call([api, "update"], `cables/${payload.id}`);
+    yield toastr.success("Update", "Sucesso ao apagar o cabo");
+  } catch (error) {
+    yield toastr.error("Erro na atualização");
   }
 }
