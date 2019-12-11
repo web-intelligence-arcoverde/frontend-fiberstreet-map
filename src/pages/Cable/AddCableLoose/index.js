@@ -26,7 +26,7 @@ function AddCable(props) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const { createCableRequest } = props;
+    const { createCableRequest, addCoordCabo } = props;
     let coordinates = props.redux.map.polyline.map(linha => {
       return {
         longitude: linha[0],
@@ -45,6 +45,7 @@ function AddCable(props) {
     // alert(JSON.stringify(cabo));
     createCableRequest(cabo);
     hideModal();
+    addCoordCabo([]);
   }
 
   const [show, setShow] = useState(false);
