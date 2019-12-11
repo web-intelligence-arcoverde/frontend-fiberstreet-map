@@ -42,7 +42,9 @@ export const Types = {
   LOAD_SUCCESS: "@cable/LOAD_SUCCESS",
   SET_OBJECT_TO: "cable/SET_OBJECT_TO",
 
-  DELETE_CABLE_BY_ID: "@cable/DELETE_CABLE_BY_ID"
+  DELETE_CABLE_BY_ID: "@cable/DELETE_CABLE_BY_ID",
+  ADD_EXISTENT_CABLE_TO_OBJECT_REQUEST: "@cable/ADD_TO_OBJ_REQUEST",
+  SAVE_CABLE_ID: "@cable/SAVE_CABLE_ID"
 };
 
 const INITIAL = {
@@ -153,6 +155,11 @@ export default function(state = INITIAL, action) {
         geojson: {
           cables: action.payload.cables
         }
+      };
+    case Types.SAVE_CABLE_ID:
+      return {
+        ...state,
+        cableId: action.payload.cableId
       };
 
     default:
@@ -273,5 +280,15 @@ export const Creators = {
   }),
   hideNewCable: () => ({
     type: Types.HIDE_MODAL_NEW_CABLE
+  }),
+
+  addExistentCableToObjectRequest: (objectId, objectType, cableId) => ({
+    type: Types.ADD_EXISTENT_CABLE_TO_OBJECT_REQUEST,
+    payload: { objectId, objectType, cableId }
+  }),
+
+  saveCableId: cableId => ({
+    type: Types.SAVE_CABLE_ID,
+    payload: { cableId }
   })
 };

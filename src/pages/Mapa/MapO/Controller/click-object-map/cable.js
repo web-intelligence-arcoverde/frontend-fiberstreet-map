@@ -5,8 +5,8 @@ import store from "../../../../../redux/store";
 
 export const handleClickCable = features => {
   const { properties } = features;
-  let longitude = features.geometry.coordinates[0];
-  let latitude = features.geometry.coordinates[1];
+  
+  const [longitude, latitude] = features.geometry.coordinates;
 
   const data = JSON.parse(properties.data);
 
@@ -15,7 +15,9 @@ export const handleClickCable = features => {
 
 const handleCableClickTwoFactor = (cable, longitude, latitude) => {
   const { delimitation, polyline, subDelimitation } = store.getState().map;
+  const dispatch = store.dispatch;
 
+  dispatch(CreatorsCable.saveCableId(cable.id));
   if (delimitation === "cabo") {
     if (subDelimitation === "cabo") {
     } else if (subDelimitation === "ceo") {
@@ -23,6 +25,6 @@ const handleCableClickTwoFactor = (cable, longitude, latitude) => {
     } else if (subDelimitation === "cliente") {
     }
   } else {
-    store.dispatch(CreatorsCable.showViewCable(cable));
+    dispatch(CreatorsCable.showViewCable(cable));
   }
 };

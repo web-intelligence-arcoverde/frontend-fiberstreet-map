@@ -1,13 +1,20 @@
 import { call, put } from "redux-saga/effects";
 
+import { Creators as MapActions } from "../ducks/cabo";
+import store from "../../store";
+
 import api from "../../../services/api";
 
 import { actions as ToastrActions, toastr } from "react-redux-toastr";
 
 export function* createCable({ payload }) {
   //alert(JSON.stringify(payload)) //-- Teste por favor antes de enviar a requisição para o servidor
+
   try {
-    yield call([api, "post"], "cables", payload);
+    // yield call([api, "post"], "cables", payload);
+    const newPolyline = [];
+    store.dispatch(MapActions.addCoordCabo(newPolyline));
+    const response = yield call([api, "post"], "cables", payload.cable);
   } catch (err) {
     ToastrActions.add({
       type: "error",
@@ -46,5 +53,34 @@ export function* deleteCable({ payload }) {
     yield toastr.success("Delete", "Sucesso ao apagar o cabo");
   } catch (err) {
     yield toastr.error("Erro", "Falha ao exluir o cabo");
+  }
+}
+
+/**
+ *
+ * @param {*} param0
+ */
+export function* addExistentCableToObject({ payload }) {
+  const { objectId, objectType, cableId } = payload;
+  try {
+    const newPolyline = [];
+    yield store.dispatch(MapActions.addCoordCabo(newPolyline));
+
+    const response = yield call(
+      [api, "put"],
+      `cables/relationship/${cableId}`,
+      {
+        objectId,
+        objectType,
+        cableId
+      }
+    );
+    const { relation, type } = response.data;
+    yield toastr.success(
+      "Relacionamento",
+      `Cabo adicionado a ${type} ${relation.id} com sucesso`
+    );
+  } catch (error) {
+    yield toastr.error("Relacionamento", "Falha ao adicionar o cabo à caixa");
   }
 }

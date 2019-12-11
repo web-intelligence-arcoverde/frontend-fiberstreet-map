@@ -15,18 +15,21 @@ export const handleClickCeo = features => {
 
 const handleCeoClickTwoFactor = (ceo, longitude, latitude) => {
   const { delimitation, subDelimitation, polyline } = store.getState().map;
+  const dixpesti = store.dispatch;
   if (delimitation === "cabo") {
     let newPolyline = [...polyline, [longitude, latitude]];
-    store.dispatch(CreatorsMap.addCoordCabo(newPolyline));
+    dixpesti(CreatorsMap.addCoordCabo(newPolyline));
 
     /* 
       Adicionar cabo de uma {cto,ceo} para os mesmo.
     */
     if ((subDelimitation === "cto") | (subDelimitation === "ceo")) {
-      store.dispatch(CreatorsCable.setIdTo(ceo.id));
-      store.dispatch(CreatorsCable.showModalAddCable("ceo"));
+      dixpesti(CreatorsCable.setIdTo(ceo.id));
+      dixpesti(CreatorsCable.showModalAddCable("ceo"));
+    } else if (subDelimitation === "anywhere") {
+      dixpesti(CreatorsCable.addExistentCableToObjectRequest(ceo.id, "CEO"));
     }
   } else {
-    store.dispatch(CreatorsCeo.showViewModalCeo(ceo));
+    dixpesti(CreatorsCeo.showViewModalCeo(ceo));
   }
 };
