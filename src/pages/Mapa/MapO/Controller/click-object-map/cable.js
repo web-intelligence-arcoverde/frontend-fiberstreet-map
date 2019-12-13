@@ -17,7 +17,7 @@ const handleCableClickTwoFactor = (cable, longitude, latitude) => {
   const { delimitation, polyline, subDelimitation } = store.getState().map;
   const dispatch = store.dispatch;
 
-  dispatch(CreatorsCable.saveCableId(cable.id));
+  dispatch(CreatorsCable.saveCable(cable));
   if (delimitation === "cabo") {
     if (subDelimitation === "cabo") {
       dispatch(CreatorsCable.updateCableRequest(cable.id, polyline));

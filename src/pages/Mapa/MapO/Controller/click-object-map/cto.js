@@ -33,6 +33,7 @@ export const handleCtoClickTwoFactor = (cto, longitude, latitude, map) => {
       disgraca(CreatorsCable.showModalAddCable("cto"));
     } else if (subDelimitation === "anywhere") {
       const { cableId } = store.getState().cabo;
+
       disgraca(
         CreatorsCable.addExistentCableToObjectRequest(cto.id, "CTO", cableId)
       );

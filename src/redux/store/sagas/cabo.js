@@ -12,9 +12,9 @@ export function* createCable({ payload }) {
 
   try {
     // yield call([api, "post"], "cables", payload);
-    const newPolyline = [];
-    store.dispatch(MapActions.addCoordCabo(newPolyline));
     const response = yield call([api, "post"], "cables", payload.cable);
+    const newPolyline = [];
+    yield store.dispatch(MapActions.addCoordCabo(newPolyline));
   } catch (err) {
     ToastrActions.add({
       type: "error",
@@ -62,7 +62,17 @@ export function* deleteCable({ payload }) {
  */
 export function* addExistentCableToObject({ payload }) {
   const { objectId, objectType, cableId } = payload;
-  const { polyline } = store.getState().map;
+  const state = store.getState()
+  const { polyline } = state.map;
+  
+  let coordinates = polyline.map(point => {
+    return {
+      longitude: point[0],
+      latitude: point[1]
+    }
+  })
+  coordinates = JSON.stringify(coordinates)
+  
   try {
     const response = yield call(
       [api, "put"],
@@ -71,9 +81,10 @@ export function* addExistentCableToObject({ payload }) {
         objectId,
         objectType,
         cableId,
-        coordinates: polyline
+        coordinates: coordinates
       }
     );
+    
     const { relation, type } = response.data;
     yield toastr.success(
       "Relacionamento",
@@ -88,8 +99,8 @@ export function* addExistentCableToObject({ payload }) {
 
 export function* updateCable({ payload }) {
   try {
-    yield call([api, "update"], `cables/${payload.id}`);
-    yield toastr.success("Update", "Sucesso ao apagar o cabo");
+    yield call([api, "put"], `cables/${payload.id}`, payload.cable);
+    yield toastr.success("Update", "Sucesso ao atualizar o cabo");
   } catch (error) {
     yield toastr.error("Erro na atualização");
   }

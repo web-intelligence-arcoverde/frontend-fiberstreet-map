@@ -44,8 +44,9 @@ export const Types = {
 
   DELETE_CABLE_BY_ID: "@cable/DELETE_CABLE_BY_ID",
   ADD_EXISTENT_CABLE_TO_OBJECT_REQUEST: "@cable/ADD_TO_OBJ_REQUEST",
-  SAVE_CABLE_ID: "@cable/SAVE_CABLE_ID",
-  UPDATE_CABLE_REQUEST: "@cable/UPDATE_CABLE_REQUEST"
+  SAVE_CABLE: "@cable/SAVE_CABLE",
+  UPDATE_CABLE_REQUEST: "@cable/UPDATE_CABLE_REQUEST",
+  SET_DRAW_TYPE: '@cable/SET_DRAW_TYPE'
 };
 
 const INITIAL = {
@@ -157,11 +158,16 @@ export default function(state = INITIAL, action) {
           cables: action.payload.cables
         }
       };
-    case Types.SAVE_CABLE_ID:
+    case Types.SAVE_CABLE:
       return {
         ...state,
-        cableId: action.payload.cableId
+        cable: action.payload.cable
       };
+    case Types.SET_DRAW_TYPE:
+      return {
+        ...state,
+        drawType: action.payload.type
+      }
 
     default:
       return state;
@@ -255,9 +261,9 @@ export const Creators = {
     payload: { cable }
   }),
 
-  updateCableRequest: id => ({
+  updateCableRequest: (id, cable) => ({
     type: Types.UPDATE_CABLE_REQUEST,
-    payload: { id }
+    payload: { id, cable }
   }),
 
   loadCableSuccess: cables => ({
@@ -293,8 +299,13 @@ export const Creators = {
     payload: { objectId, objectType, cableId }
   }),
 
-  saveCableId: cableId => ({
-    type: Types.SAVE_CABLE_ID,
-    payload: { cableId }
+  saveCable: cable => ({
+    type: Types.SAVE_CABLE,
+    payload: { cable }
+  }),
+
+  setDrawType: type => ({
+    type: Types.SET_DRAW_TYPE,
+    payload: { type }
   })
 };
