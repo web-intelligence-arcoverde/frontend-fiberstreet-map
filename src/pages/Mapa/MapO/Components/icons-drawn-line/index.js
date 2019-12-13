@@ -31,7 +31,27 @@ function IconsDrawn(props) {
   }
 
   function save() {
-    showNewCable();
+    // showNewCable();
+    const { cable, drawType } = props.redux.cabo;
+
+    let coordinates = polyline.map(line => {
+      return {
+        longitude: line[0],
+        latitude: line[1]
+      };
+    });
+    // Verify if is draw or redraw
+    // If is redraw, [...oldCoords, ...newCoords]
+    if (drawType === "DRAW") {
+      let { coordinates: oldCoords } = cable;
+      oldCoords = JSON.parse(oldCoords);
+      coordinates = oldCoords.concat(coordinates);
+    }
+
+    coordinates = JSON.stringify(coordinates);
+    const { updateCableRequest } = props;
+    updateCableRequest(cable.id, { coordinates });
+    reset();
   }
 
   function updateDrawn(map, polyline) {

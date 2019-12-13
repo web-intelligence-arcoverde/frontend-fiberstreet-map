@@ -26,7 +26,7 @@ function AddCable(props) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const { createCableRequest, addCoordCabo } = props;
+    const { updateCableRequest, addCoordCabo } = props;
     let coordinates = props.redux.map.polyline.map(linha => {
       return {
         longitude: linha[0],
@@ -34,16 +34,17 @@ function AddCable(props) {
       };
     });
     let coordinatesStrinfigied = JSON.stringify(coordinates);
-
+    const { cableId } = props.redux.cabo;
     const cabo = {
-      name: nome,
-      type: modelo,
+      // name: nome,
+      // type: modelo,
       coordinates: coordinatesStrinfigied,
-      fiberAmount: fibra,
-      obs: obs
+      // fiberAmount: fibra,
+      // obs: obs
     };
     // alert(JSON.stringify(cabo));
-    createCableRequest(cabo);
+    // createCableRequest(cabo);
+    updateCableRequest(cableId, cabo)
     hideModal();
     addCoordCabo([]);
   }

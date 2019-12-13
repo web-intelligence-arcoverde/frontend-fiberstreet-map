@@ -51,18 +51,19 @@ function ViewCable(props) {
   }
 
   function addCable() {
-    const { addCoordCabo, setDelimitation } = props;
+    const { addCoordCabo, setDelimitation, setDrawType } = props;
     const coordinates = JSON.parse(data.coordinates);
     let coord = [coordinates[0].longitude, coordinates[0].latitude]; //Fila
     setSubDelemitation("cabo");
     setDelimitation("cabo");
+    setDrawType("REDRAW");
     addCoordCabo([coord]);
     showIcons();
     hideViewCable();
   }
 
   function drawnCable() {
-    const { addCoordCabo, setDelimitation } = props;
+    const { addCoordCabo, setDelimitation, setDrawType } = props;
     const coordinates = JSON.parse(data.coordinates);
     let coord = [
       coordinates[coordinates.length - 1].longitude,
@@ -71,6 +72,7 @@ function ViewCable(props) {
 
     setDelimitation("cabo");
     setSubDelemitation("cabo");
+    setDrawType("DRAW");
     addCoordCabo([coord]);
     showIcons();
     hideViewCable();

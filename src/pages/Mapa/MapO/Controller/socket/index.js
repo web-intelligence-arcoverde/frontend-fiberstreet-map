@@ -435,6 +435,33 @@ export const loadSocket = (map, store, socket) => {
       await map.getSource("wires").setData(dados);
     });
 
+    cables.on('updatedCable', async updatedCable => {
+      const data = await store.getState().cabo.geojson.cables;
+
+      const cables = []
+      
+      data.map(cable => {
+        if (cable.properties.data.id !== updatedCable.properties.data.id) {
+          cables.push(cable);
+        } else {
+          cables.push(updatedCable)
+        }
+      })
+
+      await store.dispatch({
+        type: "@cable/LOAD_SUCCESS",
+        payload: { cables }
+      });
+
+      const dados = {
+        type: "FeatureCollection",
+        features: cables
+      };
+
+      await map.getSource("wires").setData(dados);
+      
+    })
+
     cables.on("deletedCable", async deletedCable => {
       const data = await store.getState().cabo.geojson.cables;
 
