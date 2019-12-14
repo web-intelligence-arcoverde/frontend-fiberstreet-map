@@ -32,15 +32,15 @@ export const handleCtoClickTwoFactor = (cto, longitude, latitude, map) => {
       disgraca(CreatorsCable.setIdTo(cto.id));
       disgraca(CreatorsCable.showModalAddCable("cto"));
     } else if (subDelimitation === "anywhere") {
-      const { cableId } = store.getState().cabo;
+      const { cable } = store.getState().cabo;
 
       disgraca(
-        CreatorsCable.addExistentCableToObjectRequest(cto.id, "CTO", cableId)
+        CreatorsCable.addExistentCableToObjectRequest(cto.id, "CTO", cable.id)
       );
 
       disgraca(CreatorsMap.hideIcons());
       disgraca(CreatorsMap.setDelimitation("default"));
-      var newpolyline = [];
+      const newpolyline = [];
       disgraca(CreatorsMap.addCoordCabo(newpolyline));
       updateDrawn(map, newpolyline);
     } else {

@@ -32,13 +32,15 @@ function ViewCable(props) {
       setDelimitation,
       addCoordCabo,
       setSubDelemitation,
-      setIdFrom
+      setIdFrom,
+      setTypeAndId
     } = props;
     showIcons();
     addCoordCabo(positionObject(data));
     setDelimitation("cabo");
     setSubDelemitation("cto");
     setIdFrom(data.id);
+    setTypeAndId("CTO", data.id)
     hideViewModalCto();
   }
 

@@ -31,13 +31,15 @@ function ViewFusoes(props) {
       addCoordCabo,
       setSubDelemitation,
       setIdFrom,
-      setDelimitation
+      setDelimitation,
+      setTypeAndId
     } = props;
 
     setDelimitation("cabo");
     setSubDelemitation("ceo");
     addCoordCabo(positionObject(data));
     setIdFrom(data.id);
+    setTypeAndId("CEO", data.id)
     showIcons();
     hideViewModalCeo();
   }

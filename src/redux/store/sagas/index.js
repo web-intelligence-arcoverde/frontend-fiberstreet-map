@@ -44,7 +44,8 @@ import {
   addRelCable,
   deleteCable,
   addExistentCableToObject,
-  updateCable
+  updateCable,
+  createCableWithRelationship
 } from "./cabo";
 
 import { Types as UserTypes } from "../ducks/user";
@@ -126,6 +127,7 @@ export default function* rootSaga() {
       CablesTypes.ADD_EXISTENT_CABLE_TO_OBJECT_REQUEST,
       addExistentCableToObject
     ),
+    takeLatest(CableTypes.CREATE_CABLE_WITH_RELATIONSHIP_REQUEST,createCableWithRelationship),
 
     // FiberFusions
     takeLatest(FiberFusionTypes.CREATE_REQUEST, createFusion),

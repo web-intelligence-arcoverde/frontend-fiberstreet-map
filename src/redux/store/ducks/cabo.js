@@ -46,7 +46,10 @@ export const Types = {
   ADD_EXISTENT_CABLE_TO_OBJECT_REQUEST: "@cable/ADD_TO_OBJ_REQUEST",
   SAVE_CABLE: "@cable/SAVE_CABLE",
   UPDATE_CABLE_REQUEST: "@cable/UPDATE_CABLE_REQUEST",
-  SET_DRAW_TYPE: '@cable/SET_DRAW_TYPE'
+  SET_DRAW_TYPE: "@cable/SET_DRAW_TYPE",
+  CREATE_CABLE_WITH_RELATIONSHIP_REQUEST:
+    "@cable/CREATE_CABLE_WITH_RELATIONSHIP_REQUEST",
+  SET_TYPE_ND_ID: "@cable/SET_TYPE_ND_ID"
 };
 
 const INITIAL = {
@@ -81,7 +84,9 @@ const INITIAL = {
   objectTo: {},
   geojson: {
     cables: []
-  }
+  },
+  drawType: "NONE",
+  relationshipCable: {}
 };
 
 export default function(state = INITIAL, action) {
@@ -167,8 +172,15 @@ export default function(state = INITIAL, action) {
       return {
         ...state,
         drawType: action.payload.type
-      }
-
+      };
+    case Types.SET_TYPE_ND_ID:
+      return {
+        ...state,
+        relationshipCable: {
+          type: action.payload.type,
+          id: action.payload.id
+        }
+      };
     default:
       return state;
   }
@@ -307,5 +319,15 @@ export const Creators = {
   setDrawType: type => ({
     type: Types.SET_DRAW_TYPE,
     payload: { type }
+  }),
+
+  setTypeAndId: (type, id) => ({
+    type: Types.SET_TYPE_ND_ID,
+    payload: { type, id }
+  }),
+
+  createCableWithRelationshipRequest: (cable, objectId, objectType) => ({
+    type: Types.CREATE_CABLE_WITH_RELATIONSHIP_REQUEST,
+    payload: { cable, objectId, objectType }
   })
 };
