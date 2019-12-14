@@ -105,3 +105,19 @@ export function* updateCable({ payload }) {
     yield toastr.error("Erro na atualização");
   }
 }
+
+export function* createCableWithRelationship({payload}) {
+  try {
+    /**
+     * payload = {
+     *  cable,
+     *  objectId,
+     *  objectType
+     * }
+     */
+    yield call([api, "post"], `cables/relationship`, payload);
+    yield toastr.success("Cabo", "Sucesso ao criar o cabo");
+  } catch (error) {
+    yield toastr.error("Erro ao criar cabo");
+  }
+}
