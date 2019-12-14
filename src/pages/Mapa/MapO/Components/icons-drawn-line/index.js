@@ -13,7 +13,13 @@ import { ButtonGroup, Button } from "react-bootstrap/";
 import { Container, Bottom } from "./styles";
 
 function IconsDrawn(props) {
-  const { hideIcons, setDelimitation, addCoordCabo, showNewCable } = props;
+  const {
+    hideIcons,
+    setDelimitation,
+    addCoordCabo,
+    showNewCable,
+    setDrawType
+  } = props;
   const { polyline } = props.redux.map;
   const { map } = props;
 
@@ -28,30 +34,33 @@ function IconsDrawn(props) {
     var polyline = [];
     addCoordCabo(polyline);
     updateDrawn(map, polyline);
+    setDrawType("NONE");
   }
 
   function save() {
-    // showNewCable();
     const { cable, drawType } = props.redux.cabo;
+    if (drawType === "NONE" || drawType === null || drawType === undefined) {
+      showNewCable();
+    } else {
+      let coordinates = polyline.map(line => {
+        return {
+          longitude: line[0],
+          latitude: line[1]
+        };
+      });
+      // Verify if is draw or redraw
+      // If is redraw, [...oldCoords, ...newCoords]
+      if (drawType === "DRAW") {
+        let { coordinates: oldCoords } = cable;
+        oldCoords = JSON.parse(oldCoords);
+        coordinates = oldCoords.concat(coordinates);
+      }
 
-    let coordinates = polyline.map(line => {
-      return {
-        longitude: line[0],
-        latitude: line[1]
-      };
-    });
-    // Verify if is draw or redraw
-    // If is redraw, [...oldCoords, ...newCoords]
-    if (drawType === "DRAW") {
-      let { coordinates: oldCoords } = cable;
-      oldCoords = JSON.parse(oldCoords);
-      coordinates = oldCoords.concat(coordinates);
+      coordinates = JSON.stringify(coordinates);
+      const { updateCableRequest } = props;
+      updateCableRequest(cable.id, { coordinates });
+      reset();
     }
-
-    coordinates = JSON.stringify(coordinates);
-    const { updateCableRequest } = props;
-    updateCableRequest(cable.id, { coordinates });
-    reset();
   }
 
   function updateDrawn(map, polyline) {
