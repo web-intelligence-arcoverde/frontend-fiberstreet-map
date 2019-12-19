@@ -22,7 +22,10 @@ export function* updateSplitter({ payload }) {
       payload.splitter
     );
     const { data } = response;
-    yield toastr.success("Splitter", `Sucesso ao criar Splitter ${data.id}`);
+    yield toastr.success(
+      "Splitter",
+      `Sucesso ao atualizar Splitter ${data.id}`
+    );
   } catch (err) {
     yield toastr.error("Falha", "Erro ao atualizar Splitter");
   }

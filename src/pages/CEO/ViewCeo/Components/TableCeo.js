@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Container, Col, Form, Button } from "react-bootstrap/";
+import { Col, Form, Button } from "react-bootstrap/";
 
 // redux
 import { bindActionCreators } from "redux";
@@ -9,6 +9,9 @@ import { connect } from "react-redux";
 //Creators redux
 import { Creators as CeoCreators } from "../../../../redux/store/ducks/ceo";
 import { Creators as MapCreators } from "../../../../redux/store/ducks/map";
+
+import { Container } from "./CSS/styled";
+import "./CSS/styled.css";
 
 const TableCeo = props => {
   const { data } = props.redux.ceo.viewCeo;
@@ -46,7 +49,7 @@ const TableCeo = props => {
   }
 
   return (
-    <Container>
+    <>
       <Form onSubmit={handleSubmit}>
         <Form.Row>
           <Form.Group as={Col} controlId="formGridEmail">
@@ -117,29 +120,19 @@ const TableCeo = props => {
           </Form.Group>
         </Form.Row>
 
-        <div
-          style={{
-            marginBottom: "10px",
-            display: "flex",
-            justifyContent: "flex-end"
-          }}
-        >
-          <Button
-            variant="danger"
-            style={{ marginRight: "10px" }}
-            onClick={deleteCeo}
-          >
+        <Container>
+          <Button variant="danger" className="item" onClick={deleteCeo}>
             Excluir
           </Button>
-          <Button variant="info" style={{ marginRight: "10px" }} onClick={move}>
+          <Button variant="info" className="item" onClick={move}>
             Mover Caixa
           </Button>
-          <Button variant="info" style={{ marginRight: "10px" }} type="submit">
+          <Button variant="info" className="item" type="submit">
             Atualizar informações
           </Button>
-        </div>
+        </Container>
       </Form>
-    </Container>
+    </>
   );
 };
 

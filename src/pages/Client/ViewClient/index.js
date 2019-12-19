@@ -2,7 +2,15 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 
 //UI-Components
-import { Modal, Card, ListGroup, Button } from "react-bootstrap";
+import {
+  Modal,
+  Card,
+  ListGroup,
+  Button,
+  Row,
+  Col,
+  Form
+} from "react-bootstrap";
 import Account from "@material-ui/icons/AccountCircle";
 
 //Reecriação de componentes
@@ -23,6 +31,10 @@ import { Creators as MapActions } from "../../../redux/store/ducks/map";
 import { Creators as CaboActions } from "../../../redux/store/ducks/cabo";
 import { Creators as DropActions } from "../../../redux/store/ducks/drop";
 import api from "../../../services/api";
+
+//Container
+import { Container } from "./CSS/styled";
+import "./CSS/styled.css";
 
 function ViewClient(props) {
   function changeCpf(e) {
@@ -279,36 +291,38 @@ function ViewClient(props) {
             </Card>
           </Modal.Body>
 
-          <Modal.Footer>
-            <Button variant="info" onClick={move}>
-              Mover Cliente
+          <Container>
+            <Button variant="info" onClick={move} className="item">
+              Mover
             </Button>
-            <Button variant="info" type="submit">
-              Salvar Alterações
+            <Button variant="info" type="submit" className="item">
+              Salvar alterações
             </Button>
             {status === null ? (
-              <Button variant="primary" onClick={changeStatus}>
-                Ativar cliente
+              <Button variant="info" onClick={changeStatus} className="item">
+                Ativar
               </Button>
             ) : (
-              <Button variant="danger" onClick={changeStatus}>
+              <Button variant="danger" onClick={changeStatus} className="item">
                 Desativar
               </Button>
             )}
-            <Button variant="danger" onClick={deleteClient}>
-              Excluir
-            </Button>
+
             <Button
               hidden={unvisibleAddCable}
               variant="secondary"
               onClick={addCable}
+              className="item"
             >
               Adicionar Cabo
             </Button>
-            <Button variant="secondary" onClick={handleHideModal}>
+            <Button variant="danger" onClick={deleteClient} className="item">
+              Excluir
+            </Button>
+            <Button variant="danger" onClick={handleHideModal} className="item">
               Fechar
             </Button>
-          </Modal.Footer>
+          </Container>
         </form>
       </Modal>
     </>

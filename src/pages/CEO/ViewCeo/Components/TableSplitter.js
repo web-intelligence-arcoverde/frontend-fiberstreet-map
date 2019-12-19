@@ -1,10 +1,12 @@
 import React from "react";
 
 //UI-Components
-import { Form, Button, Col, Container } from "react-bootstrap";
+import { Form, Button, Col } from "react-bootstrap";
 
 //Icons
 import Cable from "@material-ui/icons/SettingsInputHdmi";
+
+//
 
 var cores = [
   "#58D3F7",
@@ -29,7 +31,7 @@ export default function tableSplitter(props) {
   var balancing = 8;
 
   return (
-    <Container>
+    <>
       <Form>
         <Form.Row>
           <Form.Group as={Col} controlId="formGridEmail">
@@ -45,7 +47,7 @@ export default function tableSplitter(props) {
             <Form.Control required type="number" />
           </Form.Group>
         </Form.Row>
-        <Container
+        <div
           style={{
             border: "1px solid #6c757d",
             display: "flex",
@@ -93,7 +95,7 @@ export default function tableSplitter(props) {
                   )
             )}
           </div>
-        </Container>
+        </div>
         <div
           style={{
             display: "flex",
@@ -108,6 +110,6 @@ export default function tableSplitter(props) {
           <Button variant="danger"> Excluir</Button>
         </div>
       </Form>
-    </Container>
+    </>
   );
 }
