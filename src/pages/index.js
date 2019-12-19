@@ -16,6 +16,7 @@ import AddCableLoose from "./Cable/AddCableLoose/index";
 
 import SplitterRelAdd from "./Splitter/AddRelCliCto/index";
 import SplitterAdd from "./Splitter/AddRelCliCto/index";
+import ViewSplitter from "./Splitter/View/index";
 
 function LoadPages() {
   return (
@@ -37,6 +38,7 @@ function LoadPages() {
 
       <SplitterRelAdd />
       <SplitterAdd />
+      <ViewSplitter />
     </>
   );
 }

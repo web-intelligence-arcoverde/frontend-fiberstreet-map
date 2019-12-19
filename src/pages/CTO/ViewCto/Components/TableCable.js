@@ -40,7 +40,7 @@ function ViewCable(props) {
     setDelimitation("cabo");
     setSubDelemitation("cto");
     setIdFrom(data.id);
-    setTypeAndId("CTO", data.id)
+    setTypeAndId("CTO", data.id);
     hideViewModalCto();
   }
 
