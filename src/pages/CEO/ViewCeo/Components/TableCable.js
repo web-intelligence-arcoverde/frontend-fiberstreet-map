@@ -54,8 +54,16 @@ function ViewFusoes(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
-  function deleteCable(index) {
-    console.log(index);
+  function deleteCableRelationship(index) {
+    const response = window.prompt(
+      "Deseja mesmo deletar? Digite SIM para deletar"
+    );
+    const { deleteCableRelationshipRequest } = props;
+
+    if (response === "SIM") {
+      deleteCableRelationshipRequest(index, data.id, 'CEO')
+      hideViewModalCeo();
+    }
   }
 
   return (
@@ -94,7 +102,7 @@ function ViewFusoes(props) {
                 >
                   <Delete
                     style={{ color: "#6c757d" }}
-                    onClick={deleteCable(index)}
+                    onClick={deleteCableRelationship(cable.cable.id)}
                   />
                 </Button>
               </td>

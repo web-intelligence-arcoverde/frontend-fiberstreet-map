@@ -18,7 +18,7 @@ export const check = (delimitation, coordinates, map) => {
   if (delimitation === "cabo") {
     addCoordinatesCables(map, coordinates);
   } else if (delimitation === "mover") {
-    console.log(store.getState().ctos.cto);
+    
     const move = {
       coordinates: JSON.stringify(coordinates)
     };

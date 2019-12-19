@@ -44,14 +44,14 @@ function ViewCable(props) {
     hideViewModalCto();
   }
 
-  function deleteCable(index) {
-    let response = window.prompt(
+  function deleteCableRelationship(index) {
+    const response = window.prompt(
       "Deseja mesmo deletar? Digite SIM para deletar"
     );
-    const { deleteCableRequest } = props;
+    const { deleteCableRelationshipRequest } = props;
 
     if (response === "SIM") {
-      deleteCableRequest(index);
+      deleteCableRelationshipRequest(index, data.id, 'CTO')
       hideViewModalCto();
     }
   }
@@ -100,7 +100,7 @@ function ViewCable(props) {
                 >
                   <Delete
                     style={{ color: "#6c757d" }}
-                    onClick={() => deleteCable(cable.cable.id)}
+                    onClick={() => deleteCableRelationship(cable.cable.id)}
                   />
                 </Button>
               </td>

@@ -26,11 +26,11 @@ export function* loadSplitters(action) {
     // http://192.168.0.143:3333/splitter/cto/33
 
     if (response.status >= 200 && response.status < 300) {
-      console.tron.log(response);
+      // console.tron.log(response);
       const { data } = response;
-      alert(JSON.stringify(data));
+      // alert(JSON.stringify(data));
       if (process.env.NODE_ENV === "development") {
-        console.tron.log(data);
+        // console.tron.log(data);
       }
       yield put(
         DropCreators.showDropAddModal({ splitters: data, cto_id, drop })
@@ -40,7 +40,7 @@ export function* loadSplitters(action) {
     }
   } catch (error) {
     if (process.env.NODE_ENV === "development") {
-      console.tron.log(error);
+      // console.tron.log(error);
     }
   }
 }
