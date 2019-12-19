@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 //Creators do redux
 import { Creators as CtoCreatos } from "../../../../redux/store/ducks/ctos";
 import { Creators as MapCreators } from "../../../../redux/store/ducks/map";
+import { toastr } from 'react-redux-toastr';
 
 //Redux
 import { connect } from "react-redux";

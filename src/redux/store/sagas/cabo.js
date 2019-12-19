@@ -61,18 +61,24 @@ export function* deleteCable({ payload }) {
  * @param {*} param0
  */
 export function* addExistentCableToObject({ payload }) {
-  const { objectId, objectType, cableId } = payload;
-  const state = store.getState()
+  const {
+    objectId,
+    objectType,
+    cable: { id: cableId, coordinates: oldCoords }
+  } = payload;
+  const state = store.getState();
   const { polyline } = state.map;
-  
+
+  let newCoords = JSON.parse(oldCoords);
   let coordinates = polyline.map(point => {
     return {
       longitude: point[0],
       latitude: point[1]
-    }
-  })
-  coordinates = JSON.stringify(coordinates)
-  
+    };
+  });
+  coordinates = newCoords.concat(coordinates);
+  coordinates = JSON.stringify(coordinates);
+
   try {
     const response = yield call(
       [api, "put"],
@@ -84,14 +90,14 @@ export function* addExistentCableToObject({ payload }) {
         coordinates: coordinates
       }
     );
-    
+
     const { relation, type } = response.data;
     yield toastr.success(
       "Relacionamento",
       `Cabo adicionado a ${type} ${relation.id} com sucesso`
     );
     const newPolyline = [];
-    yield store.dispatch(MapActions.addCoordCabo(newPolyline));
+    yield put(MapActions.addCoordCabo(newPolyline));
   } catch (error) {
     yield toastr.error("Relacionamento", "Falha ao adicionar o cabo à caixa");
   }
@@ -106,7 +112,7 @@ export function* updateCable({ payload }) {
   }
 }
 
-export function* createCableWithRelationship({payload}) {
+export function* createCableWithRelationship({ payload }) {
   try {
     /**
      * payload = {
@@ -121,3 +127,43 @@ export function* createCableWithRelationship({payload}) {
     yield toastr.error("Erro ao criar cabo");
   }
 }
+
+export function* addRelBetweenCableAndLayer({payload}) {
+  const { type: objectType, objectId, cableId } = payload;
+  try {
+    const response = yield call(
+      [api, "put"],
+      `cables/relationship/${cableId}`,
+      {
+        objectId,
+        objectType: String(objectType).toUpperCase(),
+        cableId,
+      }
+    );
+    const { relation, type } = response.data;
+    yield toastr.success(
+      "Relacionamento",
+      `Cabo adicionado a ${type} ${relation.id} com sucesso`
+    );
+    
+  } catch (err){
+    yield toastr.error("Relacionamento", "Falha ao adicionar o cabo à caixa");
+  }
+}
+
+
+export function* deleteCableRelationship({payload}){
+  const { objectType, objectId, cableId } = payload;
+  try {
+    yield call([api, 'delete'], `cables/relationship/${cableId}/${objectType}/${objectId}`)
+    yield toastr.success(
+      "Relacionamento",
+      `Relacionamento deletado com sucesso`
+    );
+  } catch (err) {
+    yield toastr.error(
+      "Relacionamento",
+      `Relacionamento não deletado sucesso`
+    );
+  }
+} 

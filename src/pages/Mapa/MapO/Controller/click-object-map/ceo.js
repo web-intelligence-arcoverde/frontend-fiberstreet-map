@@ -15,30 +15,30 @@ export const handleClickCeo = (features, map) => {
 
 const handleCeoClickTwoFactor = (ceo, longitude, latitude, map) => {
   const { delimitation, subDelimitation, polyline } = store.getState().map;
-  const dixpesti = store.dispatch;
+  const dispatch = store.dispatch;
   if (delimitation === "cabo") {
     let newPolyline = [...polyline, [longitude, latitude]];
-    dixpesti(CreatorsMap.addCoordCabo(newPolyline));
+    dispatch(CreatorsMap.addCoordCabo(newPolyline));
 
     /* 
       Adicionar cabo de uma {cto,ceo} para os mesmo.
     */
     if ((subDelimitation === "cto") | (subDelimitation === "ceo")) {
-      dixpesti(CreatorsCable.setIdTo(ceo.id));
-      dixpesti(CreatorsCable.showModalAddCable("ceo"));
+      dispatch(CreatorsCable.setIdTo(ceo.id));
+      dispatch(CreatorsCable.showModalAddCable("ceo"));
     } else if (subDelimitation === "anywhere") {
-      const { cableId } = store.getState().cabo;
-      dixpesti(
-        CreatorsCable.addExistentCableToObjectRequest(ceo.id, "CEO", cableId)
+      const { cable } = store.getState().cabo;
+      dispatch(
+        CreatorsCable.addExistentCableToObjectRequest(ceo.id, "CEO", cable)
       );
-      dixpesti(CreatorsMap.hideIcons());
-      dixpesti(CreatorsMap.setDelimitation("default"));
-      var newpolyline = [];
-      dixpesti(CreatorsMap.addCoordCabo(newpolyline));
+      dispatch(CreatorsMap.hideIcons());
+      dispatch(CreatorsMap.setDelimitation("default"));
+      
+      const newpolyline = [];
       updateDrawn(map, newpolyline);
     }
   } else {
-    dixpesti(CreatorsCeo.showViewModalCeo(ceo));
+    dispatch(CreatorsCeo.showViewModalCeo(ceo));
   }
 };
 

@@ -26,7 +26,7 @@ function AddCable(props) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const { createCableWithRelationshipRequest, addCoordCabo } = props;
+    const { createCableRequest, createCableWithRelationshipRequest, addCoordCabo } = props;
     let coordinates = props.redux.map.polyline.map(linha => {
       return {
         longitude: linha[0],
@@ -43,9 +43,11 @@ function AddCable(props) {
       obs: obs
     };
     // alert(JSON.stringify(cabo));
-    // updateCableRequest(cableId, cabo)
-    const { type, id } = props.redux.cabo.relationshipCable;
-    createCableWithRelationshipRequest(cabo, id, type);
+    
+    createCableRequest(cabo)
+
+    // const { type, id } = props.redux.cabo.relationshipCable;
+    // createCableWithRelationshipRequest(cabo, id, type);
     hideModal();
     addCoordCabo([]);
   }
@@ -66,7 +68,7 @@ function AddCable(props) {
               color: "#6c757d"
             }}
           >
-            <Modal.Title>Adicionar cabo</Modal.Title>
+            <Modal.Title>Adicionar cabo solto</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>

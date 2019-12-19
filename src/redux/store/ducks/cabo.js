@@ -49,7 +49,10 @@ export const Types = {
   SET_DRAW_TYPE: "@cable/SET_DRAW_TYPE",
   CREATE_CABLE_WITH_RELATIONSHIP_REQUEST:
     "@cable/CREATE_CABLE_WITH_RELATIONSHIP_REQUEST",
-  SET_TYPE_ND_ID: "@cable/SET_TYPE_ND_ID"
+  SET_TYPE_ND_ID: "@cable/SET_TYPE_ND_ID",
+
+  ADD_REL_BET_LAYER_AND_CABLE: '@cable/ADD_REL_B_C_L',
+  DELETE_CABLE_REL_REQUEST: '@cable/DELETE_CABLE_REL_REQUEST'
 };
 
 const INITIAL = {
@@ -306,9 +309,9 @@ export const Creators = {
     type: Types.HIDE_MODAL_NEW_CABLE
   }),
 
-  addExistentCableToObjectRequest: (objectId, objectType, cableId) => ({
+  addExistentCableToObjectRequest: (objectId, objectType, cable) => ({
     type: Types.ADD_EXISTENT_CABLE_TO_OBJECT_REQUEST,
-    payload: { objectId, objectType, cableId }
+    payload: { objectId, objectType, cable }
   }),
 
   saveCable: cable => ({
@@ -329,5 +332,16 @@ export const Creators = {
   createCableWithRelationshipRequest: (cable, objectId, objectType) => ({
     type: Types.CREATE_CABLE_WITH_RELATIONSHIP_REQUEST,
     payload: { cable, objectId, objectType }
+  }),
+
+  addRelationshipBetLayerAndCableRequest: (type, objectId, cableId) => ({
+    type:Types.ADD_REL_BET_LAYER_AND_CABLE,
+    payload: {type, objectId, cableId} 
+  }),
+
+  deleteCableRelationshipRequest: (cableId, objectId, objectType) => ({
+    type: Types.DELETE_CABLE_REL_REQUEST,
+    payload: {cableId, objectId, objectType}
   })
+  
 };
