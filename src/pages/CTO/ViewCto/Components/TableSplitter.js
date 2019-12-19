@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-//UI-Components
-import { Form, Button, Modal, Col } from "react-bootstrap";
-
 //Conectores
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -13,21 +10,26 @@ import api from "../../../../services/api";
 import { Creators as SplitterActions } from "../../../../redux/store/ducks/splitter";
 import { Creators as CtoActions } from "../../../../redux/store/ducks/ctos";
 
-import StorageIcon from "@material-ui/icons/Storage";
 import { Container } from "@material-ui/core";
 import Cable from "@material-ui/icons/SettingsInputHdmi";
 import { wrap } from "module";
 
+//UI-Components
+import { Form, Button, Col } from "react-bootstrap";
+
 //Components
 import AddSplitter from "../../../Splitter/AddSplitter/index";
+import ViewSplitter from "../../../Splitter/View/index";
 
 function TableSplitter(props) {
   const { modalNewSplitter } = props.redux.splitter;
+  const { hideViewModalCto } = props;
+  console.log("viewofekof");
+  console.log(props);
 
   const { data, visible } = props.redux.ctos.viewCto;
 
   const [splitters, setSplitters] = useState([]);
-  const { hideViewModalCto } = props;
 
   const [name, setName] = useState("");
   const [modal, setModal] = useState("");
@@ -78,12 +80,18 @@ function TableSplitter(props) {
     showSplitterAddModal(data.id);
   }
 
+  function modalSplitter() {
+    const { showModal } = props;
+    showModal(splitters[0]);
+    console.log(props.redux.splitter.show.visible);
+  }
+
   return (
     <Container>
       <Form>
         <Form.Row>
           <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Label>Nome do splitter:</Form.Label>
+            <Form.Label>Nome:</Form.Label>
             <Form.Control
               required
               minLength="5"
@@ -93,7 +101,7 @@ function TableSplitter(props) {
             />
           </Form.Group>
           <Form.Group as={Col} controlId="formGridPassword">
-            <Form.Label>Modelo do Splitter</Form.Label>
+            <Form.Label>Modelo:</Form.Label>
             <Form.Control
               required
               minLength="5"
@@ -169,11 +177,25 @@ function TableSplitter(props) {
             marginBottom: "10px"
           }}
         >
-          <Button variant="secondary" onClick={handleAddSplitter}>
-            Adicionar um splitter
-          </Button>
+          {splitters.length === 0 ? (
+            <>
+              <Button variant="info" onClick={handleAddSplitter}>
+                Adicionar
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="secondary" onClick={modalSplitter}>
+                Editar informações
+              </Button>
+              <Button variant="danger" style={{ marginLeft: "10px" }}>
+                Excluir
+              </Button>
+            </>
+          )}
         </div>
       </Form>
+      <ViewSplitter />
       <AddSplitter />
     </Container>
   );
@@ -192,10 +214,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TableSplitter);
+export default connect(mapStateToProps, mapDispatchToProps)(TableSplitter);
 
 /**
  * 

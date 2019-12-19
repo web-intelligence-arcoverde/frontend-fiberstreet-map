@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import store from '../../../../redux/store'
+import { toastr } from 'react-redux-toastr';
+import store from '../../../../redux/store';
 
 import api from "../../../../services/api";
 import usedUrl from "../../../../services/api";
@@ -29,26 +30,10 @@ export default function Spreadsheet(props) {
   const dispatch = useDispatch();
 
   const { data, visible } = useSelector(state => state.ceo.viewCeo);
-  // useEffect(() => {
-  //   if (visible) {
-  //     api
-  //       .get(`spreadsheets/ceo/${data.id}`)
-  //       .then(response => {
-  //         setSpreadsheet(response.data);
-  //         setSpreadsheetURL(response.data.url);
-  //       })
-  //       .catch(err => console.warn(err));
-  //   }
-  // }, [data.id, visible]);
 
   const deleted = useCallback(() => {
     api.delete(`spreadsheets/:${data.id}`);
   }, [data.id]);
-
-  // const download = useCallback(() => {
-  //   // api.get(`spreadsheets/:${data.id}`);
-  //   api.get(spreadsheetURL);
-  // }, [spreadsheetURL]);
 
   function download() {
     api
@@ -81,7 +66,7 @@ export default function Spreadsheet(props) {
           }
         })
         .then(response => {
-          console.log(response.data);
+          toastr.success('Plano de emenda', 'Plano de emenda salvo com sucesso')
         })
         .catch(err => console.log(err));
     }
@@ -109,22 +94,21 @@ export default function Spreadsheet(props) {
       setP_slug(slug)
 
       api
-        .get(`spreadsheetlinks/${data.id}`)
+        .post("spreadsheetlinks", {
+          ceo_id: data.id
+        })
         .then(response => {
           setSpreadsheetURL(response.data.sublink);
         })
         .catch(err => {
-          api
-            .post("spreadsheetlinks", {
-              ceo_id: data.id
-            })
-            .then(response => {
-              setSpreadsheetURL(response.data.sublink);
-            })
-            .catch(err => {
-              console.warn(err);
-            });
+          console.warn(err);
         });
+      // api
+      //   .get(`spreadsheetlinks/${data.id}`)
+      //   .then(response => {
+      //     setSpreadsheetURL(response.data.sublink);
+      //   })
+      //   .catch(err => {});
       
       
     }
@@ -134,15 +118,6 @@ export default function Spreadsheet(props) {
     <Container>
       <Form onSubmit={handleSubmit}>
         <Form.Group>
-          <Form.Label>Nome:</Form.Label>
-          <Form.Control
-            required
-            minLength="5"
-            maxLength="150"
-            type="text"
-            value={name}
-            onChange={e => setName(e.target.value)}
-          />
           <UploadFile onUpload={handleUpload} />
           {currentFile && <FileSpreadsheet file={currentFile} />}
           <Button type="submit" variant="info" style={{ margin: "10px" }}>
@@ -155,7 +130,6 @@ export default function Spreadsheet(props) {
               target="_blank"
             >
               <Button
-                // onClick={download}
                 variant="info"
                 style={{ margin: "10px" }}
               >

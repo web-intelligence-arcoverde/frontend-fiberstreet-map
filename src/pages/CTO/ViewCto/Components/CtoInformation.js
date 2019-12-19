@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 //Components Importados
-import { Container, Col, Button, Form } from "react-bootstrap/";
+import { Col, Button, Form } from "react-bootstrap/";
 import ViewPhoto from "./PhotoCto";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
@@ -9,10 +9,14 @@ import TextField from "@material-ui/core/TextField";
 //Creators do redux
 import { Creators as CtoCreatos } from "../../../../redux/store/ducks/ctos";
 import { Creators as MapCreators } from "../../../../redux/store/ducks/map";
+import { toastr } from 'react-redux-toastr';
 
 //Redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+
+import { Container } from "./CSS/styled";
+import "./CSS/styled.css";
 
 function Components(props) {
   const { showModalPhoto, hideViewModalCto } = props;
@@ -37,7 +41,7 @@ function Components(props) {
     },
     {
       value: "cli_cancel",
-      label: "Cliente Cancelado"
+      label: "Cliente cancelado"
     }
   ]);
 
@@ -82,18 +86,17 @@ function Components(props) {
   }
 
   return (
-    <Container>
+    <>
       <Form onSubmit={handleSubmit}>
-        <Form.Row>
-          <Form.Group>
-            <Form.Label>Status</Form.Label>
+        <Form.Row className="item">
+          <Form.Group className="item">
             <TextField
               id="standard-select-currency"
               select
               label="Status"
               value={status}
               onChange={e => setStatus(e.target.value)}
-              helperText="Selecione o status da CTO"
+              helperText="Selecione o status"
               margin="normal"
               required
             >
@@ -105,7 +108,7 @@ function Components(props) {
             </TextField>
           </Form.Group>
         </Form.Row>
-        <Form.Row>
+        <Form.Row className="item">
           <Form.Group as={Col} controlId="formGridEmail">
             <Form.Label>Nome:</Form.Label>
             <Form.Control
@@ -115,7 +118,7 @@ function Components(props) {
             />
           </Form.Group>
         </Form.Row>
-        <Form.Row>
+        <Form.Row className="item">
           <Form.Group as={Col} controlId="formGridPassword">
             <Form.Label>Modelo:</Form.Label>
 
@@ -127,7 +130,7 @@ function Components(props) {
           </Form.Group>
         </Form.Row>
 
-        <Form.Row>
+        <Form.Row className="item">
           <Form.Group as={Col} controlId="formGridAddress1">
             <Form.Label>Endereço:</Form.Label>
             <Form.Control
@@ -138,7 +141,7 @@ function Components(props) {
           </Form.Group>
         </Form.Row>
 
-        <Form.Row>
+        <Form.Row className="item">
           <Form.Group as={Col} controlId="formGridAddress2">
             <Form.Label>Observação:</Form.Label>
             <Form.Control
@@ -150,42 +153,32 @@ function Components(props) {
           </Form.Group>
         </Form.Row>
 
-        <div
-          style={{
-            marginBottom: "10px",
-            display: "flex",
-            justifyContent: "flex-end"
-          }}
-        >
+        <Container>
           <>
             {status !== null ? (
-              <Button variant="primary" style={{ marginRight: "10px" }}>
+              <Button variant="info" className="item">
                 Mostrar Foto
               </Button>
             ) : (
-              <Button
-                variant="primary"
-                style={{ marginRight: "10px" }}
-                onClick={showModalPhoto}
-              >
+              <Button variant="info" className="item" onClick={showModalPhoto}>
                 Adicionar Foto
               </Button>
             )}
           </>
-          <Button variant="info" style={{ marginRight: "10px" }} onClick={move}>
-            Mover Caixa
+          <Button variant="info" className="item" onClick={move}>
+            Mover
           </Button>
 
-          <Button variant="info" style={{ marginRight: "10px" }} type="submit">
+          <Button variant="info" className="item" type="submit">
             Atualizar dados
           </Button>
-          <Button variant="danger" onClick={deleteCto}>
+          <Button variant="danger" onClick={deleteCto} className="item">
             Excluir
           </Button>
-        </div>
+        </Container>
       </Form>
       <ViewPhoto />
-    </Container>
+    </>
   );
 }
 

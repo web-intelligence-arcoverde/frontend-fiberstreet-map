@@ -7,6 +7,7 @@ import { bindActionCreators } from "redux";
 
 //Creators
 import { Creators as MapCreators } from "../../../../../redux/store/ducks/map";
+import { Creators as CableActions } from "../../../../../redux/store/ducks/cabo";
 import AuthActions from "../../../../../redux/store/ducks/auth";
 
 //Componentes @material-ui / react-bootstrap
@@ -41,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 function LeftMenu(props) {
   const classes = useStyles();
 
-  const { setDelimitation, showIcons } = props;
+  const { setDelimitation, showIcons, setDrawType } = props;
 
   const [visible, setVisible] = useState(false);
 
@@ -208,6 +209,7 @@ function LeftMenu(props) {
                 <Dropdown.Item
                   onClick={() => {
                     setDelimitation("cabo");
+                    setDrawType("NONE");
                     showIcons();
                   }}
                 >
@@ -272,7 +274,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...MapCreators, ...AuthActions }, dispatch);
+  bindActionCreators({ ...MapCreators, ...AuthActions, ...CableActions }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeftMenu);
 

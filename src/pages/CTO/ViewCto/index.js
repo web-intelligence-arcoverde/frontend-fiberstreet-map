@@ -18,7 +18,7 @@ import TableSplitter from "./Components/TableSplitter";
 import TableCable from "./Components/TableCable";
 
 //Componentes importados
-import { Modal, Accordion, Card, ListGroup } from "react-bootstrap";
+import { Modal, Accordion, Card, ListGroup, Button } from "react-bootstrap";
 
 //Tamanho das box
 function ViewCto(props) {
@@ -27,6 +27,11 @@ function ViewCto(props) {
 
   const { viewCto } = ctos; //Recuperando o estado inicial da CTO
   const { data } = viewCto;
+
+  function modalSplitter() {
+    const { showModal } = props;
+    showModal();
+  }
 
   return (
     <Modal size="lg" show={viewCto.visible} onHide={hideViewModalCto}>

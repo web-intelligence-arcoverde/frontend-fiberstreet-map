@@ -6,6 +6,7 @@ import { Creators as MapCreators } from "../../../redux/store/ducks/map";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { toastr } from 'react-redux-toastr';
 
 //Components
 import { Modal, Button, Container, Form } from "react-bootstrap/";
@@ -25,8 +26,8 @@ function CaboAdd(props) {
     setDelimitation("default");
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
+    // e.preventDefault();
     let coordinates = props.redux.map.polyline.map(linha => {
       return {
         longitude: linha[0],
@@ -39,7 +40,7 @@ function CaboAdd(props) {
       name: nome,
       type: modelo,
       fiberAmount: fibra,
-      coordinates //: coordinatesStrinfigied
+      coordinates//: coordinatesStrinfigied
     };
     const { addCoordCabo, hideIcons } = props;
     setNome("");
@@ -52,6 +53,7 @@ function CaboAdd(props) {
       drop: cabo,
       cto_id: newCabo.ctoId
     };
+    
     showDropAddModalRequest(dropNdCtoId);
   }
 
@@ -79,7 +81,9 @@ function CaboAdd(props) {
   return (
     <Container>
       <Modal show={newCabo.isVisible} onHide={hideModal}>
-        <Form onSubmit={handleSubmit}>
+        <Form 
+        // onSubmit={handleSubmit}
+        >
           <Modal.Header
             style={{
               justifyContent: "center",
@@ -87,7 +91,7 @@ function CaboAdd(props) {
               color: "#6c757d"
             }}
           >
-            <Modal.Title>Adicionar cabo</Modal.Title>
+            <Modal.Title>Adicionar cabo do cliente</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
@@ -126,7 +130,7 @@ function CaboAdd(props) {
             <Button variant="danger" onClick={hideModal}>
               Sair
             </Button>
-            <Button variant="secondary" type="submit">
+            <Button variant="secondary" onClick={handleSubmit}>
               Salvar
             </Button>
           </Modal.Footer>

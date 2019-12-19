@@ -71,6 +71,7 @@ export default function(state = INITIAL_STATE, action) {
     case Types.SET_MAP_DELEMITATION:
       return {
         ...state,
+        lastDelimitation: state.delimitation,
         delimitation: action.payload.delimitation
       };
     case Types.SET_MAP_STYLE:
