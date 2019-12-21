@@ -2,9 +2,6 @@ export const Types = {
   SHOW_NEW_MODAL_SPLITTER: "@splitter/MODAL_SHOW",
   HIDE_NEW_MODAL_SPLITTER: "@splitter/MODAL_HIDE",
 
-  SHOW_MODAL_VIEW: "splitter/SHOW_MODAL_VIEW",
-  HIDE_MODAL_VIEW: "splitter/HIDE_MODAL_VIEW",
-
   CREATE_SP_REQUEST: "@splitter/CREATE_REQUEST",
   CREATE_SP_SUCCESS: "@splitter/CREATE_SUCCESS",
 
@@ -12,7 +9,9 @@ export const Types = {
   DELETE_SP_SUCCESS: "@splitter/DELETE_SUCCESS",
 
   UPDATE_SP_REQUEST: "@splitter/UPDATE_REQUEST",
-  UPDATE_SP_SUCCESS: "@splitter/UPDATE_SUCCESS"
+  UPDATE_SP_SUCCESS: "@splitter/UPDATE_SUCCESS",
+
+  SHOW_MODAL_SPLITTER: "splitter/SHOW_MODAL_SPLITTER"
 };
 
 const INITIAL_STATE = {
@@ -20,9 +19,8 @@ const INITIAL_STATE = {
     visible: false,
     id: null
   },
-  show: {
-    visible: false,
-    data: {}
+  showSplitter: {
+    visible: false
   }
 };
 
@@ -44,22 +42,13 @@ export default function(state = INITIAL_STATE, action) {
           data: {}
         }
       };
-    case Types.SHOW_MODAL_VIEW: {
+    case Types.SHOW_MODAL_SPLITTER:
       return {
         ...state,
-        view: {
+        showSplitter: {
           visible: true
         }
       };
-    }
-    case Types.HIDE_VIEW: {
-      return {
-        ...state,
-        view: {
-          visible: false
-        }
-      };
-    }
 
     default:
       return state;
@@ -78,12 +67,8 @@ export const Creators = {
     type: Types.HIDE_NEW_MODAL_SPLITTER
   }),
 
-  showModal: () => ({
-    type: Types.SHOW_MODAL_VIEW
-  }),
-
-  hideModal: () => ({
-    type: Types.HIDE_MODAL_VIEW
+  showModalSplitter: () => ({
+    type: Types.SHOW_MODAL_SPLITTER
   }),
 
   createSplitterRequest: splitter => ({
