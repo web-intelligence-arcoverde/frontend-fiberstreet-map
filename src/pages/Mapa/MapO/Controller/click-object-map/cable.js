@@ -2,7 +2,7 @@ import { Creators as CreatorsCto } from "../../../../../redux/store/ducks/ctos";
 import { Creators as CreatorsMap } from "../../../../../redux/store/ducks/map";
 import { Creators as CreatorsCable } from "../../../../../redux/store/ducks/cabo";
 
-import { toastr } from 'react-redux-toastr';
+import { toastr } from "react-redux-toastr";
 
 import store from "../../../../../redux/store";
 
@@ -17,12 +17,17 @@ export const handleClickCable = features => {
 };
 
 const handleCableClickTwoFactor = (cable, longitude, latitude) => {
-  const { delimitation, lastDelimitation, polyline, subDelimitation } = store.getState().map;
+  const {
+    delimitation,
+    lastDelimitation,
+    polyline,
+    subDelimitation
+  } = store.getState().map;
   const dispatch = store.dispatch;
 
-  if (lastDelimitation === 'mover') {
+  if (lastDelimitation === "mover") {
     verifyMoveLayer(cable.id, dispatch);
-    dispatch(CreatorsMap.setDelimitation(delimitation))
+    dispatch(CreatorsMap.setDelimitation(delimitation));
   }
 
   dispatch(CreatorsCable.saveCable(cable));
@@ -39,12 +44,22 @@ const handleCableClickTwoFactor = (cable, longitude, latitude) => {
 };
 
 const verifyMoveLayer = (cableId, dispatch) => {
-  const { moveObjectMap : {type, objectId} } = store.getState().map;
-  
+  const {
+    moveObjectMap: { type, objectId }
+  } = store.getState().map;
+
   const toastrConfirmOptions = {
-    onOk: () => dispatch(CreatorsCable.addRelationshipBetLayerAndCableRequest(type, objectId, cableId)),
-    onCancel: () => toastr.info('Informação', 'Nenhuma relação foi criada boy')
-  }
-  toastr.confirm(`Deseja adicionar o cabo no ${type}?`, toastrConfirmOptions)
-  
-}
+    onOk: () =>
+      dispatch(
+        CreatorsCable.addRelationshipBetLayerAndCableRequest(
+          type,
+          objectId,
+          cableId
+        )
+      ),
+    onCancel: () => toastr.info("Informação", "Nenhuma relação foi criada boy")
+  };
+  toastr.confirm(`Deseja adicionar o cabo no ${type}?`, toastrConfirmOptions);
+  dispatch(CreatorsMap.setDelimitation("default"));
+  dispatch(CreatorsMap.setDelimitation("default"));
+};

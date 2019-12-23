@@ -78,11 +78,11 @@ function ViewFusoes(props) {
           </tr>
         </thead>
         <tbody>
-          {cables.map((cable, index) => (
+          {cables.map((relationship, index) => (
             <tr key={index}>
-              <td>{cable.cable.name}</td>
-              <td>{cable.cable.fiberAmount}</td>
-              <td>{cable.cable.obs}</td>
+              <td>{relationship.cable.name}</td>
+              <td>{relationship.cable.fiberAmount}</td>
+              <td>{relationship.cable.obs}</td>
 
               <td>
                 <Button
@@ -102,7 +102,7 @@ function ViewFusoes(props) {
                 >
                   <Delete
                     style={{ color: "#6c757d" }}
-                    onClick={deleteCableRelationship(cable.cable.id)}
+                    onClick={() => deleteCableRelationship(relationship.id)}
                   />
                 </Button>
               </td>

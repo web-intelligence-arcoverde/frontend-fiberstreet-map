@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toastr } from 'react-redux-toastr';
 import store from '../../../../redux/store';
 
-import api from "../../../../services/api";
+import api, {endPoint} from "../../../../services/api";
 import usedUrl from "../../../../services/api";
 
 //Creators redux
@@ -126,7 +126,7 @@ export default function Spreadsheet(props) {
 
           {spreadsheetURL && (
             <a
-              href={`http://192.168.11.104:3333/spreadsheets/${spreadsheetURL}/${p_slug}`}
+              href={`${endPoint}/spreadsheets/${spreadsheetURL}/${p_slug}`}
               target="_blank"
             >
               <Button
