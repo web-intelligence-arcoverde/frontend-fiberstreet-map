@@ -14,16 +14,14 @@ function Splitter(props) {
   const [model, setModel] = useState("");
   const [balancing, setBalancing] = useState("");
 
-  const { show } = props.redux.splitter;
-  console.log(show);
-  console.log("informações");
+  const { modalEdition } = props.redux.splitter;
 
   function hide() {
-    const { hideModalSplitter } = props;
-    hideModalSplitter();
+    const { hideSpEditionModal } = props;
+    hideSpEditionModal();
   }
   return (
-    <Modal show={show.visible} size="lg">
+    <Modal show={modalEdition.visible} size="lg">
       <Modal.Header
         style={{
           justifyContent: "center",
@@ -65,10 +63,8 @@ function Splitter(props) {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={hide}>
-            Fechar
-          </Button>
-          <Button variant="secondary" type="submit">
+          <Button variant="danger">Fechar</Button>
+          <Button variant="secondary" type="submit ">
             Atualizar
           </Button>
         </Modal.Footer>

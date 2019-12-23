@@ -23,6 +23,21 @@ function loadImports(map, geojson) {
       return geo;
     }
 
+    function sendBatchCreate(geojson) {
+      const clients = geojson.features.map(feature => {
+        const client = {
+          name: feature.properties.NOME,
+          pppoe: feature.properties.Name,
+          address: feature.properties.ENDERE__O,
+          obs: feature.properties.description
+        };
+
+        const longitude = feature.geometry;
+
+        return client
+      })
+    }
+
     function saveImportsOnDatabase(geojson) {
       let clients = geojson.features.map(feature => {
         const client = {
@@ -34,9 +49,14 @@ function loadImports(map, geojson) {
         // eslint-disable-next-line no-unused-vars
         const longitude = feature.geometry;
         //  console.log(longitude)
-        //  coordinates: JSON.stringify([feature.geometry.geometries[0].coordinates[0], feature.geometry.geometries[0].coordinates[1]])
+        client.coordinates = JSON.stringify([feature.geometry.geometries[0].coordinates[0], feature.geometry.geometries[0].coordinates[1]])
         return client;
       });
+      const postData = {
+        layerType: 'CLIENTS',
+        clients
+      }
+      api.post('imports', postData)
 
       clients.forEach(client => {
         // api.post(`http://localhost:3333/clients`, client)

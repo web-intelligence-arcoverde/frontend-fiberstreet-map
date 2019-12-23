@@ -7,11 +7,13 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { Creators as CablesCreators } from "../../../redux/store/ducks/cabo";
 import { Creators as MapCreators } from "../../../redux/store/ducks/map";
 
+import { Container } from "./CSS/styled";
+import "./CSS/styled.css";
+
 function ViewCable(props) {
   const { data } = props.redux.cabo.viewCable;
   const { visible } = props.redux.cabo.viewCable;
   const { hideViewCable } = props;
-  console.log(props);
 
   const [nome, setNome] = useState("");
   const [modelo, setModelo] = useState("");
@@ -37,8 +39,15 @@ function ViewCable(props) {
     };
   }, [visible]);
 
-  function updateCable(e) {
-    e.preventDefault();
+  function updateCable() {
+    const { updateCableRequest } = props;
+    const cabo = {
+      name: nome,
+      type: modelo,
+      fiberAmount: fibra
+    };
+    updateCableRequest(data.id, cabo);
+    hideView();
   }
 
   function hideView() {
@@ -51,13 +60,10 @@ function ViewCable(props) {
   }
 
   function addCable() {
-    const { addCoordCabo, setDelimitation, setDrawType } = props;
-    const coordinates = JSON.parse(data.coordinates);
-    let coord = [coordinates[0].longitude, coordinates[0].latitude]; //Fila
+    const { setDelimitation, setDrawType } = props;
     setSubDelemitation("cabo");
     setDelimitation("cabo");
     setDrawType("REDRAW");
-    addCoordCabo([coord]);
     showIcons();
     hideViewCable();
   }
@@ -138,15 +144,16 @@ function ViewCable(props) {
             />
           </Form.Group>
         </Modal.Body>
-        <Modal.Footer>
+        <Container>
           <Button
             variant="info"
             onClick={() => {
               drawnCable();
               setSubDelemitation("anywhere");
             }}
+            className="item"
           >
-            Adicionar a cto
+            Adicionar cto
           </Button>
           <Button
             variant="info"
@@ -154,22 +161,27 @@ function ViewCable(props) {
               drawnCable();
               setSubDelemitation("anywhere");
             }}
+            className="item"
           >
-            Adicionar a ceo
+            Adicionar ceo
           </Button>
-          <Button variant="info" onClick={drawnCable}>
+          <Button variant="info" className="item" onClick={updateCable}>
+            Atualizar informações
+          </Button>
+          <Button variant="info" onClick={drawnCable} className="item">
             Desenhar
           </Button>
-          <Button variant="info" onClick={addCable}>
+
+          <Button variant="info" onClick={addCable} className="item">
             Re-desenhar
           </Button>
-          <Button variant="danger" onClick={deleteCable}>
+          <Button variant="danger" onClick={deleteCable} className="item">
             Excluir
           </Button>
-          <Button variant="danger" onClick={hideView}>
+          <Button variant="danger" onClick={hideView} className="item">
             Sair
           </Button>
-        </Modal.Footer>
+        </Container>
       </Form>
     </Modal>
   );

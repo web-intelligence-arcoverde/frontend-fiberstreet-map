@@ -1,9 +1,9 @@
 export const Types = {
   SHOW_NEW_MODAL_SPLITTER: "@splitter/MODAL_SHOW",
   HIDE_NEW_MODAL_SPLITTER: "@splitter/MODAL_HIDE",
-
-  SHOW_MODAL_VIEW: "splitter/SHOW_MODAL_VIEW",
-  HIDE_MODAL_VIEW: "splitter/HIDE_MODAL_VIEW",
+  
+  SHOW_SP_EDITION_MODAL: '@splitter/SHOW_SP_EDITION_MODAL',
+  HIDE_SP_EDITION_MODAL: '@splitter/HIDE_SP_EDITION_MODAL',
 
   CREATE_SP_REQUEST: "@splitter/CREATE_REQUEST",
   CREATE_SP_SUCCESS: "@splitter/CREATE_SUCCESS",
@@ -12,7 +12,9 @@ export const Types = {
   DELETE_SP_SUCCESS: "@splitter/DELETE_SUCCESS",
 
   UPDATE_SP_REQUEST: "@splitter/UPDATE_REQUEST",
-  UPDATE_SP_SUCCESS: "@splitter/UPDATE_SUCCESS"
+  UPDATE_SP_SUCCESS: "@splitter/UPDATE_SUCCESS",
+
+  SHOW_MODAL_SPLITTER: "splitter/SHOW_MODAL_SPLITTER"
 };
 
 const INITIAL_STATE = {
@@ -23,6 +25,9 @@ const INITIAL_STATE = {
   show: {
     visible: false,
     data: {}
+  },
+  modalEdition: {
+    visible: false
   }
 };
 
@@ -44,10 +49,10 @@ export default function(state = INITIAL_STATE, action) {
           data: {}
         }
       };
-    case Types.SHOW_MODAL_VIEW: {
+    case Types.SHOW_MODAL_SPLITTER:
       return {
         ...state,
-        view: {
+        showSplitter: {
           visible: true
         }
       };
@@ -60,6 +65,20 @@ export default function(state = INITIAL_STATE, action) {
         }
       };
     }
+    case Types.SHOW_SP_EDITION_MODAL: 
+      return {
+        ...state,
+        modalEdition: {
+          visible: true
+        }
+      }
+    case Types.HIDE_SP_EDITION_MODAL:
+      return {
+        ...state,
+        modalEdition: {
+          visible: false
+        }
+      }
 
     default:
       return state;
@@ -74,16 +93,25 @@ export const Creators = {
     }
   }),
 
+  showSpEditionModal: spId => ({
+    type: Types.SHOW_SP_EDITION_MODAL,
+    payload: {
+      spId
+    }
+  }),
+  hideSpEditionModal: spId => ({
+    type: Types.SHOW_SP_EDITION_MODAL,
+    payload: {
+      spId
+    }
+  }),
+
   hideSplitterAddModal: () => ({
     type: Types.HIDE_NEW_MODAL_SPLITTER
   }),
 
-  showModal: () => ({
-    type: Types.SHOW_MODAL_VIEW
-  }),
-
-  hideModal: () => ({
-    type: Types.HIDE_MODAL_VIEW
+  showModalSplitter: () => ({
+    type: Types.SHOW_MODAL_SPLITTER
   }),
 
   createSplitterRequest: splitter => ({

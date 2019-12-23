@@ -24,8 +24,6 @@ import ViewSplitter from "../../../Splitter/View/index";
 function TableSplitter(props) {
   const { modalNewSplitter } = props.redux.splitter;
   const { hideViewModalCto } = props;
-  console.log("viewofekof");
-  console.log(props);
 
   const { data, visible } = props.redux.ctos.viewCto;
 
@@ -78,16 +76,18 @@ function TableSplitter(props) {
   function handleAddSplitter() {
     const { showSplitterAddModal } = props;
     showSplitterAddModal(data.id);
+    console.log(props.redux);
   }
 
   function modalSplitter() {
-    const { showModal } = props;
-    showModal(splitters[0]);
-    console.log(props.redux.splitter.show.visible);
+    const { showSpEditionModal } = props;
+    showSpEditionModal(splitters[0]);
   }
 
   return (
     <Container>
+      <ViewSplitter />
+      <AddSplitter />
       <Form>
         <Form.Row>
           <Form.Group as={Col} controlId="formGridEmail">
@@ -185,8 +185,8 @@ function TableSplitter(props) {
             </>
           ) : (
             <>
-              <Button variant="secondary" onClick={modalSplitter}>
-                Editar informações
+              <Button variant="info" onClick={modalSplitter}>
+                Adicionar
               </Button>
               <Button variant="danger" style={{ marginLeft: "10px" }}>
                 Excluir
@@ -195,8 +195,6 @@ function TableSplitter(props) {
           )}
         </div>
       </Form>
-      <ViewSplitter />
-      <AddSplitter />
     </Container>
   );
 }
