@@ -11,6 +11,7 @@ import { Creators as CoordinatesCreators } from "../../../../redux/store/ducks/c
 //Redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { toastr } from "react-redux-toastr";
 
 //UI-Components
 import { Button, Container, Table } from "react-bootstrap";
@@ -51,7 +52,7 @@ function ViewCable(props) {
     const { deleteCableRelationshipRequest } = props;
 
     if (response === "SIM") {
-      deleteCableRelationshipRequest(index, data.id, 'CTO')
+      deleteCableRelationshipRequest(index, data.id, "CTO");
       hideViewModalCto();
     }
   }
@@ -77,11 +78,11 @@ function ViewCable(props) {
           </tr>
         </thead>
         <tbody>
-          {cables.map((cable, index) => (
+          {cables.map((relationship, index) => (
             <tr key={index}>
-              <td>{cable.cable.name}</td>
-              <td>{cable.cable.fiberAmount}</td>
-              <td>{cable.cable.obs}</td>
+              <td>{relationship.cable.name}</td>
+              <td>{relationship.cable.fiberAmount}</td>
+              <td>{relationship.cable.obs}</td>
               <td>
                 <Button
                   variant="link"
@@ -100,7 +101,7 @@ function ViewCable(props) {
                 >
                   <Delete
                     style={{ color: "#6c757d" }}
-                    onClick={() => deleteCableRelationship(cable.cable.id)}
+                    onClick={() => deleteCableRelationship(relationship.id)}
                   />
                 </Button>
               </td>

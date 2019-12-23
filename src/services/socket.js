@@ -1,21 +1,21 @@
 import Ws from "@adonisjs/websocket-client";
 
+import { endPointWs } from './api';
+
+const server = "wss://fiberstreet.dktelecom.net.br";
+const local = "ws://192.168.0.100:3333";
+
 export class SocketConnection {
   connect(jwt) {
-    this.ws = Ws("ws://127.0.0.1:3333");
-    // this.ws = Ws("wss://45.224.40.252");
+    this.ws = Ws(endPointWs);
+    
     this.ws.withJwtToken(jwt);
     this.ws.connect();
 
-    this.ws.on("open", () => {
-      // console.log("Connection initialized");
-    });
+    this.ws.on("open", () => {});
 
-    this.ws.on("close", () => {
-      // console.log("Connection closed");
-    });
-    // this.subscribeCto();
-    // this.subscribeCables();
+    this.ws.on("close", () => {});
+    
     return this;
   }
 

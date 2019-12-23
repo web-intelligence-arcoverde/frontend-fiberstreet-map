@@ -80,8 +80,8 @@ function TableSplitter(props) {
   }
 
   function modalSplitter() {
-    const { showModalSplitter } = props;
-    showModalSplitter();
+    const { showSpEditionModal } = props;
+    showSpEditionModal(splitters[0]);
   }
 
   return (
@@ -185,8 +185,8 @@ function TableSplitter(props) {
             </>
           ) : (
             <>
-              <Button variant="secondary" onClick={modalSplitter}>
-                Editar informações
+              <Button variant="info" onClick={modalSplitter}>
+                Adicionar
               </Button>
               <Button variant="danger" style={{ marginLeft: "10px" }}>
                 Excluir

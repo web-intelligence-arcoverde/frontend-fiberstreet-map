@@ -14,8 +14,14 @@ function Splitter(props) {
   const [model, setModel] = useState("");
   const [balancing, setBalancing] = useState("");
 
+  const { modalEdition } = props.redux.splitter;
+
+  function hide() {
+    const { hideSpEditionModal } = props;
+    hideSpEditionModal();
+  }
   return (
-    <Modal show={props.redux.splitter.showSplitter.visible} size="lg">
+    <Modal show={modalEdition.visible} size="lg">
       <Modal.Header
         style={{
           justifyContent: "center",

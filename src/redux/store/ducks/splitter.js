@@ -1,6 +1,9 @@
 export const Types = {
   SHOW_NEW_MODAL_SPLITTER: "@splitter/MODAL_SHOW",
   HIDE_NEW_MODAL_SPLITTER: "@splitter/MODAL_HIDE",
+  
+  SHOW_SP_EDITION_MODAL: '@splitter/SHOW_SP_EDITION_MODAL',
+  HIDE_SP_EDITION_MODAL: '@splitter/HIDE_SP_EDITION_MODAL',
 
   CREATE_SP_REQUEST: "@splitter/CREATE_REQUEST",
   CREATE_SP_SUCCESS: "@splitter/CREATE_SUCCESS",
@@ -19,7 +22,11 @@ const INITIAL_STATE = {
     visible: false,
     id: null
   },
-  showSplitter: {
+  show: {
+    visible: false,
+    data: {}
+  },
+  modalEdition: {
     visible: false
   }
 };
@@ -49,6 +56,29 @@ export default function(state = INITIAL_STATE, action) {
           visible: true
         }
       };
+    }
+    case Types.HIDE_VIEW: {
+      return {
+        ...state,
+        view: {
+          visible: false
+        }
+      };
+    }
+    case Types.SHOW_SP_EDITION_MODAL: 
+      return {
+        ...state,
+        modalEdition: {
+          visible: true
+        }
+      }
+    case Types.HIDE_SP_EDITION_MODAL:
+      return {
+        ...state,
+        modalEdition: {
+          visible: false
+        }
+      }
 
     default:
       return state;
@@ -60,6 +90,19 @@ export const Creators = {
     type: Types.SHOW_NEW_MODAL_SPLITTER,
     payload: {
       ctoId
+    }
+  }),
+
+  showSpEditionModal: spId => ({
+    type: Types.SHOW_SP_EDITION_MODAL,
+    payload: {
+      spId
+    }
+  }),
+  hideSpEditionModal: spId => ({
+    type: Types.SHOW_SP_EDITION_MODAL,
+    payload: {
+      spId
     }
   }),
 
