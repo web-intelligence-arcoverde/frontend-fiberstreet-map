@@ -55,8 +55,7 @@ export default function(state = INITIAL_STATE, action) {
         showSplitter: {
           visible: true
         }
-      };
-    }
+      }
     case Types.HIDE_VIEW: {
       return {
         ...state,
