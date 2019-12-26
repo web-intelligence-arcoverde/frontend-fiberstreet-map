@@ -7,10 +7,10 @@ import { Link } from "react-router-dom";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { toastr } from 'react-redux-toastr';
-import store from '../../../../redux/store';
+import { toastr } from "react-redux-toastr";
+import store from "../../../../redux/store";
 
-import api, {endPoint} from "../../../../services/api";
+import api, { endPoint } from "../../../../services/api";
 import usedUrl from "../../../../services/api";
 
 //Creators redux
@@ -32,8 +32,18 @@ export default function Spreadsheet(props) {
   const { data, visible } = useSelector(state => state.ceo.viewCeo);
 
   const deleted = useCallback(() => {
-    api.delete(`spreadsheets/:${data.id}`);
+    api
+      .delete(`spreadsheets/ceo/${data.id}`)
+      .then(response => {
+        ////
+      })
+      .catch(err => {})
+
   }, [data.id]);
+
+  function deleteSpreadsheet() {
+    api.delete(`spreadsheets/${data.id}`);
+  }
 
   function download() {
     api
@@ -57,18 +67,42 @@ export default function Spreadsheet(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (currentFile) {
-      api
-        .post("spreadsheets", formData, {
-          onUploadProgress: e => {
-            const progress = parseInt(Math.round((e.loaded * 100) / e.total));
-            console.log(progress);
-          }
-        })
-        .then(response => {
-          toastr.success('Plano de emenda', 'Plano de emenda salvo com sucesso')
-        })
-        .catch(err => console.log(err));
+    if (!spreadsheetURL) {
+      if (currentFile) {
+        api
+          .post("spreadsheets", formData, {
+            onUploadProgress: e => {
+              const progress = parseInt(Math.round((e.loaded * 100) / e.total));
+              // console.log(progress);
+            }
+          })
+          .then(response => {
+            dispatch(CeoActions.hideViewModalCeo())
+            toastr.success(
+              "Plano de emenda",
+              "Plano de emenda salvo com sucesso"
+            );
+          })
+          .catch(err => console.log(err));
+      }
+    } else {
+      if (currentFile) {
+        api
+          .put(`spreadsheets`, formData, {
+            onUploadProgress: e => {
+              const progress = parseInt(Math.round((e.loaded * 100) / e.total));
+              console.log(progress);
+            }
+          })
+          .then(response => {
+            dispatch(CeoActions.hideViewModalCeo())
+            toastr.success(
+              "Plano de emenda",
+              "Plano de emenda salvo com sucesso"
+            );
+          })
+          .catch(err => console.log(err));
+      }
     }
   }
 
@@ -88,10 +122,9 @@ export default function Spreadsheet(props) {
   // Obter link para download da planilha com plano de emenda
   useEffect(() => {
     if (visible) {
-
       const { active: provider } = store.getState().provider;
-      const { slug } = provider
-      setP_slug(slug)
+      const { slug } = provider;
+      setP_slug(slug);
 
       api
         .post("spreadsheetlinks", {
@@ -109,8 +142,6 @@ export default function Spreadsheet(props) {
       //     setSpreadsheetURL(response.data.sublink);
       //   })
       //   .catch(err => {});
-      
-      
     }
   }, [data.id, visible]);
 
@@ -129,10 +160,7 @@ export default function Spreadsheet(props) {
               href={`${endPoint}/spreadsheets/${spreadsheetURL}/${p_slug}`}
               target="_blank"
             >
-              <Button
-                variant="info"
-                style={{ margin: "10px" }}
-              >
+              <Button variant="info" style={{ margin: "10px" }}>
                 Download
               </Button>
             </a>

@@ -8,6 +8,7 @@ import { bindActionCreators } from "redux";
 //Creators
 import { Creators as MapCreators } from "../../../../../redux/store/ducks/map";
 import { Creators as CableActions } from "../../../../../redux/store/ducks/cabo";
+import { Creators as ImportActions } from "../../../../../redux/store/ducks/import";
 import AuthActions from "../../../../../redux/store/ducks/auth";
 
 //Componentes @material-ui / react-bootstrap
@@ -42,7 +43,7 @@ const useStyles = makeStyles(theme => ({
 function LeftMenu(props) {
   const classes = useStyles();
 
-  const { setDelimitation, showIcons, setDrawType } = props;
+  const { setDelimitation, showIcons, setDrawType, openImportGeojsonModal } = props;
 
   const [visible, setVisible] = useState(false);
 
@@ -53,8 +54,7 @@ function LeftMenu(props) {
     } else {
       setVisible(false);
       props.map.setLayoutProperty(type, "visibility", "visible");
-    }
-    console.log(visible);
+    }    
   }
 
   return (
@@ -215,6 +215,13 @@ function LeftMenu(props) {
                 >
                   cabo
                 </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    openImportGeojsonModal()
+                  }}
+                >
+                  importar geojson
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
 
@@ -274,7 +281,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...MapCreators, ...AuthActions, ...CableActions }, dispatch);
+  bindActionCreators({ ...MapCreators, ...AuthActions, ...CableActions, ...ImportActions }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeftMenu);
 
