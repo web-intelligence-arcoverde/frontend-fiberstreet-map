@@ -69,9 +69,9 @@ export function* loadSplitterAndClient({ payload }) {
     yield put(
       CtoActions.loadSplitterAndClientByCtoSuccess(splitter[0], clients)
     );
-    // yield toastr.success("Sucesso", "Sucesso a carregar");
+    yield toastr.success("Sucesso", "Sucesso a carregar");
   } catch (err) {
-    // yield toastr.error("Erro", "Falha ao carregar clientes e splitter da cto");
+    yield toastr.error("Erro", "Falha ao carregar clientes e splitter da cto");
   }
 }
 

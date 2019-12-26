@@ -30,7 +30,6 @@ import { loadControllers } from "./Controller/index";
 import LeftMenu from "./Components/left-menu/index";
 import LoadPages from "../../index";
 import IconsBottom from "./Components/icons-drawn-line/index";
-import ImportGeojson from "./Components/ImportGeojson";
 
 /* */
 import { addGeojson } from "./Controller/add-geojson/index";
@@ -108,7 +107,6 @@ function Map(props) {
       <div id="geocoder" className="geocoder" />
       <div id="distance" className="distance-container" />
       <LeftMenu map={map} />
-      <ImportGeojson/>
       {visible === true ? <IconsBottom map={map} /> : <></>}
 
       <LoadPages />
