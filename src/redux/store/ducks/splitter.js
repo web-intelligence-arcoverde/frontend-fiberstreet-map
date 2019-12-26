@@ -1,9 +1,9 @@
 export const Types = {
   SHOW_NEW_MODAL_SPLITTER: "@splitter/MODAL_SHOW",
   HIDE_NEW_MODAL_SPLITTER: "@splitter/MODAL_HIDE",
-  
-  SHOW_SP_EDITION_MODAL: '@splitter/SHOW_SP_EDITION_MODAL',
-  HIDE_SP_EDITION_MODAL: '@splitter/HIDE_SP_EDITION_MODAL',
+
+  SHOW_SP_EDITION_MODAL: "@splitter/SHOW_SP_EDITION_MODAL",
+  HIDE_SP_EDITION_MODAL: "@splitter/HIDE_SP_EDITION_MODAL",
 
   CREATE_SP_REQUEST: "@splitter/CREATE_REQUEST",
   CREATE_SP_SUCCESS: "@splitter/CREATE_SUCCESS",
@@ -56,7 +56,7 @@ export default function(state = INITIAL_STATE, action) {
           visible: true
         }
       };
-    }
+
     case Types.HIDE_VIEW: {
       return {
         ...state,
@@ -65,20 +65,20 @@ export default function(state = INITIAL_STATE, action) {
         }
       };
     }
-    case Types.SHOW_SP_EDITION_MODAL: 
+    case Types.SHOW_SP_EDITION_MODAL:
       return {
         ...state,
         modalEdition: {
           visible: true
         }
-      }
+      };
     case Types.HIDE_SP_EDITION_MODAL:
       return {
         ...state,
         modalEdition: {
           visible: false
         }
-      }
+      };
 
     default:
       return state;
@@ -130,6 +130,16 @@ export const Creators = {
   }),
 
   updateSplitterSuccess: splitter => ({
+    type: Types.UPDATE_SP_SUCCESS,
+    payload: { splitter }
+  }),
+
+  deleteSplitterRequest: id => ({
+    type: Types.UPDATE_SP_REQUEST,
+    payload: { id }
+  }),
+
+  deleteSplitterSuccess: splitter => ({
     type: Types.UPDATE_SP_SUCCESS,
     payload: { splitter }
   })
