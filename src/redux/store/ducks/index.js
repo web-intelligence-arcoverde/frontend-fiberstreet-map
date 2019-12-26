@@ -20,7 +20,6 @@ import drop from "./drop";
 import fiberfusion from "./fiberfusion";
 import invite from "./invite";
 import coordinates from "./coordinates";
-import imports from "./import";
 
 import { reducer as auth } from "./auth";
 import { reducer as toastr } from "react-redux-toastr";
@@ -40,6 +39,5 @@ export default combineReducers({
   drop,
   fiberfusion,
   invite,
-  imports,
   router: connectRouter(history)
 });
