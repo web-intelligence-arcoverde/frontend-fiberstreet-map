@@ -29,6 +29,7 @@ function TableSplitter(props) {
 
   const [splitters, setSplitters] = useState([]);
 
+  const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [modal, setModal] = useState("");
   const [balancing, setBalancing] = useState("");
@@ -61,6 +62,8 @@ function TableSplitter(props) {
           const sp = response.data;
           sp.map(
             splitter => (
+              console.log(splitter),
+              setId(splitter.id),
               setName(splitter.name),
               setModal(splitter.model),
               setBalancing(splitter.balancing)
@@ -84,11 +87,30 @@ function TableSplitter(props) {
     showSpEditionModal(splitters[0]);
   }
 
+  function deleteSplitter() {
+    const { deleteSplitterRequest } = props;
+    deleteSplitterRequest(id);
+    hideViewModalCto();
+  }
+
+  function updateSplitter() {
+    const { updateSplitterRequest } = props;
+
+    var splitter = {
+      name: name,
+      model: modal,
+      balancing: balancing
+    };
+
+    updateSplitterRequest(splitter);
+    hideViewModalCto();
+  }
+
   return (
     <Container>
       <ViewSplitter />
       <AddSplitter />
-      <Form>
+      <Form onSubmit={updateSplitter}>
         <Form.Row>
           <Form.Group as={Col} controlId="formGridEmail">
             <Form.Label>Nome:</Form.Label>
@@ -185,10 +207,14 @@ function TableSplitter(props) {
             </>
           ) : (
             <>
-              <Button variant="info" onClick={modalSplitter}>
-                Adicionar
+              <Button variant="info" type="submit">
+                Atualizar informações
               </Button>
-              <Button variant="danger" style={{ marginLeft: "10px" }}>
+              <Button
+                variant="danger"
+                style={{ marginLeft: "10px" }}
+                onClick={deleteSplitter}
+              >
                 Excluir
               </Button>
             </>
