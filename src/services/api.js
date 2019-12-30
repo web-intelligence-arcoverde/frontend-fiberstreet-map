@@ -1,12 +1,14 @@
 import axios from "axios";
 import store from "../redux/store";
 
-const local = "http://192.168.11.106:3333";
+const local = "http://192.168.0.100:3333";
 const server = "https://fiberstreet.dktelecom.net.br";
 const local01 = "http://127.0.0.1:3333/";
 
-export const endPoint = true ? server : local;
-export const endPointWs = true ? `wss://fiberstreet.dktelecom.net.br` : `ws://192.168.11.106:3333`;
+export const endPoint = false ? server : local;
+export const endPointWs = false
+  ? `wss://fiberstreet.dktelecom.net.br`
+  : `ws://192.168.0.100:3333`;
 
 /** This API will connect to NodeJS Server */
 const api = axios.create({

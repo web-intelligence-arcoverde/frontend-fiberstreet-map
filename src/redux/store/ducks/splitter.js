@@ -14,6 +14,9 @@ export const Types = {
   UPDATE_SP_REQUEST: "@splitter/UPDATE_REQUEST",
   UPDATE_SP_SUCCESS: "@splitter/UPDATE_SUCCESS",
 
+  DELETE_SP_REQUEST: "@splitter/DELETE_REQUEST",
+  DELETE_SP_SUCCESS: "@splitter/DELETE_SUCCESS",
+
   SHOW_MODAL_SPLITTER: "splitter/SHOW_MODAL_SPLITTER"
 };
 
@@ -56,7 +59,6 @@ export default function(state = INITIAL_STATE, action) {
           visible: true
         }
       };
-    }
     case Types.HIDE_VIEW: {
       return {
         ...state,
@@ -124,13 +126,23 @@ export const Creators = {
     payload: { splitter }
   }),
 
-  updateSplitterRequest: splitter => ({
+  updateSplitterRequest: (splitter, id) => ({
     type: Types.UPDATE_SP_REQUEST,
-    payload: { splitter }
+    payload: { splitter, id }
   }),
 
   updateSplitterSuccess: splitter => ({
     type: Types.UPDATE_SP_SUCCESS,
+    payload: { splitter }
+  }),
+
+  deleteSplitterRequest: id => ({
+    type: Types.DELETE_SP_REQUEST,
+    payload: { id }
+  }),
+
+  deleteSplitterSuccess: splitter => ({
+    type: Types.DELETE_SP_SUCCESS,
     payload: { splitter }
   })
 };

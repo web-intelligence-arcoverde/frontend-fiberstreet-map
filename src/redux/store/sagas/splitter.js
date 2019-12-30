@@ -34,9 +34,8 @@ export function* updateSplitter({ payload }) {
 export function* deleteSplitter({ payload }) {
   try {
     const response = yield call([api, "delete"], `splitters/${payload.id}`);
-    const { data } = response;
     yield toastr.success("Splitter", `Sucesso ao deletar Splitter`);
   } catch (err) {
-    yield toastr.error("Falha", "Erro ao deletar Splitter");
+    yield toastr.error("Falha", err.response.data.error.message);
   }
 }

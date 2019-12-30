@@ -20,6 +20,10 @@ function Splitter(props) {
     const { hideSpEditionModal } = props;
     hideSpEditionModal();
   }
+
+  function handleSubmit (e) {
+    
+  }
   return (
     <Modal show={modalEdition.visible} size="lg">
       <Modal.Header
@@ -31,7 +35,7 @@ function Splitter(props) {
       >
         <Modal.Title>Informações</Modal.Title>
       </Modal.Header>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Modal.Body>
           <Form.Group>
             <Form.Label>Nome Splitter:</Form.Label>

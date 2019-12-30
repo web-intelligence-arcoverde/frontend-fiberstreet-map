@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-//Conectores
+
 import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 
 import api from "../../../../services/api";
 
@@ -21,7 +21,11 @@ import { Form, Button, Col } from "react-bootstrap";
 import AddSplitter from "../../../Splitter/AddSplitter/index";
 import ViewSplitter from "../../../Splitter/View/index";
 
+import { toastr } from 'react-redux-toastr';
+
 function TableSplitter(props) {
+
+  const dispatch = useDispatch()
   const { modalNewSplitter } = props.redux.splitter;
   const { hideViewModalCto } = props;
 
@@ -30,7 +34,7 @@ function TableSplitter(props) {
   const [splitters, setSplitters] = useState([]);
 
   const [name, setName] = useState("");
-  const [modal, setModal] = useState("");
+  const [model, setModel] = useState("");
   const [balancing, setBalancing] = useState("");
   const [fib, setFib] = useState("");
 
@@ -62,7 +66,7 @@ function TableSplitter(props) {
           sp.map(
             splitter => (
               setName(splitter.name),
-              setModal(splitter.model),
+              setModel(splitter.model),
               setBalancing(splitter.balancing)
             )
           );
@@ -76,12 +80,30 @@ function TableSplitter(props) {
   function handleAddSplitter() {
     const { showSplitterAddModal } = props;
     showSplitterAddModal(data.id);
-    console.log(props.redux);
+  }
+  
+  function deleteSplitter() {
+
+    function del() {
+      dispatch(SplitterActions.deleteSplitterRequest(splitters[0].id));
+      hideViewModalCto();
+    }
+
+    const toastrConfirmOptions = {
+      onOk: () => del(),
+      onCancel: () => console.log('CANCEL: clicked')
+    };
+
+    toastr.confirm('Are you sure about that!', toastrConfirmOptions);
+
   }
 
   function modalSplitter() {
-    const { showSpEditionModal } = props;
-    showSpEditionModal(splitters[0]);
+    const { updateSplitterRequest } = props;
+    // showSpEditionModal(splitters[0]);
+    const newObject = { name, model, balancing }
+    updateSplitterRequest(newObject, splitters[0].id);
+    hideViewModalCto()
   }
 
   return (
@@ -106,8 +128,8 @@ function TableSplitter(props) {
               required
               minLength="5"
               type="text"
-              value={modal}
-              onChange={e => setModal(e.target.value)}
+              value={model}
+              onChange={e => setModel(e.target.value)}
             />
           </Form.Group>
           <Form.Group as={Col}>
@@ -186,9 +208,9 @@ function TableSplitter(props) {
           ) : (
             <>
               <Button variant="info" onClick={modalSplitter}>
-                Adicionar
+                Atualizar
               </Button>
-              <Button variant="danger" style={{ marginLeft: "10px" }}>
+              <Button variant="danger" onClick={deleteSplitter} style={{ marginLeft: "10px" }}>
                 Excluir
               </Button>
             </>
