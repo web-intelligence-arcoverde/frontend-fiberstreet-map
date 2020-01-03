@@ -54,8 +54,7 @@ function LeftMenu(props) {
     } else {
       setVisible(false);
       props.map.setLayoutProperty(type, "visibility", "visible");
-    }
-    console.log(visible);
+    }    
   }
 
   return (

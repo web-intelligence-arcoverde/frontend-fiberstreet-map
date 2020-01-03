@@ -1,9 +1,9 @@
 export const Types = {
   SHOW_NEW_MODAL_SPLITTER: "@splitter/MODAL_SHOW",
   HIDE_NEW_MODAL_SPLITTER: "@splitter/MODAL_HIDE",
-  
-  SHOW_SP_EDITION_MODAL: '@splitter/SHOW_SP_EDITION_MODAL',
-  HIDE_SP_EDITION_MODAL: '@splitter/HIDE_SP_EDITION_MODAL',
+
+  SHOW_SP_EDITION_MODAL: "@splitter/SHOW_SP_EDITION_MODAL",
+  HIDE_SP_EDITION_MODAL: "@splitter/HIDE_SP_EDITION_MODAL",
 
   CREATE_SP_REQUEST: "@splitter/CREATE_REQUEST",
   CREATE_SP_SUCCESS: "@splitter/CREATE_SUCCESS",
@@ -13,9 +13,6 @@ export const Types = {
 
   UPDATE_SP_REQUEST: "@splitter/UPDATE_REQUEST",
   UPDATE_SP_SUCCESS: "@splitter/UPDATE_SUCCESS",
-
-  DELETE_SP_REQUEST: "@splitter/DELETE_REQUEST",
-  DELETE_SP_SUCCESS: "@splitter/DELETE_SUCCESS",
 
   SHOW_MODAL_SPLITTER: "splitter/SHOW_MODAL_SPLITTER"
 };
@@ -67,20 +64,20 @@ export default function(state = INITIAL_STATE, action) {
         }
       };
     }
-    case Types.SHOW_SP_EDITION_MODAL: 
+    case Types.SHOW_SP_EDITION_MODAL:
       return {
         ...state,
         modalEdition: {
           visible: true
         }
-      }
+      };
     case Types.HIDE_SP_EDITION_MODAL:
       return {
         ...state,
         modalEdition: {
           visible: false
         }
-      }
+      };
 
     default:
       return state;

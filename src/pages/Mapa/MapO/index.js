@@ -30,6 +30,7 @@ import { loadControllers } from "./Controller/index";
 import LeftMenu from "./Components/left-menu/index";
 import LoadPages from "../../index";
 import IconsBottom from "./Components/icons-drawn-line/index";
+import ImportGeojson from "./Components/ImportGeojson";
 
 /* */
 import { addGeojson } from "./Controller/add-geojson/index";
