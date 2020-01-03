@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-
 import { bindActionCreators } from "redux";
 import { connect, useDispatch } from "react-redux";
 
@@ -21,11 +20,10 @@ import { Form, Button, Col } from "react-bootstrap";
 import AddSplitter from "../../../Splitter/AddSplitter/index";
 import ViewSplitter from "../../../Splitter/View/index";
 
-import { toastr } from 'react-redux-toastr';
+import { toastr } from "react-redux-toastr";
 
 function TableSplitter(props) {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { modalNewSplitter } = props.redux.splitter;
   const { hideViewModalCto } = props;
 
@@ -84,9 +82,8 @@ function TableSplitter(props) {
     const { showSplitterAddModal } = props;
     showSplitterAddModal(data.id);
   }
-  
-  function deleteSplitter() {
 
+  function deleteSplitter() {
     function del() {
       dispatch(SplitterActions.deleteSplitterRequest(splitters[0].id));
       hideViewModalCto();
@@ -94,19 +91,18 @@ function TableSplitter(props) {
 
     const toastrConfirmOptions = {
       onOk: () => del(),
-      onCancel: () => console.log('CANCEL: clicked')
+      onCancel: () => console.log("CANCEL: clicked")
     };
 
-    toastr.confirm('Are you sure about that!', toastrConfirmOptions);
-
+    toastr.confirm("Are you sure about that!", toastrConfirmOptions);
   }
 
   function modalSplitter() {
     const { updateSplitterRequest } = props;
     // showSpEditionModal(splitters[0]);
-    const newObject = { name, model, balancing }
+    const newObject = { name, model, balancing };
     updateSplitterRequest(newObject, splitters[0].id);
-    hideViewModalCto()
+    hideViewModalCto();
   }
 
   function deleteSplitter() {
@@ -120,7 +116,7 @@ function TableSplitter(props) {
 
     var splitter = {
       name: name,
-      model: modal,
+      model,
       balancing: balancing
     };
 
@@ -229,21 +225,14 @@ function TableSplitter(props) {
             </>
           ) : (
             <>
-<<<<<<< HEAD
               <Button variant="info" onClick={modalSplitter}>
                 Atualizar
               </Button>
-              <Button variant="danger" onClick={deleteSplitter} style={{ marginLeft: "10px" }}>
-=======
-              <Button variant="info" type="submit">
-                Atualizar informações
-              </Button>
               <Button
                 variant="danger"
-                style={{ marginLeft: "10px" }}
                 onClick={deleteSplitter}
+                style={{ marginLeft: "10px" }}
               >
->>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
                 Excluir
               </Button>
             </>
