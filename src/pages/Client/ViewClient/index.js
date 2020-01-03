@@ -30,6 +30,7 @@ import { Creators as ClientActions } from "../../../redux/store/ducks/cliente";
 import { Creators as MapActions } from "../../../redux/store/ducks/map";
 import { Creators as CaboActions } from "../../../redux/store/ducks/cabo";
 import { Creators as DropActions } from "../../../redux/store/ducks/drop";
+import { toastr } from "react-redux-toastr";
 import api from "../../../services/api";
 
 //Container
@@ -164,8 +165,15 @@ function ViewClient(props) {
   //Excluir cliente
   function deleteClient() {
     const { deleteClientRequest } = props;
-    deleteClientRequest(data.id);
-    handleHideModal();
+
+    const options = {
+      onOk: () => {
+        deleteClientRequest(data.id);
+        handleHideModal();
+      },
+      onCancel: () => {}
+    };
+    toastr.confirm("Deseja mesmo apagar o cliente?", options);
   }
 
   function move() {

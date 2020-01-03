@@ -32,19 +32,9 @@ export default function Spreadsheet(props) {
   const { data, visible } = useSelector(state => state.ceo.viewCeo);
 
   const deleted = useCallback(() => {
-<<<<<<< HEAD
     api.delete(`spreadsheets/ceo/${data.id}`);
-    dispatch(CeoActions.hideViewModalCeo())
-=======
-    api
-      .delete(`spreadsheets/ceo/${data.id}`)
-      .then(response => {
-        ////
-      })
-      .catch(err => {})
-
->>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
-  }, [data.id]);
+    dispatch(CeoActions.hideViewModalCeo());
+  }, [data.id, dispatch]);
 
   function deleteSpreadsheet() {
     api.delete(`spreadsheets/${data.id}`);
@@ -59,65 +49,33 @@ export default function Spreadsheet(props) {
       });
   }
 
-
   function handleSubmit(e) {
     e.preventDefault();
-<<<<<<< HEAD
     if (currentFile) {
       if (!spreadsheetURL) {
         api
-        .post("spreadsheets", formData, {
-          onUploadProgress: e => {
-            const progress = parseInt(Math.round((e.loaded * 100) / e.total));
-            console.log(progress);
-          }
-        })
-        .then(response => {
-          toastr.success('Plano de emenda', 'Plano de emenda salvo com sucesso')
-        })
-        .catch(err => console.log(err));
-      } else {
-        api
-          .put(`spreadsheets/ceo/${data.id}`, formData, {
-=======
-    if (!spreadsheetURL) {
-      if (currentFile) {
-        api
           .post("spreadsheets", formData, {
-            onUploadProgress: e => {
-              const progress = parseInt(Math.round((e.loaded * 100) / e.total));
-              // console.log(progress);
-            }
-          })
-          .then(response => {
-            dispatch(CeoActions.hideViewModalCeo())
-            toastr.success(
-              "Plano de emenda",
-              "Plano de emenda salvo com sucesso"
-            );
-          })
-          .catch(err => console.log(err));
-      }
-    } else {
-      if (currentFile) {
-        api
-          .put(`spreadsheets`, formData, {
->>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
             onUploadProgress: e => {
               const progress = parseInt(Math.round((e.loaded * 100) / e.total));
               console.log(progress);
             }
           })
           .then(response => {
-<<<<<<< HEAD
-            toastr.success('Plano de emenda', 'Plano de emenda salvo com sucesso')
+            toastr.success(
+              "Plano de emenda",
+              "Plano de emenda salvo com sucesso"
+            );
           })
           .catch(err => console.log(err));
-      }
-      
-      dispatch(CeoActions.hideViewModalCeo())
-=======
-            dispatch(CeoActions.hideViewModalCeo())
+      } else {
+        api
+          .put(`spreadsheets/ceo/${data.id}`, formData, {
+            onUploadProgress: e => {
+              const progress = parseInt(Math.round((e.loaded * 100) / e.total));
+              console.log(progress);
+            }
+          })
+          .then(response => {
             toastr.success(
               "Plano de emenda",
               "Plano de emenda salvo com sucesso"
@@ -125,7 +83,8 @@ export default function Spreadsheet(props) {
           })
           .catch(err => console.log(err));
       }
->>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
+
+      dispatch(CeoActions.hideViewModalCeo());
     }
   }
 

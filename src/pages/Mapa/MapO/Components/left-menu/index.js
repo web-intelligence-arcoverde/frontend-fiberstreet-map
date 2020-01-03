@@ -8,11 +8,7 @@ import { bindActionCreators } from "redux";
 //Creators
 import { Creators as MapCreators } from "../../../../../redux/store/ducks/map";
 import { Creators as CableActions } from "../../../../../redux/store/ducks/cabo";
-<<<<<<< HEAD
 import { Creators as ImportsActions } from "../../../../../redux/store/ducks/imports";
-=======
-import { Creators as ImportActions } from "../../../../../redux/store/ducks/import";
->>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
 import AuthActions from "../../../../../redux/store/ducks/auth";
 
 //Componentes @material-ui / react-bootstrap
@@ -47,7 +43,12 @@ const useStyles = makeStyles(theme => ({
 function LeftMenu(props) {
   const classes = useStyles();
 
-  const { setDelimitation, showIcons, setDrawType, openImportGeojsonModal } = props;
+  const {
+    setDelimitation,
+    showIcons,
+    setDrawType,
+    openImportGeojsonModal
+  } = props;
 
   const [visible, setVisible] = useState(false);
 
@@ -58,7 +59,7 @@ function LeftMenu(props) {
     } else {
       setVisible(false);
       props.map.setLayoutProperty(type, "visibility", "visible");
-    }    
+    }
   }
 
   return (
@@ -221,15 +222,11 @@ function LeftMenu(props) {
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => {
-                    openImportGeojsonModal()
+                    openImportGeojsonModal();
                   }}
                 >
                   importar geojson
-<<<<<<< HEAD
-                </Dropdown.Item>  
-=======
                 </Dropdown.Item>
->>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
               </Dropdown.Menu>
             </Dropdown>
 
@@ -289,11 +286,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-<<<<<<< HEAD
-  bindActionCreators({ ...MapCreators, ...AuthActions, ...CableActions, ...ImportsActions }, dispatch);
-=======
-  bindActionCreators({ ...MapCreators, ...AuthActions, ...CableActions, ...ImportActions }, dispatch);
->>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
+  bindActionCreators(
+    { ...MapCreators, ...AuthActions, ...CableActions, ...ImportsActions },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeftMenu);
 

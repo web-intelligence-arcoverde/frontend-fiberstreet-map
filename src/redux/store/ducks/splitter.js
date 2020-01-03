@@ -14,9 +14,6 @@ export const Types = {
   UPDATE_SP_REQUEST: "@splitter/UPDATE_REQUEST",
   UPDATE_SP_SUCCESS: "@splitter/UPDATE_SUCCESS",
 
-  DELETE_SP_REQUEST: "@splitter/DELETE_REQUEST",
-  DELETE_SP_SUCCESS: "@splitter/DELETE_SUCCESS",
-
   SHOW_MODAL_SPLITTER: "splitter/SHOW_MODAL_SPLITTER"
 };
 
@@ -59,10 +56,6 @@ export default function(state = INITIAL_STATE, action) {
           visible: true
         }
       };
-<<<<<<< HEAD
-=======
-
->>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
     case Types.HIDE_VIEW: {
       return {
         ...state,
@@ -141,20 +134,12 @@ export const Creators = {
   }),
 
   deleteSplitterRequest: id => ({
-<<<<<<< HEAD
     type: Types.DELETE_SP_REQUEST,
-=======
-    type: Types.UPDATE_SP_REQUEST,
->>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
     payload: { id }
   }),
 
   deleteSplitterSuccess: splitter => ({
-<<<<<<< HEAD
     type: Types.DELETE_SP_SUCCESS,
-=======
-    type: Types.UPDATE_SP_SUCCESS,
->>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
     payload: { splitter }
   })
 };
