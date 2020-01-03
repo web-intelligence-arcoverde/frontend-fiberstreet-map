@@ -7,13 +7,11 @@ import Modal from "react-modal";
 import { Button } from "react-bootstrap";
 
 import { MembersList } from "./styles";
-import Select from 'react-select';
-
+import Select from "react-select";
 
 function Members(props) {
+  const [roles, setRoles] = useState(null);
 
-  const [roles, setRoles] = useState(null)
-  
   const members = useStore().getState().members;
   // const members = useSelector(state => state.members);
 
@@ -26,6 +24,13 @@ function Members(props) {
   useEffect(() => {
     dispatch(Creators.getMembersRequest());
   }, [dispatch]);
+
+  const handleRolesChange = useMemo(
+    (id, roles) => {
+      dispatch(Creators.updateMemberRequest(id, roles));
+    },
+    [dispatch]
+  );
 
   return (
     <Modal
@@ -45,8 +50,10 @@ function Members(props) {
               <Select
                 isMulti
                 options={roles}
+                value={member.roles}
                 getOptionLabel={role => role.name}
-                getOptionValue={}
+                getOptionValue={role => role.id}
+                onChange={value => handleRolesChange(member.id, value)}
               />
             </li>
           ))}

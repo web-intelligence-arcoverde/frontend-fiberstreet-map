@@ -71,7 +71,7 @@ import { sendInvitationEmail } from "./invite";
 import { Types as ImportsTypes } from "../ducks/imports";
 import { importGeoJSONData } from "./imports";
 
-import { getMembers } from "./members";
+import { getMembers, updateMember } from "./members";
 import { MembersTypes } from "../ducks/members";
 
 /**  O * diz que estamos criando uma função generator
@@ -160,7 +160,8 @@ export default function* rootSaga() {
     takeLatest(InviteTypes.NEW_INVITE_REQUEST, sendInvitationEmail),
 
     // members
-    takeLatest(MembersTypes.GET_MEMBERS_REQUEST, getMembers)
+    takeLatest(MembersTypes.GET_MEMBERS_REQUEST, getMembers),
+    takeLatest(MembersTypes.UPDATE_MEMBER_REQUEST, updateMember)
   ]);
 }
 
