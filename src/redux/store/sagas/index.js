@@ -47,7 +47,7 @@ import {
   updateCable,
   createCableWithRelationship,
   addRelBetweenCableAndLayer,
-  deleteCableRelationship 
+  deleteCableRelationship
 } from "./cabo";
 
 import { Types as UserTypes } from "../ducks/user";
@@ -68,8 +68,11 @@ import { createCable } from "./cabo";
 import { Types as InviteTypes } from "../ducks/invite";
 import { sendInvitationEmail } from "./invite";
 
-import { Types as ImportsTypes } from '../ducks/imports';
-import { importGeoJSONData } from './imports';
+import { Types as ImportsTypes } from "../ducks/imports";
+import { importGeoJSONData } from "./imports";
+
+import { getMembers } from "./members";
+import { MembersTypes } from "../ducks/members";
 
 /**  O * diz que estamos criando uma função generator
  * O generator é a maneira de lidarmos com assincronismo
@@ -135,8 +138,14 @@ export default function* rootSaga() {
       CablesTypes.ADD_EXISTENT_CABLE_TO_OBJECT_REQUEST,
       addExistentCableToObject
     ),
-    takeLatest(CableTypes.CREATE_CABLE_WITH_RELATIONSHIP_REQUEST,createCableWithRelationship),
-    takeLatest(CableTypes.ADD_REL_BET_LAYER_AND_CABLE, addRelBetweenCableAndLayer),
+    takeLatest(
+      CableTypes.CREATE_CABLE_WITH_RELATIONSHIP_REQUEST,
+      createCableWithRelationship
+    ),
+    takeLatest(
+      CableTypes.ADD_REL_BET_LAYER_AND_CABLE,
+      addRelBetweenCableAndLayer
+    ),
     takeLatest(CableTypes.DELETE_CABLE_REL_REQUEST, deleteCableRelationship),
 
     // FiberFusions
@@ -149,7 +158,10 @@ export default function* rootSaga() {
     takeLatest(CableTypes.ADD_REL_CABLE, addRelCable),
 
     // invites
-    takeLatest(InviteTypes.NEW_INVITE_REQUEST, sendInvitationEmail)
+    takeLatest(InviteTypes.NEW_INVITE_REQUEST, sendInvitationEmail),
+
+    // members
+    takeLatest(MembersTypes.GET_MEMBERS_REQUEST, getMembers)
   ]);
 }
 

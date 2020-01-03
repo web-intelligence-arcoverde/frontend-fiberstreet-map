@@ -50,6 +50,8 @@ import { loadSocket } from "./Controller/socket/index";
 /* Desenha cabos */
 import { drawn } from "./Controller/drawn-lines/index";
 
+import ImportData from './Components/ImportData';
+
 var geojson = {
   type: "FeatureCollection",
   features: []
@@ -107,6 +109,7 @@ function Map(props) {
       <div id="geocoder" className="geocoder" />
       <div id="distance" className="distance-container" />
       <LeftMenu map={map} />
+      <ImportData/>
       {visible === true ? <IconsBottom map={map} /> : <></>}
 
       <LoadPages />

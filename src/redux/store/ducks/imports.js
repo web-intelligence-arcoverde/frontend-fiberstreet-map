@@ -35,9 +35,9 @@ export const Creators = {
     type: Types.CLOSE_IMPORT_GJ
   }),
 
-  importGeojsonRequest: (geojson, layerType) => ({
+  importGeojsonRequest: (geojson, layerType, reqType = "json") => ({
     type: Types.IMPORT_GEOJSON_REQUEST,
-    payload: {geojson, layerType}
+    payload: {geojson, layerType, reqType}
   }),
   importGeojsonSuccess: () => ({
     type: Types.IMPORT_GEOJSON_SUCCESS
