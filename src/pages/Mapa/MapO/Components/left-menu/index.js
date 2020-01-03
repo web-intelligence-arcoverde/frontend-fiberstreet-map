@@ -8,7 +8,7 @@ import { bindActionCreators } from "redux";
 //Creators
 import { Creators as MapCreators } from "../../../../../redux/store/ducks/map";
 import { Creators as CableActions } from "../../../../../redux/store/ducks/cabo";
-import { Creators as ImportActions } from "../../../../../redux/store/ducks/import";
+import { Creators as ImportsActions } from "../../../../../redux/store/ducks/imports";
 import AuthActions from "../../../../../redux/store/ducks/auth";
 
 //Componentes @material-ui / react-bootstrap
@@ -221,7 +221,7 @@ function LeftMenu(props) {
                   }}
                 >
                   importar geojson
-                </Dropdown.Item>
+                </Dropdown.Item>  
               </Dropdown.Menu>
             </Dropdown>
 
@@ -281,7 +281,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...MapCreators, ...AuthActions, ...CableActions, ...ImportActions }, dispatch);
+  bindActionCreators({ ...MapCreators, ...AuthActions, ...CableActions, ...ImportsActions }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeftMenu);
 

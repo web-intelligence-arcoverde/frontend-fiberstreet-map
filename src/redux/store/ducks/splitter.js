@@ -56,7 +56,6 @@ export default function(state = INITIAL_STATE, action) {
           visible: true
         }
       };
-
     case Types.HIDE_VIEW: {
       return {
         ...state,
@@ -124,9 +123,9 @@ export const Creators = {
     payload: { splitter }
   }),
 
-  updateSplitterRequest: splitter => ({
+  updateSplitterRequest: (splitter, id) => ({
     type: Types.UPDATE_SP_REQUEST,
-    payload: { splitter }
+    payload: { splitter, id }
   }),
 
   updateSplitterSuccess: splitter => ({
@@ -135,12 +134,12 @@ export const Creators = {
   }),
 
   deleteSplitterRequest: id => ({
-    type: Types.UPDATE_SP_REQUEST,
+    type: Types.DELETE_SP_REQUEST,
     payload: { id }
   }),
 
   deleteSplitterSuccess: splitter => ({
-    type: Types.UPDATE_SP_SUCCESS,
+    type: Types.DELETE_SP_SUCCESS,
     payload: { splitter }
   })
 };

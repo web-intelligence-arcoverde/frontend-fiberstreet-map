@@ -32,13 +32,8 @@ export default function Spreadsheet(props) {
   const { data, visible } = useSelector(state => state.ceo.viewCeo);
 
   const deleted = useCallback(() => {
-    api
-      .delete(`spreadsheets/ceo/${data.id}`)
-      .then(response => {
-        ////
-      })
-      .catch(err => {})
-
+    api.delete(`spreadsheets/ceo/${data.id}`);
+    dispatch(CeoActions.hideViewModalCeo())
   }, [data.id]);
 
   function deleteSpreadsheet() {
@@ -54,55 +49,37 @@ export default function Spreadsheet(props) {
       });
   }
 
-  function deleteSpreadsheet(id) {
-    api
-      .delete(`spreadsheets/${id}`)
-      .then(response => {
-        console.log(response);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!spreadsheetURL) {
-      if (currentFile) {
+    if (currentFile) {
+      if (!spreadsheetURL) {
         api
-          .post("spreadsheets", formData, {
-            onUploadProgress: e => {
-              const progress = parseInt(Math.round((e.loaded * 100) / e.total));
-              // console.log(progress);
-            }
-          })
-          .then(response => {
-            dispatch(CeoActions.hideViewModalCeo())
-            toastr.success(
-              "Plano de emenda",
-              "Plano de emenda salvo com sucesso"
-            );
-          })
-          .catch(err => console.log(err));
-      }
-    } else {
-      if (currentFile) {
+        .post("spreadsheets", formData, {
+          onUploadProgress: e => {
+            const progress = parseInt(Math.round((e.loaded * 100) / e.total));
+            console.log(progress);
+          }
+        })
+        .then(response => {
+          toastr.success('Plano de emenda', 'Plano de emenda salvo com sucesso')
+        })
+        .catch(err => console.log(err));
+      } else {
         api
-          .put(`spreadsheets`, formData, {
+          .put(`spreadsheets/ceo/${data.id}`, formData, {
             onUploadProgress: e => {
               const progress = parseInt(Math.round((e.loaded * 100) / e.total));
               console.log(progress);
             }
           })
           .then(response => {
-            dispatch(CeoActions.hideViewModalCeo())
-            toastr.success(
-              "Plano de emenda",
-              "Plano de emenda salvo com sucesso"
-            );
+            toastr.success('Plano de emenda', 'Plano de emenda salvo com sucesso')
           })
           .catch(err => console.log(err));
       }
+      
+      dispatch(CeoActions.hideViewModalCeo())
     }
   }
 
