@@ -8,7 +8,11 @@ import { bindActionCreators } from "redux";
 //Creators
 import { Creators as MapCreators } from "../../../../../redux/store/ducks/map";
 import { Creators as CableActions } from "../../../../../redux/store/ducks/cabo";
+<<<<<<< HEAD
 import { Creators as ImportsActions } from "../../../../../redux/store/ducks/imports";
+=======
+import { Creators as ImportActions } from "../../../../../redux/store/ducks/import";
+>>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
 import AuthActions from "../../../../../redux/store/ducks/auth";
 
 //Componentes @material-ui / react-bootstrap
@@ -54,8 +58,7 @@ function LeftMenu(props) {
     } else {
       setVisible(false);
       props.map.setLayoutProperty(type, "visibility", "visible");
-    }
-    console.log(visible);
+    }    
   }
 
   return (
@@ -222,7 +225,11 @@ function LeftMenu(props) {
                   }}
                 >
                   importar geojson
+<<<<<<< HEAD
                 </Dropdown.Item>  
+=======
+                </Dropdown.Item>
+>>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
               </Dropdown.Menu>
             </Dropdown>
 
@@ -282,7 +289,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
+<<<<<<< HEAD
   bindActionCreators({ ...MapCreators, ...AuthActions, ...CableActions, ...ImportsActions }, dispatch);
+=======
+  bindActionCreators({ ...MapCreators, ...AuthActions, ...CableActions, ...ImportActions }, dispatch);
+>>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeftMenu);
 

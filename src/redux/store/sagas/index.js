@@ -68,8 +68,13 @@ import { createCable } from "./cabo";
 import { Types as InviteTypes } from "../ducks/invite";
 import { sendInvitationEmail } from "./invite";
 
+<<<<<<< HEAD
 import { Types as ImportsTypes } from '../ducks/imports';
 import { importGeoJSONData } from './imports';
+=======
+import { Types as ImportTypes } from '../ducks/import';
+import {importGeoJSONData} from './imports';
+>>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
 
 /**  O * diz que estamos criando uma função generator
  * O generator é a maneira de lidarmos com assincronismo
@@ -124,8 +129,12 @@ export default function* rootSaga() {
       loadSplitterAndClient
     ),
 
+<<<<<<< HEAD
     // Imports
     takeLatest(ImportsTypes.IMPORT_GEOJSON_REQUEST, importGeoJSONData),
+=======
+    takeLatest(ImportTypes.IMPORT_GEOJSON_REQUEST, importGeoJSONData),
+>>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
 
     //Cable
     takeLatest(CablesTypes.CREATE_CABLE_REQUEST, createCable),

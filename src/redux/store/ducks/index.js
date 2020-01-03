@@ -20,7 +20,11 @@ import drop from "./drop";
 import fiberfusion from "./fiberfusion";
 import invite from "./invite";
 import coordinates from "./coordinates";
+<<<<<<< HEAD
 import imports from "./imports";
+=======
+import imports from "./import";
+>>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
 
 import { reducer as auth } from "./auth";
 import { reducer as toastr } from "react-redux-toastr";

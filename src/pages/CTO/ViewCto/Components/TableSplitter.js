@@ -33,6 +33,7 @@ function TableSplitter(props) {
 
   const [splitters, setSplitters] = useState([]);
 
+  const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [model, setModel] = useState("");
   const [balancing, setBalancing] = useState("");
@@ -65,6 +66,8 @@ function TableSplitter(props) {
           const sp = response.data;
           sp.map(
             splitter => (
+              console.log(splitter),
+              setId(splitter.id),
               setName(splitter.name),
               setModel(splitter.model),
               setBalancing(splitter.balancing)
@@ -106,11 +109,30 @@ function TableSplitter(props) {
     hideViewModalCto()
   }
 
+  function deleteSplitter() {
+    const { deleteSplitterRequest } = props;
+    deleteSplitterRequest(id);
+    hideViewModalCto();
+  }
+
+  function updateSplitter() {
+    const { updateSplitterRequest } = props;
+
+    var splitter = {
+      name: name,
+      model: modal,
+      balancing: balancing
+    };
+
+    updateSplitterRequest(splitter);
+    hideViewModalCto();
+  }
+
   return (
     <Container>
       <ViewSplitter />
       <AddSplitter />
-      <Form>
+      <Form onSubmit={updateSplitter}>
         <Form.Row>
           <Form.Group as={Col} controlId="formGridEmail">
             <Form.Label>Nome:</Form.Label>
@@ -207,10 +229,21 @@ function TableSplitter(props) {
             </>
           ) : (
             <>
+<<<<<<< HEAD
               <Button variant="info" onClick={modalSplitter}>
                 Atualizar
               </Button>
               <Button variant="danger" onClick={deleteSplitter} style={{ marginLeft: "10px" }}>
+=======
+              <Button variant="info" type="submit">
+                Atualizar informações
+              </Button>
+              <Button
+                variant="danger"
+                style={{ marginLeft: "10px" }}
+                onClick={deleteSplitter}
+              >
+>>>>>>> 58e7c5a2011dcc7332fd81a83e22fd3c0d48b6db
                 Excluir
               </Button>
             </>
