@@ -1,43 +1,45 @@
+/* eslint-disable react/self-closing-comp */
 //React
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 // Redux
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 //Creators
-import { Creators as MapCreators } from "../../../../../redux/store/ducks/map";
-import { Creators as CableActions } from "../../../../../redux/store/ducks/cabo";
-import { Creators as ImportsActions } from "../../../../../redux/store/ducks/imports";
-import AuthActions from "../../../../../redux/store/ducks/auth";
+import { Creators as MapCreators } from '../../../../../redux/store/ducks/map';
+import { Creators as CableActions } from '../../../../../redux/store/ducks/cabo';
+import { Creators as ImportsActions } from '../../../../../redux/store/ducks/imports';
+import AuthActions from '../../../../../redux/store/ducks/auth';
+import MembersActions from '../../../../../redux/store/ducks/members';
 
 //Componentes @material-ui / react-bootstrap
-import { makeStyles } from "@material-ui/core/styles";
-import SettingsIcon from "@material-ui/icons/Settings";
+import { makeStyles } from '@material-ui/core/styles';
+import SettingsIcon from '@material-ui/icons/Settings';
 import {
   Button,
   Form,
   Dropdown,
   ButtonGroup,
   OverlayTrigger,
-  Tooltip
-} from "react-bootstrap/";
+  Tooltip,
+} from 'react-bootstrap/';
 
 //Componentes criados
-import { Container } from "./styles";
+import { Container } from './styles';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    position: "relative",
-    paddingLeft: "22px",
-    paddingTop: "40px"
+    position: 'relative',
+    paddingLeft: '22px',
+    paddingTop: '40px',
   },
   paper: {
-    position: "absolute",
+    position: 'absolute',
     top: 36,
     right: 0,
-    left: 0
-  }
+    left: 0,
+  },
 }));
 
 function LeftMenu(props) {
@@ -47,25 +49,27 @@ function LeftMenu(props) {
     setDelimitation,
     showIcons,
     setDrawType,
-    openImportGeojsonModal
+    openImportGeojsonModal,
+    signOut,
+    openMembersModal,
   } = props;
 
   const [visible, setVisible] = useState(false);
 
   function isVisible(type) {
     if (visible === false) {
-      props.map.setLayoutProperty(type, "visibility", "none");
+      props.map.setLayoutProperty(type, 'visibility', 'none');
       setVisible(true);
     } else {
       setVisible(false);
-      props.map.setLayoutProperty(type, "visibility", "visible");
+      props.map.setLayoutProperty(type, 'visibility', 'visible');
     }
   }
 
   return (
     <Container>
       <div className={classes.root}>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           {/* Menssagens */}
           {/* Next Realese
             <ButtonGroup vertical>
@@ -119,7 +123,7 @@ function LeftMenu(props) {
             */}
 
           {/* Adicão/Listar */}
-          <ButtonGroup vertical style={{ marginTop: "20px" }}>
+          <ButtonGroup vertical style={{ marginTop: '20px' }}>
             <Dropdown as={ButtonGroup}>
               <OverlayTrigger
                 overlay={
@@ -129,29 +133,27 @@ function LeftMenu(props) {
                 <Button variant="warning" className={classes.button}>
                   <i
                     className="fa fa-user-circle"
-                    style={{ color: "white" }}
+                    style={{ color: 'white' }}
                   ></i>
                 </Button>
               </OverlayTrigger>
               <Dropdown.Toggle
                 id="dropdown-split-basic"
                 variant="warning"
-                style={{ color: "white" }}
+                style={{ color: 'white' }}
               />
 
               <Dropdown.Menu>
-                {/** 
-                  <Dropdown.Item
-                    onClick={() => {
-                      setDelimitation("perfil");
-                    }}
-                  >
-                    perfil
-                  </Dropdown.Item>
-                  */}
                 <Dropdown.Item
                   onClick={() => {
-                    props.signOut();
+                    openMembersModal();
+                  }}
+                >
+                  Visualizar Membros
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    signOut();
                   }}
                 >
                   logout
@@ -161,20 +163,20 @@ function LeftMenu(props) {
 
             <Dropdown as={ButtonGroup}>
               <Button variant="warning" className={classes.button}>
-                <i className="fa fa-plus" style={{ color: "white" }}></i>
+                <i className="fa fa-plus" style={{ color: 'white' }}></i>
               </Button>
 
               <Dropdown.Toggle
                 id="dropdown-split-basic"
                 variant="warning"
-                style={{ color: "white" }}
+                style={{ color: 'white' }}
               />
 
               <Dropdown.Menu>
                 <Dropdown.Item
                   onClick={() => {
                     //Abre o modal para adicionar um novo cliente
-                    setDelimitation("client");
+                    setDelimitation('client');
                   }}
                 >
                   cliente
@@ -182,7 +184,7 @@ function LeftMenu(props) {
                 <Dropdown.Item
                   onClick={() => {
                     // Aqui selecionaremos o tipo de delimitação do clique no mapa
-                    setDelimitation("functionary");
+                    setDelimitation('functionary');
                   }}
                 >
                   funcionario
@@ -190,7 +192,7 @@ function LeftMenu(props) {
                 <Dropdown.Item
                   onClick={() => {
                     // Aqui selecionaremos o tipo de delimitação do clique no mapa
-                    setDelimitation("provider");
+                    setDelimitation('provider');
                   }}
                 >
                   provedor
@@ -198,7 +200,7 @@ function LeftMenu(props) {
                 <Dropdown.Item
                   onClick={() => {
                     // Aqui selecionaremos o tipo de delimitação do clique no mapa
-                    setDelimitation("cto");
+                    setDelimitation('cto');
                   }}
                 >
                   cto
@@ -206,15 +208,15 @@ function LeftMenu(props) {
 
                 <Dropdown.Item
                   onClick={() => {
-                    setDelimitation("ceo");
+                    setDelimitation('ceo');
                   }}
                 >
                   ceo
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => {
-                    setDelimitation("cabo");
-                    setDrawType("NONE");
+                    setDelimitation('cabo');
+                    setDrawType('NONE');
                     showIcons();
                   }}
                 >
@@ -232,44 +234,44 @@ function LeftMenu(props) {
 
             <Dropdown as={ButtonGroup}>
               <Button variant="warning" className={classes.button}>
-                <SettingsIcon style={{ color: "#fff" }} />
+                <SettingsIcon style={{ color: '#fff' }} />
               </Button>
 
               <Dropdown.Toggle
                 id="dropdown-split-basic"
                 variant="warning"
-                style={{ color: "white" }}
+                style={{ color: 'white' }}
               />
 
               <Dropdown.Menu>
                 <Form.Group
-                  style={{ marginBottom: "0px", marginLeft: "15px" }}
+                  style={{ marginBottom: '0px', marginLeft: '15px' }}
                   id="formGridCheckbox"
                 >
                   <Form.Check
                     label="ctos"
                     aria-label="option 1"
-                    style={{ marginTop: "5px" }}
-                    onClick={() => isVisible("cto")}
+                    style={{ marginTop: '5px' }}
+                    onClick={() => isVisible('cto')}
                   />
 
                   <Form.Check
                     label="cabo"
                     aria-label="option 1"
-                    style={{ marginTop: "5px" }}
-                    onClick={() => isVisible("wires")}
+                    style={{ marginTop: '5px' }}
+                    onClick={() => isVisible('wires')}
                   />
 
                   <Form.Check
                     label="clientes"
-                    style={{ marginTop: "10px" }}
-                    onClick={() => isVisible("cliente")}
+                    style={{ marginTop: '10px' }}
+                    onClick={() => isVisible('cliente')}
                   />
 
                   <Form.Check
                     label="ceo"
-                    style={{ marginTop: "10px" }}
-                    onClick={() => isVisible("ceo")}
+                    style={{ marginTop: '10px' }}
+                    onClick={() => isVisible('ceo')}
                   />
                 </Form.Group>
               </Dropdown.Menu>
@@ -282,12 +284,18 @@ function LeftMenu(props) {
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { ...MapCreators, ...AuthActions, ...CableActions, ...ImportsActions },
+    {
+      ...MapCreators,
+      ...AuthActions,
+      ...CableActions,
+      ...ImportsActions,
+      ...MembersActions,
+    },
     dispatch
   );
 

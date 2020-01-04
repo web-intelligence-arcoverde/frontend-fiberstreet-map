@@ -1,16 +1,16 @@
-import { createReducer, createActions } from "reduxsauce";
-import Immutable from "seamless-immutable";
+import { createReducer, createActions } from 'reduxsauce';
+import Immutable from 'seamless-immutable';
 
 /* Types & Action Creators */
 
 const { Types, Creators } = createActions({
-  signInRequest: ["email", "password"],
-  signInSuccess: ["token"],
+  signInRequest: ['email', 'password'],
+  signInSuccess: ['token'],
   signOut: null,
-  signUpRequest: ["username", "email", "password"],
-  addUserProvider: ["username", "email", "password"],
-  signUpWithProviderRequest: ["user", "provider"], // signUpWithProviderSuccess:
-  getPermissionsSuccess: ["roles", "permissions"]
+  signUpRequest: ['username', 'email', 'password'],
+  addUserProvider: ['username', 'email', 'password'],
+  signUpWithProviderRequest: ['user', 'provider'], // signUpWithProviderSuccess:
+  getPermissionsSuccess: ['roles', 'permissions'],
 });
 
 export const AuthTypes = Types;
@@ -19,10 +19,10 @@ export default Creators;
 /* Initial State */
 
 export const INITIAL_STATE = Immutable({
-  signedIn: !!localStorage.getItem("@Omni:token"),
-  token: localStorage.getItem("@Omni:token") || null,
+  signedIn: !!localStorage.getItem('@Omni:token'),
+  token: localStorage.getItem('@Omni:token') || null,
   roles: [],
-  permissions: []
+  permissions: [],
 });
 
 /* Reducers */
@@ -40,8 +40,8 @@ export const addUserProvider = (state, { username, email, password }) => {
     userProvider: {
       username,
       email,
-      password
-    }
+      password,
+    },
   });
 };
 
@@ -51,5 +51,5 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SIGN_IN_SUCCESS]: success,
   [Types.SIGN_OUT]: logout,
   [Types.GET_PERMISSIONS_SUCCESS]: permissionsSuccess,
-  [Types.ADD_USER_PROVIDER]: addUserProvider
+  [Types.ADD_USER_PROVIDER]: addUserProvider,
 });

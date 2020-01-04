@@ -1,7 +1,7 @@
 import axios from "axios";
 import store from "../redux/store";
 
-const local = "http://192.168.0.100:3333";
+const local = "http://127.0.0.1:3333";
 const server = "https://fiberstreet.dktelecom.net.br";
 const local01 = "http://127.0.0.1:3333/";
 

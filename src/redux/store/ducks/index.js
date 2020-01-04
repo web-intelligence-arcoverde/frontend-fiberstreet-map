@@ -1,6 +1,6 @@
-import { combineReducers } from "redux";
-import { connectRouter } from "connected-react-router";
-import history from "../../../routes/history";
+import { combineReducers } from 'redux';
+import { connectRouter } from 'connected-react-router';
+import history from '../../../routes/history';
 
 /*
   Distribuir ações para suas devidas reducers
@@ -8,23 +8,23 @@ import history from "../../../routes/history";
                 {Reducers}
 */
 
-import ctos from "./ctos";
-import user from "./user";
-import map from "./map";
-import provider from "./provider";
-import client from "./cliente";
-import ceo from "./ceo";
-import splitter from "./splitter";
-import cabo from "./cabo";
-import drop from "./drop";
-import fiberfusion from "./fiberfusion";
-import invite from "./invite";
-import coordinates from "./coordinates";
-import imports from "./imports";
-import members from "./members";
+import ctos from './ctos';
+import user from './user';
+import map from './map';
+import provider from './provider';
+import client from './cliente';
+import ceo from './ceo';
+import splitter from './splitter';
+import cabo from './cabo';
+import drop from './drop';
+import fiberfusion from './fiberfusion';
+import invite from './invite';
+import coordinates from './coordinates';
+import imports from './imports';
+import { reducer as members } from './members';
 
-import { reducer as auth } from "./auth";
-import { reducer as toastr } from "react-redux-toastr";
+import { reducer as auth } from './auth';
+import { reducer as toastr } from 'react-redux-toastr';
 
 export default combineReducers({
   coordinates,
@@ -43,5 +43,5 @@ export default combineReducers({
   invite,
   imports,
   members,
-  router: connectRouter(history)
+  router: connectRouter(history),
 });

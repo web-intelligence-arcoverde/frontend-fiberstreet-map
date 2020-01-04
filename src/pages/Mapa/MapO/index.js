@@ -1,61 +1,62 @@
 /* eslint-disable no-fallthrough */
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 // Redux
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 //Creators
-import { Creators as MapCreators } from "../../../redux/store/ducks/map";
+import { Creators as MapCreators } from '../../../redux/store/ducks/map';
 
 /* mapBox */
-import "mapbox-gl/dist/mapbox-gl.css";
-import mapboxgl from "mapbox-gl";
+import 'mapbox-gl/dist/mapbox-gl.css';
+import mapboxgl from 'mapbox-gl';
 
-import "mapbox-gl/dist/mapbox-gl.css";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
-import store from "../../../redux/store";
+import store from '../../../redux/store';
 
 //Websockets
-import socket from "../../../services/socket";
+import socket from '../../../services/socket';
 
 //CSS
-import "./map.css";
+import './map.css';
 
 /* Acões no mapa */
-import { loadControllers } from "./Controller/index";
+import { loadControllers } from './Controller/index';
 
 //Componentes
-import LeftMenu from "./Components/left-menu/index";
-import LoadPages from "../../index";
-import IconsBottom from "./Components/icons-drawn-line/index";
-import ImportGeojson from "./Components/ImportGeojson";
+import LeftMenu from './Components/left-menu/index';
+import LoadPages from '../../index';
+import IconsBottom from './Components/icons-drawn-line/index';
+import ImportGeojson from './Components/ImportGeojson';
+import Members from '~/components/Members';
 
 /* */
-import { addGeojson } from "./Controller/add-geojson/index";
+import { addGeojson } from './Controller/add-geojson/index';
 
 /* Carregar icons e buscar na api objetos do mapa[inicio] */
-import { clientes } from "./Controller/load-clients/index";
-import { ctos } from "./Controller/load-ctos/index";
-import { ceos } from "./Controller/load-ceos/index";
-import { cables } from "./Controller/load-cables/index";
+import { clientes } from './Controller/load-clients/index';
+import { ctos } from './Controller/load-ctos/index';
+import { ceos } from './Controller/load-ceos/index';
+import { cables } from './Controller/load-cables/index';
 /* Carregar icons e buscar na api objetos do mapa[fim] */
 
 /* Abrir [cto,ceo,client] */
-import { openObject } from "./Controller/click-object-map/index";
+import { openObject } from './Controller/click-object-map/index';
 
 /* Socket */
-import { loadSocket } from "./Controller/socket/index";
+import { loadSocket } from './Controller/socket/index';
 
 /* Desenha cabos */
-import { drawn } from "./Controller/drawn-lines/index";
+import { drawn } from './Controller/drawn-lines/index';
 
-import ImportData from "./Components/ImportData";
+import ImportData from './Components/ImportData';
 
 var geojson = {
-  type: "FeatureCollection",
-  features: []
+  type: 'FeatureCollection',
+  features: [],
 };
 
 // Used to draw a line between points
@@ -64,7 +65,7 @@ function Map(props) {
   const [map, setMap] = useState(null);
   const { container, zoom, accessToken, style } = props;
   const { classNameStyle } = props;
-  const url = "https://wanderdrone.appspot.com";
+  const url = 'https://wanderdrone.appspot.com';
 
   const { visible } = props.redux.map.showIconsDrawn;
 
@@ -85,11 +86,11 @@ function Map(props) {
       container: container,
       style: style,
       center: center,
-      zoom: zoom
+      zoom: zoom,
     });
 
-    var geo = document.getElementById("geocoder");
-    var distanceContainer = document.getElementById("distance");
+    var geo = document.getElementById('geocoder');
+    var distanceContainer = document.getElementById('distance');
 
     addGeojson(map, geojson);
     loadControllers(map, geojson, distanceContainer, geo, store);
@@ -111,6 +112,7 @@ function Map(props) {
       <div id="distance" className="distance-container" />
       <LeftMenu map={map} />
       <ImportData />
+      <Members />
       {visible === true ? <IconsBottom map={map} /> : <></>}
 
       <LoadPages />
@@ -124,11 +126,11 @@ Map.propTypes = {
   style: string.isRequired,
   classNameStyle: string.isRequired,
   zoom: number.isRequired,
-  accessToken: string.isRequired
+  accessToken: string.isRequired,
 };
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>

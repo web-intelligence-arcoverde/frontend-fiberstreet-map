@@ -1,42 +1,34 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from 'react';
 
-import { useSelector, useDispatch, useStore } from "react-redux";
-import { Creators } from "../../redux/store/ducks/members";
+import { useSelector, useDispatch, useStore, connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import MembersActions from '../../redux/store/ducks/members';
 
-import Modal from "react-modal";
-import { Button } from "react-bootstrap";
+import Modal from 'react-modal';
+import { Button } from 'react-bootstrap';
 
-import { MembersList } from "./styles";
-import Select from "react-select";
+import { MembersList } from './styles';
+import Select from 'react-select';
 
 function Members(props) {
   const [roles, setRoles] = useState(null);
+  const { members } = props;
 
-  const members = useStore().getState().members;
-  // const members = useSelector(state => state.members);
-
-  const dispatch = useDispatch();
-
-  const hideModal = useMemo(() => {
-    dispatch(Creators.closeMembersModal());
-  }, [dispatch]);
+  const { closeMembersModal, getMembersRequest, updateMemberRequest } = props;
 
   useEffect(() => {
-    dispatch(Creators.getMembersRequest());
-  }, [dispatch]);
+    getMembersRequest();
+  }, [members.membersModalOpen]);
 
-  const handleRolesChange = useMemo(
-    (id, roles) => {
-      dispatch(Creators.updateMemberRequest(id, roles));
-    },
-    [dispatch]
-  );
+  function handleRolesChange(id, roles) {
+    updateMemberRequest(id, roles);
+  }
 
   return (
     <Modal
       isOpen={members.membersModalOpen}
       contentLabel="Membros"
-      onRequestClose={hideModal}
+      onRequestClose={closeMembersModal}
       className="modal-container"
       overlayClassName="modal-overlay"
     >
@@ -44,21 +36,22 @@ function Members(props) {
 
       <form>
         <MembersList>
-          {members.data.map(member => (
-            <li key={member.id}>
-              <strong>{member.user.name}</strong>
-              <Select
-                isMulti
-                options={roles}
-                value={member.roles}
-                getOptionLabel={role => role.name}
-                getOptionValue={role => role.id}
-                onChange={value => handleRolesChange(member.id, value)}
-              />
-            </li>
-          ))}
+          {members.data.length > 0 &&
+            members.data.map(member => (
+              <li key={member.id}>
+                <strong>{member.user.username}</strong>
+                <Select
+                  isMulti
+                  options={roles}
+                  value={member.roles}
+                  getOptionLabel={role => role.name}
+                  getOptionValue={role => role.id}
+                  onChange={value => handleRolesChange(member.id, value)}
+                />
+              </li>
+            ))}
         </MembersList>
-        <Button variant="danger" onClick={hideModal} className="item">
+        <Button variant="danger" onClick={closeMembersModal} className="item">
           Fechar
         </Button>
         <Button onClick={() => {}}>Cancelar</Button>
@@ -67,4 +60,11 @@ function Members(props) {
   );
 }
 
-export default Members;
+const mapStateToProps = state => ({
+  members: state.members,
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(MembersActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Members);
