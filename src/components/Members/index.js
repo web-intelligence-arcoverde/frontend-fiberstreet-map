@@ -4,20 +4,30 @@ import { useSelector, useDispatch, useStore, connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import MembersActions from '../../redux/store/ducks/members';
 
-import Modal from 'react-modal';
+import { Modal } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 
 import { MembersList } from './styles';
 import Select from 'react-select';
 
+import api from '~/services/api';
+
 function Members(props) {
-  const [roles, setRoles] = useState(null);
+  const [roles, setRoles] = useState([]);
   const { members } = props;
 
   const { closeMembersModal, getMembersRequest, updateMemberRequest } = props;
 
   useEffect(() => {
-    getMembersRequest();
+    async function getMembers() {
+      getMembersRequest();
+
+      const response = await api.get('roles');
+
+      await setRoles(response.data);
+    }
+
+    getMembers();
   }, [members.membersModalOpen]);
 
   function handleRolesChange(id, roles) {
@@ -26,18 +36,24 @@ function Members(props) {
 
   return (
     <Modal
-      isOpen={members.membersModalOpen}
+      show={members.membersModalOpen}
       contentLabel="Membros"
-      onRequestClose={closeMembersModal}
-      className="modal-container"
-      overlayClassName="modal-overlay"
+      onHide={closeMembersModal}
     >
-      <h1>Membros</h1>
+      <Modal.Header
+        style={{
+          justifyContent: 'center',
+          backgroundColor: '#F7D358',
+          color: '#585858',
+        }}
+      >
+        <Modal.Title>Membros</Modal.Title>
+      </Modal.Header>
 
-      <form>
-        <MembersList>
-          {members.data.length > 0 &&
-            members.data.map(member => (
+      <Modal.Body>
+        <form>
+          <MembersList>
+            {members.data.map(member => (
               <li key={member.id}>
                 <strong>{member.user.username}</strong>
                 <Select
@@ -50,12 +66,15 @@ function Members(props) {
                 />
               </li>
             ))}
-        </MembersList>
+          </MembersList>
+        </form>
+      </Modal.Body>
+      <Modal.Footer>
         <Button variant="danger" onClick={closeMembersModal} className="item">
           Fechar
         </Button>
         <Button onClick={() => {}}>Cancelar</Button>
-      </form>
+      </Modal.Footer>
     </Modal>
   );
 }

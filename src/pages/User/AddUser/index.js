@@ -1,23 +1,26 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 //Conectors
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 //Reducers
-import { Creators as actionsUser } from "../../../redux/store/ducks/user";
-import { Creators as InviteActions } from "../../../redux/store/ducks/invite";
+import { Creators as actionsUser } from '../../../redux/store/ducks/user';
+import { Creators as InviteActions } from '../../../redux/store/ducks/invite';
+import MembersActions from '~/redux/store/ducks/members'
+import api from '~/services/api'
 
 //Components UI
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Select from 'react-select';
 
 function AddUser(props) {
   const { hideModalNewUser } = props;
   const { viewNewUser } = props.redux.user;
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
   const [validated, setValidated] = useState(false);
 
@@ -36,7 +39,7 @@ function AddUser(props) {
       onHide={hideModalNewUser}
       animation={false}
     >
-      <Modal.Header style={{ justifyContent: "center", color: "#ffc107" }}>
+      <Modal.Header style={{ justifyContent: 'center', color: '#ffc107' }}>
         <Modal.Title>Cadastrar Funcionario</Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleSubmit}>
@@ -63,7 +66,7 @@ function AddUser(props) {
               Enviar
             </Button>
           ) : (
-            console.log("")
+            console.log('')
           )}
         </Modal.Footer>
       </Form>
@@ -72,10 +75,11 @@ function AddUser(props) {
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
+  members: state.members
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...actionsUser, ...InviteActions }, dispatch);
+  bindActionCreators({ ...actionsUser, ...InviteActions, ...MembersActions }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddUser);

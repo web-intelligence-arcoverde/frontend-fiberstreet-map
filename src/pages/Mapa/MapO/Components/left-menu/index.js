@@ -27,6 +27,7 @@ import {
 
 //Componentes criados
 import { Container } from './styles';
+import Can from '~/components/Can';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -144,19 +145,22 @@ function LeftMenu(props) {
               />
 
               <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => {
-                    openMembersModal();
-                  }}
-                >
-                  Visualizar Membros
-                </Dropdown.Item>
+                <Can checkRole="administrator">
+                  <Dropdown.Item
+                    onClick={() => {
+                      openMembersModal();
+                    }}
+                  >
+                    Membros
+                  </Dropdown.Item>
+                </Can>
+
                 <Dropdown.Item
                   onClick={() => {
                     signOut();
                   }}
                 >
-                  logout
+                  Sair
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

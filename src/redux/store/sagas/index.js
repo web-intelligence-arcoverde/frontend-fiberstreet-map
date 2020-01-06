@@ -1,45 +1,45 @@
 // O Método All lida com vários sagas - tipo combineReducers do redux
-import { all, takeLatest } from "redux-saga/effects";
+import { all, takeLatest, fork } from 'redux-saga/effects';
 
-import { AuthTypes } from "../ducks/auth";
+import { AuthTypes } from '../ducks/auth';
 import {
   signIn,
   signOut,
   signUp,
   signUpWithProvider,
-  getPermissions
-} from "./auth";
+  getPermissions,
+} from './auth';
 
-import { Types as ClientTypes } from "../ducks/cliente";
+import { Types as ClientTypes } from '../ducks/cliente';
 import {
   createClient,
   loadClient,
   deleteClient,
-  updateClient
-} from "./cliente";
+  updateClient,
+} from './cliente';
 
-import { Types as CtoTypes } from "../ducks/ctos";
-import { createCto, loadSplitterAndClient, updateCto, deleteCto } from "./ctos";
+import { Types as CtoTypes } from '../ducks/ctos';
+import { createCto, loadSplitterAndClient, updateCto, deleteCto } from './ctos';
 
-import { Types as CeoTypes } from "../ducks/ceo";
+import { Types as CeoTypes } from '../ducks/ceo';
 import {
   createCeo,
   updateCeo,
   deleteCeo,
   createSpreadsheet,
-  deleteSpreadsheet
-} from "./ceo";
+  deleteSpreadsheet,
+} from './ceo';
 
-import { Types as ProvidersTypes } from "../ducks/provider";
-import { getProviders, init } from "./provider";
+import { Types as ProvidersTypes } from '../ducks/provider';
+import { getProviders, init } from './provider';
 
-import { Types as DropTypes } from "../ducks/drop";
-import { loadSplitters, addDrop } from "./drop";
+import { Types as DropTypes } from '../ducks/drop';
+import { loadSplitters, addDrop } from './drop';
 
-import { Types as SplitterTypes } from "../ducks/splitter";
-import { createSplitter, updateSplitter, deleteSplitter } from "./splitter";
+import { Types as SplitterTypes } from '../ducks/splitter';
+import { createSplitter, updateSplitter, deleteSplitter } from './splitter';
 
-import { Types as CableTypes } from "../ducks/cabo";
+import { Types as CableTypes } from '../ducks/cabo';
 import {
   addRelCable,
   deleteCable,
@@ -47,32 +47,32 @@ import {
   updateCable,
   createCableWithRelationship,
   addRelBetweenCableAndLayer,
-  deleteCableRelationship
-} from "./cabo";
+  deleteCableRelationship,
+} from './cabo';
 
-import { Types as UserTypes } from "../ducks/user";
-import { inviteNewUser } from "./user";
+import { Types as UserTypes } from '../ducks/user';
+import { inviteNewUser } from './user';
 
-import { Types as FiberFusionTypes } from "../ducks/fiberfusion";
+import { Types as FiberFusionTypes } from '../ducks/fiberfusion';
 import {
   createFusion,
   deleteFusion,
   updateFusion,
   showFibersCable,
-  showCablesCeo
-} from "./fiberfusion";
+  showCablesCeo,
+} from './fiberfusion';
 
-import { Types as CablesTypes } from "../ducks/cabo";
-import { createCable } from "./cabo";
+import { Types as CablesTypes } from '../ducks/cabo';
+import { createCable } from './cabo';
 
-import { Types as InviteTypes } from "../ducks/invite";
-import { sendInvitationEmail } from "./invite";
+import { Types as InviteTypes } from '../ducks/invite';
+import { sendInvitationEmail } from './invite';
 
-import { Types as ImportsTypes } from "../ducks/imports";
-import { importGeoJSONData } from "./imports";
+import { Types as ImportsTypes } from '../ducks/imports';
+import { importGeoJSONData } from './imports';
 
-import { getMembers, updateMember } from "./members";
-import { MembersTypes } from "../ducks/members";
+import { getMembers, updateMember } from './members';
+import { MembersTypes } from '../ducks/members';
 
 /**  O * diz que estamos criando uma função generator
  * O generator é a maneira de lidarmos com assincronismo
@@ -83,7 +83,7 @@ import { MembersTypes } from "../ducks/members";
 export default function* rootSaga() {
   yield all([
     init(),
-
+    fork(getPermissions),
     // ProvidersTypes
     takeLatest(ProvidersTypes.GET_PROVIDERS_REQUEST, getProviders),
 
@@ -161,7 +161,7 @@ export default function* rootSaga() {
 
     // members
     takeLatest(MembersTypes.GET_MEMBERS_REQUEST, getMembers),
-    takeLatest(MembersTypes.UPDATE_MEMBER_REQUEST, updateMember)
+    takeLatest(MembersTypes.UPDATE_MEMBER_REQUEST, updateMember),
   ]);
 }
 

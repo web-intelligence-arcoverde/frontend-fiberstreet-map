@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import Modal from "react-modal";
-import api from "../../../services/api";
-import { Form } from "../../components/modalStyles/styles";
-import "../modalStyles/styles.css";
+import Modal from 'react-modal';
+import api from '../../../services/api';
+import { Form } from '../../components/modalStyles/styles';
+import '../modalStyles/styles.css';
 
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Creators as CaboCreators } from '../../../redux/store/ducks/cabo';
 
 function AddNewCabo(props) {
-  const [nome, setNome] = useState("");
-  const [tipo, setTipo] = useState("");
+  const [nome, setNome] = useState('');
+  const [tipo, setTipo] = useState('');
   const [quantidade_fibras, setQuantidadeFibras] = useState(0);
 
   function handleSubmit(e) {
@@ -19,7 +19,7 @@ function AddNewCabo(props) {
     let coordinates = props.redux.all.mapa.polyline.map(linha => {
       return {
         longitude: linha[0],
-        latitude: linha[1]
+        latitude: linha[1],
       };
     });
     let coordinatesStrinfigied = JSON.stringify(coordinates);
@@ -27,7 +27,7 @@ function AddNewCabo(props) {
       coordenadas: coordinatesStrinfigied,
       nome,
       tipo,
-      quantidade_fibras
+      quantidade_fibras,
     };
     const idOfCtoToRelationship = props.redux.ctos.ctoId;
     // const data = {
@@ -38,11 +38,11 @@ function AddNewCabo(props) {
 
     const { addCoordCabo } = props;
     api
-      .post("cabo/add/rel", cabo)
+      .post('cabo/add/rel', cabo)
       .then(response => {
         alert(response.data);
-        setNome("");
-        setTipo("");
+        setNome('');
+        setTipo('');
         addCoordCabo([[0, 0]]);
         setQuantidadeFibras(0);
         handleHideModal();
@@ -64,9 +64,9 @@ function AddNewCabo(props) {
       overlayClassName="modal-overlay"
     >
       <>
-        <h3 style={{ color: "orange" }}>Cabo</h3>
+        <h3 style={{ color: 'orange' }}>Cabo</h3>
         <Form
-          style={{ marginTop: 1.2 + "em" }}
+          style={{ marginTop: 1.2 + 'em' }}
           action=""
           onSubmit={handleSubmit}
         >
@@ -101,22 +101,22 @@ function AddNewCabo(props) {
           />
           <button
             type="submit"
-            style={{ height: 3 + "em", backgroundColor: "#429911" }}
+            style={{ height: 3 + 'em', backgroundColor: '#429911' }}
           >
             Salvar
           </button>
           <button
-            style={{ marginTop: 5, height: 3 + "em", backgroundColor: "red" }}
+            style={{ marginTop: 5, height: 3 + 'em', backgroundColor: 'red' }}
           >
             Sair
           </button>
         </Form>
         <div
           style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            flexDirection: "row",
-            padding: 5 + "px"
+            display: 'flex',
+            justifyContent: 'flex-end',
+            flexDirection: 'row',
+            padding: 5 + 'px',
           }}
         />
       </>
@@ -125,7 +125,7 @@ function AddNewCabo(props) {
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>

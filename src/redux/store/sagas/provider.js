@@ -1,12 +1,13 @@
-import { call, put, select } from "redux-saga/effects";
+import { call, put, select } from 'redux-saga/effects';
 
-import api from "../../../services/api";
+import api from '../../../services/api';
 
-import { Creators as ProvidersActions } from "../ducks/provider";
+import { Creators as ProvidersActions } from '../ducks/provider';
+import { getPermissions } from './auth';
 
 export function* getProviders() {
   try {
-    const response = yield call(api.get, "providers");
+    const response = yield call(api.get, 'providers');
     yield put(ProvidersActions.getProvidersSuccess(response.data));
   } catch (err) {}
 }
@@ -16,7 +17,8 @@ export function* init() {
     const signedIn = yield select(state => state.auth.signedIn);
     // Se o método acima não der certo, tenta obter o token do localStorage para fazer a verificação
     if (signedIn) {
-      const response = yield call(api.get, "providers");
+      const response = yield call(api.get, 'providers');
+      yield getPermissions();
       yield put(ProvidersActions.getProvidersSuccess(response.data));
       yield put(ProvidersActions.selectProvider(response.data[0]));
     }
