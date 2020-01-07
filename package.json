@@ -4,6 +4,18 @@
   "private": true,
   "repository": "https://gitlab.com/gtc3300k/fiberstreet-web",
   "author": "Kevin Cavalcanti <k.w9cavalcanti@gmail.com>",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "cross-env CI=true yarn test --bail --findRelatedTests",
+      "git add"
+    ]
+  },
   "dependencies": {
     "@adonisjs/websocket-client": "^1.0.9",
     "@deck.gl/mapbox": "^7.1.7",
@@ -95,6 +107,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@types/jest": "^24.0.23",
+    "cross-env": "^6.0.3",
     "customize-cra": "^0.8.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
@@ -108,7 +121,9 @@
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "eslint-plugin-standard": "^4.0.1",
+    "husky": "^4.0.0",
     "less-loader": "^5.0.0",
+    "lint-staged": "^9.5.0",
     "prettier": "^1.19.1"
   }
 }

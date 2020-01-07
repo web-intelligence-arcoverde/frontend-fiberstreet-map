@@ -1,23 +1,23 @@
 export const Types = {
-  ADD_DROP_REQUEST: "ADD_REQUEST/drop",
-  ADD_DROP_SUCCESS: "ADD_SUCCESS/drop",
-  ADD_DROP_FAILURE: "ADD_FAILED/drop",
+  ADD_DROP_REQUEST: 'ADD_REQUEST/drop',
+  ADD_DROP_SUCCESS: 'ADD_SUCCESS/drop',
+  ADD_DROP_FAILURE: 'ADD_FAILED/drop',
 
-  SHOW_DROP_MODAL_REQUEST: "SHOW_MODAL_REQUEST/drop",
-  SHOW_DROP_MODAL: "SHOW_MODAL/drop",
-  HIDE_DROP_MODAL: "HIDE_MODAL/drop",
+  SHOW_DROP_MODAL_REQUEST: 'SHOW_MODAL_REQUEST/drop',
+  SHOW_DROP_MODAL: 'SHOW_MODAL/drop',
+  HIDE_DROP_MODAL: 'HIDE_MODAL/drop',
 
-  ADD_SAIDAS_SPLITTER: "ADD_SAIDAS_SPLITTER/drop",
+  ADD_SAIDAS_SPLITTER: 'ADD_SAIDAS_SPLITTER/drop',
 
-  ADD_DROP_CLIENT_ID: "@drop/ADD_CLIENT_ID"
+  ADD_DROP_CLIENT_ID: '@drop/ADD_CLIENT_ID',
 };
 
 const INITIAL_STATE = {
   isVisible: false,
   request: false,
   data: {
-    splitters: []
-  }
+    splitters: [],
+  },
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -29,7 +29,7 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         isVisible: true,
         data: action.payload.data,
-        carregando: false
+        carregando: false,
       };
     case Types.HIDE_DROP_MODAL:
       return { ...state, isVisible: false, carregando: false };
@@ -40,7 +40,7 @@ export default function(state = INITIAL_STATE, action) {
     case Types.ADD_DROP_CLIENT_ID:
       return {
         ...state,
-        client_id: action.payload.clientId
+        client_id: action.payload.clientId,
         // data: { ...state.data, client_id:  }
       };
     default:
@@ -51,32 +51,32 @@ export default function(state = INITIAL_STATE, action) {
 export const Creators = {
   addDropClientId: clientId => ({
     type: Types.ADD_DROP_CLIENT_ID,
-    payload: { clientId }
+    payload: { clientId },
   }),
 
   addDropRequest: data => ({
     type: Types.ADD_DROP_REQUEST,
-    payload: { data }
+    payload: { data },
   }),
 
   showDropAddModalRequest: data => ({
     type: Types.SHOW_DROP_MODAL_REQUEST,
-    payload: { data }
+    payload: { data },
   }),
 
   showDropAddModal: data => ({
     type: Types.SHOW_DROP_MODAL,
-    payload: { data }
+    payload: { data },
   }),
 
   hideDropAddModal: () => ({
-    type: Types.HIDE_DROP_MODAL
+    type: Types.HIDE_DROP_MODAL,
   }),
 
   addSaidasSplitter: saidas => ({
     type: Types.ADD_SAIDAS_SPLITTER,
-    payload: { saidas }
-  })
+    payload: { saidas },
+  }),
 
   // removeSaidasSplitter°
 };

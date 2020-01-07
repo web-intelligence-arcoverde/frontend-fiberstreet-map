@@ -1,37 +1,37 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
-import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
-import { Creators as MapCreators } from "../../../redux/store/ducks/map";
+import { Creators as DropCreators } from '../../../redux/store/ducks/drop';
+import { Creators as CaboCreators } from '../../../redux/store/ducks/cabo';
 
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { toastr } from 'react-redux-toastr';
 
 //Components
-import { Modal, Button, Container, Form } from "react-bootstrap/";
+import { Modal, Button, Container, Form } from 'react-bootstrap/';
+import { Creators as MapCreators } from '../../../redux/store/ducks/map';
 
 function CaboAdd(props) {
   const { newCabo } = props.redux.cabo;
 
-  const [nome, setNome] = useState("");
-  const [modelo, setModelo] = useState("");
+  const [nome, setNome] = useState('');
+  const [modelo, setModelo] = useState('');
   const [fibra, setFibra] = useState(0);
-  const TNAME = "nome";
-  const TMODEL = "modelo";
+  const TNAME = 'nome';
+  const TMODEL = 'modelo';
 
   function hideModal() {
     const { hideAddCableCto, setDelimitation } = props;
     hideAddCableCto();
-    setDelimitation("default");
+    setDelimitation('default');
   }
 
   function handleSubmit() {
     // e.preventDefault();
-    let coordinates = props.redux.map.polyline.map(linha => {
+    /*let coordinates = props.redux.map.polyline.map(linha => {
       return {
         longitude: linha[0],
-        latitude: linha[1]
+        latitude: linha[1],
       };
     });
     let coordinatesStrinfigied = JSON.stringify(coordinates);
@@ -40,20 +40,20 @@ function CaboAdd(props) {
       name: nome,
       type: modelo,
       fiberAmount: fibra,
-      coordinates//: coordinatesStrinfigied
-    };
+      coordinates, //: coordinatesStrinfigied
+    };*/
     const { addCoordCabo, hideIcons } = props;
-    setNome("");
-    setModelo("");
+    setNome('');
+    setModelo('');
     addCoordCabo([]);
     hideModal();
     hideIcons();
     const { showDropAddModalRequest } = props;
     const dropNdCtoId = {
-      drop: cabo,
-      cto_id: newCabo.ctoId
+      drop: null,
+      cto_id: newCabo.ctoId,
     };
-    
+
     showDropAddModalRequest(dropNdCtoId);
   }
 
@@ -67,7 +67,7 @@ function CaboAdd(props) {
       case TMODEL:
         setModelo(value);
         break;
-      case "QTFIBRA":
+      case 'QTFIBRA':
         setFibra(value);
         break;
     }
@@ -81,14 +81,14 @@ function CaboAdd(props) {
   return (
     <Container>
       <Modal show={newCabo.isVisible} onHide={hideModal}>
-        <Form 
+        <Form
         // onSubmit={handleSubmit}
         >
           <Modal.Header
             style={{
-              justifyContent: "center",
-              backgroundColor: "#F7D358",
-              color: "#6c757d"
+              justifyContent: 'center',
+              backgroundColor: '#F7D358',
+              color: '#6c757d',
             }}
           >
             <Modal.Title>Adicionar cabo do cliente</Modal.Title>
@@ -141,7 +141,7 @@ function CaboAdd(props) {
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>

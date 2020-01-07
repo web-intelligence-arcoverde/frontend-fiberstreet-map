@@ -34,7 +34,7 @@ import { Types as ProvidersTypes } from '../ducks/provider';
 import { getProviders, init } from './provider';
 
 import { Types as DropTypes } from '../ducks/drop';
-import { loadSplitters, addDrop } from './drop';
+import { loadSplitters, addDrop, addClientInCto } from './drop';
 
 import { Types as SplitterTypes } from '../ducks/splitter';
 import { createSplitter, updateSplitter, deleteSplitter } from './splitter';
@@ -108,14 +108,14 @@ export default function* rootSaga() {
     takeLatest(CeoTypes.CREATE_SPREADSHEET_REQUEST, createSpreadsheet),
     takeLatest(CeoTypes.DELETE_SPREADSHEET_REQUEST, deleteSpreadsheet),
 
-    //CTO
+    // CTO
     takeLatest(CtoTypes.CREATE_CTO_REQUEST, createCto),
     takeLatest(CtoTypes.UPDATE_CTO_REQUEST, updateCto),
     takeLatest(CtoTypes.DELETE_CTO_REQUEST, deleteCto),
 
     // Drop
     takeLatest(DropTypes.SHOW_DROP_MODAL_REQUEST, loadSplitters),
-    takeLatest(DropTypes.ADD_DROP_REQUEST, addDrop),
+    takeLatest(DropTypes.ADD_DROP_REQUEST, addClientInCto),
 
     // Splitter
     takeLatest(SplitterTypes.UPDATE_SP_REQUEST, updateSplitter),

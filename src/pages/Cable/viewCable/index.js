@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-import { Modal, Button, Form } from "react-bootstrap";
-import { Creators as CablesCreators } from "../../../redux/store/ducks/cabo";
-import { Creators as MapCreators } from "../../../redux/store/ducks/map";
+import { Modal, Button, Form } from 'react-bootstrap';
+import { Creators as CablesCreators } from '../../../redux/store/ducks/cabo';
+import { Creators as MapCreators } from '../../../redux/store/ducks/map';
+import { toastr } from 'react-redux-toastr';
 
-import { Container } from "./CSS/styled";
-import "./CSS/styled.css";
+import { Container } from './CSS/styled';
+import './CSS/styled.css';
 
 function ViewCable(props) {
   const { data } = props.redux.cabo.viewCable;
   const { visible } = props.redux.cabo.viewCable;
   const { hideViewCable } = props;
 
-  const [nome, setNome] = useState("");
-  const [modelo, setModelo] = useState("");
-  const [fibra, setFibra] = useState("");
-  const [obs, setObs] = useState("");
+  const [nome, setNome] = useState('');
+  const [modelo, setModelo] = useState('');
+  const [fibra, setFibra] = useState('');
+  const [obs, setObs] = useState('');
 
   const { showIcons, setSubDelemitation } = props;
 
@@ -32,10 +33,10 @@ function ViewCable(props) {
     }
 
     return () => {
-      setNome("");
-      setModelo("");
-      setFibra("");
-      setObs("");
+      setNome('');
+      setModelo('');
+      setFibra('');
+      setObs('');
     };
   }, [visible]);
 
@@ -44,26 +45,26 @@ function ViewCable(props) {
     const cabo = {
       name: nome,
       type: modelo,
-      fiberAmount: fibra
+      fiberAmount: fibra,
     };
     updateCableRequest(data.id, cabo);
     hideView();
   }
 
   function hideView() {
-    setNome("");
-    setModelo("");
-    setFibra("");
-    setObs("");
+    setNome('');
+    setModelo('');
+    setFibra('');
+    setObs('');
 
     hideViewCable();
   }
 
   function addCable() {
     const { setDelimitation, setDrawType } = props;
-    setSubDelemitation("cabo");
-    setDelimitation("cabo");
-    setDrawType("REDRAW");
+    setSubDelemitation('cabo');
+    setDelimitation('cabo');
+    setDrawType('REDRAW');
     showIcons();
     hideViewCable();
   }
@@ -73,12 +74,12 @@ function ViewCable(props) {
     const coordinates = JSON.parse(data.coordinates);
     let coord = [
       coordinates[coordinates.length - 1].longitude,
-      coordinates[coordinates.length - 1].latitude
+      coordinates[coordinates.length - 1].latitude,
     ]; //pegar posição do objeto que saiu o cabo
 
-    setDelimitation("cabo");
-    setSubDelemitation("cabo");
-    setDrawType("DRAW");
+    setDelimitation('cabo');
+    setSubDelemitation('cabo');
+    setDrawType('DRAW');
     addCoordCabo([coord]);
     showIcons();
     hideViewCable();
@@ -86,19 +87,26 @@ function ViewCable(props) {
 
   function deleteCable() {
     const { deleteCableRequest } = props;
-    deleteCableRequest(data.id);
-    hideViewCable();
+    const options = {
+      onOk: () => {
+        deleteCableRequest(data.id);
+        hideViewCable();
+      },
+      onCancel: () => {},
+    };
+
+    toastr.confirm('Deseja mesmo deletar este cabo?', options);
   }
 
   return (
     <Modal show={visible} onHide={hideView} size="lg">
       <Modal.Header
         style={{
-          justifyContent: "center",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          backgroundColor: "#F7D358"
+          justifyContent: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          backgroundColor: '#F7D358',
         }}
       >
         <Modal.Title>Informações do cabo</Modal.Title>
@@ -149,7 +157,7 @@ function ViewCable(props) {
             variant="info"
             onClick={() => {
               drawnCable();
-              setSubDelemitation("anywhere");
+              setSubDelemitation('anywhere');
             }}
             className="item"
           >
@@ -159,7 +167,7 @@ function ViewCable(props) {
             variant="info"
             onClick={() => {
               drawnCable();
-              setSubDelemitation("anywhere");
+              setSubDelemitation('anywhere');
             }}
             className="item"
           >
@@ -187,7 +195,7 @@ function ViewCable(props) {
   );
 }
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>

@@ -1,8 +1,8 @@
-import { call, put, select } from "redux-saga/effects";
-import api, { API } from "../../../services/api";
+import { call, put, select } from 'redux-saga/effects';
+import api, { API } from '../../../services/api';
 
-import { Creators as DropCreators } from "../ducks/drop";
-import { toastr } from "react-redux-toastr";
+import { Creators as DropCreators } from '../ducks/drop';
+import { toastr } from 'react-redux-toastr';
 
 function* getSaidaSplitterForSplitter(splitterId) {
   const response = yield call(api.get, `/saidasplitter/splitter/${splitterId}`);
@@ -29,7 +29,7 @@ export function* loadSplitters(action) {
       // console.tron.log(response);
       const { data } = response;
       // alert(JSON.stringify(data));
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NODE_ENV === 'development') {
         // console.tron.log(data);
       }
       yield put(
@@ -39,9 +39,39 @@ export function* loadSplitters(action) {
       throw response;
     }
   } catch (error) {
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === 'development') {
       // console.tron.log(error);
     }
+  }
+}
+
+export function* addClientInCto({ payload }) {
+  const { saida } = yield payload.data;
+  const client_id = yield select(state => state.drop.client_id);
+
+  const novasaida = {
+    ...saida,
+    splitter_id: saida.splitter_id,
+    client_id,
+    isActive: null,
+    selected: null,
+    id: null,
+  };
+
+  const saidaR = {
+    number: novasaida.number,
+    client_id,
+    splitter_id: saida.splitter_id,
+  };
+
+  try {
+    const response = yield call(api.post, 'drops', {
+      output: saidaR,
+    });
+    yield put(DropCreators.hideDropAddModal());
+    yield toastr.success('Sucesso', 'Sucesso ao adicionar drop');
+  } catch (err) {
+    yield toastr.error('Erro', 'Erro ao adicionar drop');
   }
 }
 
@@ -50,7 +80,7 @@ export function* addDrop(action) {
 
   const spAndCli = yield {
     splitter_cod: saida.splitter_id,
-    cliente_cod_cli: client_id
+    cliente_cod_cli: client_id,
   };
 
   // Saida Do Splitter
@@ -61,18 +91,18 @@ export function* addDrop(action) {
     client_id,
     isActive: null,
     selected: null,
-    id: null
+    id: null,
   };
   const clientId = yield select(state => state.drop.client_id);
   const saidaResponsaFilhoDaputa = {
     number: novaSaida.number,
     client_id: clientId,
-    splitter_id: saida.splitter_id
+    splitter_id: saida.splitter_id,
   };
 
   // Fibra Óptica
   const fibra = {
-    name: drop.name
+    name: drop.name,
   };
 
   try {
@@ -85,14 +115,14 @@ export function* addDrop(action) {
     // 4 - Relacionar o cabo com a cto
     // 'cable', 'fiber', 'output'
 
-    const response = yield call(api.post, "drops", {
+    const response = yield call(api.post, 'drops', {
       cable: cabo,
       output: saidaResponsaFilhoDaputa,
-      fiber: fibra
+      fiber: fibra,
     });
 
     yield put(DropCreators.hideDropAddModal());
-    yield toastr.success("Sucesso", "Sucesso ao adicionar drop");
+    yield toastr.success('Sucesso', 'Sucesso ao adicionar drop');
 
     // const response = yield call(api.post, "cables", drop);
     // const { data: cabo } = yield response;
@@ -112,6 +142,6 @@ export function* addDrop(action) {
     // yield call(api.post, "drop-fibra/create", fibra);
     // yield put(DropCreators.hideDropAddModal());
   } catch (err) {
-    yield toastr.error("Erro", "Erro ao adicionar drop");
+    yield toastr.error('Erro', 'Erro ao adicionar drop');
   }
 }
