@@ -39,7 +39,7 @@ import { loadSplitters, addDrop, addClientInCto } from './drop';
 import { Types as SplitterTypes } from '../ducks/splitter';
 import { createSplitter, updateSplitter, deleteSplitter } from './splitter';
 
-import { Types as CableTypes } from '../ducks/cabo';
+import { Types as CableTypes, Types as CablesTypes } from '../ducks/cabo';
 import {
   addRelCable,
   deleteCable,
@@ -48,6 +48,7 @@ import {
   createCableWithRelationship,
   addRelBetweenCableAndLayer,
   deleteCableRelationship,
+  createCable,
 } from './cabo';
 
 import { Types as UserTypes } from '../ducks/user';
@@ -61,9 +62,6 @@ import {
   showFibersCable,
   showCablesCeo,
 } from './fiberfusion';
-
-import { Types as CablesTypes } from '../ducks/cabo';
-import { createCable } from './cabo';
 
 import { Types as InviteTypes } from '../ducks/invite';
 import { sendInvitationEmail } from './invite';
@@ -87,7 +85,7 @@ export default function* rootSaga() {
     // ProvidersTypes
     takeLatest(ProvidersTypes.GET_PROVIDERS_REQUEST, getProviders),
 
-    //Account
+    // Account
     takeLatest(AuthTypes.SIGN_IN_REQUEST, signIn),
     takeLatest(AuthTypes.SIGN_OUT, signOut),
     takeLatest(AuthTypes.SIGN_UP_REQUEST, signUp),
@@ -98,7 +96,7 @@ export default function* rootSaga() {
     takeLatest(ClientTypes.UPDATE_CLIENT_REQUEST, updateClient),
     takeLatest(ClientTypes.DELETE_CLIENT_REQUEST, deleteClient),
 
-    //Funcionarios
+    // Funcionarios
     takeLatest(UserTypes.INVITE_NEW_USER_PROVIDER_REQUEST, inviteNewUser),
 
     // Ceo
@@ -129,7 +127,7 @@ export default function* rootSaga() {
 
     takeLatest(ImportsTypes.IMPORT_GEOJSON_REQUEST, importGeoJSONData),
 
-    //Cable
+    // Cable
     takeLatest(CablesTypes.CREATE_CABLE_REQUEST, createCable),
     takeLatest(CablesTypes.UPDATE_CABLE_REQUEST, updateCable),
     takeLatest(CablesTypes.DELETE_CABLE_REQUEST, deleteCable),
@@ -177,5 +175,5 @@ export default function* rootSaga() {
 // import { Types as DropTypes } from "../ducks/drop";
 
 // takeLatest(CaboTypes.CREATE_CABO_REQUEST, createCabo)
-//takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient)
-//takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient)
+// takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient)
+// takeLatest(ClientTypes.CREATE_CLIENT_REQUEST, createClient)

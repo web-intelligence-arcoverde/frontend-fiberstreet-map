@@ -32,6 +32,7 @@ import LoadPages from '../../index';
 import IconsBottom from './Components/icons-drawn-line/index';
 import ImportGeojson from './Components/ImportGeojson';
 import Members from '~/components/Members';
+import { ContainerSearch, InputSearch } from './styles';
 
 /* */
 import { addGeojson } from './Controller/add-geojson/index';
@@ -90,6 +91,7 @@ function Map(props) {
     });
 
     var geo = document.getElementById('geocoder');
+    //var filterInput = document.getElementById('filter-input');
     var distanceContainer = document.getElementById('distance');
 
     addGeojson(map, geojson);
@@ -108,7 +110,13 @@ function Map(props) {
   return (
     <>
       <div id={container} className={classNameStyle} />
-      <div id="geocoder" className="geocoder" />
+      <>
+        <div id="geocoder" className="geocoder" />
+        {/* <ContainerSearch>
+          <InputSearch />
+        </ContainerSearch> */}
+        {/* <div id="codergeo" className="geocoder" /> */}
+      </>
       <div id="distance" className="distance-container" />
       <LeftMenu map={map} />
       <ImportData />

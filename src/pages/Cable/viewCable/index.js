@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { Modal, Button, Form } from 'react-bootstrap';
+import { toastr } from 'react-redux-toastr';
 import { Creators as CablesCreators } from '../../../redux/store/ducks/cabo';
 import { Creators as MapCreators } from '../../../redux/store/ducks/map';
-import { toastr } from 'react-redux-toastr';
 
 import { Container } from './CSS/styled';
 import './CSS/styled.css';
@@ -29,7 +29,7 @@ function ViewCable(props) {
       setModelo(data.type);
       setFibra(data.fiberAmount);
       setObs(data.obs);
-      //alert(data.)
+      // alert(data.)
     }
 
     return () => {
@@ -72,10 +72,10 @@ function ViewCable(props) {
   function drawnCable() {
     const { addCoordCabo, setDelimitation, setDrawType } = props;
     const coordinates = JSON.parse(data.coordinates);
-    let coord = [
+    const coord = [
       coordinates[coordinates.length - 1].longitude,
       coordinates[coordinates.length - 1].latitude,
-    ]; //pegar posição do objeto que saiu o cabo
+    ]; // pegar posição do objeto que saiu o cabo
 
     setDelimitation('cabo');
     setSubDelemitation('cabo');

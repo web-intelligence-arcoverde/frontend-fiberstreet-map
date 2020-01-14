@@ -1,7 +1,8 @@
-import { getPosition } from "./postion-user/index";
-import { search } from "./search-location/index";
-import { measure } from "./measure-distance/index";
-import { mapClick } from "./click-map/index";
+import { getPosition } from './postion-user/index';
+import { search } from './search-location/index';
+import { searchLayer } from './search-layer';
+import { measure } from './measure-distance/index';
+import { mapClick } from './click-map/index';
 
 export const loadControllers = (
   map,
@@ -12,6 +13,7 @@ export const loadControllers = (
 ) => {
   getPosition(map);
   search(map, geo);
+  //searchLayer(map, filterInput, store);
   measure(map, distanceContainer, geojson);
   mapClick(map, store);
 };

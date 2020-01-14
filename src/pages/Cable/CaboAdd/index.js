@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 
-import { Creators as DropCreators } from '../../../redux/store/ducks/drop';
-import { Creators as CaboCreators } from '../../../redux/store/ducks/cabo';
-
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toastr } from 'react-redux-toastr';
 
-//Components
+// Components
 import { Modal, Button, Container, Form } from 'react-bootstrap/';
+import { Creators as CaboCreators } from '../../../redux/store/ducks/cabo';
+import { Creators as DropCreators } from '../../../redux/store/ducks/drop';
 import { Creators as MapCreators } from '../../../redux/store/ducks/map';
 
 function CaboAdd(props) {
@@ -28,7 +27,7 @@ function CaboAdd(props) {
 
   function handleSubmit() {
     // e.preventDefault();
-    /*let coordinates = props.redux.map.polyline.map(linha => {
+    /* let coordinates = props.redux.map.polyline.map(linha => {
       return {
         longitude: linha[0],
         latitude: linha[1],
@@ -41,7 +40,7 @@ function CaboAdd(props) {
       type: modelo,
       fiberAmount: fibra,
       coordinates, //: coordinatesStrinfigied
-    };*/
+    }; */
     const { addCoordCabo, hideIcons } = props;
     setNome('');
     setModelo('');

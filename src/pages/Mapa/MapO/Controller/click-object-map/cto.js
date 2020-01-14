@@ -6,8 +6,8 @@ import store from '../../../../../redux/store';
 
 export const handleClickCto = (features, map) => {
   const { properties } = features;
-  let longitude = features.geometry.coordinates[0];
-  let latitude = features.geometry.coordinates[1];
+  const longitude = features.geometry.coordinates[0];
+  const latitude = features.geometry.coordinates[1];
 
   const data = JSON.parse(properties.data);
 

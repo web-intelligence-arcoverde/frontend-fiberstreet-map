@@ -1,8 +1,8 @@
 import { call, put, select } from 'redux-saga/effects';
+import { toastr } from 'react-redux-toastr';
 import api, { API } from '../../../services/api';
 
 import { Creators as DropCreators } from '../ducks/drop';
-import { toastr } from 'react-redux-toastr';
 
 function* getSaidaSplitterForSplitter(splitterId) {
   const response = yield call(api.get, `/saidasplitter/splitter/${splitterId}`);
@@ -13,8 +13,8 @@ export function* loadSplitters(action) {
   const { data: Data } = action.payload;
   const { cto_id, drop } = Data;
 
-  let count = 0;
-  let ssp = [];
+  const count = 0;
+  const ssp = [];
 
   try {
     const response = yield call(
@@ -22,7 +22,7 @@ export function* loadSplitters(action) {
       `splittercto/${cto_id}`
       // `${API.GET_SPLITTER_BY_CTO}/${cto_id}`
     );
-    //`/get/splitter/cto/${cto_id}`);
+    // `/get/splitter/cto/${cto_id}`);
     // http://192.168.0.143:3333/splitter/cto/33
 
     if (response.status >= 200 && response.status < 300) {

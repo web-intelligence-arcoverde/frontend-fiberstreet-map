@@ -20,9 +20,9 @@ export const openObject = (map, store) => {
     handleClickCto(e.features[0], map)
   );
 
-  //Cable
+  // Cable
   map.on('click', 'wires', e => handleClickCable(e.features[0]));
 
-  //Evento de clique na caixa de emenda
+  // Evento de clique na caixa de emenda
   map.on('click', 'ceo', e => handleClickCeo(e, map));
 };

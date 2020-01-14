@@ -5,17 +5,21 @@ export const get = (map, store, api, API) => {
       const { data } = response;
 
       const dat = {
-        type: "FeatureCollection",
-        features: data
+        type: 'FeatureCollection',
+        features: data,
       };
 
       store.dispatch({
-        type: "@cable/LOAD_SUCCESS",
-        payload: { cables: data }
+        type: '@cable/LOAD_SUCCESS',
+        payload: { cables: data },
       });
 
-      console.log(map.getSource("wires"));
-      map.getSource("wires").setData(dat);
+      map.getSource('wires').setData(dat);
+
+      // store.dispatch({
+      //   type: '@map/ADD_LAYER_DATA',
+      //   payload: { data: dat, type: 'add' },
+      // });
     })
     .catch(error => {});
 };

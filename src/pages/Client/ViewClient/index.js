@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
-//UI-Components
+// UI-Components
 import {
   Modal,
   Card,
@@ -13,27 +13,27 @@ import {
 } from 'react-bootstrap';
 import Account from '@material-ui/icons/AccountCircle';
 
-//Reecriação de componentes
+// Reecriação de componentes
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toastr } from 'react-redux-toastr';
 import { Field } from './Components/InputBase';
 import { InputField } from './Components/InputFieldComponent';
 
-//Redux
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+// Redux
 
-//Functions
+// Functions
 import { cpfMask } from '../../util/format';
 import { positionObject } from '../../Functions/get-position-object/index';
 
-//Creators
+// Creators
 import { Creators as ClientActions } from '../../../redux/store/ducks/cliente';
 import { Creators as MapActions } from '../../../redux/store/ducks/map';
 import { Creators as CaboActions } from '../../../redux/store/ducks/cabo';
 import { Creators as DropActions } from '../../../redux/store/ducks/drop';
-import { toastr } from 'react-redux-toastr';
 import api from '../../../services/api';
 
-//Container
+// Container
 import { Container } from './CSS/styled';
 import './CSS/styled.css';
 
@@ -43,7 +43,7 @@ function ViewClient(props) {
   }
 
   const { viewClient } = props.redux.client;
-  const { data } = viewClient; //Informações do usuario.
+  const { data } = viewClient; // Informações do usuario.
 
   const [id, setId] = useState('');
   const [cpf, setCpf] = useState('');
@@ -103,15 +103,15 @@ function ViewClient(props) {
     const { coordinates } = data.coordinates;
     const { updateClientRequest } = props;
     const updateClient = {
-      id: id,
-      address: address,
-      cpf: cpf,
-      name: name,
-      coordinates: coordinates,
-      speed: speed,
-      pppoe: pppoe,
-      obs: obs,
-      status: status,
+      id,
+      address,
+      cpf,
+      name,
+      coordinates,
+      speed,
+      pppoe,
+      obs,
+      status,
       installation_date: installation,
     };
     updateClientRequest(updateClient, id);
@@ -143,17 +143,17 @@ function ViewClient(props) {
 
     // setDelimitation('cabo'); // map - map.delimitacao
 
-    //addCoordCabo(positionObject(data)); // map - map.polyline
+    // addCoordCabo(positionObject(data)); // map - map.polyline
     addCableClientId(data.id); // cabo - cabo.id
     // addDropClientId(data.id);
     addDropClientId(id);
 
     setDelimitation('client_add_cable');
-    //showIcons();
+    // showIcons();
     handleHideModal();
   }
 
-  //Mudar status
+  // Mudar status
   function changeStatus(e) {
     if (e) {
       if (status === null) {
@@ -165,7 +165,7 @@ function ViewClient(props) {
     }
   }
 
-  //Excluir cliente
+  // Excluir cliente
   function deleteClient() {
     const { deleteClientRequest } = props;
 
@@ -224,8 +224,8 @@ function ViewClient(props) {
                     maxLength="18"
                     minLength="14"
                     component={InputField}
-                    name={'CPF:'}
-                    type={'text'}
+                    name="CPF:"
+                    type="text"
                     value={cpf}
                     onChange={changeCpf}
                   />
@@ -236,8 +236,8 @@ function ViewClient(props) {
                     minLength="5"
                     maxLength="100"
                     component={InputField}
-                    name={'Nome:'}
-                    type={'text'}
+                    name="Nome:"
+                    type="text"
                     value={name}
                     onChange={e => setName(e.target.value)}
                   />
@@ -246,8 +246,8 @@ function ViewClient(props) {
                   <Field
                     required
                     component={InputField}
-                    name={'Plano:'}
-                    type={'text'}
+                    name="Plano:"
+                    type="text"
                     value={speed}
                     onChange={e => setSpeed(e.target.value)}
                   />
@@ -258,8 +258,8 @@ function ViewClient(props) {
                     minLength="5"
                     maxLength="100"
                     component={InputField}
-                    name={'PPPOE:'}
-                    type={'text'}
+                    name="PPPOE:"
+                    type="text"
                     value={pppoe}
                     onChange={e => setPppoe(e.target.value)}
                   />
@@ -270,8 +270,8 @@ function ViewClient(props) {
                     minLength="5"
                     maxLength="100"
                     component={InputField}
-                    name={'Endereço:'}
-                    type={'text'}
+                    name="Endereço:"
+                    type="text"
                     value={address}
                     onChange={e => setAddress(e.target.value)}
                   />
@@ -279,8 +279,8 @@ function ViewClient(props) {
                 <ListGroup.Item>
                   <Field
                     component={InputField}
-                    name={'Data de instalação:'}
-                    type={'date'}
+                    name="Data de instalação:"
+                    type="date"
                     value={installation}
                     onChange={e => setInstallation(e.target.value)}
                   />
@@ -288,8 +288,8 @@ function ViewClient(props) {
                 <ListGroup.Item>
                   <Field
                     component={InputField}
-                    name={'Observação:'}
-                    type={'textarea'}
+                    name="Observação:"
+                    type="textarea"
                     required
                     as="textarea"
                     rows="3"
@@ -344,7 +344,7 @@ const mapStateToProps = state => ({
   redux: state,
 });
 
-//Ações
+// Ações
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     { ...ClientActions, ...MapActions, ...CaboActions, ...DropActions },

@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux';
 import { Creators as MapCreators } from '../../../../../redux/store/ducks/map';
 import { Creators as CableActions } from '../../../../../redux/store/ducks/cabo';
 import { Creators as ImportsActions } from '../../../../../redux/store/ducks/imports';
+import { Creators as UserActions } from '~/redux/store/ducks/user';
 import AuthActions from '../../../../../redux/store/ducks/auth';
 import MembersActions from '../../../../../redux/store/ducks/members';
 
@@ -153,6 +154,25 @@ function LeftMenu(props) {
                   >
                     Membros
                   </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      // Aqui selecionaremos o tipo de delimitação do clique no mapa
+                      setDelimitation('default');
+                      const { showModalNewUser } = props;
+                      showModalNewUser();
+                    }}
+                  >
+                    Add Funcionario
+                  </Dropdown.Item>
+
+                  {/* <Dropdown.Item
+                  onClick={() => {
+                    // Aqui selecionaremos o tipo de delimitação do clique no mapa
+                    setDelimitation('provider');
+                  }}
+                >
+                  Add provedor
+                </Dropdown.Item> */}
                 </Can>
 
                 <Dropdown.Item
@@ -185,22 +205,7 @@ function LeftMenu(props) {
                 >
                   cliente
                 </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    // Aqui selecionaremos o tipo de delimitação do clique no mapa
-                    setDelimitation('functionary');
-                  }}
-                >
-                  funcionario
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    // Aqui selecionaremos o tipo de delimitação do clique no mapa
-                    setDelimitation('provider');
-                  }}
-                >
-                  provedor
-                </Dropdown.Item>
+
                 <Dropdown.Item
                   onClick={() => {
                     // Aqui selecionaremos o tipo de delimitação do clique no mapa
@@ -225,6 +230,14 @@ function LeftMenu(props) {
                   }}
                 >
                   cabo
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    const { openSearchModal } = props;
+                    openSearchModal();
+                  }}
+                >
+                  pesquisar
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => {
@@ -299,6 +312,7 @@ const mapDispatchToProps = dispatch =>
       ...CableActions,
       ...ImportsActions,
       ...MembersActions,
+      ...UserActions,
     },
     dispatch
   );

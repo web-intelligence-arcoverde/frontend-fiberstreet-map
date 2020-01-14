@@ -1,22 +1,22 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 //Components Importados
-import { Col, Button, Form } from "react-bootstrap/";
-import ViewPhoto from "./PhotoCto";
-import MenuItem from "@material-ui/core/MenuItem";
-import TextField from "@material-ui/core/TextField";
+import { Col, Button, Form } from 'react-bootstrap/';
+import ViewPhoto from './PhotoCto';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
 
 //Creators do redux
-import { Creators as CtoCreatos } from "../../../../redux/store/ducks/ctos";
-import { Creators as MapCreators } from "../../../../redux/store/ducks/map";
+import { Creators as CtoCreatos } from '../../../../redux/store/ducks/ctos';
+import { Creators as MapCreators } from '../../../../redux/store/ducks/map';
 import { toastr } from 'react-redux-toastr';
 
 //Redux
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import { Container } from "./CSS/styled";
-import "./CSS/styled.css";
+import { Container } from './CSS/styled';
+import './CSS/styled.css';
 
 function Components(props) {
   const { showModalPhoto, hideViewModalCto } = props;
@@ -32,29 +32,29 @@ function Components(props) {
   const [status, setStatus] = useState(data.status);
   const [statuses, setStatuses] = useState([
     {
-      value: "active",
-      label: "Ativa"
+      value: 'active',
+      label: 'Ativa',
     },
     {
-      value: "full",
-      label: "Lotada"
+      value: 'full',
+      label: 'Lotada',
     },
     {
-      value: "cli_cancel",
-      label: "Cliente cancelado"
-    }
+      value: 'cli_cancel',
+      label: 'Cliente cancelado',
+    },
   ]);
 
   //Atualizar CTO
   function handleSubmit(e) {
     e.preventDefault();
     var mode;
-    if (status === "Ativa") {
-      mode = "active";
-    } else if (status === "Lotada") {
-      mode = "full";
+    if (status === 'Ativa') {
+      mode = 'active';
+    } else if (status === 'Lotada') {
+      mode = 'full';
     } else {
-      mode = "cli_cancel";
+      mode = 'cli_cancel';
     }
     const { updateCtoRequest } = props;
     const updateCto = {
@@ -62,7 +62,7 @@ function Components(props) {
       model: model,
       address: address,
       obs: obs,
-      status //: mode
+      status, //: mode
     };
     updateCtoRequest(updateCto, data.id);
     hideViewModalCto();
@@ -71,7 +71,14 @@ function Components(props) {
   //Deletar CTO
   function deleteCto() {
     const { deleteCtoRequest } = props;
-    deleteCtoRequest(data.id);
+    const options = {
+      onOk: () => {
+        deleteCtoRequest(data.id);
+      },
+      onCancel: () => {},
+    };
+
+    toastr.confirm('Deseja deletar a cto?', options);
   }
 
   function openPhoto() {
@@ -81,8 +88,8 @@ function Components(props) {
   function move() {
     const { hideViewModalCto, setDelimitation, setType } = props;
     hideViewModalCto();
-    setType("cto", data.id);
-    setDelimitation("mover");
+    setType('cto', data.id);
+    setDelimitation('mover');
   }
 
   return (
@@ -160,11 +167,14 @@ function Components(props) {
                 Mostrar Foto
               </Button>
             ) : (
-              <Button variant="info" className="item" onClick={showModalPhoto}>
-                Adicionar Foto
-              </Button>
+              <></>
             )}
           </>
+          {false && (
+            <Button variant="info" className="item" onClick={showModalPhoto}>
+              Adicionar Foto
+            </Button>
+          )}
           <Button variant="info" className="item" onClick={move}>
             Mover
           </Button>
@@ -183,7 +193,7 @@ function Components(props) {
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>

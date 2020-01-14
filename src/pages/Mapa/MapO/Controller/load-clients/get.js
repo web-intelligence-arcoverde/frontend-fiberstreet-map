@@ -4,65 +4,70 @@ export const get = (map, store, api, API) => {
 
     let clientsActive = [];
     data.forEach(client => {
-      if (client.properties.data.status === "active") {
+      if (client.properties.data.status === 'active') {
         clientsActive.push(client);
       }
     });
     let clientsInactive = [];
     data.forEach(client => {
-      if (client.properties.data.status !== "active") {
+      if (client.properties.data.status !== 'active') {
         clientsInactive.push(client);
       }
     });
 
     const clientesAtivos = {
-      type: "FeatureCollection",
-      features: clientsActive
+      type: 'FeatureCollection',
+      features: clientsActive,
     };
 
     const clientesInativos = {
-      type: "FeatureCollection",
-      features: clientsInactive
+      type: 'FeatureCollection',
+      features: clientsInactive,
     };
 
     store.dispatch({
-      type: "@cliente/LOAD_GJ_SUCCESS",
-      payload: { clients: data }
+      type: '@cliente/LOAD_GJ_SUCCESS',
+      payload: { clients: data },
     });
 
-    map.getSource("cliente").setData(clientesAtivos);
-    map.getSource("cliente_inativo").setData(clientesInativos);
+    map.getSource('cliente').setData(clientesAtivos);
+    map.getSource('cliente_inativo').setData(clientesInativos);
+    const datax = [...clientsActive, ...clientsInactive];
+    // store.dispatch({
+    //   type: '@map/ADD_LAYER_DATA',
+    //   payload: { data: datax, type: 'add' },
+    // });
   });
   // ativo
   map.loadImage(
-    require("../../../../../assets/images/cliente-ativo.png"),
+    require('../../../../../assets/images/cliente-ativo.png'),
     function(error, image) {
       if (error) throw error;
-      map.addImage("custom-cliente", image);
+      map.addImage('custom-cliente', image);
       /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
       map.addLayer({
-        id: "cliente",
-        type: "symbol",
-        source: "cliente",
+        id: 'cliente',
+        type: 'symbol',
+        source: 'cliente',
         layout: {
-          "icon-image": "custom-cliente"
-        }
+          'icon-image': 'custom-cliente',
+        },
       });
     }
   );
   // inativo
   map.loadImage(
-    require("../../../../../assets/images/cliente-inativo.png"),
+    require('../../../../../assets/images/cliente-inativo.png'),
     function(error, image) {
       if (error) throw error;
-      map.addImage("cliente-inativo", image);
+      map.addImage('cliente-inativo', image);
       map.addLayer({
-        id: "cliente_inativo",
-        type: "symbol",
-        source: "cliente_inativo",
+        id: 'cliente_inativo',
+        type: 'symbol',
+        source: 'cliente_inativo',
         layout: {
-          "icon-image": "cliente-inativo"
-        }
+          'icon-image': 'cliente-inativo',
+        },
       });
     }
   );

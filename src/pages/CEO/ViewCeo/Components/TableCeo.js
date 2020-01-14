@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import { Col, Form, Button } from "react-bootstrap/";
+import { Col, Form, Button } from 'react-bootstrap/';
 
 // redux
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 //Creators redux
-import { Creators as CeoCreators } from "../../../../redux/store/ducks/ceo";
-import { Creators as MapCreators } from "../../../../redux/store/ducks/map";
+import { Creators as CeoCreators } from '../../../../redux/store/ducks/ceo';
+import { Creators as MapCreators } from '../../../../redux/store/ducks/map';
+import { toastr } from 'react-redux-toastr';
 
-import { Container } from "./CSS/styled";
-import "./CSS/styled.css";
+import { Container } from './CSS/styled';
+import './CSS/styled.css';
 
 const TableCeo = props => {
   const { data } = props.redux.ceo.viewCeo;
@@ -24,7 +25,13 @@ const TableCeo = props => {
 
   function deleteCeo() {
     const { deleteCeoRequest } = props;
-    deleteCeoRequest(data.id);
+    const options = {
+      onOk: () => {
+        deleteCeoRequest(data.id);
+      },
+      onCancel: () => {},
+    };
+    toastr.confirm('Deseja deletar mesmo?', options);
   }
 
   //Atualizar CEO
@@ -36,7 +43,7 @@ const TableCeo = props => {
       type: type,
       model: model,
       address: address,
-      obs: obs
+      obs: obs,
     };
     updateCeoRequest(updateCeo, data.id);
   }
@@ -44,8 +51,8 @@ const TableCeo = props => {
   function move() {
     const { hideViewModalCeo, setDelimitation, setType } = props;
     hideViewModalCeo();
-    setType("ceo", data.id);
-    setDelimitation("mover");
+    setType('ceo', data.id);
+    setDelimitation('mover');
   }
 
   return (
@@ -137,7 +144,7 @@ const TableCeo = props => {
 };
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>
