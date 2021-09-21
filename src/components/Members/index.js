@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import { useSelector, useDispatch, useStore, connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Modal, Button } from '@material-ui/core';
+import Select from 'react-select';
 import MembersActions from '../../redux/store/ducks/members';
 
-import { Modal } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
-
 import { MembersList } from './styles';
-import Select from 'react-select';
 
 import api from '~/services/api';
 

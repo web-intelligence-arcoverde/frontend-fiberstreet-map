@@ -1,41 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 // redux
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-//Creators redux
-import { Creators as ceoCreators } from "../../../../redux/store/ducks/ceo";
-import { Creators as FiberFusionActions } from "../../../../redux/store/ducks/fiberfusion";
+// Creators redux
 
 // Api
-import api from '../../../../services/api'
 
-//Ui
-import { Modal, Form, Button, Col } from "react-bootstrap/";
-import CloseIcon from "@material-ui/icons/Close";
-import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
+// Ui
+import { Modal, Button } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import api from '../../../../services/api';
+import { Creators as FiberFusionActions } from '../../../../redux/store/ducks/fiberfusion';
+import { Creators as ceoCreators } from '../../../../redux/store/ducks/ceo';
 
 function ModalFusao(props) {
-  const [cables, setCables] = useState([{ value: "", label: "" }]);
+  const [cables, setCables] = useState([{ value: '', label: '' }]);
   const [fibers, setFibers] = useState([]);
 
-  const [bandeja, setBandeja] = useState("");
-  const [cableTo, setCableTo] = useState("");
-  const [cableFrom, setCableFrom] = useState("");
-  const [fiberTo, setFiberTo] = useState("");
-  const [fiberFrom, setFiberFrom] = useState("");
-  const [obs, setObs] = useState("");
+  const [bandeja, setBandeja] = useState('');
+  const [cableTo, setCableTo] = useState('');
+  const [cableFrom, setCableFrom] = useState('');
+  const [fiberTo, setFiberTo] = useState('');
+  const [fiberFrom, setFiberFrom] = useState('');
+  const [obs, setObs] = useState('');
   const [fiberFusion, setFiberFusion] = useState({
     from: {
       cableId: null,
-      fiberId: null
+      fiberId: null,
     },
     to: {
       cableId: null,
-      fiberId: null
-    }
+      fiberId: null,
+    },
   });
 
   const { visible } = props.redux.ceo.viewNewFusao;
@@ -45,30 +45,23 @@ function ModalFusao(props) {
       setFiberFusion({
         from: {
           cableId: null,
-          fiberId: null
+          fiberId: null,
         },
         to: {
           cableId: null,
-          fiberId: null
-        }
+          fiberId: null,
+        },
       });
     }
   }, [visible]);
-  // useEffect(() => {
-  //   const { showCablesCeoRequest } = props;
-  //   const { data } = props.redux.ceo.viewCeo;
-  //   if (props.redux.ceo.viewNewFusao.visible) {
-  //     showCablesCeoRequest(data.id);
-  //   }
-  // }, [props, visible]);
 
   useEffect(() => {
     if (visible) {
       const { cables } = props.fiberfusion;
-      let allOptions = cables.map(({ cable }) => {
+      const allOptions = cables.map(({ cable }) => {
         return {
           value: cable.id,
-          label: `${cable.name} ${cable.fiberAmount} FO`
+          label: `${cable.name} ${cable.fiberAmount} FO`,
         };
       });
       console.log(allOptions);
@@ -77,43 +70,46 @@ function ModalFusao(props) {
   }, [props.fiberfusion, visible]);
 
   useEffect(() => {
-    if (typeof fiberFusion.from.cableId === "number") {
+    if (typeof fiberFusion.from.cableId === 'number') {
       // const { showFibersCableRequest } = props;
       // showFibersCableRequest(Number(fiberFusion.from.cableId));
-      api.get(`fibers/cable/${fiberFusion.to.cableId}`)
+      api
+        .get(`fibers/cable/${fiberFusion.to.cableId}`)
         .then(response => {
           const { data } = response;
           setFiberFusion({
             ...fiberFusion,
             to: {
               ...fiberFusion.to,
-              fibers: data
-            }
-          })
-        }).catch(err => {
-          ///
+              fibers: data,
+            },
+          });
         })
+        .catch(err => {
+          // /
+        });
     }
-
   }, [fiberFusion.from.cableId]);
 
   useEffect(() => {
     if (typeof fiberFusion.to.cableId === 'number') {
-      api.get(`fibers/cable/${fiberFusion.to.cableId}`)
+      api
+        .get(`fibers/cable/${fiberFusion.to.cableId}`)
         .then(response => {
           const { data } = response;
           setFiberFusion({
             ...fiberFusion,
             to: {
               ...fiberFusion.to,
-              fibers: data
-            }
-          })
-        }).catch(err => {
-          ///
+              fibers: data,
+            },
+          });
         })
+        .catch(err => {
+          // /
+        });
     }
-  }, [fiberFusion.to.cableId])
+  }, [fiberFusion.to.cableId]);
 
   const { hideNewViewModalFusao } = props;
 
@@ -124,186 +120,135 @@ function ModalFusao(props) {
       onHide={hideNewViewModalFusao}
       size="lg"
     >
-      <Modal.Header
+      <div
         style={{
-          justifyContent: "center",
-          fontSize: "30px",
-          backgroundColor: "#F7D358",
-          paddingTop: "15px",
-          paddinBottom: "15px"
+          justifyContent: 'center',
+          fontSize: '30px',
+          backgroundColor: '#F7D358',
+          paddingTop: '15px',
+          paddinBottom: '15px',
         }}
       >
-        <Modal.Title>Adicionar fusão</Modal.Title>
-      </Modal.Header>
+        <h1>Adicionar fusão</h1>
+      </div>
 
-      <Modal.Body>
-        <Form>
-          <Form.Row>
-            <Form.Group as={Col}>
-              <Form.Label>Bandeja</Form.Label>
-              <Form.Control
-                type="text"
-                value={bandeja}
-                onChange={e => setBandeja(e.target.value)}
-              />
-            </Form.Group>
-          </Form.Row>
+      <form>
+        <div>
+          <label>Bandeja</label>
+          <input
+            type="text"
+            value={bandeja}
+            onChange={e => setBandeja(e.target.value)}
+          />
+        </div>
 
-          <div
-            style={{ display: "flex", marginTop: "10px", marginBottom: "10px" }}
+        <div
+          style={{ display: 'flex', marginTop: '10px', marginBottom: '10px' }}
+        >
+          <label>Cabo</label>
+          <input
+            id="standard-select-currency"
+            select
+            label="Cabo"
+            name="asd"
+            // className={classes.textField}
+            // value={tipo}
+            value={fiberFusion.from.cableId || ''}
+            // defaultValue={select[0].value}
+            onChange={e =>
+              setFiberFusion({
+                ...fiberFusion,
+                from: {
+                  ...fiberFusion.from,
+                  cableId: e.target.value,
+                },
+              })
+            }
+            helperText="Selecione o cabo 1 da fusão"
+            margin="normal"
+            required
           >
-            <Form.Row
-              style={{
-                display: "block",
-                width: "50%",
-                marginRight: "15px",
-                padding: "15px"
-              }}
+            {cables.map(option => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </input>
+
+          <div>
+            <label>Fibra</label>
+            <input
+              as="select"
+              value={fiberTo}
+              onChange={e => setFiberTo(e.target.value)}
             >
-              <Form.Group as={Col}>
-                <Form.Label>Cabo</Form.Label>
-                <TextField
-                  id="standard-select-currency"
-                  select
-                  label="Cabo"
-                  name="asd"
-                  // className={classes.textField}
-                  // value={tipo}
-                  value={fiberFusion.from.cableId || ""}
-                  // defaultValue={select[0].value}
-                  onChange={e =>
-                    setFiberFusion({
-                      ...fiberFusion,
-                      from: {
-                        ...fiberFusion.from,
-                        cableId: e.target.value
-                      }
-                    })
-                  }
-                  SelectProps={
-                    {
-                      // MenuProps: {
-                      //   className: classes.menu
-                      // }
-                    }
-                  }
-                  helperText="Selecione o cabo 1 da fusão"
-                  margin="normal"
-                  required
-                >
-                  {cables.map(option => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                {/* <Form.Control
-                  as="select"
-                  value={cableTo}
-                  onChange={e => setCableTo(e.target.value)}
-                > */}
-                {/* {cables.map(cable => (
-                    <option>{cable}</option>
-                  ))} */}
-                {/* {props.fiberfusion.cables.map(cable => (
-                    <option>
-                      {cable.cable.name} {cable.cable.id}
-                    </option>
-                  ))} */}
-                {/* {
-                    () => console.log(props)
-                  } */}
-                {/* </Form.Control> */}
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Fibra</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={fiberTo}
-                  onChange={e => setFiberTo(e.target.value)}
-                >
-                  {/* {fibers.map(fiber => (
+              {/* {fibers.map(fiber => (
                     <option>{fiber}</option>
                   ))} */}
-                </Form.Control>
-              </Form.Group>
-            </Form.Row>
-
-            <div
-              style={{
-                justifyContent: "center",
-                display: "flex",
-                flexDirection: "column",
-                width: "50px"
-              }}
-            >
-              <Button variant="secondary">
-                <CloseIcon />
-              </Button>
-            </div>
-
-            <Form.Row
-              style={{
-                display: "block",
-                width: "50%",
-                marginLeft: "15px",
-                padding: "15px"
-              }}
-            >
-              <Form.Group as={Col}>
-                <Form.Label>Cabo</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={cableFrom}
-                  onChange={e => setCableFrom(e.target.value)}
-                >
-                  {/* {cables.map(cable => (
-                    <option>{cable}</option>
-                  ))} */}
-                </Form.Control>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Fibra</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={fiberFrom}
-                  onChange={e => setFiberFrom(e.target.value)}
-                >
-                  {/* {fibers.map(fiber => (
-                    <option>{fiber}</option>
-                  ))} */}
-                </Form.Control>
-              </Form.Group>
-            </Form.Row>
+            </input>
           </div>
 
           <div
             style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginTop: "10px",
-              marginBottom: "10px"
+              justifyContent: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              width: '50px',
             }}
           >
-            <Button variant="secondary" type="submit" style={{ width: "100%" }}>
-              Adicionar
+            <Button variant="secondary">
+              <CloseIcon />
             </Button>
           </div>
-        </Form>
-      </Modal.Body>
+
+          <div>
+            <label>Cabo</label>
+            <input
+              as="select"
+              value={cableFrom}
+              onChange={e => setCableFrom(e.target.value)}
+            >
+              {/* {cables.map(cable => (
+                    <option>{cable}</option>
+                  ))} */}
+            </input>
+          </div>
+
+          <label>Fibra</label>
+          <input
+            as="select"
+            value={fiberFrom}
+            onChange={e => setFiberFrom(e.target.value)}
+          >
+            {/* {fibers.map(fiber => (
+                    <option>{fiber}</option>
+                  ))} */}
+          </input>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            marginTop: '10px',
+            marginBottom: '10px',
+          }}
+        >
+          <Button variant="secondary" type="submit" style={{ width: '100%' }}>
+            Adicionar
+          </Button>
+        </div>
+      </form>
     </Modal>
   );
 }
 
 const mapStateToProps = state => ({
   redux: state,
-  fiberfusion: state.fiberfusion
+  fiberfusion: state.fiberfusion,
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...ceoCreators, ...FiberFusionActions }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ModalFusao);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalFusao);

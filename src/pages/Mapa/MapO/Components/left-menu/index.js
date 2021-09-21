@@ -1,20 +1,12 @@
 /* eslint-disable react/self-closing-comp */
-//React
+// React
 import React, { useState } from 'react';
 
 // Redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-//Creators
-import { Creators as MapCreators } from '../../../../../redux/store/ducks/map';
-import { Creators as CableActions } from '../../../../../redux/store/ducks/cabo';
-import { Creators as ImportsActions } from '../../../../../redux/store/ducks/imports';
-import { Creators as UserActions } from '~/redux/store/ducks/user';
-import AuthActions from '../../../../../redux/store/ducks/auth';
-import MembersActions from '../../../../../redux/store/ducks/members';
-
-//Componentes @material-ui / react-bootstrap
+// Creators
 import { makeStyles } from '@material-ui/core/styles';
 import SettingsIcon from '@material-ui/icons/Settings';
 import {
@@ -25,8 +17,16 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap/';
+import { Creators as MapCreators } from '../../../../../redux/store/ducks/map';
+import { Creators as CableActions } from '../../../../../redux/store/ducks/cabo';
+import { Creators as ImportsActions } from '../../../../../redux/store/ducks/imports';
+import { Creators as UserActions } from '~/redux/store/ducks/user';
+import AuthActions from '../../../../../redux/store/ducks/auth';
+import MembersActions from '../../../../../redux/store/ducks/members';
 
-//Componentes criados
+// Componentes @material-ui / react-bootstrap
+
+// Componentes criados
 import { Container } from './styles';
 import Can from '~/components/Can';
 
@@ -72,59 +72,6 @@ function LeftMenu(props) {
     <Container>
       <div className={classes.root}>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {/* Menssagens */}
-          {/* Next Realese
-            <ButtonGroup vertical>
-              
-              <Dropdown as={ButtonGroup}>
-                <Badge
-                  badgeContent={4}
-                  color="primary"
-                  style={{ width: "100%" }}
-                >
-                  <OverlayTrigger
-                    overlay={
-                      <Tooltip id="tooltip-disabled">Log de alterações</Tooltip>
-                    }
-                  >
-                    <Button variant="warning" style={{ width: "100%" }}>
-                      <i
-                        className="fa fa-exclamation-circle"
-                        style={{ color: "white" }}
-                      ></i>
-                    </Button>
-                  </OverlayTrigger>
-                </Badge>
-              </Dropdown>
-
-              
-
-              <Dropdown as={ButtonGroup} style={{ marginTop: "10px" }}>
-                <OverlayTrigger
-                  overlay={<Tooltip id="tooltip-disabled">Mensagens</Tooltip>}
-                >
-                  <Button variant="warning" className={classes.button}>
-                    <i
-                      className="fa fa-envelope"
-                      style={{ color: "white" }}
-                    ></i>
-                  </Button>
-                </OverlayTrigger>
-                <Dropdown.Toggle
-                  id="dropdown-split-basic"
-                  variant="warning"
-                  style={{ color: "white" }}
-                />
-
-                <Dropdown.Menu>
-                  <Dropdown.Item>Caixa de mensagens</Dropdown.Item>
-                  <Dropdown.Item>Enviar Mensagem</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </ButtonGroup>
-            */}
-
-          {/* Adicão/Listar */}
           <ButtonGroup vertical style={{ marginTop: '20px' }}>
             <Dropdown as={ButtonGroup}>
               <OverlayTrigger
@@ -164,15 +111,6 @@ function LeftMenu(props) {
                   >
                     Add Funcionario
                   </Dropdown.Item>
-
-                  {/* <Dropdown.Item
-                  onClick={() => {
-                    // Aqui selecionaremos o tipo de delimitação do clique no mapa
-                    setDelimitation('provider');
-                  }}
-                >
-                  Add provedor
-                </Dropdown.Item> */}
                 </Can>
 
                 <Dropdown.Item
@@ -199,7 +137,7 @@ function LeftMenu(props) {
               <Dropdown.Menu>
                 <Dropdown.Item
                   onClick={() => {
-                    //Abre o modal para adicionar um novo cliente
+                    // Abre o modal para adicionar um novo cliente
                     setDelimitation('client');
                   }}
                 >
@@ -318,15 +256,3 @@ const mapDispatchToProps = dispatch =>
   );
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeftMenu);
-
-/*
-<Dropdown.Item href="#">
-                      <Form.Check label="ctos" aria-label="option 1" />
-                    </Dropdown.Item>
-                    <Dropdown.Item href="#">
-                      <Form.Check label="clientes" />
-                    </Dropdown.Item>
-                    <Dropdown.Item href="#">
-                      <Form.Check label="ceo" />
-                    </Dropdown.Item>
-*/

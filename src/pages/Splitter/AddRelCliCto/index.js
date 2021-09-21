@@ -1,32 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-//API
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
-import { Creators as MapCreators } from "../../../redux/store/ducks/map";
-import { toastr } from "react-redux-toastr";
+// API
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toastr } from 'react-redux-toastr';
 
-import api from "../../../services/api";
-
-//Components
-import { Modal, Container, Button } from "react-bootstrap";
-import { OutView, IconOutSp } from "./styles";
-import "./styles.css";
-import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import CachedIcon from "@material-ui/icons/Cached";
-import AlarmIcon from "@material-ui/icons/Alarm";
+// Components
+import { Modal, Container, Button } from '@material-ui/core';
+import './styles.css';
+import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import CachedIcon from '@material-ui/icons/Cached';
+import AlarmIcon from '@material-ui/icons/Alarm';
+import { OutView, IconOutSp } from './styles';
+import api from '../../../services/api';
+import { Creators as MapCreators } from '../../../redux/store/ducks/map';
+import { Creators as DropCreators } from '../../../redux/store/ducks/drop';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: "100%",
+    width: '100%',
     maxWidth: 360,
-    backgroundColor: theme.palette.background.paper
-  }
+    backgroundColor: theme.palette.background.paper,
+  },
 }));
 
 function AddRelCliCto(props) {
@@ -42,7 +41,7 @@ function AddRelCliCto(props) {
 
   function handleHideModal() {
     const { hideDropAddModal, hideIcons } = props;
-    setDelimitation("default");
+    setDelimitation('default');
     hideIcons();
     hideDropAddModal();
   }
@@ -75,7 +74,7 @@ function AddRelCliCto(props) {
           // console.tron.log(saidasAndId.saidas);
           criarArrayDeAcordoComOBalanceamento(
             // saidasAndId.saidas,
-            saidasAndId, //.saidas,
+            saidasAndId, // .saidas,
             splitter.balancing,
             // splitter.balanceamento,
             splitter.id
@@ -96,30 +95,30 @@ function AddRelCliCto(props) {
     balanceamento,
     splitter_id
   ) {
-    let newArray = new Array(balanceamento);
+    const newArray = new Array(balanceamento);
     // console.tron.log(newArray);
     // preencher tudo com null
 
     for (let count = 0; count < balanceamento; count++) {
       if (saidas[count]) {
-        if (count + 1 === saidas[count].number /*numero*/) {
+        if (count + 1 === saidas[count].number /* numero */) {
           newArray[count] = {
             ...saidas[count],
             isActive: true,
-            splitter_id
+            splitter_id,
           };
         } else {
           // Teste para adicionar saída caso não seja um número a mais do que a posição no array
 
-          let posicaoDaSaidaNoArray = saidas[count].number /*numero*/ - 1;
+          const posicaoDaSaidaNoArray = saidas[count].number /* numero */ - 1;
 
           newArray[posicaoDaSaidaNoArray] = {
             ...saidas[count],
             isActive: true,
             selected: false,
-            obter: true
+            obter: true,
           };
-          //newArray[posicaoDaSaidaNoArray] = saidas[count];
+          // newArray[posicaoDaSaidaNoArray] = saidas[count];
 
           // newArray[posicaoDaSaidaNoArray].isActive = true;
           // newArray[posicaoDaSaidaNoArray].selected = false;
@@ -133,21 +132,19 @@ function AddRelCliCto(props) {
               number: count + 1,
               isActive: false,
               select: false,
-              splitter_id
+              splitter_id,
             };
           }
         }
-      } else {
-        if (!newArray[count]) {
-          newArray[count] = {
-            id: 0,
-            // numero: count + 1,
-            number: count + 1,
-            isActive: false,
-            selected: false,
-            splitter_id
-          };
-        }
+      } else if (!newArray[count]) {
+        newArray[count] = {
+          id: 0,
+          // numero: count + 1,
+          number: count + 1,
+          isActive: false,
+          selected: false,
+          splitter_id,
+        };
       }
     }
 
@@ -162,25 +159,23 @@ function AddRelCliCto(props) {
 
   function selectOutToAddCliente(number, isUsing) {
     if (isUsing) {
-      alert("Não é possível usar uma saída já em uso");
+      alert('Não é possível usar uma saída já em uso');
     } else {
       setSaidaSelecionada(number);
 
-      setParams(
-        params.map((select, index) => (number === index ? true : false))
-      );
-      alert("Splitter selecionado");
+      setParams(params.map((select, index) => number === index));
+      alert('Splitter selecionado');
     }
   }
 
   useEffect(() => {
     // obterSaidasDoSplitter();
     if (props.redux.drop.isVisible) obterSaidasDoSplitter();
-  }, [props.redux.drop.isVisible]); //obterSaidasDoSplitter,
+  }, [props.redux.drop.isVisible]); // obterSaidasDoSplitter,
 
   function salvarDrop() {
     // Procurando em um array de objetos
-    let findedSelected = saidaSelecionada.find(
+    const findedSelected = saidaSelecionada.find(
       saida => saida.selected === true
     );
     if (findedSelected) {
@@ -198,10 +193,10 @@ function AddRelCliCto(props) {
         );
       }
     } else {
-      toastr.warning("Inválido", "Por favor, selecione uma saída");
+      toastr.warning('Inválido', 'Por favor, selecione uma saída');
     }
 
-    setDelimitation("default");
+    setDelimitation('default');
   }
 
   const classes = useStyles();
@@ -225,68 +220,58 @@ function AddRelCliCto(props) {
   return (
     <Container>
       <Modal show={props.redux.drop.isVisible} onHide={handleHideModal}>
-        <Modal.Header style={{ justifyContent: "center" }}>
-          <Modal.Title style={{ color: "#FF8000" }}>
-            Mostrar as portas -
-            <CachedIcon
-              onClick={obterSaidasDoSplitter}
-              style={{ marginLeft: "5px", color: "#FF8000" }}
-              aria-label="add an alarm"
-            >
-              <AlarmIcon />
-            </CachedIcon>
-          </Modal.Title>
-        </Modal.Header>
+        Mostrar as portas -
+        <CachedIcon
+          onClick={obterSaidasDoSplitter}
+          style={{ marginLeft: '5px', color: '#FF8000' }}
+          aria-label="add an alarm"
+        >
+          <AlarmIcon />
+        </CachedIcon>
+        <List dense className={classes.root} style={{ maxWidth: '100%' }}>
+          {saidas.map((saida, index) => {
+            const labelId = `checkbox-list-secondary-label-${index}`;
+            return (
+              <ListItem key={index} button>
+                <ListItemText
+                  style={{ color: '#FF8000' }}
+                  id={labelId}
+                  primary={`Porta ${index + 1}`}
+                />
 
-        <Modal.Body>
-          <List dense className={classes.root} style={{ maxWidth: "100%" }}>
-            {saidas.map((saida, index) => {
-              const labelId = `checkbox-list-secondary-label-${index}`;
-              return (
-                <ListItem key={index} button>
-                  <ListItemText
-                    style={{ color: "#FF8000" }}
-                    id={labelId}
-                    primary={`Porta ${index + 1}`}
-                  />
+                <ListItemSecondaryAction>
+                  <OutView>
+                    <IconOutSp
+                      active={saida.isActive}
+                      onClick={() => {
+                        const newAr = saidas.map((output, indice) =>
+                          index === indice
+                            ? (output.selected = true)
+                            : (output.selected = false)
+                        );
 
-                  <ListItemSecondaryAction>
-                    <OutView>
-                      <IconOutSp
-                        active={saida.isActive}
-                        onClick={() => {
-                          let newAr = saidas.map((output, indice) =>
-                            index === indice
-                              ? (output.selected = true)
-                              : (output.selected = false)
-                          );
+                        const newArrayFull = saidas.map((output, indx) =>
+                          index === indx
+                            ? { ...output, selected: true }
+                            : { ...output, selected: false }
+                        );
 
-                          let newArrayFull = saidas.map((output, indx) =>
-                            index === indx
-                              ? { ...output, selected: true }
-                              : { ...output, selected: false }
-                          );
-
-                          setSaidaSelecionada(newArrayFull);
-                        }}
-                        selected={saida.selected}
-                      />
-                    </OutView>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              );
-            })}
-          </List>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleHideModal}>
-            Fechar
-          </Button>
-          <Button variant="secondary" onClick={salvarDrop}>
-            Salvar
-          </Button>
-        </Modal.Footer>
+                        setSaidaSelecionada(newArrayFull);
+                      }}
+                      selected={saida.selected}
+                    />
+                  </OutView>
+                </ListItemSecondaryAction>
+              </ListItem>
+            );
+          })}
+        </List>
+        <Button variant="danger" onClick={handleHideModal}>
+          Fechar
+        </Button>
+        <Button variant="secondary" onClick={salvarDrop}>
+          Salvar
+        </Button>
       </Modal>
     </Container>
   );
@@ -294,7 +279,7 @@ function AddRelCliCto(props) {
 
 const mapStateToProps = state => ({
   // drop: state.drop
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>
@@ -305,4 +290,4 @@ export default connect(mapStateToProps, mapDispatchToProps)(AddRelCliCto);
 /** Ações necessárias */
 // - Recuperar o id da Cto
 // - Listas o Splitter e as saídas dele
-//<span>{saida.numero}</span>
+// <span>{saida.numero}</span>

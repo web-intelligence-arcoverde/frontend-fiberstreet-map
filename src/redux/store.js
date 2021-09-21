@@ -1,17 +1,17 @@
-//Reducers & Redux
+// Reducers & Redux
 
-import { createStore, compose, applyMiddleware } from "redux";
+import { createStore, compose, applyMiddleware } from 'redux';
 
-//Combinação dos reducers
-import reducers from "./store/ducks";
+// Combinação dos reducers
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+import createSagaMiddleware from 'redux-saga';
+import reducers from './store/ducks';
 
-//Router
-import { connectRouter, routerMiddleware } from "connected-react-router";
-import history from "../routes/history";
+// Router
+import history from '../routes/history';
 
-//Sagas
-import sagas from "./store/sagas";
-import createSagaMiddleware from "redux-saga";
+// Sagas
+import sagas from './store/sagas';
 
 const middlewares = [];
 
@@ -21,7 +21,7 @@ middlewares.push(sagaMiddlewares);
 middlewares.push(routerMiddleware(history));
 
 const composer =
-  process.env.NODE_ENV === "development"
+  process.env.NODE_ENV === 'development'
     ? compose(applyMiddleware(...middlewares))
     : applyMiddleware(...middlewares);
 

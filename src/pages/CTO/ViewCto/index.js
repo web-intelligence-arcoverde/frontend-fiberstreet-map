@@ -1,31 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-//Redux
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+// Redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+// Componentes importados
+import { Modal, Accordion, Card } from '@material-ui/core';
+// API
+import api from '../../../services/api';
 
-//API
-import api from "../../../services/api";
+// Creators do redux
+import { Creators as ctosActions } from '../../../redux/store/ducks/ctos';
+import { Creators as SplitterActions } from '../../../redux/store/ducks/splitter';
 
-//Creators do redux
-import { Creators as ctosActions } from "../../../redux/store/ducks/ctos";
-import { Creators as SplitterActions } from "../../../redux/store/ducks/splitter";
+// Componentes "criados"
+import CtoInformation from './Components/CtoInformation';
+import TableClients from './Components/TableUsers';
+import TableSplitter from './Components/TableSplitter';
+import TableCable from './Components/TableCable';
 
-//Componentes "criados"
-import CtoInformation from "./Components/CtoInformation";
-import TableClients from "./Components/TableUsers";
-import TableSplitter from "./Components/TableSplitter";
-import TableCable from "./Components/TableCable";
-
-//Componentes importados
-import { Modal, Accordion, Card, ListGroup, Button } from "react-bootstrap";
-
-//Tamanho das box
+// Tamanho das box
 function ViewCto(props) {
   const { ctos } = props.redux;
   const { hideViewModalCto } = props;
 
-  const { viewCto } = ctos; //Recuperando o estado inicial da CTO
+  const { viewCto } = ctos; // Recuperando o estado inicial da CTO
   const { data } = viewCto;
 
   function modalSplitter() {
@@ -38,106 +36,106 @@ function ViewCto(props) {
       <Card>
         <Card.Header
           style={{
-            fontSize: "40px",
-            backgroundColor: "#F7D358",
-            textAlign: "center"
+            fontSize: '40px',
+            backgroundColor: '#F7D358',
+            textAlign: 'center',
           }}
         >
           Caixa Terminal Optica
         </Card.Header>
-        <ListGroup variant="flush">
-          <ListGroup.Item>
+        <div variant="flush">
+          <div>
             <Accordion>
               <Card>
-                <Accordion.Toggle
+                <div
                   as={Card.Header}
                   eventKey="0"
-                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                  style={{ backgroundColor: '#6c757d', color: '#FFF' }}
                 >
                   <h5>Informações do terminal optico</h5>
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="0">
-                  <Card.Body
+                </div>
+                <div>
+                  <Card
                     style={{
-                      paddingTop: "10px",
-                      paddingLeft: "5px",
-                      paddingBottom: "0px"
+                      paddingTop: '10px',
+                      paddingLeft: '5px',
+                      paddingBottom: '0px',
                     }}
                   >
                     <CtoInformation />
-                  </Card.Body>
-                </Accordion.Collapse>
+                  </Card>
+                </div>
               </Card>
               <Card>
-                <Accordion.Toggle
+                <div
                   as={Card.Header}
                   eventKey="1"
-                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                  style={{ backgroundColor: '#6c757d', color: '#FFF' }}
                 >
                   <h5>Clientes no terminal</h5>
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body
+                </div>
+                <div>
+                  <Card
                     style={{
-                      paddingTop: "10px",
-                      paddingLeft: "5px",
-                      paddingBottom: "0px"
+                      paddingTop: '10px',
+                      paddingLeft: '5px',
+                      paddingBottom: '0px',
                     }}
                   >
                     <TableClients />
-                  </Card.Body>
-                </Accordion.Collapse>
+                  </Card>
+                </div>
               </Card>
               <Card>
-                <Accordion.Toggle
+                <div
                   as={Card.Header}
                   eventKey="2"
-                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                  style={{ backgroundColor: '#6c757d', color: '#FFF' }}
                 >
                   <h5>Splitters</h5>
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="2">
+                </div>
+                <div>
                   <Card.Body
                     style={{
-                      paddingTop: "10px",
-                      paddingLeft: "5px",
-                      paddingBottom: "0px"
+                      paddingTop: '10px',
+                      paddingLeft: '5px',
+                      paddingBottom: '0px',
                     }}
                   >
                     <TableSplitter />
                   </Card.Body>
-                </Accordion.Collapse>
+                </div>
               </Card>
               <Card>
-                <Accordion.Toggle
+                <div
                   as={Card.Header}
                   eventKey="3"
-                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                  style={{ backgroundColor: '#6c757d', color: '#FFF' }}
                 >
                   <h5>Cabos</h5>
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="3">
-                  <Card.Body
+                </div>
+                <div>
+                  <div
                     style={{
-                      paddingTop: "10px",
-                      paddingLeft: "5px",
-                      paddingBottom: "0px"
+                      paddingTop: '10px',
+                      paddingLeft: '5px',
+                      paddingBottom: '0px',
                     }}
                   >
                     <TableCable />
-                  </Card.Body>
-                </Accordion.Collapse>
+                  </div>
+                </div>
               </Card>
             </Accordion>
-          </ListGroup.Item>
-        </ListGroup>
+          </div>
+        </div>
       </Card>
     </Modal>
   );
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>

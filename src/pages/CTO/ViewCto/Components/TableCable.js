@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-//API
-import api from "../../../../services/api";
+// API
+import { Button, Container, Table } from '@material-ui/core';
+import Delete from '@material-ui/icons/HighlightOff';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toastr } from 'react-redux-toastr';
+import api from '../../../../services/api';
 
-import { Creators as ctosActions } from "../../../../redux/store/ducks/ctos";
-import { Creators as MapActions } from "../../../../redux/store/ducks/map";
-import { Creators as CaboActions } from "../../../../redux/store/ducks/cabo";
-import { Creators as CoordinatesCreators } from "../../../../redux/store/ducks/coordinates";
+import { Creators as ctosActions } from '../../../../redux/store/ducks/ctos';
+import { Creators as MapActions } from '../../../../redux/store/ducks/map';
+import { Creators as CaboActions } from '../../../../redux/store/ducks/cabo';
+import { Creators as CoordinatesCreators } from '../../../../redux/store/ducks/coordinates';
 
-//Redux
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { toastr } from "react-redux-toastr";
+// Redux
 
-//UI-Components
-import { Button, Container, Table } from "react-bootstrap";
-import Delete from "@material-ui/icons/HighlightOff";
+// UI-Components
 
-//function
-import { positionObject } from "../../../Functions/get-position-object/index";
+// function
+import { positionObject } from '../../../Functions/get-position-object/index';
 
 function ViewCable(props) {
   const { hideViewModalCto } = props;
@@ -34,25 +34,25 @@ function ViewCable(props) {
       addCoordCabo,
       setSubDelemitation,
       setIdFrom,
-      setTypeAndId
+      setTypeAndId,
     } = props;
     showIcons();
     addCoordCabo(positionObject(data));
-    setDelimitation("cabo");
-    setSubDelemitation("cto");
+    setDelimitation('cabo');
+    setSubDelemitation('cto');
     setIdFrom(data.id);
-    setTypeAndId("CTO", data.id);
+    setTypeAndId('CTO', data.id);
     hideViewModalCto();
   }
 
   function deleteCableRelationship(index) {
     const response = window.prompt(
-      "Deseja mesmo deletar? Digite SIM para deletar"
+      'Deseja mesmo deletar? Digite SIM para deletar'
     );
     const { deleteCableRelationshipRequest } = props;
 
-    if (response === "SIM") {
-      deleteCableRelationshipRequest(index, data.id, "CTO");
+    if (response === 'SIM') {
+      deleteCableRelationshipRequest(index, data.id, 'CTO');
       hideViewModalCto();
     }
   }
@@ -87,20 +87,20 @@ function ViewCable(props) {
                 <Button
                   variant="link"
                   style={{
-                    borderTopWidth: "0px",
-                    paddingTop: "0px",
-                    borderLeftWidth: "0px",
-                    paddingLeft: "0px",
-                    paddingBottom: "0px",
-                    paddingRight: "0px",
-                    borderRightWidth: "0px",
-                    borderBottomWidth: "0px",
-                    marginLeft: "5px",
-                    marginRight: "5px"
+                    borderTopWidth: '0px',
+                    paddingTop: '0px',
+                    borderLeftWidth: '0px',
+                    paddingLeft: '0px',
+                    paddingBottom: '0px',
+                    paddingRight: '0px',
+                    borderRightWidth: '0px',
+                    borderBottomWidth: '0px',
+                    marginLeft: '5px',
+                    marginRight: '5px',
                   }}
                 >
                   <Delete
-                    style={{ color: "#6c757d" }}
+                    style={{ color: '#6c757d' }}
                     onClick={() => deleteCableRelationship(relationship.id)}
                   />
                 </Button>
@@ -111,10 +111,10 @@ function ViewCable(props) {
       </Table>
       <div
         style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginTop: "10px",
-          marginBottom: "10px"
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginTop: '10px',
+          marginBottom: '10px',
         }}
       >
         <Button variant="secondary" onClick={addCable}>
@@ -126,7 +126,7 @@ function ViewCable(props) {
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>

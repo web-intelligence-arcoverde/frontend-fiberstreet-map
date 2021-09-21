@@ -1,16 +1,15 @@
-import React from "react";
+import React from 'react';
 
 // Redux
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-//Creators
-import { Creators as MapCreators } from "../../../../../redux/store/ducks/map";
-import { Creators as CablesCreators } from "../../../../../redux/store/ducks/cabo";
+// Creators
+import { Button } from '@material-ui/core';
+import { Creators as MapCreators } from '../../../../../redux/store/ducks/map';
+import { Creators as CablesCreators } from '../../../../../redux/store/ducks/cabo';
 
-import { ButtonGroup, Button } from "react-bootstrap/";
-
-import { Container, Bottom } from "./styles";
+import { Container, Bottom } from './styles';
 
 function IconsDrawn(props) {
   const {
@@ -18,7 +17,7 @@ function IconsDrawn(props) {
     setDelimitation,
     addCoordCabo,
     showNewCable,
-    setDrawType
+    setDrawType,
   } = props;
   const { polyline } = props.redux.map;
   const { map } = props;
@@ -31,26 +30,26 @@ function IconsDrawn(props) {
   }
 
   function reset() {
-    var polyline = [];
+    const polyline = [];
     addCoordCabo(polyline);
     updateDrawn(map, polyline);
-    setDrawType("NONE");
+    setDrawType('NONE');
   }
 
   function save() {
     const { cable, drawType } = props.redux.cabo;
-    if (drawType === "NONE" || drawType === null || drawType === undefined) {
+    if (drawType === 'NONE' || drawType === null || drawType === undefined) {
       showNewCable();
     } else {
       let coordinates = polyline.map(line => {
         return {
           longitude: line[0],
-          latitude: line[1]
+          latitude: line[1],
         };
       });
       // Verify if is draw or redraw
       // If is redraw, [...oldCoords, ...newCoords]
-      if (drawType === "DRAW") {
+      if (drawType === 'DRAW') {
         let { coordinates: oldCoords } = cable;
         oldCoords = JSON.parse(oldCoords);
         coordinates = oldCoords.concat(coordinates);
@@ -64,52 +63,50 @@ function IconsDrawn(props) {
   }
 
   function updateDrawn(map, polyline) {
-    map.getSource("linhas").setData({
-      type: "Feature",
+    map.getSource('linhas').setData({
+      type: 'Feature',
       properties: {},
       geometry: {
-        type: "LineString",
-        coordinates: polyline
-      }
+        type: 'LineString',
+        coordinates: polyline,
+      },
     });
   }
   return (
     <Container>
       <Bottom>
-        <ButtonGroup aria-label="Basic example">
-          <Button
-            variant="warning"
-            size="lg"
-            onClick={() => {
-              setDelimitation("default");
-              hideIcons();
-              save();
-            }}
-          >
-            <i className="fa fa-save" style={{ color: "white" }}></i>
-          </Button>
-          <Button variant="warning" size="lg" onClick={remove}>
-            <i className="fa fa-undo" style={{ color: "white" }}></i>
-          </Button>
-          <Button
-            variant="warning"
-            size="lg"
-            onClick={() => {
-              setDelimitation("default");
-              reset();
-              hideIcons();
-            }}
-          >
-            <i className="fa fa-trash" style={{ color: "white" }}></i>
-          </Button>
-        </ButtonGroup>
+        <Button
+          variant="warning"
+          size="lg"
+          onClick={() => {
+            setDelimitation('default');
+            hideIcons();
+            save();
+          }}
+        >
+          <i className="fa fa-save" style={{ color: 'white' }} />
+        </Button>
+        <Button variant="warning" size="lg" onClick={remove}>
+          <i className="fa fa-undo" style={{ color: 'white' }} />
+        </Button>
+        <Button
+          variant="warning"
+          size="lg"
+          onClick={() => {
+            setDelimitation('default');
+            reset();
+            hideIcons();
+          }}
+        >
+          <i className="fa fa-trash" style={{ color: 'white' }} />
+        </Button>
       </Bottom>
     </Container>
   );
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>

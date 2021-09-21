@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button } from '@material-ui/core';
 import { toastr } from 'react-redux-toastr';
 import { Creators as CablesCreators } from '../../../redux/store/ducks/cabo';
 import { Creators as MapCreators } from '../../../redux/store/ducks/map';
@@ -100,7 +100,7 @@ function ViewCable(props) {
 
   return (
     <Modal show={visible} onHide={hideView} size="lg">
-      <Modal.Header
+      <div
         style={{
           justifyContent: 'center',
           display: 'flex',
@@ -109,49 +109,48 @@ function ViewCable(props) {
           backgroundColor: '#F7D358',
         }}
       >
-        <Modal.Title>Informações do cabo</Modal.Title>
-      </Modal.Header>
-      <Form>
-        <Modal.Body>
-          <Form.Group>
-            <Form.Label>Nome do cabo:</Form.Label>
-            <Form.Control
-              required
-              value={nome}
-              onChange={e => setNome(e.target.value)}
-              type="text"
-            />
-          </Form.Group>
+        <h1>Informações do cabo</h1>
+      </div>
+      <form>
+        <div>
+          <label>Nome do cabo:</label>
+          <input
+            required
+            value={nome}
+            onChange={e => setNome(e.target.value)}
+            type="text"
+          />
+        </div>
 
-          <Form.Group>
-            <Form.Label>Modelo do cabo:</Form.Label>
-            <Form.Control
-              required
-              value={modelo}
-              onChange={e => setModelo(e.target.value)}
-              type="text"
-            />
-          </Form.Group>
+        <div>
+          <label>Modelo do cabo:</label>
+          <input
+            required
+            value={modelo}
+            onChange={e => setModelo(e.target.value)}
+            type="text"
+          />
+        </div>
 
-          <Form.Group>
-            <Form.Label>Quantidade de fibras:</Form.Label>
-            <Form.Control
-              required
-              value={fibra}
-              onChange={e => setFibra(e.target.value)}
-              type="number"
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Observação:</Form.Label>
-            <Form.Control
-              required
-              value={obs}
-              onChange={e => setObs(e.target.value)}
-              type="area"
-            />
-          </Form.Group>
-        </Modal.Body>
+        <div>
+          <label>Quantidade de fibras:</label>
+          <input
+            required
+            value={fibra}
+            onChange={e => setFibra(e.target.value)}
+            type="number"
+          />
+        </div>
+        <div>
+          <label>Observação:</label>
+          <input
+            required
+            value={obs}
+            onChange={e => setObs(e.target.value)}
+            type="area"
+          />
+        </div>
+
         <Container>
           <Button
             variant="info"
@@ -190,7 +189,7 @@ function ViewCable(props) {
             Sair
           </Button>
         </Container>
-      </Form>
+      </form>
     </Modal>
   );
 }

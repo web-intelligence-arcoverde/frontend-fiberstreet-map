@@ -1,26 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import { bindActionCreators } from "redux";
-import { connect, useDispatch } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { connect, useDispatch } from 'react-redux';
 
-import api from "../../../../services/api";
+import { wrap } from 'module';
+import { Button } from '@material-ui/core';
+import { toastr } from 'react-redux-toastr';
+import api from '../../../../services/api';
 
-//Creators
-import { Creators as SplitterActions } from "../../../../redux/store/ducks/splitter";
-import { Creators as CtoActions } from "../../../../redux/store/ducks/ctos";
+// Creators
+import { Creators as SplitterActions } from '../../../../redux/store/ducks/splitter';
+import { Creators as CtoActions } from '../../../../redux/store/ducks/ctos';
 
-import { Container } from "@material-ui/core";
-import Cable from "@material-ui/icons/SettingsInputHdmi";
-import { wrap } from "module";
+// UI-Components
 
-//UI-Components
-import { Form, Button, Col } from "react-bootstrap";
-
-//Components
-import AddSplitter from "../../../Splitter/AddSplitter/index";
-import ViewSplitter from "../../../Splitter/View/index";
-
-import { toastr } from "react-redux-toastr";
+// Components
+import AddSplitter from '../../../Splitter/AddSplitter/index';
+import ViewSplitter from '../../../Splitter/View/index';
 
 function TableSplitter(props) {
   const dispatch = useDispatch();
@@ -31,29 +27,29 @@ function TableSplitter(props) {
 
   const [splitters, setSplitters] = useState([]);
 
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
-  const [model, setModel] = useState("");
-  const [balancing, setBalancing] = useState("");
-  const [fib, setFib] = useState("");
+  const [id, setId] = useState('');
+  const [name, setName] = useState('');
+  const [model, setModel] = useState('');
+  const [balancing, setBalancing] = useState('');
+  const [fib, setFib] = useState('');
 
-  var cores = [
-    "#58D3F7",
-    "#6E6E6E",
-    "#FF00BF",
-    "#0101DF",
-    "#04B4AE",
-    "#F7FE2E",
-    "#000000",
-    "#01A9DB",
-    "#FF0000",
-    "#01DF74",
-    "#F781F3",
-    "#A9A9F5",
-    "#0B4C5F",
-    "#D8D8D8",
-    "#A901DB",
-    "#81F7BE"
+  const cores = [
+    '#58D3F7',
+    '#6E6E6E',
+    '#FF00BF',
+    '#0101DF',
+    '#04B4AE',
+    '#F7FE2E',
+    '#000000',
+    '#01A9DB',
+    '#FF0000',
+    '#01DF74',
+    '#F781F3',
+    '#A9A9F5',
+    '#0B4C5F',
+    '#D8D8D8',
+    '#A901DB',
+    '#81F7BE',
   ];
 
   useEffect(() => {
@@ -91,10 +87,10 @@ function TableSplitter(props) {
 
     const toastrConfirmOptions = {
       onOk: () => del(),
-      onCancel: () => console.log("CANCEL: clicked")
+      onCancel: () => console.log('CANCEL: clicked'),
     };
 
-    toastr.confirm("Are you sure about that!", toastrConfirmOptions);
+    toastr.confirm('Are you sure about that!', toastrConfirmOptions);
   }
 
   function modalSplitter() {
@@ -114,10 +110,10 @@ function TableSplitter(props) {
   function updateSplitter() {
     const { updateSplitterRequest } = props;
 
-    var splitter = {
-      name: name,
+    const splitter = {
+      name,
       model,
-      balancing: balancing
+      balancing,
     };
 
     updateSplitterRequest(splitter);
@@ -125,49 +121,49 @@ function TableSplitter(props) {
   }
 
   return (
-    <Container>
+    <div>
       <ViewSplitter />
       <AddSplitter />
-      <Form onSubmit={updateSplitter}>
-        <Form.Row>
-          <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Label>Nome:</Form.Label>
-            <Form.Control
+      <form onSubmit={updateSplitter}>
+        <div>
+          <div>
+            <label>Nome:</label>
+            <input
               required
               minLength="5"
               value={name}
               type="text"
               onChange={e => setName(e.target.value)}
             />
-          </Form.Group>
-          <Form.Group as={Col} controlId="formGridPassword">
-            <Form.Label>Modelo:</Form.Label>
-            <Form.Control
+          </div>
+          <div>
+            <label>Modelo:</label>
+            <input
               required
               minLength="5"
               type="text"
               value={model}
               onChange={e => setModel(e.target.value)}
             />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Balanceamento:</Form.Label>
-            <Form.Control
+          </div>
+          <div>
+            <label>Balanceamento:</label>
+            <input
               required
               type="number"
               value={balancing}
               onChange={e => setBalancing(e.target.value)}
             />
-          </Form.Group>
-        </Form.Row>
-        <Container
+          </div>
+        </div>
+        <div
           style={{
-            border: "1px solid #6c757d",
-            display: "flex",
+            border: '1px solid #6c757d',
+            display: 'flex',
             flexWrap: wrap,
-            paddingLeft: "0px",
-            paddingRight: "0px",
-            marginBottom: "10px"
+            paddingLeft: '0px',
+            paddingRight: '0px',
+            marginBottom: '10px',
           }}
         >
           <div>
@@ -179,14 +175,17 @@ function TableSplitter(props) {
                       variant="secondary"
                       style={{
                         flex: 1,
-                        marginLeft: "10px",
-                        marginRight: "10px",
-                        marginTop: "10px",
-                        marginBottom: "10px",
-                        backgroundColor: cores[index]
+                        marginLeft: '10px',
+                        marginRight: '10px',
+                        marginTop: '10px',
+                        marginBottom: '10px',
+                        backgroundColor: cores[index],
                       }}
                     >
-                      <Cable />
+                      <i
+                        className="fa fa-user-circle"
+                        style={{ color: 'white' }}
+                      />
                     </Button>
                   )
                 : balancing == 16 &&
@@ -196,25 +195,28 @@ function TableSplitter(props) {
                       variant="secondary"
                       style={{
                         flex: 1,
-                        marginLeft: "10px",
-                        marginRight: "10px",
-                        marginTop: "10px",
-                        marginBottom: "10px",
-                        backgroundColor: cores[index]
+                        marginLeft: '10px',
+                        marginRight: '10px',
+                        marginTop: '10px',
+                        marginBottom: '10px',
+                        backgroundColor: cores[index],
                       }}
                     >
-                      <Cable />
+                      <i
+                        className="fa fa-user-circle"
+                        style={{ color: 'white' }}
+                      />
                     </Button>
                   )
             )}
           </div>
-        </Container>
+        </div>
         <div
           style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "10px",
-            marginBottom: "10px"
+            display: 'flex',
+            justifyContent: 'flex-end',
+            marginTop: '10px',
+            marginBottom: '10px',
           }}
         >
           {splitters.length === 0 ? (
@@ -231,27 +233,27 @@ function TableSplitter(props) {
               <Button
                 variant="danger"
                 onClick={deleteSplitter}
-                style={{ marginLeft: "10px" }}
+                style={{ marginLeft: '10px' }}
               >
                 Excluir
               </Button>
             </>
           )}
         </div>
-      </Form>
-    </Container>
+      </form>
+    </div>
   );
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       ...SplitterActions,
-      ...CtoActions
+      ...CtoActions,
     },
     dispatch
   );

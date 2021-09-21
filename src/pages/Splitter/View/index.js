@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { Modal, Form, Button } from "react-bootstrap/";
+import React, { useState } from 'react';
+import { Modal, Button } from '@material-ui/core';
 
-//Conectores
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+// Conectores
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-//Creators
-import { Creators as splitterCreators } from "../../../redux/store/ducks/splitter";
-import { Creators as ctosActions } from "../../../redux/store/ducks/ctos";
+// Creators
+import { Creators as splitterCreators } from '../../../redux/store/ducks/splitter';
+import { Creators as ctosActions } from '../../../redux/store/ducks/ctos';
 
 function Splitter(props) {
-  const [name, setName] = useState("");
-  const [model, setModel] = useState("");
-  const [balancing, setBalancing] = useState("");
+  const [name, setName] = useState('');
+  const [model, setModel] = useState('');
+  const [balancing, setBalancing] = useState('');
 
   const { modalEdition } = props.redux.splitter;
 
@@ -21,64 +21,47 @@ function Splitter(props) {
     hideSpEditionModal();
   }
 
-  function handleSubmit (e) {
-    
-  }
+  function handleSubmit(e) {}
   return (
     <Modal show={modalEdition.visible} size="lg">
-      <Modal.Header
-        style={{
-          justifyContent: "center",
-          backgroundColor: "#ffc107",
-          color: "#6c757d"
-        }}
-      >
-        <Modal.Title>Informações</Modal.Title>
-      </Modal.Header>
-      <Form onSubmit={handleSubmit}>
-        <Modal.Body>
-          <Form.Group>
-            <Form.Label>Nome Splitter:</Form.Label>
-            <Form.Control
-              required
-              type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Modelo:</Form.Label>
-            <Form.Control
-              required
-              type="text"
-              value={model}
-              onChange={e => setModel(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Balanceamento:</Form.Label>
-            <Form.Control
-              required
-              type="number"
-              placeholder="Quantidade de saidas do splitter"
-              value={balancing}
-              onChange={e => setBalancing(e.target.value)}
-            />
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger">Fechar</Button>
-          <Button variant="secondary" type="submit ">
-            Atualizar
-          </Button>
-        </Modal.Footer>
-      </Form>
+      Informações
+      <form onSubmit={handleSubmit}>
+        <label>Nome Splitter:</label>
+        <input
+          required
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value)}
+        />
+
+        <label>Modelo:</label>
+        <input
+          required
+          type="text"
+          value={model}
+          onChange={e => setModel(e.target.value)}
+        />
+
+        <label>Balanceamento:</label>
+        <input
+          required
+          type="number"
+          placeholder="Quantidade de saidas do splitter"
+          value={balancing}
+          onChange={e => setBalancing(e.target.value)}
+        />
+
+        <Button variant="danger">Fechar</Button>
+        <Button variant="secondary" type="submit ">
+          Atualizar
+        </Button>
+      </form>
     </Modal>
   );
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>

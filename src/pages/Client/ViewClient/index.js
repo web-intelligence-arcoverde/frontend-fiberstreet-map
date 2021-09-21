@@ -2,15 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 // UI-Components
-import {
-  Modal,
-  Card,
-  ListGroup,
-  Button,
-  Row,
-  Col,
-  Form,
-} from 'react-bootstrap';
+import { Modal, Card, Button } from '@material-ui/core';
 import Account from '@material-ui/icons/AccountCircle';
 
 // Reecriação de componentes
@@ -23,7 +15,7 @@ import { InputField } from './Components/InputFieldComponent';
 // Redux
 
 // Functions
-import { cpfMask } from '../../util/format';
+import { cpfMask } from '../../../util/format';
 import { positionObject } from '../../Functions/get-position-object/index';
 
 // Creators
@@ -72,8 +64,6 @@ function ViewClient(props) {
         })
         .catch(err => {});
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewClient.visible]);
 
   function firstLoad() {
@@ -189,7 +179,7 @@ function ViewClient(props) {
   return (
     <>
       <Modal size="lg" show={viewClient.visible} onHide={handleHideModal}>
-        <Modal.Header
+        <div
           style={{
             justifyContent: 'center',
             display: 'flex',
@@ -207,100 +197,96 @@ function ViewClient(props) {
               marginBottom: '10px',
             }}
           />
-          <Modal.Title style={{ color: '#585858' }}>{data.name}</Modal.Title>
-        </Modal.Header>
+          <h1 style={{ color: '#585858' }}>{data.name}</h1>
+        </div>
         <form onSubmit={handleSubmit}>
-          <Modal.Body style={{ backgroundColor: '#FFFFFF' }}>
-            <Card style={{ width: '100%' }}>
-              <Card.Header
-                style={{ backgroundColor: '#D8D8D8', textAlign: 'center' }}
-              >
-                Informações do cliente
-              </Card.Header>
-              <ListGroup variant="flush">
-                <ListGroup.Item>
-                  <Field
-                    required
-                    maxLength="18"
-                    minLength="14"
-                    component={InputField}
-                    name="CPF:"
-                    type="text"
-                    value={cpf}
-                    onChange={changeCpf}
-                  />
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Field
-                    required
-                    minLength="5"
-                    maxLength="100"
-                    component={InputField}
-                    name="Nome:"
-                    type="text"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                  />
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Field
-                    required
-                    component={InputField}
-                    name="Plano:"
-                    type="text"
-                    value={speed}
-                    onChange={e => setSpeed(e.target.value)}
-                  />
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Field
-                    required
-                    minLength="5"
-                    maxLength="100"
-                    component={InputField}
-                    name="PPPOE:"
-                    type="text"
-                    value={pppoe}
-                    onChange={e => setPppoe(e.target.value)}
-                  />
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Field
-                    required
-                    minLength="5"
-                    maxLength="100"
-                    component={InputField}
-                    name="Endereço:"
-                    type="text"
-                    value={address}
-                    onChange={e => setAddress(e.target.value)}
-                  />
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Field
-                    component={InputField}
-                    name="Data de instalação:"
-                    type="date"
-                    value={installation}
-                    onChange={e => setInstallation(e.target.value)}
-                  />
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Field
-                    component={InputField}
-                    name="Observação:"
-                    type="textarea"
-                    required
-                    as="textarea"
-                    rows="3"
-                    maxLength="300"
-                    value={obs}
-                    onChange={e => setObs(e.target.value)}
-                  />
-                </ListGroup.Item>
-              </ListGroup>
-            </Card>
-          </Modal.Body>
+          <Card style={{ width: '100%' }}>
+            <div style={{ backgroundColor: '#D8D8D8', textAlign: 'center' }}>
+              Informações do cliente
+            </div>
+            <div>
+              <div>
+                <input
+                  required
+                  maxLength="18"
+                  minLength="14"
+                  component={InputField}
+                  name="CPF:"
+                  type="text"
+                  value={cpf}
+                  onChange={changeCpf}
+                />
+              </div>
+              <div>
+                <input
+                  required
+                  minLength="5"
+                  maxLength="100"
+                  component={InputField}
+                  name="Nome:"
+                  type="text"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                />
+              </div>
+              <div>
+                <input
+                  required
+                  component={InputField}
+                  name="Plano:"
+                  type="text"
+                  value={speed}
+                  onChange={e => setSpeed(e.target.value)}
+                />
+              </div>
+              <div>
+                <input
+                  required
+                  minLength="5"
+                  maxLength="100"
+                  component={InputField}
+                  name="PPPOE:"
+                  type="text"
+                  value={pppoe}
+                  onChange={e => setPppoe(e.target.value)}
+                />
+              </div>
+              <div>
+                <input
+                  required
+                  minLength="5"
+                  maxLength="100"
+                  component={InputField}
+                  name="Endereço:"
+                  type="text"
+                  value={address}
+                  onChange={e => setAddress(e.target.value)}
+                />
+              </div>
+              <div>
+                <input
+                  component={InputField}
+                  name="Data de instalação:"
+                  type="date"
+                  value={installation}
+                  onChange={e => setInstallation(e.target.value)}
+                />
+              </div>
+              <div>
+                <input
+                  component={InputField}
+                  name="Observação:"
+                  type="textarea"
+                  required
+                  as="textarea"
+                  rows="3"
+                  maxLength="300"
+                  value={obs}
+                  onChange={e => setObs(e.target.value)}
+                />
+              </div>
+            </div>
+          </Card>
 
           <Container>
             <Button variant="info" onClick={move} className="item">

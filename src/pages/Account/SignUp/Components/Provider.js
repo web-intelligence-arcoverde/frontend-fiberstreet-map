@@ -1,45 +1,45 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import { Form, Button } from "react-bootstrap/";
-import Typography from "@material-ui/core/Typography";
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import { Button } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import AuthActions from "../../../../redux/store/ducks/auth";
+import AuthActions from '../../../../redux/store/ducks/auth';
 
 const useStyles = makeStyles(theme => ({
-  "@global": {
+  '@global': {
     body: {
-      backgroundColor: theme.palette.common.white
-    }
+      backgroundColor: theme.palette.common.white,
+    },
   },
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3)
-  }
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
 }));
 
 function Provider(props) {
   const classes = useStyles();
 
-  const [nameProvider, setNameProvider] = useState("");
-  const [cpf, setCpf] = useState("");
-  const [address, setAddress] = useState("");
-  const [key, setKey] = useState("");
+  const [nameProvider, setNameProvider] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [address, setAddress] = useState('');
+  const [key, setKey] = useState('');
 
   function createUser(event) {
     event.preventDefault();
-    console.log("Desgraça");
+    console.log('Desgraça');
   }
 
   function createProvider(event) {
@@ -50,7 +50,7 @@ function Provider(props) {
       name: nameProvider,
       cpf,
       address,
-      secret: key
+      secret: key,
     };
 
     const { signUpWithProviderRequest } = props;
@@ -65,7 +65,7 @@ function Provider(props) {
           <Typography
             component="h1"
             variant="h5"
-            style={{ textAlign: "center" }}
+            style={{ textAlign: 'center' }}
           >
             Cadastrar
           </Typography>
@@ -117,7 +117,7 @@ function Provider(props) {
             type="text"
             onChange={e => setKey(e.target.value)}
           />
-          <Button variant="secondary" style={{ width: "100%" }} type="submit">
+          <Button variant="secondary" style={{ width: '100%' }} type="submit">
             Concluir
           </Button>
         </form>
@@ -127,13 +127,10 @@ function Provider(props) {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(AuthActions, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Provider);
+export default connect(mapStateToProps, mapDispatchToProps)(Provider);

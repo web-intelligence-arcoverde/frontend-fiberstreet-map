@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-//Creators
+// Creators
 import { Creators as MapCreators } from '../../../redux/store/ducks/map';
 
 /* mapBox */
@@ -17,22 +17,22 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import store from '../../../redux/store';
 
-//Websockets
+// Websockets
 import socket from '../../../services/socket';
 
-//CSS
+// CSS
 import './map.css';
 
 /* Acões no mapa */
 import { loadControllers } from './Controller/index';
 
-//Componentes
-import LeftMenu from './Components/left-menu/index';
+// Componentes
+import LeftMenuMap from '../../../components/organisms/LeftMenuUserAction';
+
 import LoadPages from '../../index';
 import IconsBottom from './Components/icons-drawn-line/index';
-import ImportGeojson from './Components/ImportGeojson';
+
 import Members from '~/components/Members';
-import { ContainerSearch, InputSearch } from './styles';
 
 /* */
 import { addGeojson } from './Controller/add-geojson/index';
@@ -55,7 +55,7 @@ import { drawn } from './Controller/drawn-lines/index';
 
 import ImportData from './Components/ImportData';
 
-var geojson = {
+const geojson = {
   type: 'FeatureCollection',
   features: [],
 };
@@ -83,16 +83,16 @@ function Map(props) {
    */
   function handleMap(container, center, zoom, accessToken, style) {
     mapboxgl.accessToken = accessToken;
-    var map = new mapboxgl.Map({
-      container: container,
-      style: style,
-      center: center,
-      zoom: zoom,
+    const map = new mapboxgl.Map({
+      container,
+      style,
+      center,
+      zoom,
     });
 
-    var geo = document.getElementById('geocoder');
-    //var filterInput = document.getElementById('filter-input');
-    var distanceContainer = document.getElementById('distance');
+    const geo = document.getElementById('geocoder');
+    // var filterInput = document.getElementById('filter-input');
+    const distanceContainer = document.getElementById('distance');
 
     addGeojson(map, geojson);
     loadControllers(map, geojson, distanceContainer, geo, store);
@@ -110,20 +110,12 @@ function Map(props) {
   return (
     <>
       <div id={container} className={classNameStyle} />
-      <>
-        <div id="geocoder" className="geocoder" />
-        {/* <ContainerSearch>
-          <InputSearch />
-        </ContainerSearch> */}
-        {/* <div id="codergeo" className="geocoder" /> */}
-      </>
-      <div id="distance" className="distance-container" />
-      <LeftMenu map={map} />
-      <ImportData />
-      <Members />
-      {visible === true ? <IconsBottom map={map} /> : <></>}
 
-      <LoadPages />
+      <div id="geocoder" className="geocoder" />
+
+      <div id="distance" className="distance-container" />
+
+      <LeftMenuMap />
     </>
   );
 }

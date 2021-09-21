@@ -1,38 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 // redux
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-//Creators redux
-import { Creators as ceoCreators } from "../../../../redux/store/ducks/ceo";
+// Creators redux
 
-//UI-Components
-import { Button, Container, Table, Form } from "react-bootstrap";
-import Delete from "@material-ui/icons/HighlightOff";
-import Load from "@material-ui/icons/RotateLeft";
-import ModalFusao from "./ModalFusao";
+// UI-Components
+import { Button, Container, Table } from '@material-ui/core';
+import Delete from '@material-ui/icons/HighlightOff';
+import Load from '@material-ui/icons/RotateLeft';
+import { Creators as ceoCreators } from '../../../../redux/store/ducks/ceo';
+import ModalFusao from './ModalFusao';
 
 function ViewFusoes(props) {
-  console.log("Informações cable");
-  console.log(props);
-
   const [open, setOpen] = useState(false);
   const [openFiber, setOpenFiber] = useState(false);
-  const [cable, setCable] = useState("");
-  const [fib, setFib] = useState("");
+  const [cable, setCable] = useState('');
+  const [fib, setFib] = useState('');
 
   const { showNewViewModalFusao } = props;
   const { hideViewModalCeo } = props;
 
   function openChange() {
-    //hideViewModalCeo();
+    // hideViewModalCeo();
     showNewViewModalFusao();
   }
 
   useEffect(() => {
     if (open === true) {
-      console.log("fudeu");
+      console.log('fudeu');
     }
   }, [open]);
 
@@ -45,7 +42,7 @@ function ViewFusoes(props) {
             <th>Bandeja</th>
             <th>Cabo</th>
             <th>Fibra</th>
-            <th style={{ textAlign: "center" }}>x</th>
+            <th style={{ textAlign: 'center' }}>x</th>
             <th>Fibra</th>
             <th>Cabo</th>
             <th>Observação</th>
@@ -66,19 +63,19 @@ function ViewFusoes(props) {
               <Button
                 variant="link"
                 style={{
-                  borderTopWidth: "0px",
-                  paddingTop: "0px",
-                  borderLeftWidth: "0px",
-                  paddingLeft: "0px",
-                  paddingBottom: "0px",
-                  paddingRight: "0px",
-                  borderRightWidth: "0px",
-                  borderBottomWidth: "0px",
-                  marginLeft: "5px",
-                  marginRight: "5px"
+                  borderTopWidth: '0px',
+                  paddingTop: '0px',
+                  borderLeftWidth: '0px',
+                  paddingLeft: '0px',
+                  paddingBottom: '0px',
+                  paddingRight: '0px',
+                  borderRightWidth: '0px',
+                  borderBottomWidth: '0px',
+                  marginLeft: '5px',
+                  marginRight: '5px',
                 }}
               >
-                <Delete style={{ color: "#6c757d" }} />
+                <Delete style={{ color: '#6c757d' }} />
               </Button>
             </td>
           </tr>
@@ -87,16 +84,16 @@ function ViewFusoes(props) {
 
       <div
         style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginTop: "10px",
-          marginBottom: "10px"
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginTop: '10px',
+          marginBottom: '10px',
         }}
       >
         <Button
           variant="secondary"
           type="submit"
-          style={{ width: "100%" }}
+          style={{ width: '100%' }}
           onClick={openChange}
         >
           Adicionar uma nova fusão
@@ -108,13 +105,10 @@ function ViewFusoes(props) {
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...ceoCreators }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewFusoes);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewFusoes);

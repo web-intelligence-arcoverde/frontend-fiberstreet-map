@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import clsx from "clsx";
-import { lighten, makeStyles } from "@material-ui/core/styles";
-import moment from "moment";
-import api from "../../../../services/api";
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import { lighten, makeStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 
 import {
   Table,
@@ -18,27 +17,20 @@ import {
   Paper,
   Checkbox,
   IconButton,
-  Tooltip
-} from "@material-ui/core/";
-
-import { Modal, Button } from "react-bootstrap/";
+  Tooltip,
+} from '@material-ui/core/';
 
 // redux
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-//Creators redux
-import { Creators as clienteCreators } from "../../../../redux/store/ducks/cliente";
-import { Creators as ctosCreators } from "../../../../redux/store/ducks/ctos";
+// Creators redux
+import { Delete, FilterList, LocationOn, Edit } from '@material-ui/icons/';
+import { Creators as clienteCreators } from '../../../../redux/store/ducks/cliente';
+import { Creators as ctosCreators } from '../../../../redux/store/ducks/ctos';
 
-//Icons
-import {
-  Delete,
-  FilterList,
-  LocationOn,
-  Edit,
-  People
-} from "@material-ui/icons/";
+// Icons
+import api from '../../../../services/api';
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -61,29 +53,29 @@ function stableSort(array, cmp) {
 }
 
 function getSorting(order, orderBy) {
-  return order === "desc"
+  return order === 'desc'
     ? (a, b) => desc(a, b, orderBy)
     : (a, b) => -desc(a, b, orderBy);
 }
 
 const headCells = [
-  { id: "cpf", numeric: false, disablePadding: false, label: "CPF" },
-  { id: "name", numeric: false, disablePadding: false, label: "Nome" },
-  { id: "ppoe", numeric: false, disablePadding: false, label: "PPPOE" },
-  { id: "speed", numeric: false, disablePadding: false, label: "Plano" },
+  { id: 'cpf', numeric: false, disablePadding: false, label: 'CPF' },
+  { id: 'name', numeric: false, disablePadding: false, label: 'Nome' },
+  { id: 'ppoe', numeric: false, disablePadding: false, label: 'PPPOE' },
+  { id: 'speed', numeric: false, disablePadding: false, label: 'Plano' },
   {
-    id: "created_at",
+    id: 'created_at',
     numeric: false,
     disablePadding: false,
-    label: "Criação"
+    label: 'Criação',
   },
   {
-    id: "installation_date",
+    id: 'installation_date',
     numeric: false,
     disablePadding: false,
-    label: "Instalação"
+    label: 'Instalação',
   },
-  { id: "obs", numeric: false, disablePadding: false, label: "Obs." }
+  { id: 'obs', numeric: false, disablePadding: false, label: 'Obs.' },
 ];
 
 function EnhancedTableHead(props) {
@@ -94,7 +86,7 @@ function EnhancedTableHead(props) {
     orderBy,
     numSelected,
     rowCount,
-    onRequestSort
+    onRequestSort,
   } = props;
   const createSortHandler = property => event => {
     onRequestSort(event, property);
@@ -105,18 +97,18 @@ function EnhancedTableHead(props) {
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox
-            style={{ color: "#FFBF00" }}
+            style={{ color: '#FFBF00' }}
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all desserts" }}
+            inputProps={{ 'aria-label': 'select all desserts' }}
           />
         </TableCell>
         {headCells.map(headCell => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "center"}
-            padding={headCell.disablePadding ? "none" : "default"}
+            align={headCell.numeric ? 'right' : 'center'}
+            padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
@@ -127,7 +119,7 @@ function EnhancedTableHead(props) {
               {headCell.label}
               {orderBy === headCell.id ? (
                 <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </span>
               ) : null}
             </TableSortLabel>
@@ -143,37 +135,37 @@ EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired
+  rowCount: PropTypes.number.isRequired,
 };
 
 const useToolbarStyles = makeStyles(theme => ({
   root2: {
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1)
+    paddingRight: theme.spacing(1),
   },
   highlight:
-    theme.palette.type === "light"
+    theme.palette.type === 'light'
       ? {
           color: theme.palette.secondary.main,
-          backgroundColor: lighten("#FFBF00", 0.5)
+          backgroundColor: lighten('#FFBF00', 0.5),
         }
       : {
-          color: "#D8D8D8",
-          backgroundColor: theme.palette.secondary.dark
+          color: '#D8D8D8',
+          backgroundColor: theme.palette.secondary.dark,
         },
   spacer: {
-    flex: "1 1 100%"
+    flex: '1 1 100%',
   },
   actions: {
     color: theme.palette.text.secondary,
-    display: "inherit"
+    display: 'inherit',
   },
   title: {
-    flex: "0 0 auto",
-    color: "#FFF"
-  }
+    flex: '0 0 auto',
+    color: '#FFF',
+  },
 }));
 
 const EnhancedTableToolbar = props => {
@@ -183,7 +175,7 @@ const EnhancedTableToolbar = props => {
   return (
     <Toolbar
       className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0
+        [classes.highlight]: numSelected > 0,
       })}
     >
       <div className={classes.title}>
@@ -192,7 +184,7 @@ const EnhancedTableToolbar = props => {
             {numSelected} selecionado(s)
           </Typography>
         ) : (
-          <Typography></Typography>
+          <Typography />
         )}
       </div>
       <div className={classes.spacer} />
@@ -234,41 +226,41 @@ const EnhancedTableToolbar = props => {
 };
 
 EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired
+  numSelected: PropTypes.number.isRequired,
 };
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: "100%",
-    marginTop: theme.spacing(3)
+    width: '100%',
+    marginTop: theme.spacing(3),
   },
   paper: {
-    width: "100%",
-    marginBottom: "0px"
+    width: '100%',
+    marginBottom: '0px',
   },
   table: {
-    minWidth: "100%"
+    minWidth: '100%',
   },
   tableWrapper: {
-    overflowX: "auto"
+    overflowX: 'auto',
   },
   visuallyHidden: {
     border: 0,
-    clip: "rect(0 0 0 0)",
+    clip: 'rect(0 0 0 0)',
     height: 1,
     margin: -1,
-    overflow: "hidden",
+    overflow: 'hidden',
     padding: 0,
-    position: "absolute",
+    position: 'absolute',
     top: 20,
-    width: 1
-  }
+    width: 1,
+  },
 }));
 
 function TableClients(props) {
   const classes = useStyles();
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -299,8 +291,8 @@ function TableClients(props) {
   }, [data.id, viewCto.visible]);
 
   function handleRequestSort(event, property) {
-    const isDesc = orderBy === property && order === "desc";
-    setOrder(isDesc ? "asc" : "desc");
+    const isDesc = orderBy === property && order === 'desc';
+    setOrder(isDesc ? 'asc' : 'desc');
     setOrderBy(property);
   }
 
@@ -314,7 +306,7 @@ function TableClients(props) {
   }
 
   function formatDate(data) {
-    const date = moment(data).format("DD/MM/YYYY");
+    const date = moment(data).format('DD/MM/YYYY');
     return date;
   }
 
@@ -339,7 +331,7 @@ function TableClients(props) {
   }
 
   function handleChangePage(event, newPage) {
-    console.log("");
+    console.log('');
   }
 
   function handleChangeRowsPerPage(event) {
@@ -359,14 +351,14 @@ function TableClients(props) {
     <div className={classes.root2}>
       <Paper className={classes.paper}>
         <EnhancedTableToolbar
-          style={{ marginTop: "0px" }}
+          style={{ marginTop: '0px' }}
           numSelected={selected.length}
         />
         <div className={classes.tableWrapper}>
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size={"medium"}
+            size="medium"
           >
             <EnhancedTableHead
               classes={classes}
@@ -398,36 +390,36 @@ function TableClients(props) {
                         <TableCell padding="checkbox">
                           <Checkbox
                             checked={isItemSelected}
-                            inputProps={{ "aria-labelledby": labelId }}
-                            style={{ color: "#FFBF00" }}
+                            inputProps={{ 'aria-labelledby': labelId }}
+                            style={{ color: '#FFBF00' }}
                           />
                         </TableCell>
 
                         <TableCell
                           component="th"
-                          style={{ color: "#BDBDBD" }}
+                          style={{ color: '#BDBDBD' }}
                           id={labelId}
                           scope="row"
                           padding="none"
                         >
                           {row.cpf}
                         </TableCell>
-                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                        <TableCell align="center" style={{ color: '#BDBDBD' }}>
                           {row.name}
                         </TableCell>
-                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                        <TableCell align="center" style={{ color: '#BDBDBD' }}>
                           {row.pppoe}
                         </TableCell>
-                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                        <TableCell align="center" style={{ color: '#BDBDBD' }}>
                           {row.speed}
                         </TableCell>
-                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                        <TableCell align="center" style={{ color: '#BDBDBD' }}>
                           {formatDate(row.created_at)}
                         </TableCell>
-                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                        <TableCell align="center" style={{ color: '#BDBDBD' }}>
                           {formatDate(row.installation_date)}
                         </TableCell>
-                        <TableCell align="center" style={{ color: "#BDBDBD" }}>
+                        <TableCell align="center" style={{ color: '#BDBDBD' }}>
                           {row.obs}
                         </TableCell>
                       </TableRow>
@@ -448,10 +440,10 @@ function TableClients(props) {
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{
-            "aria-label": "previous page"
+            'aria-label': 'previous page',
           }}
           nextIconButtonProps={{
-            "aria-label": "next page"
+            'aria-label': 'next page',
           }}
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
@@ -462,13 +454,10 @@ function TableClients(props) {
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators((clienteCreators, ctosCreators), dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TableClients);
+export default connect(mapStateToProps, mapDispatchToProps)(TableClients);

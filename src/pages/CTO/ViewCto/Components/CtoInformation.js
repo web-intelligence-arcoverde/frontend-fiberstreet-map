@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 
-//Components Importados
-import { Col, Button, Form } from 'react-bootstrap/';
-import ViewPhoto from './PhotoCto';
+// Components Importados
+import { Col, Button } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 
-//Creators do redux
-import { Creators as CtoCreatos } from '../../../../redux/store/ducks/ctos';
-import { Creators as MapCreators } from '../../../../redux/store/ducks/map';
+// Creators do redux
 import { toastr } from 'react-redux-toastr';
 
-//Redux
+// Redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Creators as MapCreators } from '../../../../redux/store/ducks/map';
+import { Creators as CtoCreatos } from '../../../../redux/store/ducks/ctos';
+import ViewPhoto from './PhotoCto';
 
 import { Container } from './CSS/styled';
 import './CSS/styled.css';
@@ -45,10 +45,10 @@ function Components(props) {
     },
   ]);
 
-  //Atualizar CTO
+  // Atualizar CTO
   function handleSubmit(e) {
     e.preventDefault();
-    var mode;
+    let mode;
     if (status === 'Ativa') {
       mode = 'active';
     } else if (status === 'Lotada') {
@@ -58,17 +58,17 @@ function Components(props) {
     }
     const { updateCtoRequest } = props;
     const updateCto = {
-      name: name,
-      model: model,
-      address: address,
-      obs: obs,
-      status, //: mode
+      name,
+      model,
+      address,
+      obs,
+      status, // : mode
     };
     updateCtoRequest(updateCto, data.id);
     hideViewModalCto();
   }
 
-  //Deletar CTO
+  // Deletar CTO
   function deleteCto() {
     const { deleteCtoRequest } = props;
     const options = {
@@ -94,71 +94,53 @@ function Components(props) {
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
-        <Form.Row className="item">
-          <Form.Group className="item">
-            <TextField
-              id="standard-select-currency"
-              select
-              label="Status"
-              value={status}
-              onChange={e => setStatus(e.target.value)}
-              helperText="Selecione o status"
-              margin="normal"
-              required
-            >
-              {statuses.map(option => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Form.Group>
-        </Form.Row>
-        <Form.Row className="item">
-          <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Label>Nome:</Form.Label>
-            <Form.Control
-              type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
-            />
-          </Form.Group>
-        </Form.Row>
-        <Form.Row className="item">
-          <Form.Group as={Col} controlId="formGridPassword">
-            <Form.Label>Modelo:</Form.Label>
+      <form onSubmit={handleSubmit}>
+        <TextField
+          id="standard-select-currency"
+          select
+          label="Status"
+          value={status}
+          onChange={e => setStatus(e.target.value)}
+          helperText="Selecione o status"
+          margin="normal"
+          required
+        >
+          {statuses.map(option => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
 
-            <Form.Control
-              type="text"
-              value={model}
-              onChange={e => setModel(e.target.value)}
-            />
-          </Form.Group>
-        </Form.Row>
+        <label>Nome:</label>
+        <input
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value)}
+        />
 
-        <Form.Row className="item">
-          <Form.Group as={Col} controlId="formGridAddress1">
-            <Form.Label>Endereço:</Form.Label>
-            <Form.Control
-              type="text"
-              value={address}
-              onChange={e => setAddress(e.target.value)}
-            />
-          </Form.Group>
-        </Form.Row>
+        <label>Modelo:</label>
 
-        <Form.Row className="item">
-          <Form.Group as={Col} controlId="formGridAddress2">
-            <Form.Label>Observação:</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows="3"
-              value={obs}
-              onChange={e => setObs(e.target.value)}
-            />
-          </Form.Group>
-        </Form.Row>
+        <input
+          type="text"
+          value={model}
+          onChange={e => setModel(e.target.value)}
+        />
+
+        <label>Endereço:</label>
+        <input
+          type="text"
+          value={address}
+          onChange={e => setAddress(e.target.value)}
+        />
+
+        <label>Observação:</label>
+        <input
+          as="textarea"
+          rows="3"
+          value={obs}
+          onChange={e => setObs(e.target.value)}
+        />
 
         <Container>
           <>
@@ -186,7 +168,7 @@ function Components(props) {
             Excluir
           </Button>
         </Container>
-      </Form>
+      </form>
       <ViewPhoto />
     </>
   );

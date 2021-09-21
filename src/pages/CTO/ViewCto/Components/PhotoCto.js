@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Modal, Image } from "react-bootstrap/";
+import React, { useState } from 'react';
+import { Modal } from '@material-ui/core';
 
-//Creators do redux
-import { Creators as ctosActions } from "../../../../redux/store/ducks/ctos";
+// Creators do redux
 
-//Redux
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+// Redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Creators as ctosActions } from '../../../../redux/store/ducks/ctos';
 
 function ViewPhoto(props) {
   return (
@@ -14,19 +14,16 @@ function ViewPhoto(props) {
       show={props.redux.ctos.viewPhoto.visible}
       onHide={props.hideModalPhoto}
     >
-      <Image src="caminho da img" fluid></Image>
+      <img src="caminho da img" fluid />
     </Modal>
   );
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...ctosActions }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ViewPhoto);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewPhoto);

@@ -1,27 +1,26 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Creators as DropCreators } from "../../../redux/store/ducks/drop";
-import { Creators as CaboCreators } from "../../../redux/store/ducks/cabo";
-import { Creators as MapCreators } from "../../../redux/store/ducks/map";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Modal, Button, Container } from '@material-ui/core';
+import { Creators as DropCreators } from '../../../redux/store/ducks/drop';
+import { Creators as CaboCreators } from '../../../redux/store/ducks/cabo';
+import { Creators as MapCreators } from '../../../redux/store/ducks/map';
 
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-
-//Components
-import { Modal, Button, Container, Form } from "react-bootstrap/";
+// Components
 
 function AddCable(props) {
   const { newCable } = props.redux.cabo;
 
-  const [nome, setNome] = useState("");
-  const [modelo, setModelo] = useState("");
+  const [nome, setNome] = useState('');
+  const [modelo, setModelo] = useState('');
   const [fibra, setFibra] = useState(0);
-  const [obs, setObs] = useState("");
+  const [obs, setObs] = useState('');
 
   function hideModal() {
     const { hideNewCable, setDelimitation } = props;
     hideNewCable();
-    setDelimitation("default");
+    setDelimitation('default');
   }
 
   async function handleSubmit(e) {
@@ -29,22 +28,22 @@ function AddCable(props) {
     const {
       createCableRequest,
       createCableWithRelationshipRequest,
-      addCoordCabo
+      addCoordCabo,
     } = props;
-    let coordinates = props.redux.map.polyline.map(linha => {
+    const coordinates = props.redux.map.polyline.map(linha => {
       return {
         longitude: linha[0],
-        latitude: linha[1]
+        latitude: linha[1],
       };
     });
-    let coordinatesStrinfigied = JSON.stringify(coordinates);
+    const coordinatesStrinfigied = JSON.stringify(coordinates);
     const { cableId } = props.redux.cabo;
     const cabo = {
       name: nome,
       type: modelo,
       coordinates: coordinatesStrinfigied,
       fiberAmount: fibra,
-      obs: obs
+      obs,
     };
     createCableRequest(cabo);
     hideModal();
@@ -59,75 +58,63 @@ function AddCable(props) {
   return (
     <Container>
       <Modal show={newCable.visible} onHide={hideModal}>
-        <Form onSubmit={handleSubmit}>
-          <Modal.Header
+        <form onSubmit={handleSubmit}>
+          <div
             style={{
-              justifyContent: "center",
-              backgroundColor: "#F7D358",
-              color: "#6c757d"
+              justifyContent: 'center',
+              backgroundColor: '#F7D358',
+              color: '#6c757d',
             }}
           >
-            <Modal.Title>Adicionar cabo solto</Modal.Title>
-          </Modal.Header>
+            Adicionar cabo solto
+          </div>
 
-          <Modal.Body>
-            <Form.Group>
-              <Form.Label>Nome do cabo:</Form.Label>
-              <Form.Control
-                required
-                value={nome}
-                onChange={e => setNome(e.target.value)}
-                type="text"
-              />
-            </Form.Group>
+          <label>Nome do cabo:</label>
+          <input
+            required
+            value={nome}
+            onChange={e => setNome(e.target.value)}
+            type="text"
+          />
 
-            <Form.Group>
-              <Form.Label>Modelo do cabo:</Form.Label>
-              <Form.Control
-                required
-                value={modelo}
-                onChange={e => setModelo(e.target.value)}
-                type="text"
-              />
-            </Form.Group>
+          <label>Modelo do cabo:</label>
+          <input
+            required
+            value={modelo}
+            onChange={e => setModelo(e.target.value)}
+            type="text"
+          />
 
-            <Form.Group>
-              <Form.Label>Observação:</Form.Label>
-              <Form.Control
-                required
-                value={obs}
-                onChange={e => setObs(e.target.value)}
-                type="text"
-              />
-            </Form.Group>
+          <label>Observação:</label>
+          <input
+            required
+            value={obs}
+            onChange={e => setObs(e.target.value)}
+            type="text"
+          />
 
-            <Form.Group>
-              <Form.Label>Quantidade de fibras:</Form.Label>
-              <Form.Control
-                required
-                value={fibra}
-                onChange={e => setFibra(e.target.value)}
-                type="number"
-              />
-            </Form.Group>
-          </Modal.Body>
+          <label>Quantidade de fibras:</label>
+          <input
+            required
+            value={fibra}
+            onChange={e => setFibra(e.target.value)}
+            type="number"
+          />
 
-          <Modal.Footer>
-            <Button variant="danger" onClick={hideModal}>
-              Sair
-            </Button>
-            <Button variant="secondary" type="submit">
-              Salvar
-            </Button>
-          </Modal.Footer>
-        </Form>
+          <Button variant="danger" onClick={hideModal}>
+            Sair
+          </Button>
+          <Button variant="secondary" type="submit">
+            Salvar
+          </Button>
+        </form>
       </Modal>
     </Container>
   );
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>

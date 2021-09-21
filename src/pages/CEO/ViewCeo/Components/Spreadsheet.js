@@ -1,24 +1,24 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from 'react';
 
-import { Container, Col, Form, Button } from "react-bootstrap";
-import UploadFile from "../../../../components/UploadFile";
-import FileSpreadsheet from "../../../../components/FileSpreadsheet";
-import { Link } from "react-router-dom";
+import { Container, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 // redux
-import { useSelector, useDispatch } from "react-redux";
-import { toastr } from "react-redux-toastr";
-import store from "../../../../redux/store";
+import { useSelector, useDispatch } from 'react-redux';
+import { toastr } from 'react-redux-toastr';
+import FileSpreadsheet from '../../../../components/FileSpreadsheet';
+import UploadFile from '../../../../components/UploadFile';
+import store from '../../../../redux/store';
 
-import api, { endPoint } from "../../../../services/api";
-import usedUrl from "../../../../services/api";
+import api, { endPoint } from '../../../../services/api';
+import usedUrl from '../../../../services/api';
 
-//Creators redux
+// Creators redux
 // import { Creators as CeoActions } from "../../../../redux/store/ducks/ceo";
-import { Creators as CeoActions } from "~/redux/store/ducks/ceo";
+import { Creators as CeoActions } from '~/redux/store/ducks/ceo';
 
 export default function Spreadsheet(props) {
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
 
   const [currentFile, setCurrentFile] = useState(null);
   const [formData, setFormData] = useState(new FormData());
@@ -54,16 +54,16 @@ export default function Spreadsheet(props) {
     if (currentFile) {
       if (!spreadsheetURL) {
         api
-          .post("spreadsheets", formData, {
+          .post('spreadsheets', formData, {
             onUploadProgress: e => {
               const progress = parseInt(Math.round((e.loaded * 100) / e.total));
               console.log(progress);
-            }
+            },
           })
           .then(response => {
             toastr.success(
-              "Plano de emenda",
-              "Plano de emenda salvo com sucesso"
+              'Plano de emenda',
+              'Plano de emenda salvo com sucesso'
             );
           })
           .catch(err => console.log(err));
@@ -73,12 +73,12 @@ export default function Spreadsheet(props) {
             onUploadProgress: e => {
               const progress = parseInt(Math.round((e.loaded * 100) / e.total));
               console.log(progress);
-            }
+            },
           })
           .then(response => {
             toastr.success(
-              "Plano de emenda",
-              "Plano de emenda salvo com sucesso"
+              'Plano de emenda',
+              'Plano de emenda salvo com sucesso'
             );
           })
           .catch(err => console.log(err));
@@ -94,8 +94,8 @@ export default function Spreadsheet(props) {
     setCurrentFile(files[0]);
     const currentFile = files[0];
     const data = new FormData();
-    data.append("file", currentFile, currentFile.name);
-    data.append("ceo_id", viewCeoData.id);
+    data.append('file', currentFile, currentFile.name);
+    data.append('ceo_id', viewCeoData.id);
     setFormData(data);
   }
 
@@ -109,8 +109,8 @@ export default function Spreadsheet(props) {
       setP_slug(slug);
 
       api
-        .post("spreadsheetlinks", {
-          ceo_id: data.id
+        .post('spreadsheetlinks', {
+          ceo_id: data.id,
         })
         .then(response => {
           setSpreadsheetURL(response.data.sublink);
@@ -129,11 +129,11 @@ export default function Spreadsheet(props) {
 
   return (
     <Container>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group>
+      <form onSubmit={handleSubmit}>
+        <div>
           <UploadFile onUpload={handleUpload} />
           {currentFile && <FileSpreadsheet file={currentFile} />}
-          <Button type="submit" variant="info" style={{ margin: "10px" }}>
+          <Button type="submit" variant="info" style={{ margin: '10px' }}>
             Atualizar
           </Button>
 
@@ -142,7 +142,7 @@ export default function Spreadsheet(props) {
               href={`${endPoint}/spreadsheets/${spreadsheetURL}/${p_slug}`}
               target="_blank"
             >
-              <Button variant="info" style={{ margin: "10px" }}>
+              <Button variant="info" style={{ margin: '10px' }}>
                 Download
               </Button>
             </a>
@@ -152,13 +152,13 @@ export default function Spreadsheet(props) {
             <Button
               onClick={deleted}
               variant="danger"
-              style={{ margin: "10px" }}
+              style={{ margin: '10px' }}
             >
               Deletar
             </Button>
           )}
-        </Form.Group>
-      </Form>
+        </div>
+      </form>
     </Container>
   );
 }

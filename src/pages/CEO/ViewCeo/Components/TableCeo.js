@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-import { Col, Form, Button } from 'react-bootstrap/';
+import { Button } from '@material-ui/core';
 
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-//Creators redux
+// Creators redux
+import { toastr } from 'react-redux-toastr';
 import { Creators as CeoCreators } from '../../../../redux/store/ducks/ceo';
 import { Creators as MapCreators } from '../../../../redux/store/ducks/map';
-import { toastr } from 'react-redux-toastr';
 
 import { Container } from './CSS/styled';
 import './CSS/styled.css';
@@ -34,16 +34,16 @@ const TableCeo = props => {
     toastr.confirm('Deseja deletar mesmo?', options);
   }
 
-  //Atualizar CEO
+  // Atualizar CEO
   function handleSubmit(e) {
     e.preventDefault();
     const { updateCeoRequest } = props;
     const updateCeo = {
-      name: name,
-      type: type,
-      model: model,
-      address: address,
-      obs: obs,
+      name,
+      type,
+      model,
+      address,
+      obs,
     };
     updateCeoRequest(updateCeo, data.id);
   }
@@ -57,75 +57,67 @@ const TableCeo = props => {
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
-        <Form.Row>
-          <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Label>Nome:</Form.Label>
-            <Form.Control
-              required
-              minLength="5"
-              maxLength="100"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              type="text"
-            />
-          </Form.Group>
-        </Form.Row>
-        <Form.Row>
-          <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Label>Tipo:</Form.Label>
-            <Form.Control
-              required
-              minLength="5"
-              maxLength="100"
-              value={type}
-              onChange={e => setType(e.target.value)}
-              type="text"
-            />
-          </Form.Group>
-        </Form.Row>
-        <Form.Row>
-          <Form.Group as={Col} controlId="formGridPassword">
-            <Form.Label>Modelo:</Form.Label>
-            <Form.Control
-              required
-              minLength="5"
-              maxLength="100"
-              type="text"
-              value={model}
-              onChange={e => setModel(e.target.value)}
-            />
-          </Form.Group>
-        </Form.Row>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Nome:</label>
+          <input
+            required
+            minLength="5"
+            maxLength="100"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            type="text"
+          />
+        </div>
 
-        <Form.Row>
-          <Form.Group as={Col} controlId="formGridAddress1">
-            <Form.Label>Endereço:</Form.Label>
-            <Form.Control
-              required
-              minLength="5"
-              maxLength="100"
-              type="text"
-              value={address}
-              onChange={e => setAddress(e.target.value)}
-            />
-          </Form.Group>
-        </Form.Row>
+        <div>
+          <label>Tipo:</label>
+          <input
+            required
+            minLength="5"
+            maxLength="100"
+            value={type}
+            onChange={e => setType(e.target.value)}
+            type="text"
+          />
+        </div>
 
-        <Form.Row>
-          <Form.Group as={Col} controlId="formGridAddress2">
-            <Form.Label>Observação:</Form.Label>
-            <Form.Control
-              required
-              minLength="5"
-              maxLength="200"
-              as="textarea"
-              rows="3"
-              value={obs}
-              onChange={e => setObs(e.target.value)}
-            />
-          </Form.Group>
-        </Form.Row>
+        <div>
+          <label>Modelo:</label>
+          <input
+            required
+            minLength="5"
+            maxLength="100"
+            type="text"
+            value={model}
+            onChange={e => setModel(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label>Endereço:</label>
+          <input
+            required
+            minLength="5"
+            maxLength="100"
+            type="text"
+            value={address}
+            onChange={e => setAddress(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label>Observação:</label>
+          <input
+            required
+            minLength="5"
+            maxLength="200"
+            as="textarea"
+            rows="3"
+            value={obs}
+            onChange={e => setObs(e.target.value)}
+          />
+        </div>
 
         <Container>
           <Button variant="danger" className="item" onClick={deleteCeo}>
@@ -138,7 +130,7 @@ const TableCeo = props => {
             Atualizar informações
           </Button>
         </Container>
-      </Form>
+      </form>
     </>
   );
 };

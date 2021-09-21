@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 
-//Conectors
+// Conectors
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-//Reducers
+// Reducers
+import { Modal, Button, Select } from '@material-ui/core';
 import { Creators as actionsUser } from '../../../redux/store/ducks/user';
 import { Creators as InviteActions } from '../../../redux/store/ducks/invite';
-import MembersActions from '~/redux/store/ducks/members'
-import api from '~/services/api'
+import MembersActions from '~/redux/store/ducks/members';
+import api from '~/services/api';
 
-//Components UI
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Select from 'react-select';
+// Components UI
 
 function AddUser(props) {
   const { hideModalNewUser } = props;
@@ -39,47 +36,42 @@ function AddUser(props) {
       onHide={hideModalNewUser}
       animation={false}
     >
-      <Modal.Header style={{ justifyContent: 'center', color: '#ffc107' }}>
-        <Modal.Title>Cadastrar Funcionario</Modal.Title>
-      </Modal.Header>
-      <Form onSubmit={handleSubmit}>
-        <Modal.Body>
-          <Form.Group>
-            <Form.Label>Insira o e-mail do funcionario:</Form.Label>
-            <Form.Control
-              required
-              type="email"
-              placeholder="Email"
-              value={email}
-              minLength="2"
-              onChange={e => setEmail(e.target.value)}
-            />
-          </Form.Group>
-        </Modal.Body>
+      Cadastrar Funcionario
+      <form onSubmit={handleSubmit}>
+        <label>Insira o e-mail do funcionario:</label>
+        <input
+          required
+          type="email"
+          placeholder="Email"
+          value={email}
+          minLength="2"
+          onChange={e => setEmail(e.target.value)}
+        />
 
-        <Modal.Footer>
-          <Button variant="secondary" onClick={hideModalNewUser}>
-            Fechar
+        <Button variant="secondary" onClick={hideModalNewUser}>
+          Fechar
+        </Button>
+        {email.length > 5 ? (
+          <Button variant="primary" type="submit">
+            Enviar
           </Button>
-          {email.length > 5 ? (
-            <Button variant="primary" type="submit">
-              Enviar
-            </Button>
-          ) : (
-            console.log('')
-          )}
-        </Modal.Footer>
-      </Form>
+        ) : (
+          console.log('')
+        )}
+      </form>
     </Modal>
   );
 }
 
 const mapStateToProps = state => ({
   redux: state,
-  members: state.members
+  members: state.members,
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ ...actionsUser, ...InviteActions, ...MembersActions }, dispatch);
+  bindActionCreators(
+    { ...actionsUser, ...InviteActions, ...MembersActions },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddUser);

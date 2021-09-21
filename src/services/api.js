@@ -5,6 +5,8 @@ const local = 'http://127.0.0.1:3333';
 const server = 'https://fiberstreet.dktelecom.net.br';
 const local01 = 'http://127.0.0.1:3333/';
 
+const server_aws = 'http://3.138.109.146/';
+
 export const endPoint = false ? server : local;
 export const endPointWs = false
   ? `wss://fiberstreet.dktelecom.net.br`
@@ -12,7 +14,7 @@ export const endPointWs = false
 
 /** This API will connect to NodeJS Server */
 const api = axios.create({
-  baseURL: endPoint,
+  baseURL: server_aws,
 });
 
 api.interceptors.request.use(config => {
@@ -32,7 +34,7 @@ api.interceptors.request.use(config => {
 });
 
 export const API = {
-  //Geojson
+  // Geojson
   GET_CABO_GEOJSON: '/gj/cables',
   GET_CTO_GEOJSON: '/gj/ctos',
   GET_CLIENTE_GEOJSON: '/gj/clients',

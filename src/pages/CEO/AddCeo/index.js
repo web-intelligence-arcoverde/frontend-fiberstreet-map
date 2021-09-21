@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-//Components
-import { Modal, Form, Button } from "react-bootstrap";
+// Components
+import { Modal, Button } from '@material-ui/core';
 
-//Redux
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+// Redux
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-//Creators
-import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
+// Creators
+import { Creators as ceoCreators } from '../../../redux/store/ducks/ceo';
 
 function AddCeo(props) {
   const { HideNewViewModalCeo, createCeoRequest } = props;
   const { viewNewCeo } = props.redux.ceo;
 
-  const [name, setName] = useState("");
-  const [model, setModel] = useState("");
-  const [observacao, setObservacao] = useState("");
-  const [type, setType] = useState("");
-  const [address, setAddress] = useState("");
+  const [name, setName] = useState('');
+  const [model, setModel] = useState('');
+  const [observacao, setObservacao] = useState('');
+  const [type, setType] = useState('');
+  const [address, setAddress] = useState('');
   const [clickable, setClickable] = useState(true);
 
   useEffect(() => {
@@ -37,13 +37,13 @@ function AddCeo(props) {
         coordinates: await viewNewCeo.coordinates,
         model,
         address,
-        obs: observacao
+        obs: observacao,
       };
-      await setName("");
-      await setModel("");
-      await setType("");
-      await setAddress("");
-      await setObservacao("");
+      await setName('');
+      await setModel('');
+      await setType('');
+      await setAddress('');
+      await setObservacao('');
       await HideNewViewModalCeo();
 
       await createCeoRequest(newCeo);
@@ -52,21 +52,21 @@ function AddCeo(props) {
 
   return (
     <Modal show={viewNewCeo.visible} onHide={HideNewViewModalCeo}>
-      <Form>
+      <form>
         <Modal.Header
           style={{
-            justifyContent: "center",
-            backgroundColor: "#ffc107",
-            color: "#6c757d"
+            justifyContent: 'center',
+            backgroundColor: '#ffc107',
+            color: '#6c757d',
           }}
         >
           <Modal.Title>Cadastrar Caixa de Emenda Óptica</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          <Form.Group>
-            <Form.Label>Nome:</Form.Label>
-            <Form.Control
+          <div>
+            <label>Nome:</label>
+            <input
               required
               minLength="5"
               maxLength="150"
@@ -74,10 +74,10 @@ function AddCeo(props) {
               value={name}
               onChange={e => setName(e.target.value)}
             />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Modelo:</Form.Label>
-            <Form.Control
+          </div>
+          <div>
+            <label>Modelo:</label>
+            <input
               required
               minLength="5"
               maxLength="100"
@@ -85,11 +85,11 @@ function AddCeo(props) {
               value={model}
               onChange={e => setModel(e.target.value)}
             />
-          </Form.Group>
+          </div>
 
-          <Form.Group>
-            <Form.Label>Tipo:</Form.Label>
-            <Form.Control
+          <div>
+            <label>Tipo:</label>
+            <input
               required
               minLength="5"
               maxLength="100"
@@ -97,11 +97,11 @@ function AddCeo(props) {
               value={type}
               onChange={e => setType(e.target.value)}
             />
-          </Form.Group>
+          </div>
 
-          <Form.Group>
-            <Form.Label>Endereço:</Form.Label>
-            <Form.Control
+          <div>
+            <label>Endereço:</label>
+            <input
               required
               minLength="5"
               maxLength="200"
@@ -109,11 +109,11 @@ function AddCeo(props) {
               value={address}
               onChange={e => setAddress(e.target.value)}
             />
-          </Form.Group>
+          </div>
 
-          <Form.Group controlId="exampleForm.ControlTextarea1">
-            <Form.Label>Observações:</Form.Label>
-            <Form.Control
+          <div>
+            <label>Observações:</label>
+            <input
               required
               minLength="5"
               maxLength="200"
@@ -122,7 +122,7 @@ function AddCeo(props) {
               value={observacao}
               onChange={e => setObservacao(e.target.value)}
             />
-          </Form.Group>
+          </div>
         </Modal.Body>
 
         <Modal.Footer>
@@ -134,19 +134,16 @@ function AddCeo(props) {
             Salvar
           </Button>
         </Modal.Footer>
-      </Form>
+      </form>
     </Modal>
   );
 }
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...ceoCreators }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddCeo);
+export default connect(mapStateToProps, mapDispatchToProps)(AddCeo);

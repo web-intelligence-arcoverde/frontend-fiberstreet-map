@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-//API
-import api from "../../../../services/api";
+// API
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Button, Container, Table } from '@material-ui/core';
+import Delete from '@material-ui/icons/HighlightOff';
+import api from '../../../../services/api';
 
 // redux
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
 
-//Creators redux
-import { Creators as ceoCreators } from "../../../../redux/store/ducks/ceo";
-import { Creators as mapCreators } from "../../../../redux/store/ducks/map";
-import { Creators as cableCreators } from "../../../../redux/store/ducks/cabo";
+// Creators redux
+import { Creators as ceoCreators } from '../../../../redux/store/ducks/ceo';
+import { Creators as mapCreators } from '../../../../redux/store/ducks/map';
+import { Creators as cableCreators } from '../../../../redux/store/ducks/cabo';
 
-import { positionObject } from "../../../Functions/get-position-object/index";
+import { positionObject } from '../../../Functions/get-position-object/index';
 
-//UI-Components
-import { Button, Container, Table } from "react-bootstrap";
-import Delete from "@material-ui/icons/HighlightOff";
+// UI-Components
 
 function ViewFusoes(props) {
   const { data, visible } = props.redux.ceo.viewCeo;
@@ -32,14 +32,14 @@ function ViewFusoes(props) {
       setSubDelemitation,
       setIdFrom,
       setDelimitation,
-      setTypeAndId
+      setTypeAndId,
     } = props;
 
-    setDelimitation("cabo");
-    setSubDelemitation("ceo");
+    setDelimitation('cabo');
+    setSubDelemitation('ceo');
     addCoordCabo(positionObject(data));
     setIdFrom(data.id);
-    setTypeAndId("CEO", data.id)
+    setTypeAndId('CEO', data.id);
     showIcons();
     hideViewModalCeo();
   }
@@ -56,12 +56,12 @@ function ViewFusoes(props) {
 
   function deleteCableRelationship(index) {
     const response = window.prompt(
-      "Deseja mesmo deletar? Digite SIM para deletar"
+      'Deseja mesmo deletar? Digite SIM para deletar'
     );
     const { deleteCableRelationshipRequest } = props;
 
-    if (response === "SIM") {
-      deleteCableRelationshipRequest(index, data.id, 'CEO')
+    if (response === 'SIM') {
+      deleteCableRelationshipRequest(index, data.id, 'CEO');
       hideViewModalCeo();
     }
   }
@@ -88,20 +88,20 @@ function ViewFusoes(props) {
                 <Button
                   variant="link"
                   style={{
-                    borderTopWidth: "0px",
-                    paddingTop: "0px",
-                    borderLeftWidth: "0px",
-                    paddingLeft: "0px",
-                    paddingBottom: "0px",
-                    paddingRight: "0px",
-                    borderRightWidth: "0px",
-                    borderBottomWidth: "0px",
-                    marginLeft: "5px",
-                    marginRight: "5px"
+                    borderTopWidth: '0px',
+                    paddingTop: '0px',
+                    borderLeftWidth: '0px',
+                    paddingLeft: '0px',
+                    paddingBottom: '0px',
+                    paddingRight: '0px',
+                    borderRightWidth: '0px',
+                    borderBottomWidth: '0px',
+                    marginLeft: '5px',
+                    marginRight: '5px',
                   }}
                 >
                   <Delete
-                    style={{ color: "#6c757d" }}
+                    style={{ color: '#6c757d' }}
                     onClick={() => deleteCableRelationship(relationship.id)}
                   />
                 </Button>
@@ -112,15 +112,15 @@ function ViewFusoes(props) {
       </Table>
       <div
         style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginTop: "10px",
-          marginBottom: "10px"
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginTop: '10px',
+          marginBottom: '10px',
         }}
       >
         <Button
           variant="secondary"
-          style={{ width: "100%" }}
+          style={{ width: '100%' }}
           onClick={addCable}
         >
           Adicionar um novo cabo
@@ -132,7 +132,7 @@ function ViewFusoes(props) {
 
 const mapStateToProps = state => ({
   redux: state,
-  fiberfusion: state.fiberfusion
+  fiberfusion: state.fiberfusion,
 });
 
 const mapDispatchToProps = dispatch =>

@@ -1,48 +1,46 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import { Form, Button } from "react-bootstrap/";
-import Typography from "@material-ui/core/Typography";
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import { Button } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { Redirect } from "react-router-dom";
-import { push } from "connected-react-router";
+import { Redirect } from 'react-router-dom';
+import { push } from 'connected-react-router';
 
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import AuthActions from "../../../redux/store/ducks/auth";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import AuthActions from '../../../redux/store/ducks/auth';
 
 const useStyles = makeStyles(theme => ({
-  "@global": {
+  '@global': {
     body: {
-      backgroundColor: theme.palette.common.white
-    }
+      backgroundColor: theme.palette.common.white,
+    },
   },
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3)
-  }
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
 }));
 
 function SignUp(props) {
   const classes = useStyles();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [type, setType] = useState("Admin");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [type, setType] = useState('Admin');
   const [redirect, setRedirect] = useState(false);
-
-  console.log(props);
 
   const { signUpRequest } = props;
 
@@ -55,16 +53,16 @@ function SignUp(props) {
   function createProvider(e) {
     e.preventDefault();
 
-    var cliente = {
-      name: name,
-      email: email,
-      password: password
+    const cliente = {
+      name,
+      email,
+      password,
     };
 
     const { addUserProvider } = props;
     addUserProvider(name, email, password);
 
-    //push("/provider");
+    // push("/provider");
     setRedirect(true);
   }
 
@@ -74,7 +72,7 @@ function SignUp(props) {
     }
   }
 
-  //{renderRedirect}
+  // {renderRedirect}
 
   return (
     <Container component="main" maxWidth="xs">
@@ -83,7 +81,7 @@ function SignUp(props) {
         <form
           className={classes.form}
           onSubmit={e => {
-            if (type === "Admin") createProvider(e);
+            if (type === 'Admin') createProvider(e);
             else createUser(e);
             // type === "Admin" ? createProvider() : createUser()
           }}
@@ -92,7 +90,7 @@ function SignUp(props) {
           <Typography
             component="h1"
             variant="h5"
-            style={{ textAlign: "center" }}
+            style={{ textAlign: 'center' }}
           >
             Cadastrar Usuario
           </Typography>
@@ -132,21 +130,21 @@ function SignUp(props) {
             type="password"
             onChange={e => setPassword(e.target.value)}
           />
-          <Form.Group>
-            <Form.Control
-              as="select"
-              value={type}
-              onChange={e => setType(e.target.value)}
-              style={{
-                height: "54px",
-                marginTop: "16px"
-              }}
-            >
-              <option>Admin</option>
-              <option>Funcionario</option>
-            </Form.Control>
-          </Form.Group>
-          <Button variant="secondary" style={{ width: "100%" }} type="submit">
+
+          <input
+            as="select"
+            value={type}
+            onChange={e => setType(e.target.value)}
+            style={{
+              height: '54px',
+              marginTop: '16px',
+            }}
+          >
+            <option>Admin</option>
+            <option>Funcionario</option>
+          </input>
+
+          <Button variant="secondary" style={{ width: '100%' }} type="submit">
             Prosseguir
           </Button>
         </form>
@@ -158,7 +156,4 @@ function SignUp(props) {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(AuthActions, dispatch);
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(SignUp);
+export default connect(null, mapDispatchToProps)(SignUp);

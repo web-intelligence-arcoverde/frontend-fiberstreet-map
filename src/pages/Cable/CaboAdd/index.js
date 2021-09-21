@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { toastr } from 'react-redux-toastr';
 
 // Components
-import { Modal, Button, Container, Form } from 'react-bootstrap/';
+import { Modal, Button, Container } from '@material-ui/core';
 import { Creators as CaboCreators } from '../../../redux/store/ducks/cabo';
 import { Creators as DropCreators } from '../../../redux/store/ducks/drop';
 import { Creators as MapCreators } from '../../../redux/store/ducks/map';
@@ -80,60 +80,38 @@ function CaboAdd(props) {
   return (
     <Container>
       <Modal show={newCabo.isVisible} onHide={hideModal}>
-        <Form
+        <form
         // onSubmit={handleSubmit}
         >
-          <Modal.Header
-            style={{
-              justifyContent: 'center',
-              backgroundColor: '#F7D358',
-              color: '#6c757d',
-            }}
-          >
-            <Modal.Title>Adicionar cabo do cliente</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <Form.Group>
-              <Form.Label>Nome do cabo:</Form.Label>
-              <Form.Control
-                required
-                value={nome}
-                onChange={e => setNome(e.target.value)}
-                type="text"
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Modelo do cabo:</Form.Label>
-              <Form.Control
-                required
-                value={modelo}
-                onChange={e => setModelo(e.target.value)}
-                type="text"
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Quantidade de fibras:</Form.Label>
-              <Form.Control
-                required
-                value={fibra}
-                onChange={e => setFibra(e.target.value)}
-                type="number"
-              />
-            </Form.Group>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="danger" onClick={hideModal}>
-              Sair
-            </Button>
-            <Button variant="secondary" onClick={handleSubmit}>
-              Salvar
-            </Button>
-          </Modal.Footer>
-        </Form>
+          Adicionar cabo do cliente
+          <label>Nome do cabo:</label>
+          <input
+            required
+            value={nome}
+            onChange={e => setNome(e.target.value)}
+            type="text"
+          />
+          <label>Modelo do cabo:</label>
+          <input
+            required
+            value={modelo}
+            onChange={e => setModelo(e.target.value)}
+            type="text"
+          />
+          <label>Quantidade de fibras:</label>
+          <input
+            required
+            value={fibra}
+            onChange={e => setFibra(e.target.value)}
+            type="number"
+          />
+          <Button variant="danger" onClick={hideModal}>
+            Sair
+          </Button>
+          <Button variant="secondary" onClick={handleSubmit}>
+            Salvar
+          </Button>
+        </form>
       </Modal>
     </Container>
   );

@@ -1,20 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-//Redux
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+// Redux
+import { connect } from 'react-redux';
+import { Modal, Accordion, Card, ListGroup } from '@material-ui/core';
+import { bindActionCreators } from 'redux';
 
-import { Creators as ceoCreators } from "../../../redux/store/ducks/ceo";
-import { Creators as FiberFusionActions } from "../../../redux/store/ducks/fiberfusion";
+import { Creators as ceoCreators } from '../../../redux/store/ducks/ceo';
+import { Creators as FiberFusionActions } from '../../../redux/store/ducks/fiberfusion';
 
-//import components
-import TableCeo from "./Components/TableCeo";
-import TableFusoes from "./Components/TableFusoes";
-import TableCable from "./Components/TableCable";
-import Spreadsheet from "./Components/Spreadsheet";
+// import components
+import TableCeo from './Components/TableCeo';
+import TableFusoes from './Components/TableFusoes';
+import TableCable from './Components/TableCable';
+import Spreadsheet from './Components/Spreadsheet';
 
-//UI-Components
-import { Modal, Accordion, Card, ListGroup } from "react-bootstrap";
+// UI-Components
 
 const ViewCeo = props => {
   const { visible } = props.redux.ceo.viewCeo;
@@ -34,93 +34,93 @@ const ViewCeo = props => {
       onHide={props.hideViewModalCeo}
     >
       <Card>
-        <Card.Header
+        <h1
           style={{
-            fontSize: "30px",
-            backgroundColor: "#F7D358",
-            textAlign: "center"
+            fontSize: '30px',
+            backgroundColor: '#F7D358',
+            textAlign: 'center',
           }}
         >
           Caixa de Emenda Optica
-        </Card.Header>
-        <ListGroup variant="flush">
-          <ListGroup.Item>
+        </h1>
+        <div>
+          <div>
             <Accordion>
               <Card>
-                <Accordion.Toggle
+                <div
                   as={Card.Header}
                   eventKey="0"
-                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                  style={{ backgroundColor: '#6c757d', color: '#FFF' }}
                 >
                   <h5>Informações da caixa de emenda</h5>
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="0">
-                  <Card.Body
+                </div>
+                <Accordion eventKey="0">
+                  <div
                     style={{
-                      paddingTop: "10px",
-                      paddingLeft: "5px",
-                      paddingBottom: "0px"
+                      paddingTop: '10px',
+                      paddingLeft: '5px',
+                      paddingBottom: '0px',
                     }}
                   >
                     <TableCeo />
-                  </Card.Body>
-                </Accordion.Collapse>
+                  </div>
+                </Accordion>
               </Card>
 
               <Card>
-                <Accordion.Toggle
+                <Accordion
                   as={Card.Header}
                   eventKey="2"
-                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                  style={{ backgroundColor: '#6c757d', color: '#FFF' }}
                 >
                   <h5>Lista de cabos</h5>
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="2">
-                  <Card.Body
+                </Accordion>
+                <Accordion eventKey="2">
+                  <div
                     style={{
-                      paddingTop: "10px",
-                      paddingLeft: "5px",
-                      paddingBottom: "0px"
+                      paddingTop: '10px',
+                      paddingLeft: '5px',
+                      paddingBottom: '0px',
                     }}
                   >
                     <TableCable />
-                  </Card.Body>
-                </Accordion.Collapse>
+                  </div>
+                </Accordion>
               </Card>
 
               <Card>
-                <Accordion.Toggle
+                <Accordion
                   as={Card.Header}
                   eventKey="3"
-                  style={{ backgroundColor: "#6c757d", color: "#FFF" }}
+                  style={{ backgroundColor: '#6c757d', color: '#FFF' }}
                 >
                   <h5>Plano de Emenda</h5>
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="3">
-                  <Card.Body
+                </Accordion>
+                <Accordion eventKey="3">
+                  <div
                     style={{
-                      paddingTop: "10px",
-                      paddingLeft: "5px",
-                      paddingBottom: "0px"
+                      paddingTop: '10px',
+                      paddingLeft: '5px',
+                      paddingBottom: '0px',
                     }}
                   >
                     <Spreadsheet />
-                  </Card.Body>
-                </Accordion.Collapse>
+                  </div>
+                </Accordion>
               </Card>
             </Accordion>
-          </ListGroup.Item>
-        </ListGroup>
+          </div>
+        </div>
       </Card>
     </Modal>
   );
 };
 
 const mapStateToProps = state => ({
-  redux: state
+  redux: state,
 });
 
-//Ações
+// Ações
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...ceoCreators, ...FiberFusionActions }, dispatch);
 

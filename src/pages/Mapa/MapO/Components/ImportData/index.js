@@ -1,45 +1,45 @@
-//React
-import React, { useState } from "react";
+// React
+import React, { useState } from 'react';
 
 // Redux
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-//Creators
-import { Creators as MapCreators } from "../../../../../redux/store/ducks/map";
-import { Creators as CableActions } from "../../../../../redux/store/ducks/cabo";
-import { Creators as ImportActions } from "../../../../../redux/store/ducks/imports";
-import AuthActions from "../../../../../redux/store/ducks/auth";
+// Creators
+import { makeStyles } from '@material-ui/core/styles';
+import SettingsIcon from '@material-ui/icons/Settings';
+import { Modal, Button } from '@material-ui/core';
+import { Creators as MapCreators } from '../../../../../redux/store/ducks/map';
+import { Creators as CableActions } from '../../../../../redux/store/ducks/cabo';
+import { Creators as ImportActions } from '../../../../../redux/store/ducks/imports';
+import AuthActions from '../../../../../redux/store/ducks/auth';
 
-//Componentes @material-ui / react-bootstrap
-import { makeStyles } from "@material-ui/core/styles";
-import SettingsIcon from "@material-ui/icons/Settings";
-import { Modal, Button, Form } from "react-bootstrap";
+// Componentes @material-ui / react-bootstrap
 
-//Componentes criados
-import { Container } from "./styles";
+// Componentes criados
+import { Container } from './styles';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    position: "relative",
-    paddingLeft: "22px",
-    paddingTop: "40px"
+    position: 'relative',
+    paddingLeft: '22px',
+    paddingTop: '40px',
   },
   paper: {
-    position: "absolute",
+    position: 'absolute',
     top: 36,
     right: 0,
-    left: 0
-  }
+    left: 0,
+  },
 }));
 
 function ImportData(props) {
-  const [geojson, setGeojson] = useState("");
-  const [layerType, setLayerType] = useState("");
-  const [reqType, setReqType] = useState("");
+  const [geojson, setGeojson] = useState('');
+  const [layerType, setLayerType] = useState('');
+  const [reqType, setReqType] = useState('');
   const {
     loading,
-    modal: { visible }
+    modal: { visible },
   } = props.imports;
 
   const { importGeojsonRequest, closeImportGeojsonModal } = props;
@@ -51,76 +51,54 @@ function ImportData(props) {
   function handleSubmit(e) {
     e.preventDefault();
     importGeojsonRequest(geojson, layerType, reqType);
-    setGeojson("");
-    setLayerType("");
-    setReqType("");
+    setGeojson('');
+    setLayerType('');
+    setReqType('');
   }
 
   return (
     <Modal show={visible} onHide={hideModal}>
-      {!loading && (
-        <Form onSubmit={handleSubmit}>
-          <Modal.Header
-            style={{
-              justifyContent: "center",
-              backgroundColor: "#ffc107",
-              color: "#6c757d"
-            }}
-          >
-            <Modal.Title>Importar via GEOJSON</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <Form.Group>
-              <Form.Label>GeoJSON or XML:</Form.Label>
-              <Form.Control
-                required
-                as="textarea"
-                value={geojson}
-                onChange={e => setGeojson(e.target.value)}
-                // onChange={e => setGeojson(JSON.parse(e.target.value))}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>is GeoJSON or XML?</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                value={reqType}
-                onChange={e => setReqType(e.target.value)}
-                // onChange={e => setGeojson(JSON.parse(e.target.value))}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Tipo: (CLIENTS, CTOS, CEOS)</Form.Label>
-              <Form.Control
-                required
-                minLength="3"
-                type="text"
-                value={layerType}
-                onChange={e => setLayerType(e.target.value)}
-              />
-            </Form.Group>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="danger" onClick={hideModal}>
-              Fechar
-            </Button>
-
-            <Button variant="secondary" type="submit">
-              Salvar
-            </Button>
-          </Modal.Footer>
-        </Form>
-      )}
-      {loading && <h4>Enviando...</h4>}
+      <form onSubmit={handleSubmit}>
+        Importar via GEOJSON
+        <div>
+          <label>GeoJSON or XML:</label>
+          <input
+            required
+            as="textarea"
+            value={geojson}
+            onChange={e => setGeojson(e.target.value)}
+            // onChange={e => setGeojson(JSON.parse(e.target.value))}
+          />
+        </div>
+        <div>
+          <label>is GeoJSON or XML?</label>
+          <input
+            required
+            type="text"
+            value={reqType}
+            onChange={e => setReqType(e.target.value)}
+            // onChange={e => setGeojson(JSON.parse(e.target.value))}
+          />
+        </div>
+        <div>
+          <label>Tipo: (CLIENTS, CTOS, CEOS)</label>
+          <input
+            required
+            minLength="3"
+            type="text"
+            value={layerType}
+            onChange={e => setLayerType(e.target.value)}
+          />
+        </div>
+        <Button onClick={hideModal}>Fechar</Button>
+        <Button type="submit">Salvar</Button>
+      </form>
     </Modal>
   );
 }
 
 const mapStateToProps = state => ({
-  imports: state.imports
+  imports: state.imports,
 });
 
 const mapDispatchToProps = dispatch =>
