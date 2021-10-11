@@ -7,12 +7,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 // Creators
+
+import mapboxgl from 'mapbox-gl';
+
 import { Creators as MapCreators } from '../../../redux/store/ducks/map';
 
 /* mapBox */
-import 'mapbox-gl/dist/mapbox-gl.css';
-import mapboxgl from 'mapbox-gl';
-
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import store from '../../../redux/store';
@@ -60,7 +60,6 @@ const geojson = {
   features: [],
 };
 
-// Used to draw a line between points
 function Map(props) {
   const [center, setCenter] = useState([-37.0601269, -8.424398]);
   const [map, setMap] = useState(null);
@@ -108,15 +107,17 @@ function Map(props) {
   }
 
   return (
-    <>
-      <div id={container} className={classNameStyle} />
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div>
+        <div id={container} className={classNameStyle} />
 
-      <div id="geocoder" className="geocoder" />
+        <div id="geocoder" className="geocoder" />
 
-      <div id="distance" className="distance-container" />
+        <div id="distance" className="distance-container" />
 
-      <LeftMenuMap />
-    </>
+        <LeftMenuMap />
+      </div>
+    </div>
   );
 }
 

@@ -6,9 +6,9 @@
 - MapBox
 - API in NodeJS for FiberStreet
 
-# UI ["Apenas usar react-bootstrap"]
+# UI ["Apenas usar material-ui"]
 
-- https://react-bootstrap.github.io/
+- https://material-ui.com/components/
 - https://fontawesome.com/v4.7/icons/
 
 # Padrões

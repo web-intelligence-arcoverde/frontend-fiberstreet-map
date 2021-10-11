@@ -105,15 +105,3 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(ImportActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ImportData);
-
-/*
-<Dropdown.Item href="#">
-                      <Form.Check label="ctos" aria-label="option 1" />
-                    </Dropdown.Item>
-                    <Dropdown.Item href="#">
-                      <Form.Check label="clientes" />
-                    </Dropdown.Item>
-                    <Dropdown.Item href="#">
-                      <Form.Check label="ceo" />
-                    </Dropdown.Item>
-*/
